@@ -1,0 +1,10 @@
+{
+  "mcpServers": {
+    "polarion": {
+      "type": "stdio",
+      "command": "bun",
+      "args": ["run", "src/server.ts"],
+      "env": {}
+    }
+  }
+}

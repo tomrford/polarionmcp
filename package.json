@@ -1,0 +1,25 @@
+{
+  "name": "polarionmcp",
+  "module": "src/server.ts",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "start": "bun run src/server.ts",
+    "generate": "bash scripts/generate-client.sh",
+    "typecheck": "tsc --noEmit",
+    "test": "bun test"
+  },
+  "devDependencies": {
+    "@types/bun": "latest",
+    "@types/node": "25.0.10",
+    "openapi-typescript": "7.10.1"
+  },
+  "peerDependencies": {
+    "typescript": "^5"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "1.25.3",
+    "openapi-fetch": "0.15.0",
+    "zod": "4.3.6"
+  }
+}
