@@ -1,9 +1,19 @@
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
+import { WebStandardStreamableHTTPServerTransport } from "@modelcontextprotocol/sdk/server/webStandardStreamableHttp.js";
 import { z } from "zod/v4";
 import { client } from "./client.ts";
 import { httpError, networkError } from "./errors.ts";
 import { pagination, errorResult, ok, fieldsParam } from "./helpers.ts";
+
+/** Extract a Bearer token from the MCP request context, falling back to env var for stdio mode. */
+function authHeaders(extra: { authInfo?: { token: string }; requestInfo?: { headers: Record<string, string | string[] | undefined> } }): { Authorization: string } {
+  const rawHeader = extra.requestInfo?.headers?.["authorization"];
+  const headerToken = typeof rawHeader === "string" ? rawHeader.replace(/^Bearer\s+/i, "") : undefined;
+  const token = extra.authInfo?.token ?? headerToken ?? process.env["POLARION_ACCESS_TOKEN"];
+  if (!token) throw new Error("No Polarion access token available");
+  return { Authorization: `Bearer ${token}` };
+}
 
 const server = new McpServer(
   {
@@ -51,9 +61,10 @@ server.registerTool(
         .describe("1-indexed page number"),
     },
   },
-  async ({ query, fields, page_size, page_number }) => {
+  async ({ query, fields, page_size, page_number }, extra) => {
     try {
       const { data, error, response } = await client.GET("/projects", {
+        headers: authHeaders(extra),
         params: {
           query: {
             "page[size]": page_size,
@@ -114,11 +125,12 @@ server.registerTool(
         .describe("1-indexed page number"),
     },
   },
-  async ({ project, query, fields, revision, page_size, page_number }) => {
+  async ({ project, query, fields, revision, page_size, page_number }, extra) => {
     try {
       const { data, error, response } = await client.GET(
         "/projects/{projectId}/workitems",
         {
+          headers: authHeaders(extra),
           params: {
             path: { projectId: project },
             query: {
@@ -171,11 +183,12 @@ server.registerTool(
         .describe("Comma-separated attribute fields (omit for all)"),
     },
   },
-  async ({ project, work_item_id, revision, fields }) => {
+  async ({ project, work_item_id, revision, fields }, extra) => {
     try {
       const { data, error, response } = await client.GET(
         "/projects/{projectId}/workitems/{workItemId}",
         {
+          headers: authHeaders(extra),
           params: {
             path: { projectId: project, workItemId: work_item_id },
             query: {
@@ -220,11 +233,12 @@ server.registerTool(
         ),
     },
   },
-  async ({ project, resource_type, target_type }) => {
+  async ({ project, resource_type, target_type }, extra) => {
     try {
       const { data, error, response } = await client.GET(
         "/projects/{projectId}/actions/getFieldsMetadata",
         {
+          headers: authHeaders(extra),
           params: {
             path: { projectId: project },
             query: { resourceType: resource_type, targetType: target_type },
@@ -271,11 +285,12 @@ server.registerTool(
     attributes,
     workflow_action,
     change_type_to,
-  }) => {
+  }, extra) => {
     try {
       const { error, response } = await client.PATCH(
         "/projects/{projectId}/workitems/{workItemId}",
         {
+          headers: authHeaders(extra),
           params: {
             path: { projectId: project, workItemId: work_item_id },
             query: {
@@ -328,11 +343,12 @@ server.registerTool(
         .describe("1-indexed page number"),
     },
   },
-  async ({ project, query, fields, page_size, page_number }) => {
+  async ({ project, query, fields, page_size, page_number }, extra) => {
     try {
       const { data, error, response } = await client.GET(
         "/projects/{projectId}/documents",
         {
+          headers: authHeaders(extra),
           params: {
             path: { projectId: project },
             query: {
@@ -387,11 +403,12 @@ server.registerTool(
         .describe("Comma-separated attribute fields (omit for all)"),
     },
   },
-  async ({ project, space, document, revision, fields }) => {
+  async ({ project, space, document, revision, fields }, extra) => {
     try {
       const { data, error, response } = await client.GET(
         "/projects/{projectId}/spaces/{spaceId}/documents/{documentName}",
         {
+          headers: authHeaders(extra),
           params: {
             path: {
               projectId: project,
@@ -443,11 +460,12 @@ server.registerTool(
         .describe("1-indexed page number"),
     },
   },
-  async ({ project, work_item_id, fields, page_size, page_number }) => {
+  async ({ project, work_item_id, fields, page_size, page_number }, extra) => {
     try {
       const { data, error, response } = await client.GET(
         "/projects/{projectId}/workitems/{workItemId}/linkedworkitems",
         {
+          headers: authHeaders(extra),
           params: {
             path: { projectId: project, workItemId: work_item_id },
             query: {
@@ -494,11 +512,12 @@ server.registerTool(
       field_id: z.string().describe("Field ID (e.g. severity, priority)"),
     },
   },
-  async ({ project, field_id }) => {
+  async ({ project, field_id }, extra) => {
     try {
       const { data, error, response } = await client.GET(
         "/projects/{projectId}/workitems/fields/{fieldId}/actions/getAvailableOptions",
         {
+          headers: authHeaders(extra),
           params: {
             path: { projectId: project, fieldId: field_id },
           },
@@ -527,11 +546,12 @@ server.registerTool(
       work_item_id: z.string().describe("Work Item ID"),
     },
   },
-  async ({ project, work_item_id }) => {
+  async ({ project, work_item_id }, extra) => {
     try {
       const { data, error, response } = await client.GET(
         "/projects/{projectId}/workitems/{workItemId}/actions/getWorkflowActions",
         {
+          headers: authHeaders(extra),
           params: {
             path: { projectId: project, workItemId: work_item_id },
           },
@@ -549,5 +569,91 @@ server.registerTool(
 
 // ---------- start ----------
 
-const transport = new StdioServerTransport();
-await server.connect(transport);
+const isStdio = process.argv.includes("--stdio");
+const defaultHttpPort = 8080;
+
+function httpPort(): number {
+  const rawPort = process.env["PORT"];
+  if (!rawPort) return defaultHttpPort;
+
+  const port = Number(rawPort);
+  if (!Number.isInteger(port) || port < 1 || port > 65535) {
+    throw new Error(`Invalid PORT value: ${rawPort}`);
+  }
+  return port;
+}
+
+if (isStdio) {
+  // Local dev/test mode: token comes from POLARION_ACCESS_TOKEN env var
+  const transport = new StdioServerTransport();
+  await server.connect(transport);
+  console.error("Polarion MCP running in stdio mode");
+} else {
+  // Production HTTP mode: token comes from each client's Authorization header
+  type Transport = InstanceType<typeof WebStandardStreamableHTTPServerTransport>;
+  const sessions = new Map<string, Transport>();
+
+  const port = httpPort();
+
+  Bun.serve({
+    port,
+    routes: {
+      "/mcp": {
+        POST: async (req) => {
+          // Check for existing session
+          const sessionId = req.headers.get("mcp-session-id");
+          let transport: Transport;
+
+          if (sessionId && sessions.has(sessionId)) {
+            transport = sessions.get(sessionId)!;
+          } else if (!sessionId) {
+            // New session — create transport
+            transport = new WebStandardStreamableHTTPServerTransport({
+              sessionIdGenerator: () => crypto.randomUUID(),
+              onsessioninitialized: (id) => {
+                sessions.set(id, transport);
+              },
+              onsessionclosed: (id) => {
+                sessions.delete(id);
+              },
+            });
+            transport.onclose = () => {
+              if (transport.sessionId) sessions.delete(transport.sessionId);
+            };
+            await server.connect(transport);
+          } else {
+            return new Response("Session not found", { status: 404 });
+          }
+
+          // Extract bearer token and pass as authInfo
+          const authHeader = req.headers.get("authorization");
+          const token = authHeader?.replace(/^Bearer\s+/i, "");
+
+          return transport.handleRequest(req, {
+            authInfo: token ? { token, clientId: "polarion-mcp-client", scopes: [] } : undefined,
+          });
+        },
+        GET: async (req) => {
+          const sessionId = req.headers.get("mcp-session-id");
+          const transport = sessionId ? sessions.get(sessionId) : undefined;
+          if (!transport) {
+            return new Response("Session not found", { status: 404 });
+          }
+          return transport.handleRequest(req);
+        },
+        DELETE: async (req) => {
+          const sessionId = req.headers.get("mcp-session-id");
+          const transport = sessionId ? sessions.get(sessionId) : undefined;
+          if (!transport) {
+            return new Response("Session not found", { status: 404 });
+          }
+          return transport.handleRequest(req);
+        },
+      },
+    },
+  });
+
+  console.log(
+    `Polarion MCP running on http://localhost:${port}/mcp (TLS should terminate at the proxy/load balancer)`
+  );
+}

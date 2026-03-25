@@ -5,6 +5,7 @@
   "private": true,
   "scripts": {
     "start": "bun run src/server.ts",
+    "start:stdio": "bun run src/server.ts --stdio",
     "generate": "bash scripts/generate-client.sh",
     "typecheck": "tsc --noEmit",
     "test": "bun test"

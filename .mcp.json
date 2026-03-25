@@ -3,7 +3,7 @@
     "polarion": {
       "type": "stdio",
       "command": "bun",
-      "args": ["run", "src/server.ts"],
+      "args": ["run", "src/server.ts", "--stdio"],
       "env": {}
     }
   }

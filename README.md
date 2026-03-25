@@ -13,10 +13,16 @@ cp .env.example .env   # then fill in your Polarion URL and token
 
 ## Usage
 
-Run directly:
+Run in HTTP mode:
 
 ```bash
 bun run src/server.ts
+```
+
+Run in stdio mode:
+
+```bash
+bun run src/server.ts --stdio
 ```
 
 Or add to your MCP client config (e.g. `.mcp.json`):
@@ -27,7 +33,7 @@ Or add to your MCP client config (e.g. `.mcp.json`):
     "polarion": {
       "type": "stdio",
       "command": "bun",
-      "args": ["run", "src/server.ts"],
+      "args": ["run", "src/server.ts", "--stdio"],
       "env": {
         "POLARION_BASE_URL": "https://polarion.example.com/polarion/rest/v1",
         "POLARION_ACCESS_TOKEN": "your-token"
@@ -42,7 +48,10 @@ Or add to your MCP client config (e.g. `.mcp.json`):
 | Variable | Required | Description |
 |----------|----------|-------------|
 | `POLARION_BASE_URL` | yes | Full base URL, e.g. `https://polarion.example.com/polarion/rest/v1` |
-| `POLARION_ACCESS_TOKEN` | yes | Bearer token (personal access token from Polarion) |
+| `POLARION_ACCESS_TOKEN` | stdio only | Bearer token for local stdio mode |
+| `PORT` | HTTP only | Listen port for HTTP mode. Defaults to `8080` |
+
+In HTTP mode, each client must send its own `Authorization: Bearer ...` header. TLS/HTTPS is expected to terminate at an ingress, reverse proxy, or load balancer in front of the container; this server listens on plain HTTP inside the deployment boundary.
 
 ## Tools
 
