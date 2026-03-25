@@ -35,6 +35,7 @@ The default MCP surface should remain small and oriented around real day-to-day 
 - discover fields and enums
 - inspect workflow actions
 - perform narrow, explicit updates for known safe workflows
+- manage a small number of tightly scoped mutations such as comments or links when justified by real use
 
 These tools should encode intent directly in the tool name and input schema.
 
@@ -46,6 +47,7 @@ A generic read tool is acceptable because:
 - read workflows can be iterative
 - models can call it repeatedly to drill down
 - it avoids adding dozens or hundreds of low-value one-off tools
+- a single project-scoped read surface covers a large share of the OpenAPI's repeated patterns
 
 A generic write tool is explicitly out of scope for the intended mature product because:
 
@@ -80,6 +82,8 @@ The mature MCP should support workflows like:
 - "Which enum values are valid for this field?"
 - "What workflow actions are allowed on this item?"
 - "Update this one work item in a narrowly scoped way"
+- "Add a comment to this one item or document"
+- "Add, update, or remove one explicit link between two known items"
 
 The mature MCP should avoid encouraging workflows like:
 
@@ -109,6 +113,12 @@ Examples:
 - `get_enum_options`
 - `get_workflow_actions`
 
+Likely v1 additions beyond the current surface may include a very small number of tightly scoped mutation tools, for example:
+
+- add or update a single work item link
+- remove a single work item link
+- add or update a single comment on a work item or document
+
 These tools should stay few in number, strongly typed, and focused on common workflows rather than raw REST fidelity.
 
 ### Layer 2: Generic read escape hatch
@@ -121,6 +131,8 @@ Preferred design:
 - backed by allowlisted OpenAPI `operationId` values
 - validated against known path and query parameters
 - read-only by construction
+- project-scoped by default
+- explicitly biased away from wide cross-project reads
 
 Proposed shape:
 
@@ -128,15 +140,18 @@ Proposed shape:
 
 High-level input:
 
+- `project`
 - `operation_id`
 - `path_params`
 - `query`
+- optional `scope_mode`
 
 Optional controls:
 
 - pagination inputs
 - sparse field selection
 - small result-mode hints such as summary vs raw
+- truncation controls with safe upper bounds
 
 High-level behavior:
 
@@ -144,6 +159,10 @@ High-level behavior:
 - reject unknown or blocked operation IDs
 - validate required parameters before execution
 - return compact structured output by default
+- require a project context for normal operation
+- only permit cross-project or `/all/*` style reads through an explicit advanced mode
+- enforce low default page sizes and bounded maximums
+- truncate oversized responses and return continuation information rather than dumping large payloads
 
 Why operation ID over path:
 
@@ -152,6 +171,13 @@ Why operation ID over path:
 - easier help/discovery
 - easier auditability
 - easier alignment with the bundled OpenAPI spec
+
+Recommended scope model:
+
+- normal mode: project-scoped reads only
+- advanced mode: explicit cross-project or `/all/*` reads, only for allowlisted operations and with stricter limits
+
+The default user and model experience should assume "work within one project."
 
 ### Layer 3: Discovery and help
 
@@ -169,6 +195,7 @@ High-level responsibilities:
 - indicate whether an operation is read-only, curated, advanced, or blocked
 - provide a short example
 - point the model toward a curated tool when one exists
+- explain when an operation is only available in advanced all-project mode
 
 This tool should bias the model toward curated tools first and the generic read escape hatch second.
 
@@ -186,6 +213,7 @@ Potential resource categories:
 - field semantics for custom work item types
 - workflow expectations
 - "how this team uses Polarion" notes
+- project-specific prompts or agent guidance stored in Polarion-managed content
 
 The key idea is that documentation becomes fetchable context, not always-loaded context.
 
@@ -198,6 +226,7 @@ Read access is still not "free." The mature product should guard against:
 - accidental large fetches
 - repeated retrieval of irrelevant or low-signal data
 - exposure of endpoints that are technically readable but not useful or appropriate
+- context rot caused by large response bodies or very high-cardinality result sets
 
 Expected controls:
 
@@ -205,6 +234,10 @@ Expected controls:
 - result truncation or summarization by default
 - allowlisting of generic read operations
 - blocking binary or unusually large responses from the generic read tool
+- project scoping by default
+- explicit opt-in for advanced all-project reads
+- bounded maximum page sizes
+- continuation hints so the model can iteratively fetch the next slice instead of overfetching
 
 ### Write safety
 
@@ -217,6 +250,8 @@ Rules:
 - no generic bulk update tool
 - only explicit, well-understood mutation tools
 - mutation tools should target narrow objects and explicit fields
+- no admin or instance-management mutation surface
+- prefer per-object comment and link mutations over any multi-object write shape
 
 When write tools exist, they should encourage a safe workflow:
 
@@ -236,6 +271,7 @@ Use server instructions for short global rules such as:
 - use metadata discovery before unfamiliar updates
 - use the generic read tool only when no curated tool fits
 - fetch data incrementally instead of broadly
+- stay within a single project unless an advanced all-project read is clearly needed
 
 These instructions should stay brief and operational.
 
@@ -263,6 +299,8 @@ They should help the model choose the tool, not teach the entire Polarion API.
 - help/discovery over the OpenAPI surface
 - resources for project-specific guidance
 - stronger validation and safer defaults
+- project-scoped operation by default
+- lightweight telemetry for product learning
 - enough tests for confidence in day-to-day use
 
 ### Out of scope for maturity target
@@ -272,6 +310,7 @@ They should help the model choose the tool, not teach the entire Polarion API.
 - generic POST/PATCH/DELETE tooling
 - broad bulk mutation support
 - binary and job-style escape hatches unless clearly needed later
+- admin and instance-management operations
 
 ## Maturity Goals
 
@@ -283,7 +322,7 @@ Users and models can reliably complete common Polarion tasks through a small, do
 
 ### 2. Safe escape hatch
 
-Uncommon read needs can be satisfied through a generic read tool without exposing broad mutation or arbitrary-path risk.
+Uncommon read needs can be satisfied through a generic read tool without exposing broad mutation or arbitrary-path risk, and without encouraging large unbounded fetches.
 
 ### 3. Good discoverability
 
@@ -305,6 +344,8 @@ Examples:
 - compact output
 - bounded help responses
 - explicit warnings for advanced operations
+- project scope by default
+- truncation before large payloads reach the model
 
 ### 5. Confidence through tests
 
@@ -325,6 +366,20 @@ It should be obvious:
 - which tools are advanced
 - which operations are intentionally blocked
 - where project guidance comes from
+- when all-project read mode is being used
+
+### 7. Product feedback loop
+
+The MCP should provide lightweight internal telemetry or logs so maintainers can learn from real usage without relying on non-technical users to manually report hot paths.
+
+Useful signals include:
+
+- which tools are called most often
+- which generic read operation IDs are used repeatedly
+- which help queries fail to route cleanly to a tool
+- where models frequently need multiple discovery steps before a write
+
+This feedback should be used to decide when a generic read pattern deserves promotion into a dedicated curated tool.
 
 ## Suggested Implementation Phases
 
@@ -342,13 +397,15 @@ This is not a detailed plan, but a sequencing guide.
 - introduce `polarion_api_help`
 - surface a small allowlisted view of relevant read operations
 - bias responses toward curated tools first
+- explain project-scoped defaults and advanced all-project mode
 
 ### Phase 3: add generic read escape hatch
 
 - introduce `polarion_api_read`
 - key it by `operation_id`
 - enforce read-only allowlists
-- keep outputs compact and paginated
+- keep outputs compact, paginated, and truncated by default
+- require project scope unless advanced all-project mode is explicitly requested
 
 ### Phase 4: add resource-backed project guidance
 
@@ -361,6 +418,7 @@ This is not a detailed plan, but a sequencing guide.
 - expand tests
 - tune defaults from real usage
 - adjust curated tools based on recurring internal tasks
+- add lightweight telemetry or structured logs for tool and operation usage
 - continue to resist generic write expansion unless a specific safe case emerges
 
 ## Open Questions
@@ -373,6 +431,8 @@ These questions should be resolved before locking the implementation plan:
 - Which project-specific docs should live as resources first?
 - If docs are stored in Polarion, what content model and governance should own them?
 - Which existing curated tools are truly essential, and which additional ones are justified by repeated day-to-day use?
+- Which comment and link mutations are safe and common enough for the first write expansion?
+- What telemetry is acceptable for internal deployment, and what retention/privacy rules should apply?
 
 ## Non-Goals
 
@@ -392,6 +452,7 @@ The intended mature Polarion MCP is:
 - resistant to wide, unsafe mutation patterns
 - supported by resources and discovery instead of bloated tool schemas
 - flexible enough to read beyond the curated set when needed
+- intentionally scoped to working with Polarion project data rather than administering Polarion itself
 
 The central product choice is deliberate:
 
