@@ -4,12 +4,16 @@ import { registerProjectsTools } from "./tools/curated/projects.ts";
 import { registerWorkItemTools } from "./tools/curated/work-items.ts";
 import { registerDocumentTools } from "./tools/curated/documents.ts";
 import { registerMetadataTools } from "./tools/curated/metadata.ts";
+import { registerApiHelpTool } from "./tools/api-help.ts";
+import { registerGenericReadTool } from "./tools/generic-read.ts";
 
 export function registerServerFeatures(server: McpServer) {
   registerProjectsTools(server);
   registerWorkItemTools(server);
   registerDocumentTools(server);
   registerMetadataTools(server);
+  registerApiHelpTool(server);
+  registerGenericReadTool(server);
 }
 
 export function createServer() {
