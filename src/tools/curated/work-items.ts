@@ -287,4 +287,74 @@ export function registerWorkItemTools(server: McpServer) {
       }),
     ),
   );
+
+  server.registerTool(
+    "get_enum_options",
+    {
+      title: "Get Enum Options",
+      description:
+        "Returns available enum options for a work item field (e.g. severity, priority).",
+      inputSchema: {
+        project: z.string().describe("Project ID"),
+        field_id: z.string().describe("Field ID (e.g. severity, priority)"),
+      },
+    },
+    withToolLogging(
+      "get_enum_options",
+      async ({ project, field_id }, extra) => {
+        try {
+          const { data, error, response } = await client.GET(
+            "/projects/{projectId}/workitems/fields/{fieldId}/actions/getAvailableOptions",
+            {
+              headers: authHeaders(extra),
+              params: {
+                path: { projectId: project, fieldId: field_id },
+              },
+            },
+          );
+          if (error || !response.ok) {
+            return errorResult(httpError(response.status, error));
+          }
+          return ok(data?.data ?? []);
+        } catch (err) {
+          return errorResult(networkError(err));
+        }
+      },
+    ),
+  );
+
+  server.registerTool(
+    "get_workflow_actions",
+    {
+      title: "Get Workflow Actions",
+      description:
+        "Returns available workflow actions for a work item.",
+      inputSchema: {
+        project: z.string().describe("Project ID"),
+        work_item_id: z.string().describe("Work Item ID"),
+      },
+    },
+    withToolLogging(
+      "get_workflow_actions",
+      async ({ project, work_item_id }, extra) => {
+        try {
+          const { data, error, response } = await client.GET(
+            "/projects/{projectId}/workitems/{workItemId}/actions/getWorkflowActions",
+            {
+              headers: authHeaders(extra),
+              params: {
+                path: { projectId: project, workItemId: work_item_id },
+              },
+            },
+          );
+          if (error || !response.ok) {
+            return errorResult(httpError(response.status, error));
+          }
+          return ok(data?.data ?? []);
+        } catch (err) {
+          return errorResult(networkError(err));
+        }
+      },
+    ),
+  );
 }
