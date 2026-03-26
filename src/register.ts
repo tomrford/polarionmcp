@@ -6,6 +6,7 @@ import { registerDocumentTools } from "./tools/curated/documents.ts";
 import { registerMetadataTools } from "./tools/curated/metadata.ts";
 import { registerApiHelpTool } from "./tools/api-help.ts";
 import { registerGenericReadTool } from "./tools/generic-read.ts";
+import { registerResources } from "./resources.ts";
 
 export function registerServerFeatures(server: McpServer) {
   registerProjectsTools(server);
@@ -14,6 +15,7 @@ export function registerServerFeatures(server: McpServer) {
   registerMetadataTools(server);
   registerApiHelpTool(server);
   registerGenericReadTool(server);
+  registerResources(server);
 }
 
 export function createServer() {
