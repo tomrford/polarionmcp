@@ -21,6 +21,8 @@ describe("createServer", () => {
     const toolNames = tools.tools.map((tool) => tool.name).sort();
 
     expect(toolNames).toEqual([
+      "add_work_item_comment",
+      "add_work_item_link",
       "get_document",
       "get_enum_options",
       "get_fields_metadata",
@@ -32,7 +34,9 @@ describe("createServer", () => {
       "list_work_items",
       "polarion_api_help",
       "polarion_api_read",
+      "remove_work_item_link",
       "update_work_item",
+      "update_work_item_link",
     ]);
 
     expect(client.getInstructions()).toContain("Polarion MCP usage rules");

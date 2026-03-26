@@ -7,6 +7,8 @@ import { registerMetadataTools } from "./tools/curated/metadata.ts";
 import { registerApiHelpTool } from "./tools/api-help.ts";
 import { registerGenericReadTool } from "./tools/generic-read.ts";
 import { registerResources } from "./resources.ts";
+import { registerCommentTools } from "./tools/comments.ts";
+import { registerLinkTools } from "./tools/links.ts";
 
 export function registerServerFeatures(server: McpServer) {
   registerProjectsTools(server);
@@ -15,6 +17,8 @@ export function registerServerFeatures(server: McpServer) {
   registerMetadataTools(server);
   registerApiHelpTool(server);
   registerGenericReadTool(server);
+  registerCommentTools(server);
+  registerLinkTools(server);
   registerResources(server);
 }
 
