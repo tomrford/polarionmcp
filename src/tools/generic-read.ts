@@ -50,11 +50,7 @@ function validateQueryParams(
 }
 
 function readBaseUrl() {
-  try {
-    return getPolarionBaseUrl();
-  } catch {
-    return process.env["POLARION_BASE_URL"] ?? "";
-  }
+  return getPolarionBaseUrl();
 }
 
 export function buildReadUrl(

@@ -1,10 +1,11 @@
 import createClient from "openapi-fetch";
 import type { paths } from "../generated/polarion.ts";
 
-const baseUrl = process.env["POLARION_BASE_URL"] ?? "";
+const baseUrl = process.env["POLARION_BASE_URL"];
+
+if (!baseUrl) throw new Error("POLARION_BASE_URL is not set");
 
 export function getPolarionBaseUrl() {
-  if (!baseUrl) throw new Error("POLARION_BASE_URL is not set");
   return baseUrl;
 }
 

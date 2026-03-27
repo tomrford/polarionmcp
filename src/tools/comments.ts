@@ -62,9 +62,8 @@ export function registerCommentTools(server: McpServer) {
           return errorResult(networkError(error));
         }
       },
-      ({ project, work_item_id, text_type }) => ({
+      ({ project, work_item_id }) => ({
         target_id: `${project}/${work_item_id}`,
-        scope_mode: text_type,
       }),
     ),
   );

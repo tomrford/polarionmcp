@@ -226,7 +226,7 @@ export function truncateResponse(
 
   return {
     data: {
-      truncated_preview: rendered.slice(0, options.maxChars),
+      truncated_preview: rendered.slice(0, options.maxChars) + "…(truncated)",
     },
     truncation: {
       reason: "char_limit",
