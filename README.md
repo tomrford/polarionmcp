@@ -2,7 +2,7 @@
 
 MCP server that exposes Polarion ALM's REST API to AI coding agents (Claude Code, Cursor, etc.) via the [Model Context Protocol](https://modelcontextprotocol.io).
 
-Works with any Polarion instance — reads projects, work items, documents, linked items, field metadata, enums, and workflow actions. Also supports sparse PATCH updates on work items.
+Works with any Polarion instance — exposes a small high-signal curated tool set for common workflows, plus guided discovery and a safe generic read escape hatch. Also supports sparse PATCH updates on work items.
 
 ## Setup
 
@@ -67,8 +67,40 @@ In HTTP mode, each client must send its own `Authorization: Bearer ...` header. 
 | `get_fields_metadata` | Discover available fields for a resource type |
 | `get_enum_options` | Get available enum values for a field (e.g. severity, priority) |
 | `get_workflow_actions` | Get available workflow transitions for a work item |
+| `polarion_api_help` | Discover curated and generic read operations by keyword or resource type |
+| `polarion_api_read` | Execute an allowlisted read-only Polarion GET operation by `operation_id` |
 
-All list endpoints support pagination (`page_size`, `page_number`) and field selection (`fields`).
+All list-style endpoints support pagination (`page_size`, `page_number`) and field selection (`fields`).
+
+Default pagination is intentionally narrow:
+
+- default `page_size`: `20`
+- maximum `page_size`: `50`
+
+## MCP Resources
+
+The server exposes fetchable resources for guidance instead of overloading tool descriptions:
+
+| Resource URI | Description |
+|--------------|-------------|
+| `polarion://guides/query-syntax` | Polarion query syntax and filtering guide |
+| `polarion://guides/mcp-usage` | Tool selection, pagination, and safety guidance |
+
+## Usage Guidance
+
+Preferred workflow:
+
+1. Use a curated tool when one exists
+2. If unsure which operation fits, call `polarion_api_help`
+3. Use `polarion_api_read` only when no curated tool fits
+4. Fetch incrementally with pagination and sparse fields
+
+Generic read behavior:
+
+- keyed by `operation_id`, not arbitrary paths
+- blocked for binary/admin-like endpoints
+- advanced global/all-project reads require explicit `scope_mode: "all"`
+- oversized responses may be truncated with continuation hints
 
 ## Generated API Client
 

@@ -5,6 +5,10 @@ const baseUrl = process.env["POLARION_BASE_URL"];
 
 if (!baseUrl) throw new Error("POLARION_BASE_URL is not set");
 
+export function getPolarionBaseUrl() {
+  return baseUrl;
+}
+
 export const client = createClient<paths>({
   baseUrl,
   headers: {
