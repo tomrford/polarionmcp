@@ -2,14 +2,26 @@
 
 MCP server that exposes Polarion ALM's REST API to AI coding agents (Claude Code, Cursor, etc.) via the [Model Context Protocol](https://modelcontextprotocol.io).
 
-Works with any Polarion instance — exposes a small high-signal curated tool set for common workflows, plus guided discovery and a safe generic read escape hatch. Also supports sparse PATCH updates on work items.
+## Status
+
+Codemode migration branch.
+
+The checked-in runtime is still the older Bun-based multi-tool server. The target architecture for this branch is a Deno-based codemode server with one public `code` tool, top-level resources, and an internal combined tool surface of curated tools plus generated raw `api.*` tools.
+
+See:
+
+- [docs/product-direction.md](/Users/tomford/code/projects/polarionmcp/docs/product-direction.md)
+- [docs/codemode-plan.md](/Users/tomford/code/projects/polarionmcp/docs/codemode-plan.md)
 
 ## Setup
 
 ```bash
+nix develop
 bun install
 cp .env.example .env   # then fill in your Polarion URL and token
 ```
+
+`.envrc` is configured for `use flake`.
 
 ## Usage
 
