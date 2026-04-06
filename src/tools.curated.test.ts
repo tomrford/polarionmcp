@@ -1,4 +1,12 @@
-import { afterEach, beforeEach, describe, expect, test, vi } from "bun:test";
+import {
+  afterEach,
+  beforeEach,
+  describe,
+  expect,
+  expectCalledWith,
+  test,
+  vi,
+} from "./test/test.ts";
 import { Client } from "@modelcontextprotocol/sdk/client/index.js";
 import { InMemoryTransport } from "@modelcontextprotocol/sdk/inMemory.js";
 import { createServer } from "./register.ts";
@@ -78,7 +86,7 @@ describe("curated tools", () => {
       },
     });
 
-    expect(getSpy).toHaveBeenCalledWith("/projects", {
+    expectCalledWith(getSpy, "/projects", {
       headers: { Authorization: "Bearer test-token" },
       params: {
         query: {
@@ -127,7 +135,7 @@ describe("curated tools", () => {
       },
     });
 
-    expect(getSpy).toHaveBeenCalledWith("/projects/{projectId}/workitems", {
+    expectCalledWith(getSpy, "/projects/{projectId}/workitems", {
       headers: { Authorization: "Bearer test-token" },
       params: {
         path: { projectId: "PRJ" },
@@ -179,7 +187,7 @@ describe("curated tools", () => {
       },
     });
 
-    expect(getSpy).toHaveBeenCalledWith("/projects/{projectId}/workitems/{workItemId}", {
+    expectCalledWith(getSpy, "/projects/{projectId}/workitems/{workItemId}", {
       headers: { Authorization: "Bearer test-token" },
       params: {
         path: { projectId: "PRJ", workItemId: "REQ-1" },
@@ -219,7 +227,7 @@ describe("curated tools", () => {
       },
     });
 
-    expect(patchSpy).toHaveBeenCalledWith("/projects/{projectId}/workitems/{workItemId}", {
+    expectCalledWith(patchSpy, "/projects/{projectId}/workitems/{workItemId}", {
       headers: { Authorization: "Bearer test-token" },
       params: {
         path: { projectId: "PRJ", workItemId: "REQ-1" },
@@ -264,7 +272,7 @@ describe("curated tools", () => {
       },
     });
 
-    expect(getSpy).toHaveBeenCalledWith("/projects/{projectId}/documents", {
+    expectCalledWith(getSpy, "/projects/{projectId}/documents", {
       headers: { Authorization: "Bearer test-token" },
       params: {
         path: { projectId: "PRJ" },
@@ -315,16 +323,20 @@ describe("curated tools", () => {
       },
     });
 
-    expect(getSpy).toHaveBeenCalledWith("/projects/{projectId}/spaces/{spaceId}/documents/{documentName}", {
-      headers: { Authorization: "Bearer test-token" },
-      params: {
-        path: { projectId: "PRJ", spaceId: "_default", documentName: "Spec" },
-        query: {
-          revision: undefined,
-          fields: undefined,
+    expectCalledWith(
+      getSpy,
+      "/projects/{projectId}/spaces/{spaceId}/documents/{documentName}",
+      {
+        headers: { Authorization: "Bearer test-token" },
+        params: {
+          path: { projectId: "PRJ", spaceId: "_default", documentName: "Spec" },
+          query: {
+            revision: undefined,
+            fields: undefined,
+          },
         },
       },
-    });
+    );
 
     expect(textPayload(result)).toEqual({
       id: "PRJ/_default/Spec",
@@ -357,7 +369,7 @@ describe("curated tools", () => {
       },
     });
 
-    expect(getSpy).toHaveBeenCalledWith("/projects/{projectId}/workitems/{workItemId}/linkedworkitems", {
+    expectCalledWith(getSpy, "/projects/{projectId}/workitems/{workItemId}/linkedworkitems", {
       headers: { Authorization: "Bearer test-token" },
       params: {
         path: { projectId: "PRJ", workItemId: "REQ-1" },
@@ -407,7 +419,7 @@ describe("curated tools", () => {
       },
     });
 
-    expect(getSpy).toHaveBeenCalledWith("/projects/{projectId}/actions/getFieldsMetadata", {
+    expectCalledWith(getSpy, "/projects/{projectId}/actions/getFieldsMetadata", {
       headers: { Authorization: "Bearer test-token" },
       params: {
         path: { projectId: "PRJ" },

@@ -1,11 +1,13 @@
 import createClient from "openapi-fetch";
 import type { paths } from "../generated/polarion.ts";
 
-const baseUrl = process.env["POLARION_BASE_URL"];
+const rawBaseUrl = Deno.env.get("POLARION_BASE_URL");
 
-if (!baseUrl) throw new Error("POLARION_BASE_URL is not set");
+if (!rawBaseUrl) throw new Error("POLARION_BASE_URL is not set");
 
-export function getPolarionBaseUrl() {
+const baseUrl: string = rawBaseUrl;
+
+export function getPolarionBaseUrl(): string {
   return baseUrl;
 }
 

@@ -5,11 +5,11 @@ import { createServer } from "./register.ts";
 // ---------- start ----------
 
 const server = createServer();
-const isStdio = process.argv.includes("--stdio");
+const isStdio = Deno.args.includes("--stdio");
 const defaultHttpPort = 8080;
 
 function httpPort(): number {
-  const rawPort = process.env["PORT"];
+  const rawPort = Deno.env.get("PORT");
   if (!rawPort) return defaultHttpPort;
 
   const port = Number(rawPort);
@@ -31,62 +31,54 @@ if (isStdio) {
 
   const port = httpPort();
 
-  Bun.serve({
-    port,
-    routes: {
-      "/mcp": {
-        POST: async (req) => {
-          // Check for existing session
-          const sessionId = req.headers.get("mcp-session-id");
-          let transport: Transport;
+  Deno.serve({ port }, async (req) => {
+    const url = new URL(req.url);
+    if (url.pathname !== "/mcp") {
+      return new Response("Not found", { status: 404 });
+    }
 
-          if (sessionId && sessions.has(sessionId)) {
-            transport = sessions.get(sessionId)!;
-          } else if (!sessionId) {
-            // New session — create transport
-            transport = new WebStandardStreamableHTTPServerTransport({
-              sessionIdGenerator: () => crypto.randomUUID(),
-              onsessioninitialized: (id) => {
-                sessions.set(id, transport);
-              },
-              onsessionclosed: (id) => {
-                sessions.delete(id);
-              },
-            });
-            transport.onclose = () => {
-              if (transport.sessionId) sessions.delete(transport.sessionId);
-            };
-            await server.connect(transport);
-          } else {
-            return new Response("Session not found", { status: 404 });
-          }
+    const sessionId = req.headers.get("mcp-session-id");
+    const existingTransport = sessionId ? sessions.get(sessionId) : undefined;
 
-          // Extract bearer token and pass as authInfo
-          const authHeader = req.headers.get("authorization");
-          const token = authHeader?.replace(/^Bearer\s+/i, "");
+    if (req.method === "POST") {
+      let transport: Transport;
 
-          return transport.handleRequest(req, {
-            authInfo: token ? { token, clientId: "polarion-mcp-client", scopes: [] } : undefined,
-          });
-        },
-        GET: async (req) => {
-          const sessionId = req.headers.get("mcp-session-id");
-          const transport = sessionId ? sessions.get(sessionId) : undefined;
-          if (!transport) {
-            return new Response("Session not found", { status: 404 });
-          }
-          return transport.handleRequest(req);
-        },
-        DELETE: async (req) => {
-          const sessionId = req.headers.get("mcp-session-id");
-          const transport = sessionId ? sessions.get(sessionId) : undefined;
-          if (!transport) {
-            return new Response("Session not found", { status: 404 });
-          }
-          return transport.handleRequest(req);
-        },
-      },
-    },
+      if (existingTransport) {
+        transport = existingTransport;
+      } else if (!sessionId) {
+        transport = new WebStandardStreamableHTTPServerTransport({
+          sessionIdGenerator: () => crypto.randomUUID(),
+          onsessioninitialized: (id) => {
+            sessions.set(id, transport);
+          },
+          onsessionclosed: (id) => {
+            sessions.delete(id);
+          },
+        });
+        transport.onclose = () => {
+          if (transport.sessionId) sessions.delete(transport.sessionId);
+        };
+        await server.connect(transport);
+      } else {
+        return new Response("Session not found", { status: 404 });
+      }
+
+      const authHeader = req.headers.get("authorization");
+      const token = authHeader?.replace(/^Bearer\s+/i, "");
+
+      return transport.handleRequest(req, {
+        authInfo: token ? { token, clientId: "polarion-mcp-client", scopes: [] } : undefined,
+      });
+    }
+
+    if (req.method === "GET" || req.method === "DELETE") {
+      if (!existingTransport) {
+        return new Response("Session not found", { status: 404 });
+      }
+      return existingTransport.handleRequest(req);
+    }
+
+    return new Response("Method not allowed", { status: 405 });
   });
 
   console.log(

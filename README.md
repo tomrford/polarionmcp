@@ -6,7 +6,7 @@ MCP server that exposes Polarion ALM's REST API to AI coding agents (Claude Code
 
 Codemode migration branch.
 
-The checked-in runtime is still the older Bun-based multi-tool server. The target architecture for this branch is a Deno-based codemode server with one public `code` tool, top-level resources, and an internal combined tool surface of curated tools plus generated raw `api.*` tools.
+The checked-in runtime is now a Deno-based multi-tool server. The target architecture for this branch is still a codemode server with one public `code` tool, top-level resources, and an internal combined tool surface of curated tools plus generated raw `api.*` tools.
 
 See:
 
@@ -17,7 +17,6 @@ See:
 
 ```bash
 nix develop
-bun install
 cp .env.example .env   # then fill in your Polarion URL and token
 ```
 
@@ -28,13 +27,13 @@ cp .env.example .env   # then fill in your Polarion URL and token
 Run in HTTP mode:
 
 ```bash
-bun run src/server.ts
+deno task start
 ```
 
 Run in stdio mode:
 
 ```bash
-bun run src/server.ts --stdio
+deno task start:stdio
 ```
 
 Or add to your MCP client config (e.g. `.mcp.json`):
@@ -44,8 +43,8 @@ Or add to your MCP client config (e.g. `.mcp.json`):
   "mcpServers": {
     "polarion": {
       "type": "stdio",
-      "command": "bun",
-      "args": ["run", "src/server.ts", "--stdio"],
+      "command": "deno",
+      "args": ["task", "start:stdio"],
       "env": {
         "POLARION_BASE_URL": "https://polarion.example.com/polarion/rest/v1",
         "POLARION_ACCESS_TOKEN": "your-token"
@@ -121,13 +120,13 @@ Types are generated from the bundled OpenAPI spec (`polarionrest.json`) using `o
 To regenerate types after updating the spec:
 
 ```bash
-bun run generate
+deno task generate
 ```
 
 ## Tests
 
 ```bash
-bun test
+deno task test
 ```
 
 ## License

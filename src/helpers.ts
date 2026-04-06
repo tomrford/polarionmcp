@@ -55,7 +55,7 @@ export function authHeaders(extra: RequestContextLike): { Authorization: string 
   const token =
     extra.authInfo?.token ??
     headerToken ??
-    process.env["POLARION_ACCESS_TOKEN"];
+    Deno.env.get("POLARION_ACCESS_TOKEN");
 
   if (!token) throw new Error("No Polarion access token available");
 

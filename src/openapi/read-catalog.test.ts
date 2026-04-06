@@ -1,4 +1,4 @@
-import { describe, expect, test } from "bun:test";
+import { describe, expect, test } from "../test/test.ts";
 import { READ_OPERATION_CATALOG, READ_OPERATION_CATALOG_BY_ID } from "./read-catalog.ts";
 import {
   getReadPolicy,

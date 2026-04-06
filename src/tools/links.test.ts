@@ -1,4 +1,12 @@
-import { afterEach, beforeEach, describe, expect, test, vi } from "bun:test";
+import {
+  afterEach,
+  beforeEach,
+  describe,
+  expect,
+  expectCalledWith,
+  test,
+  vi,
+} from "../test/test.ts";
 import { Client } from "@modelcontextprotocol/sdk/client/index.js";
 import { InMemoryTransport } from "@modelcontextprotocol/sdk/inMemory.js";
 import { createServer } from "../register.ts";
@@ -75,7 +83,7 @@ describe("link tools", () => {
       },
     });
 
-    expect(postSpy).toHaveBeenCalledWith("/projects/{projectId}/workitems/{workItemId}/linkedworkitems", {
+    expectCalledWith(postSpy, "/projects/{projectId}/workitems/{workItemId}/linkedworkitems", {
       headers: { Authorization: "Bearer test-token" },
       params: {
         path: { projectId: "PRJ", workItemId: "REQ-1" },
@@ -130,7 +138,8 @@ describe("link tools", () => {
       },
     });
 
-    expect(patchSpy).toHaveBeenCalledWith(
+    expectCalledWith(
+      patchSpy,
       "/projects/{projectId}/workitems/{workItemId}/linkedworkitems/{roleId}/{targetProjectId}/{linkedWorkItemId}",
       {
         headers: { Authorization: "Bearer test-token" },
@@ -183,7 +192,8 @@ describe("link tools", () => {
       },
     });
 
-    expect(deleteSpy).toHaveBeenCalledWith(
+    expectCalledWith(
+      deleteSpy,
       "/projects/{projectId}/workitems/{workItemId}/linkedworkitems/{roleId}/{targetProjectId}/{linkedWorkItemId}",
       {
         headers: { Authorization: "Bearer test-token" },

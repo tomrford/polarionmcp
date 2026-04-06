@@ -1,8 +1,7 @@
-FROM oven/bun:1
+FROM denoland/deno:2.6.10
 WORKDIR /app
-COPY package.json bun.lock ./
-RUN bun install --frozen-lockfile
 COPY . .
+RUN deno cache --allow-env --allow-net --allow-read src/server.ts
 ENV PORT=8080
 EXPOSE 8080
-CMD ["bun", "run", "src/server.ts"]
+CMD ["deno", "task", "start"]

@@ -1,4 +1,4 @@
 #!/usr/bin/env bash
 set -euo pipefail
 cd "$(dirname "$0")/.."
-bunx openapi-typescript polarionrest.json -o generated/polarion.ts
+deno run -A npm:openapi-typescript@7.10.1 polarionrest.json -o generated/polarion.ts

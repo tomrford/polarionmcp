@@ -1,4 +1,4 @@
-import { describe, expect, test } from "bun:test";
+import { describe, expect, test } from "./test/test.ts";
 import { makeError, httpError, networkError } from "./errors.ts";
 
 describe("errors", () => {

@@ -64,7 +64,7 @@ function sortedUnique(values: string[]) {
 
 async function loadReadOperationCatalog(): Promise<ReadOperationCatalogEntry[]> {
   const specUrl = new URL("../../polarionrest.json", import.meta.url);
-  const spec = await Bun.file(specUrl).json() as OpenApiSpec;
+  const spec = JSON.parse(await Deno.readTextFile(specUrl)) as OpenApiSpec;
   const entries: ReadOperationCatalogEntry[] = [];
 
   for (const [pathTemplate, pathItem] of Object.entries(spec.paths)) {

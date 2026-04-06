@@ -1,4 +1,12 @@
-import { afterEach, beforeEach, describe, expect, test, vi } from "bun:test";
+import {
+  afterEach,
+  beforeEach,
+  describe,
+  expect,
+  expectCalledWith,
+  test,
+  vi,
+} from "../test/test.ts";
 import { Client } from "@modelcontextprotocol/sdk/client/index.js";
 import { InMemoryTransport } from "@modelcontextprotocol/sdk/inMemory.js";
 import { createServer } from "../register.ts";
@@ -67,7 +75,7 @@ describe("comment tools", () => {
       },
     });
 
-    expect(postSpy).toHaveBeenCalledWith("/projects/{projectId}/workitems/{workItemId}/comments", {
+    expectCalledWith(postSpy, "/projects/{projectId}/workitems/{workItemId}/comments", {
       headers: { Authorization: "Bearer test-token" },
       params: {
         path: { projectId: "PRJ", workItemId: "REQ-1" },

@@ -1,4 +1,4 @@
-import { describe, expect, test } from "bun:test";
+import { describe, expect, test } from "../test/test.ts";
 import { buildReadUrl } from "./generic-read.ts";
 
 describe("buildReadUrl", () => {
