@@ -1,13 +1,16 @@
 {
   "nodeModulesDir": "auto",
+  "workspace": [
+    "packages/polarion-tools"
+  ],
   "imports": {
     "@std/expect": "jsr:@std/expect@^1.0.17",
     "@std/testing/bdd": "jsr:@std/testing@^1.0.15/bdd"
   },
   "tasks": {
-    "start": "deno run --allow-env --allow-net src/server.ts",
-    "start:stdio": "deno run --allow-env src/server.ts --stdio",
-    "generate": "deno run -A npm:openapi-typescript@7.10.1 polarionrest.json -o generated/polarion.ts",
+    "start": "deno run --allow-env --allow-net src/main.ts",
+    "start:stdio": "deno run --allow-env src/main.ts --stdio",
+    "generate": "deno run -A npm:openapi-typescript@7.10.1 packages/polarion-tools/polarionrest.json -o packages/polarion-tools/generated/polarion.ts",
     "check": "POLARION_BASE_URL=https://example.invalid deno test --no-run --allow-env --allow-read",
     "test": "POLARION_BASE_URL=https://example.invalid deno test --allow-env --allow-read"
   },

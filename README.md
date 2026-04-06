@@ -6,7 +6,7 @@ MCP server that exposes Polarion ALM's REST API to AI coding agents (Claude Code
 
 Codemode migration branch.
 
-The checked-in runtime is now a Deno-based multi-tool server. The target architecture for this branch is still a codemode server with one public `code` tool, top-level resources, and an internal combined tool surface of curated tools plus generated raw `api.*` tools.
+The checked-in runtime is now a Deno-based multi-tool server packaged under `packages/polarion-tools`. The target architecture for this branch is still a codemode server with one public `code` tool, top-level resources, and an internal combined tool surface of curated tools plus generated raw `api.*` tools.
 
 See:
 
@@ -115,7 +115,7 @@ Generic read behavior:
 
 ## Generated API Client
 
-Types are generated from the bundled OpenAPI spec (`polarionrest.json`) using `openapi-typescript`. The runtime client uses `openapi-fetch` for fully typed requests.
+Types are generated from the bundled OpenAPI spec at [`packages/polarion-tools/polarionrest.json`](/Users/tomford/code/projects/polarionmcp/packages/polarion-tools/polarionrest.json) using `openapi-typescript`. The runtime client uses `openapi-fetch` for fully typed requests.
 
 To regenerate types after updating the spec:
 

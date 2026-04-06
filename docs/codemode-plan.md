@@ -85,8 +85,8 @@ In this repo the Bun-specific seams are small. Moving the host and the sandbox t
 
 Expected migration surface:
 
-- `Bun.serve()` in `src/server.ts`
-- `Bun.file()` in `src/openapi/read-catalog.ts`
+- `Bun.serve()` in `packages/polarion-tools/src/server.ts`
+- `Bun.file()` in `packages/polarion-tools/src/openapi/read-catalog.ts`
 - `bun:test` imports across tests
 - package/tooling files
 
@@ -230,7 +230,7 @@ Goal: replace the homegrown generic read/help path with a repo-local raw API nam
 
 Recommended scope:
 
-- trim `polarionrest.json` using repo policy logic
+- trim `packages/polarion-tools/polarionrest.json` using repo policy logic
 - include approved reads and writes
 - include `jobs`
 - exclude admin/license/avatar/icon/binary/export and similar low-signal surfaces
