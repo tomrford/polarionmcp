@@ -1,0 +1,59 @@
+export const SERVER_INSTRUCTIONS = `Polarion tool-surface rules:
+1. Prefer curated tools over polarion_api_read for common tasks.
+2. Use polarion_api_help before polarion_api_read when unsure which operation fits.
+3. Prefer project-scoped work; only use all-project reads when clearly necessary.
+4. Fetch incrementally. Default page size is 20 and responses may be truncated.
+5. Use get_fields_metadata before unfamiliar updates or custom-field queries.
+6. Check workflow actions before changing status-like fields.
+7. Check existing links before creating or updating a work item link.
+
+Polarion query syntax:
+- Lucene-style field queries: field:value, field:val* (wildcard)
+- Boolean operators: AND, OR, NOT, parentheses for grouping
+- Common fields: type, status, id, title, priority, severity, created, updated
+- Examples: type:requirement AND status:open, id:PRJ*, severity:must_have
+- Bare text matches exact ID
+
+Custom fields:
+- Custom fields are type-specific. Use get_fields_metadata with target_type to discover them.
+- Example: type "sysparameter" has custom fields: parval, parmin, parmax, parunit, swname
+- Request custom fields via the fields param: fields="title,parval,parunit"
+- Query sysparameters: query="type:sysparameter"`;
+
+export const PUBLIC_SERVER_INSTRUCTIONS = `This server exposes one tool: code.
+
+Write an async JavaScript arrow function that returns the final result.
+
+Inside code you can call the Polarion tool surface:
+- prefer curated tools for common workflows
+- use polarion_api_help to find the right allowlisted read operation
+- use polarion_api_read only when no curated tool fits
+
+Guidance:
+- prefer project-scoped work over all-project reads
+- fetch incrementally; default page size is 20 and responses may be truncated
+- use get_fields_metadata before unfamiliar updates or custom-field queries
+- use get_workflow_actions before status-like changes
+- check existing links before creating or updating a work item link
+
+Polarion query syntax:
+- field:value and field:val*
+- AND, OR, NOT, parentheses
+- common fields: type, status, id, title, priority, severity, created, updated
+- examples: type:requirement AND status:open, id:PRJ*, severity:must_have`;
+
+export const PUBLIC_CODE_TOOL_DESCRIPTION =
+  `Execute JavaScript codemode against the Polarion tool surface.
+
+Write an async arrow function. Inside the sandbox you can call curated Polarion tools plus polarion_api_help and polarion_api_read.
+
+Preferred workflow:
+1. Use a curated tool when one exists.
+2. Use polarion_api_help when you need to discover the right read operation.
+3. Use polarion_api_read only as the allowlisted read escape hatch.
+
+Query syntax quick reference:
+- field:value
+- field:val*
+- AND, OR, NOT, parentheses
+- common fields: type, status, id, title, priority, severity`;

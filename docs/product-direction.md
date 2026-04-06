@@ -2,7 +2,8 @@
 
 ## Status
 
-This branch is migrating the Polarion MCP from a many-tool Bun server into a codemode-first Deno server.
+This branch is migrating the Polarion MCP from a many-tool Bun server into a codemode-first Deno
+server.
 
 The target product is a power tool, initially pointed at demo or sandbox data.
 
@@ -11,7 +12,7 @@ The target product is a power tool, initially pointed at demo or sandbox data.
 The final public MCP should expose:
 
 - one `code` tool
-- lightweight top-level resources for guidance
+- concise server instructions and code-tool guidance
 
 The user-facing model should not need to reason about separate curated and raw MCP servers.
 
@@ -24,6 +25,13 @@ Inside the codemode sandbox, the model should have access to one combined tool s
 - search/help over the raw API namespace
 
 Curated and raw tools must be callable in the same execution so code can mix them freely.
+
+Current checked-in vertical slice:
+
+- public `code` tool is implemented
+- the internal tool surface is still the existing curated tools plus `polarion_api_help` and
+  `polarion_api_read`
+- generated raw `api.*` tools are still to come
 
 ## Write Posture
 
@@ -68,4 +76,6 @@ Excluded by default:
 
 `batch_id` orchestration is obsolete in this design.
 
-Codemode should replace the need for query-handle state, fingerprint caches, and most batch orchestration. If we later need a true bulk primitive for throughput, that should be added directly from the real API surface rather than reviving the old `batch_id` design.
+Codemode should replace the need for query-handle state, fingerprint caches, and most batch
+orchestration. If we later need a true bulk primitive for throughput, that should be added directly
+from the real API surface rather than reviving the old `batch_id` design.

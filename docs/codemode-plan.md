@@ -2,19 +2,21 @@
 
 ## Goal
 
-Replace both the abandoned `batch_id` direction and the current many-tool MCP surface with a single codemode-driven MCP.
+Replace both the abandoned `batch_id` direction and the current many-tool MCP surface with a single
+codemode-driven MCP.
 
 Target stack:
 
 - `@cloudflare/codemode`
 - Deno host + Deno sandbox execution
 - one public `code` tool
-- top-level resources for guidance
+- concise server instructions and code-tool guidance
 - one internal sandbox tool surface containing:
   - curated Polarion workflow tools
   - namespaced raw API tools derived from a trimmed OpenAPI spec
 
-The main product win is eliminating repeated LLM round-trips for loops, conditionals, fan-out, cross-result joins, and most wide-update orchestration.
+The main product win is eliminating repeated LLM round-trips for loops, conditionals, fan-out,
+cross-result joins, and most wide-update orchestration.
 
 ## What This Plan Corrects
 
@@ -25,7 +27,8 @@ The first draft was directionally right but too eager to combine four separate c
 3. monorepo/package split
 4. custom codemode wiring based on an outdated mental model of the library
 
-That is more risk than needed. We should prove the codemode shape first, then decide how much repo churn is justified.
+That is more risk than needed. We should prove the codemode shape first, then decide how much repo
+churn is justified.
 
 ## Product Position
 
@@ -33,7 +36,8 @@ This is a product pivot away from the old read-biased MCP model.
 
 Implications:
 
-- the replacement product contract lives in [docs/product-direction.md](/Users/tomford/code/projects/polarionmcp/docs/product-direction.md)
+- the replacement product contract lives in
+  [docs/product-direction.md](/Users/tomford/code/projects/polarionmcp/docs/product-direction.md)
 - writes are allowed in v1
 - `jobs` move from blocked to allowed
 - admin, license, avatar, icon/binary/download, and similar non-product endpoints stay trimmed out
@@ -81,20 +85,22 @@ What should not survive:
 
 Recommended answer: yes.
 
-In this repo the Bun-specific seams are small. Moving the host and the sandbox to Deno early simplifies the runtime story and matches the codemode execution model better.
+In this repo the Bun-specific seams are small. Moving the host and the sandbox to Deno early
+simplifies the runtime story and matches the codemode execution model better.
 
 Expected migration surface:
 
-- `Bun.serve()` in `packages/polarion-tools/src/server.ts`
-- `Bun.file()` in `packages/polarion-tools/src/openapi/read-catalog.ts`
+- `Bun.serve()` in `src/server.ts`
+- `Bun.file()` in `src/openapi/read-catalog.ts`
 - `bun:test` imports across tests
 - package/tooling files
 
-### 4. Monorepo split is acceptable if it stays mechanical
+### 4. Monorepo split is optional, not a goal
 
-Recommended answer: yes.
+Recommended answer: no, unless we later have multiple real packages to justify it.
 
-The repo is still small, so this is not required for correctness. But if the split is kept mechanical and reviewable, it is reasonable to do early because the resulting boundaries are already clear:
+The repo is still small, and if we are shipping one MCP per domain for now, a package split mostly
+adds path churn. Keep clear module boundaries inside one package first:
 
 - host/server assembly
 - curated Polarion tools
@@ -105,7 +111,8 @@ The repo is still small, so this is not required for correctness. But if the spl
 
 Recommended answer: yes.
 
-The first draft assumed custom composition around `createCodeTool` and a bespoke provider model. Current Cloudflare docs already expose:
+The first draft assumed custom composition around `createCodeTool` and a bespoke provider model.
+Current Cloudflare docs already expose:
 
 - `codeMcpServer({ server, executor })`
 - `openApiMcpServer({ spec, executor, request })`
@@ -115,13 +122,15 @@ That matters, but the clarified product shape is:
 - one public `code` tool
 - one internal combined tool surface containing curated tools plus raw `api.*` tools
 
-So `codeMcpServer` remains the key wrapper. `openApiMcpServer` is now reference material rather than the primary assembly path.
+So `codeMcpServer` remains the key wrapper. `openApiMcpServer` is now reference material rather than
+the primary assembly path.
 
 ### 6. Make the public surface a single `code` tool, and keep the internal server combined
 
 Recommended answer: yes.
 
-The public MCP should be a single `code` tool. The internal upstream server should contain both curated tools and raw API tools so they can be chained inside one sandboxed execution.
+The public MCP should be a single `code` tool. The internal upstream server should contain both
+curated tools and raw API tools so they can be chained inside one sandboxed execution.
 
 Recommended v1 shape:
 
@@ -132,13 +141,15 @@ Recommended v1 shape:
 - public MCP server:
   - one `code` tool produced by wrapping the upstream server
 
-This is the right shape because the model can mix high-signal curated tools with raw fallback calls inside one run.
+This is the right shape because the model can mix high-signal curated tools with raw fallback calls
+inside one run.
 
 ### 7. Raw API tools should include writes in v1, but only from the trimmed spec
 
 Recommended answer: yes.
 
-The raw API surface is part of the power-tool contract. The boundary is not "read only." The boundary is "only operations that survive the trim step."
+The raw API surface is part of the power-tool contract. The boundary is not "read only." The
+boundary is "only operations that survive the trim step."
 
 Recommended v1:
 
@@ -153,7 +164,8 @@ This means the trim policy becomes the primary safety mechanism.
 
 Recommended answer: yes.
 
-This part of the draft was right. The sandbox must never see bearer tokens. The host request layer should remain the place that:
+This part of the draft was right. The sandbox must never see bearer tokens. The host request layer
+should remain the place that:
 
 - injects auth
 - enforces base URL
@@ -161,17 +173,17 @@ This part of the draft was right. The sandbox must never see bearer tokens. The 
 - logs requested operations
 - blocks trimmed-out operations
 
-### 9. Keep top-level resources, but simplify them for the codemode product
+### 9. Drop top-level resources for now; keep guidance in instructions/tool description
 
 Recommended answer: yes.
 
-The existing repo already has lightweight guidance resources, and those still make sense. They should live on the final public MCP rather than inside the codemode sandbox.
+The guidance we have is short enough to live in the public server instructions and `code` tool
+description. That removes one more drift surface while the product is still moving.
 
 Likely to reuse:
 
 - `src/openapi/read-policy.ts`
 - `src/openapi/read-catalog.ts`
-- `src/resources.ts`
 - concise server instructions, updated for codemode and the power-tool contract
 
 ## Recommended Architecture
@@ -183,9 +195,12 @@ Goal: prove the critical unknowns with minimal churn.
 Build a tiny branch-local spike that answers these questions:
 
 1. Can we implement a Deno-based executor against codemode's current `Executor` interface?
-2. Can we build one upstream MCP server containing both curated tools and repo-local raw `api.*` tools?
-3. Can we wrap that server with `codeMcpServer` and successfully chain curated and raw calls inside one execution?
-4. Can we front a trimmed Polarion OpenAPI spec with host-side auth injection and no credential leakage?
+2. Can we build one upstream MCP server containing both curated tools and repo-local raw `api.*`
+   tools?
+3. Can we wrap that server with `codeMcpServer` and successfully chain curated and raw calls inside
+   one execution?
+4. Can we front a trimmed Polarion OpenAPI spec with host-side auth injection and no credential
+   leakage?
 
 Deliverable:
 
@@ -208,6 +223,7 @@ Recommended scope:
 - move host to Deno
 - add Deno sandbox executor
 - keep existing curated tool implementations
+- flatten the single-package workspace into one repo-root package
 - reduce curated tools to the minimal high-signal subset
 - build repo-local raw `api.*` tools from the trimmed spec
 - expose one public `code` tool by wrapping that upstream server
@@ -218,11 +234,13 @@ Initial curated subset:
 - `list_work_items`
 - `get_work_item`
 - `update_work_item`
-- whichever of `get_fields_metadata`, `get_enum_options`, `get_workflow_actions` remain useful enough to beat raw calls
+- whichever of `get_fields_metadata`, `get_enum_options`, `get_workflow_actions` remain useful
+  enough to beat raw calls
 
 Question to resolve before coding:
 
-Do `list_documents` and `get_document` belong in the initial curated subset? Recommended answer: only if they are a real day-to-day workflow, otherwise defer.
+Do `list_documents` and `get_document` belong in the initial curated subset? Recommended answer:
+only if they are a real day-to-day workflow, otherwise defer.
 
 ### Phase 2: raw API tool generation from the trimmed spec
 
@@ -230,7 +248,7 @@ Goal: replace the homegrown generic read/help path with a repo-local raw API nam
 
 Recommended scope:
 
-- trim `packages/polarion-tools/polarionrest.json` using repo policy logic
+- trim `polarionrest.json` using repo policy logic
 - include approved reads and writes
 - include `jobs`
 - exclude admin/license/avatar/icon/binary/export and similar low-signal surfaces
@@ -252,17 +270,18 @@ Add:
 - clearer server instructions for when to prefer curated tools vs raw `api.*`
 - tests for sandbox timeout, host request policy, and trimmed-spec behavior
 - docs showing typical code-mode patterns
-- top-level resource registration on the public MCP
 
 ## Concrete Implementation Plan
 
 ### Step 1. Lock the product contract
 
-Use [docs/product-direction.md](/Users/tomford/code/projects/polarionmcp/docs/product-direction.md) as the short product contract for the branch and keep it aligned with implementation changes.
+Use [docs/product-direction.md](/Users/tomford/code/projects/polarionmcp/docs/product-direction.md)
+as the short product contract for the branch and keep it aligned with implementation changes.
 
 ### Step 2. Migrate the repo to Deno
 
-Add flake/devshell, Deno config, Deno serve/test equivalents, and update code that currently depends on Bun APIs.
+Add flake/devshell, Deno config, Deno serve/test equivalents, and update code that currently depends
+on Bun APIs.
 
 ### Step 3. Implement a minimal executor
 
@@ -321,9 +340,11 @@ The generator should:
 4. emit TS types/client from that trimmed spec
 5. emit the raw MCP registry from that trimmed spec
 
-This preserves the ability to re-include routes later by changing policy and regenerating, without needing to fetch and hand-trim again.
+This preserves the ability to re-include routes later by changing policy and regenerating, without
+needing to fetch and hand-trim again.
 
-The first target is not "all safe operations." The first target is "smallest useful power-tool slice."
+The first target is not "all safe operations." The first target is "smallest useful power-tool
+slice."
 
 ### Step 6. Build raw `api.*` tools from the trimmed spec
 
@@ -366,7 +387,8 @@ Recommended answer:
 Why:
 
 - mainstream OpenAPI generators are good at clients and models
-- they are not primarily designed to emit "combined codemode-ready MCP tool registry with our naming, trim policy, and host-side request semantics"
+- they are not primarily designed to emit "combined codemode-ready MCP tool registry with our
+  naming, trim policy, and host-side request semantics"
 - our custom layer is small and policy-heavy, which makes it a good place to own the final shape
 
 Current best fit:
@@ -374,9 +396,12 @@ Current best fit:
 - `openapi-typescript` or `@hey-api/openapi-ts` for generated types/client
 - repo-local script for trim + MCP registry generation
 
-`@hey-api/openapi-ts` is attractive if we want a more programmable pipeline later because it explicitly supports plugin-based generation. `openapi-typescript` is attractive if we want to stay minimal and keep generation close to our current setup.
+`@hey-api/openapi-ts` is attractive if we want a more programmable pipeline later because it
+explicitly supports plugin-based generation. `openapi-typescript` is attractive if we want to stay
+minimal and keep generation close to our current setup.
 
-We do not need a full "OpenAPI to MCP server" generator because the end product is not a standalone generated MCP server. It is one component inside a combined codemode assembly.
+We do not need a full "OpenAPI to MCP server" generator because the end product is not a standalone
+generated MCP server. It is one component inside a combined codemode assembly.
 
 ### Step 6b. Cloudflare reference code
 
@@ -397,14 +422,15 @@ The most reusable upstream pieces are small:
 - exposes `search` backed by `codemode.spec()`
 - exposes `execute` backed by `codemode.request()`
 
-That means copying it verbatim is not very helpful for our final product. The better move is to borrow the relevant helper logic and build our own raw `api.*` layer around the trimmed spec.
+That means copying it verbatim is not very helpful for our final product. The better move is to
+borrow the relevant helper logic and build our own raw `api.*` layer around the trimmed spec.
 
 ### Step 7. Wrap the internal server with `codeMcpServer`
 
 The final public server shape should be:
 
 - one `code` tool
-- top-level resources
+- public instructions/tool description carrying the lightweight guidance
 
 ## Explicit Non-Goals For V1
 
@@ -430,11 +456,12 @@ Recommended answer: both.
 
 ### 4. Do we still want the current metadata/workflow curated tools?
 
-Recommended answer: keep only the ones that materially outperform raw `api.*` calls for common workflows.
+Recommended answer: keep only the ones that materially outperform raw `api.*` calls for common
+workflows.
 
 ### 5. Are resources and server instructions still part of the product?
 
-Recommended answer: yes. Keep them top-level and lightweight.
+Recommended answer: keep instructions; skip separate resources for now.
 
 ## Verification
 
@@ -445,11 +472,13 @@ Before calling the plan implementation-ready, prove all of the following:
 3. sandbox network access is blocked
 4. bearer tokens never appear inside sandbox-visible code or logs
 5. timeout and error reporting are intelligible
-6. top-level resources still resolve on the public MCP
+6. public instructions/tool description carry the needed lightweight guidance
 7. test coverage exists for executor behavior and request policy enforcement
 
 ## References
 
-- Product contract: [docs/product-direction.md](/Users/tomford/code/projects/polarionmcp/docs/product-direction.md)
+- Product contract:
+  [docs/product-direction.md](/Users/tomford/code/projects/polarionmcp/docs/product-direction.md)
 - Previous batching attempt: `feat/batch-operations`
-- Half-baked earlier direction notes: [repl_mcp_decisions.md](/Users/tomford/code/projects/polarionmcp/repl_mcp_decisions.md)
+- Half-baked earlier direction notes:
+  [repl_mcp_decisions.md](/Users/tomford/code/projects/polarionmcp/repl_mcp_decisions.md)

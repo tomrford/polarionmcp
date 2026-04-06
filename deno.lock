@@ -7,7 +7,12 @@
     "jsr:@std/internal@^1.0.12": "1.0.12",
     "jsr:@std/path@^1.1.4": "1.1.4",
     "jsr:@std/testing@^1.0.15": "1.0.17",
+    "npm:@cloudflare/codemode@*": "0.3.3_@modelcontextprotocol+sdk@1.25.3__zod@4.3.6__ajv@8.18.0__express@5.2.1_zod@4.3.6",
+    "npm:@cloudflare/codemode@0.3.3": "0.3.3_@modelcontextprotocol+sdk@1.25.3__zod@4.3.6__ajv@8.18.0__express@5.2.1_zod@4.3.6",
+    "npm:@modelcontextprotocol/sdk@*": "1.25.3_zod@4.3.6_ajv@8.18.0_express@5.2.1",
     "npm:@modelcontextprotocol/sdk@1.25.3": "1.25.3_zod@4.3.6_ajv@8.18.0_express@5.2.1",
+    "npm:acorn@*": "8.15.0",
+    "npm:acorn@8.15.0": "8.15.0",
     "npm:openapi-fetch@0.15.0": "0.15.0",
     "npm:zod@4.3.6": "4.3.6"
   },
@@ -44,6 +49,19 @@
     }
   },
   "npm": {
+    "@cloudflare/codemode@0.3.3_@modelcontextprotocol+sdk@1.25.3__zod@4.3.6__ajv@8.18.0__express@5.2.1_zod@4.3.6": {
+      "integrity": "sha512-jO1PPnxe/nQIMDO5dgWzXWzJ1ozjixqzUVevp3NX6joYxjZphqDIBgGSGfqalfAaEf+qhgBoF42n8zZc1NiVOQ==",
+      "dependencies": [
+        "@modelcontextprotocol/sdk",
+        "@types/json-schema",
+        "acorn@8.16.0",
+        "zod"
+      ],
+      "optionalPeers": [
+        "@modelcontextprotocol/sdk",
+        "zod"
+      ]
+    },
     "@hono/node-server@1.19.12_hono@4.12.11": {
       "integrity": "sha512-txsUW4SQ1iilgE0l9/e9VQWmELXifEFvmdA1j6WFh/aFPj99hIntrSsq/if0UWyGVkmrRPKA1wCeP+UCr1B9Uw==",
       "dependencies": [
@@ -71,12 +89,23 @@
         "zod-to-json-schema"
       ]
     },
+    "@types/json-schema@7.0.15": {
+      "integrity": "sha512-5+fP8P8MFNC+AyZCDxrB2pkZFPGzqQWUzpSeuuVLvm8VMcorNYavBqoFcxK8bQz4Qsbn4oUEEem4wDLfcysGHA=="
+    },
     "accepts@2.0.0": {
       "integrity": "sha512-5cvg6CtKwfgdmVqY1WIiXKc3Q1bkRqGLi+2W/6ao+6Y7gu/RCwRuAhGEzh5B4KlszSuTLgZYuqFqo5bImjNKng==",
       "dependencies": [
         "mime-types",
         "negotiator"
       ]
+    },
+    "acorn@8.15.0": {
+      "integrity": "sha512-NZyJarBfL7nWwIq+FDL6Zp/yHEhePMNnnJ0y3qfieCrmNvYct8uvtiV41UvlSe6apAfk0fY1FbWx+NwfmpvtTg==",
+      "bin": true
+    },
+    "acorn@8.16.0": {
+      "integrity": "sha512-UVJyE9MttOsBQIDKw1skb9nAwQuR5wuGD3+82K6JgJlm/Y+KI92oNsMNGZCYdDsVtRHSak0pcV5Dno5+4jh9sw==",
+      "bin": true
     },
     "ajv-formats@3.0.1_ajv@8.18.0": {
       "integrity": "sha512-8iUql50EUR+uUcdRQ3HDqa6EVyo3docL8g5WJ3FNcWmu62IbkGUue/pEyLBW8VGKKucTPgqeks4fIU1DA4yowQ==",
@@ -567,7 +596,9 @@
     ],
     "packageJson": {
       "dependencies": [
+        "npm:@cloudflare/codemode@0.3.3",
         "npm:@modelcontextprotocol/sdk@1.25.3",
+        "npm:acorn@8.15.0",
         "npm:openapi-fetch@0.15.0",
         "npm:zod@4.3.6"
       ]
