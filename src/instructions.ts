@@ -24,13 +24,11 @@ export const PUBLIC_SERVER_INSTRUCTIONS = `This server exposes one tool: code.
 
 Write an async JavaScript arrow function that returns the final result.
 
-Inside code you can call the Polarion tool surface:
-- prefer curated tools for common workflows
-- use polarion_api_help to find the right allowlisted read operation
-- use polarion_api_read only when no curated tool fits
+Inside code, use the generated codemode tool catalog and call functions through codemode.*.
+
+Prefer project-scoped work over all-project reads.
 
 Guidance:
-- prefer project-scoped work over all-project reads
 - fetch incrementally; default page size is 20 and responses may be truncated
 - use get_fields_metadata before unfamiliar updates or custom-field queries
 - use get_workflow_actions before status-like changes
@@ -41,19 +39,3 @@ Polarion query syntax:
 - AND, OR, NOT, parentheses
 - common fields: type, status, id, title, priority, severity, created, updated
 - examples: type:requirement AND status:open, id:PRJ*, severity:must_have`;
-
-export const PUBLIC_CODE_TOOL_DESCRIPTION =
-  `Execute JavaScript codemode against the Polarion tool surface.
-
-Write an async arrow function. Inside the sandbox you can call curated Polarion tools plus polarion_api_help and polarion_api_read.
-
-Preferred workflow:
-1. Use a curated tool when one exists.
-2. Use polarion_api_help when you need to discover the right read operation.
-3. Use polarion_api_read only as the allowlisted read escape hatch.
-
-Query syntax quick reference:
-- field:value
-- field:val*
-- AND, OR, NOT, parentheses
-- common fields: type, status, id, title, priority, severity`;

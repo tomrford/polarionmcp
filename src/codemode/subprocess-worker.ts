@@ -139,6 +139,16 @@ function createToolFn(providerName: string, toolName: string, positionalArgs = f
   };
 }
 
+function createProviderProxy(providerName: string, tools: string[], positionalArgs = false) {
+  const allowedTools = new Set(tools);
+  return new Proxy({}, {
+    get: (_target, toolName) => {
+      if (typeof toolName !== "string" || !allowedTools.has(toolName)) return undefined;
+      return createToolFn(providerName, toolName, positionalArgs);
+    },
+  });
+}
+
 globalThis.console = {
   log: (...args: unknown[]) => emitLog("log", args),
   info: (...args: unknown[]) => emitLog("log", args),
@@ -154,16 +164,12 @@ globalThis.console = {
 } as typeof console;
 
 try {
-  const toolNames: string[] = [];
-  const toolFns: ((...args: unknown[]) => Promise<unknown>)[] = [];
-  for (const provider of init.providers) {
-    for (const tool of provider.tools) {
-      toolNames.push(tool);
-      toolFns.push(createToolFn(provider.name, tool, provider.positionalArgs));
-    }
-  }
-  const execute = new Function(...toolNames, `return (${init.code})();`);
-  const result = await execute(...toolFns);
+  const providerNames = init.providers.map((provider) => provider.name);
+  const providerValues = init.providers.map((provider) =>
+    createProviderProxy(provider.name, provider.tools, provider.positionalArgs)
+  );
+  const execute = new Function(...providerNames, `return (${init.code})();`);
+  const result = await execute(...providerValues);
   await send({ type: "result", result });
 } catch (error) {
   await send({

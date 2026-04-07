@@ -84,7 +84,7 @@ describe("createPublicServer", () => {
       name: "code",
       arguments: {
         code:
-          'async () => await polarion_api_help({ keyword: "workflow", resource_type: "workitems" })',
+          'async () => await codemode.polarion_api_help({ keyword: "workflow", resource_type: "workitems" })',
       },
     });
 
@@ -118,12 +118,14 @@ describe("createPublicServer", () => {
       response: { ok: true, status: 200 },
     } as unknown as any);
 
-    const { client, server, clientTransport, serverTransport } = await connectClient("bridge-token");
+    const { client, server, clientTransport, serverTransport } = await connectClient(
+      "bridge-token",
+    );
 
     const result = await client.callTool({
       name: "code",
       arguments: {
-        code: "async () => await list_projects({ page_size: 5 })",
+        code: "async () => await codemode.list_projects({ page_size: 5 })",
       },
     });
 
@@ -169,7 +171,7 @@ describe("createPublicServer", () => {
     const result = await client.callTool({
       name: "code",
       arguments: {
-        code: "async () => await list_projects({})",
+        code: "async () => await codemode.list_projects({})",
       },
     });
 
@@ -187,6 +189,25 @@ describe("createPublicServer", () => {
 
     const textResult = result as CallToolResult;
     expect(textResult.isError).toBeUndefined();
+
+    await Promise.all([
+      client.close(),
+      clientTransport.close(),
+      serverTransport.close(),
+      server.close(),
+    ]);
+  });
+
+  test("uses generated code description with typed codemode catalog", async () => {
+    const { client, server, clientTransport, serverTransport } = await connectClient();
+
+    const tools = await client.listTools();
+    const codeTool = tools.tools.find((tool) => tool.name === "code");
+
+    expect(codeTool?.description).toContain("declare const codemode");
+    expect(codeTool?.description).toContain("list_projects");
+    expect(codeTool?.description).toContain("polarion_api_help");
+    expect(codeTool?.description).toContain("codemode.");
 
     await Promise.all([
       client.close(),
