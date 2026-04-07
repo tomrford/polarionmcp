@@ -1,23 +1,9 @@
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { SERVER_INSTRUCTIONS } from "./instructions.ts";
-import { registerProjectsTools } from "./tools/curated/projects.ts";
-import { registerWorkItemTools } from "./tools/curated/work-items.ts";
-import { registerDocumentTools } from "./tools/curated/documents.ts";
-import { registerMetadataTools } from "./tools/curated/metadata.ts";
-import { registerApiHelpTool } from "./tools/api-help.ts";
-import { registerGenericReadTool } from "./tools/generic-read.ts";
-import { registerCommentTools } from "./tools/comments.ts";
-import { registerLinkTools } from "./tools/links.ts";
+import { registerGeneratedTools } from "./generated/register-generated-tools.ts";
 
 export function registerServerFeatures(server: McpServer) {
-  registerProjectsTools(server);
-  registerWorkItemTools(server);
-  registerDocumentTools(server);
-  registerMetadataTools(server);
-  registerApiHelpTool(server);
-  registerGenericReadTool(server);
-  registerCommentTools(server);
-  registerLinkTools(server);
+  registerGeneratedTools(server);
 }
 
 export function createServer() {

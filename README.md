@@ -1,28 +1,36 @@
 # polarion-mcp
 
-MCP server that exposes Polarion ALM's REST API to AI coding agents (Claude Code, Cursor, etc.) via
-the [Model Context Protocol](https://modelcontextprotocol.io).
+MCP server that exposes Polarion ALM's REST API to AI coding agents through
+[Model Context Protocol](https://modelcontextprotocol.io).
 
 ## Status
 
-Codemode migration branch.
+Current runtime:
 
-The checked-in runtime is now a Deno-based codemode server rooted under `src/`. The current vertical
-slice exposes one public `code` tool, with the existing curated Polarion tools plus
-`polarion_api_help` and `polarion_api_read` living behind the codemode sandbox. Generated raw
-`api.*` tools are the next step, not the current state.
+- Deno host under `src/`
+- public MCP surface: top-level `search` and `code`
+- internal codemode surface: generated Polarion operations named by exact OpenAPI `operationId`
+
+This is now a raw-first codemode server. The old curated tools and generic help/read escape hatches
+are gone.
 
 See:
 
 - [docs/product-direction.md](/Users/tomford/code/projects/polarionmcp/docs/product-direction.md)
 - [docs/codemode-plan.md](/Users/tomford/code/projects/polarionmcp/docs/codemode-plan.md)
+- [docs/generated-tools-design.md](/Users/tomford/code/projects/polarionmcp/docs/generated-tools-design.md)
 
 ## Setup
 
 ```bash
 nix develop
-cp .env.example .env   # then fill in your Polarion URL and token
+cp .env.example .env
 ```
+
+Fill in:
+
+- `POLARION_BASE_URL`
+- `POLARION_ACCESS_TOKEN` for local stdio usage
 
 `.envrc` is configured for `use flake`.
 
@@ -40,7 +48,7 @@ Run in stdio mode:
 deno task start:stdio
 ```
 
-Or add to your MCP client config (e.g. `.mcp.json`):
+Example MCP client config:
 
 ```json
 {
@@ -66,55 +74,66 @@ Or add to your MCP client config (e.g. `.mcp.json`):
 | `POLARION_ACCESS_TOKEN` | stdio only | Bearer token for local stdio mode                                   |
 | `PORT`                  | HTTP only  | Listen port for HTTP mode. Defaults to `8080`                       |
 
-In HTTP mode, each client must send its own `Authorization: Bearer ...` header. TLS/HTTPS is
-expected to terminate at an ingress, reverse proxy, or load balancer in front of the container; this
-server listens on plain HTTP inside the deployment boundary.
+In HTTP mode, callers must send their own `Authorization: Bearer ...` header. Auth stays host-side;
+the codemode sandbox never receives credentials directly.
 
-## Public Tool
+## Public MCP Surface
 
-| Tool   | Description                                                            |
-| ------ | ---------------------------------------------------------------------- |
-| `code` | Execute JavaScript codemode against the internal Polarion tool surface |
+Top-level tools:
 
-Inside `code`, the current internal tool surface includes:
+- `search`: fuzzy discovery over the real callable Polarion catalog
+- `code`: execute JavaScript against the internal `codemode.*` Polarion surface
 
-- curated tools: `list_projects`, `list_work_items`, `get_work_item`, `update_work_item`,
-  `list_documents`, `get_document`, `list_linked_work_items`, `get_fields_metadata`,
-  `get_enum_options`, `get_workflow_actions`, `add_work_item_comment`, `add_work_item_link`,
-  `update_work_item_link`, `remove_work_item_link`
-- discovery/escape hatch: `polarion_api_help`, `polarion_api_read`
+Typical flow:
 
-All list-style endpoints support pagination (`page_size`, `page_number`) and field selection
-(`fields`).
+1. call `search` if you need to discover function names, parameter shapes, or return shapes
+2. call `code`
+3. inside `code`, use `codemode.<operationId>(...)`
 
-Default pagination is intentionally narrow:
+Example:
 
-- default `page_size`: `20`
-- maximum `page_size`: `50`
+```js
+(async () => {
+  return await codemode.getProjects({});
+});
+```
 
-## Usage Guidance
+## Internal Generated Surface
 
-Preferred workflow:
+The internal codemode surface is generated from a trimmed checked-in OpenAPI spec.
 
-1. Use a curated tool when one exists
-2. If unsure which operation fits, call `polarion_api_help`
-3. Use `polarion_api_read` only when no curated tool fits
-4. Fetch incrementally with pagination and sparse fields
+Properties:
 
-Generic read behavior:
+- generated operation names use the exact OpenAPI `operationId`
+- request shapes are lightly tuned for scripting
+- path params are promoted to top-level
+- ordinary query params are promoted to top-level
+- pagination is normalized to `page: { size, number }`
+- request bodies live under top-level `body`
+- responses stay close to the raw API
+- `204` responses normalize to `{ ok: true }`
 
-- keyed by `operation_id`, not arbitrary paths
-- blocked for binary/admin-like endpoints
-- advanced global/all-project reads require explicit `scope_mode: "all"`
-- oversized responses may be truncated with continuation hints
+Examples:
 
-## Generated API Client
+- `codemode.getProjects({})`
+- `codemode.getWorkItems({ projectId: "PRJ", query: "type:requirement" })`
+- `codemode.patchWorkItem({ projectId: "PRJ", workItemId: "REQ-1", body: { ... } })`
 
-Types are generated from the bundled OpenAPI spec at
-[`polarionrest.json`](/Users/tomford/code/projects/polarionmcp/polarionrest.json) using
-`openapi-typescript`. The runtime client uses `openapi-fetch` for fully typed requests.
+## Generation Pipeline
 
-To regenerate types after updating the spec:
+The generator task:
+
+1. loads the full upstream spec from
+   [polarionrest.json](/Users/tomford/code/projects/polarionmcp/polarionrest.json)
+2. trims it through an explicit allowlist
+3. writes
+   [generated/polarion.trimmed.json](/Users/tomford/code/projects/polarionmcp/generated/polarion.trimmed.json)
+4. regenerates
+   [generated/polarion.ts](/Users/tomford/code/projects/polarionmcp/generated/polarion.ts)
+5. emits the generated operation registry at
+   [src/generated/operations.ts](/Users/tomford/code/projects/polarionmcp/src/generated/operations.ts)
+
+Run it with:
 
 ```bash
 deno task generate
@@ -124,6 +143,7 @@ deno task generate
 
 ```bash
 deno task test
+deno task check
 ```
 
 ## License

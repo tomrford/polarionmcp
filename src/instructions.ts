@@ -1,11 +1,9 @@
 export const SERVER_INSTRUCTIONS = `Polarion tool-surface rules:
-1. Prefer curated tools over polarion_api_read for common tasks.
-2. Use polarion_api_help before polarion_api_read when unsure which operation fits.
-3. Prefer project-scoped work; only use all-project reads when clearly necessary.
-4. Fetch incrementally. Default page size is 20 and responses may be truncated.
-5. Use get_fields_metadata before unfamiliar updates or custom-field queries.
-6. Check workflow actions before changing status-like fields.
-7. Check existing links before creating or updating a work item link.
+1. This server exposes generated Polarion operations using exact OpenAPI operationId names.
+2. Prefer project-scoped work; only use cross-project routes when clearly necessary.
+3. Fetch incrementally. Default page size is 20 and responses may be truncated.
+4. Use the generated metadata and workflow action routes before unfamiliar updates.
+5. Most write operations take a top-level body object mirroring the JSON API request payload.
 
 Polarion query syntax:
 - Lucene-style field queries: field:value, field:val* (wildcard)
@@ -15,14 +13,14 @@ Polarion query syntax:
 - Bare text matches exact ID
 
 Custom fields:
-- Custom fields are type-specific. Use get_fields_metadata with target_type to discover them.
+- Custom fields are type-specific. Use getProjectFieldsMetadata with resourceType and targetType to discover them.
 - Example: type "sysparameter" has custom fields: parval, parmin, parmax, parunit, swname
-- Request custom fields via the fields param: fields="title,parval,parunit"
+- Request custom fields via the fields parameter, for example fields: { workitems: "title,parval,parunit" }
 - Query sysparameters: query="type:sysparameter"`;
 
 export const PUBLIC_SERVER_INSTRUCTIONS = `This server exposes two tools: search and code.
 
-Use search first when you need to discover the available Polarion functions or their parameter shapes.
+Use search first when you need to discover the available Polarion functions, parameter shapes, or return shapes.
 
 Then use code to write an async JavaScript arrow function that returns the final result.
 
@@ -32,9 +30,9 @@ Prefer project-scoped work over all-project reads.
 
 Guidance:
 - fetch incrementally; default page size is 20 and responses may be truncated
-- use get_fields_metadata before unfamiliar updates or custom-field queries
-- use get_workflow_actions before status-like changes
-- check existing links before creating or updating a work item link
+- generated tools use exact OpenAPI operationId names such as getProjects, getWorkItems, and patchWorkItem
+- write operations usually take a top-level body object mirroring the JSON API request payload
+- use metadata and workflow action routes before unfamiliar updates
 
 Polarion query syntax:
 - field:value and field:val*
@@ -52,5 +50,5 @@ Inside code, call Polarion functions through codemode.*.
 
 Example:
 async () => {
-  return await codemode.list_projects({});
+  return await codemode.getProjects({});
 }`;

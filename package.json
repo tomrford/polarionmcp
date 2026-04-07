@@ -6,7 +6,6 @@
     "@cloudflare/codemode": "0.3.3",
     "@modelcontextprotocol/sdk": "1.25.3",
     "acorn": "8.15.0",
-    "openapi-fetch": "0.15.0",
     "zod": "4.3.6"
   },
   "scripts": {

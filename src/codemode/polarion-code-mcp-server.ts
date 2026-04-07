@@ -63,9 +63,12 @@ type ToolCatalogEntry = {
   name: string;
   callable: string;
   description?: string;
+  resource_group?: string;
   required_params: string[];
   optional_params: string[];
-  input_schema: Record<string, unknown>;
+  input_summary?: string;
+  output_summary?: string;
+  annotations?: Record<string, unknown>;
   search_text: string;
   compact_text: string;
 };
@@ -103,17 +106,35 @@ function stemSearchToken(value: string): string {
 }
 
 function buildToolCatalog(
-  tools: Array<{ name: string; description?: string; inputSchema: Record<string, unknown> }>,
+  tools: Array<{
+    name: string;
+    description?: string;
+    inputSchema: Record<string, unknown>;
+    annotations?: Record<string, unknown>;
+    _meta?: Record<string, unknown>;
+  }>,
 ) {
   const entries: ToolCatalogEntry[] = tools.map((tool) => {
     const required = new Set(schemaRequired(tool.inputSchema));
     const properties = schemaProperties(tool.inputSchema);
     const propertyDescriptions = schemaPropertyDescriptions(tool.inputSchema);
     const paramNames = Object.keys(properties);
+    const resourceGroup = typeof tool._meta?.resourceGroup === "string"
+      ? tool._meta.resourceGroup
+      : undefined;
+    const inputSummary = typeof tool._meta?.inputSummary === "string"
+      ? tool._meta.inputSummary
+      : undefined;
+    const outputSummary = typeof tool._meta?.outputSummary === "string"
+      ? tool._meta.outputSummary
+      : undefined;
     const searchSource = [
       tool.name,
       sanitizeToolName(tool.name),
       tool.description ?? "",
+      resourceGroup ?? "",
+      inputSummary ?? "",
+      outputSummary ?? "",
       ...paramNames,
       ...propertyDescriptions,
     ].join(" ");
@@ -121,9 +142,12 @@ function buildToolCatalog(
       name: tool.name,
       callable: `codemode.${sanitizeToolName(tool.name)}`,
       description: tool.description,
+      resource_group: resourceGroup,
       required_params: paramNames.filter((name) => required.has(name)),
       optional_params: paramNames.filter((name) => !required.has(name)),
-      input_schema: tool.inputSchema,
+      input_summary: inputSummary,
+      output_summary: outputSummary,
+      annotations: tool.annotations,
       search_text: normalizeSearchText(searchSource),
       compact_text: compactSearchText(searchSource),
     };
@@ -181,10 +205,13 @@ function searchCatalog(entries: ToolCatalogEntry[], query: string, limit: number
     matches: scored.slice(0, limit).map(({ entry, score }) => ({
       name: entry.name,
       callable: entry.callable,
+      resource_group: entry.resource_group,
       description: entry.description,
       required_params: entry.required_params,
       optional_params: entry.optional_params,
-      input_schema: entry.input_schema,
+      input_summary: entry.input_summary,
+      output_summary: entry.output_summary,
+      annotations: entry.annotations,
       score,
     })),
   };

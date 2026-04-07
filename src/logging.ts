@@ -14,6 +14,9 @@ export interface ToolLogEvent {
   error_type?: string;
   target_id?: string;
   attribute_count?: number;
+  resource_group?: string;
+  method?: string;
+  path_template?: string;
 }
 
 function safeErrorType(errorLike: unknown): string | undefined {

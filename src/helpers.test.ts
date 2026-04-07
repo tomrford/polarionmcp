@@ -83,8 +83,7 @@ describe("authHeaders", () => {
       authHeaders({
         authInfo: { token: "token-b" },
         requestInfo: { headers: { authorization: "Bearer token-c" } },
-      })
-    );
+      }));
 
     expect(headers).toEqual({ Authorization: "Bearer token-a" });
   });

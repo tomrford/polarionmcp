@@ -1,81 +1,103 @@
 # Product Direction
 
-## Status
+## Current Product Shape
 
-This branch is migrating the Polarion MCP from a many-tool Bun server into a codemode-first Deno
-server.
+This server is now a codemode-first Polarion power tool.
 
-The target product is a power tool, initially pointed at demo or sandbox data.
+Public MCP surface:
 
-## Public Surface
+- top-level `search` for discovery
+- top-level `code` for execution
 
-The final public MCP should expose:
+Internal codemode surface:
 
-- one `code` tool
-- concise server instructions and code-tool guidance
+- generated Polarion operations only
+- exact OpenAPI `operationId` names
+- no curated wrappers
+- no generic help/read escape hatch
 
-The user-facing model should not need to reason about separate curated and raw MCP servers.
+The user-facing model should discover via `search`, then script against `codemode.*` inside `code`.
 
-## Internal Tool Surface
+## Why This Shape
 
-Inside the codemode sandbox, the model should have access to one combined tool surface:
+The product is optimizing for:
 
-- curated tools for common Polarion workflows
-- raw `api.*` tools generated from a trimmed OpenAPI surface
-- search/help over the raw API namespace
+- fewer model round-trips
+- loops, joins, and conditional workflows inside one execution
+- broad Polarion coverage from one trimmed API surface
+- low maintenance cost when the allowed surface changes
 
-Curated and raw tools must be callable in the same execution so code can mix them freely.
+That pushes the design toward:
 
-Current checked-in vertical slice:
-
-- public `code` tool is implemented
-- the internal tool surface is still the existing curated tools plus `polarion_api_help` and
-  `polarion_api_read`
-- generated raw `api.*` tools are still to come
+- one trimmed OpenAPI source of truth
+- generated callable operations instead of hand-maintained curated wrappers
+- one generic host request adapter
+- host-side auth only
 
 ## Write Posture
 
-Writes are allowed in v1.
+Writes are allowed.
 
-Boundaries:
+Current safety boundary:
 
 - auth stays host-side
-- the sandbox never sees credentials
-- the allowed surface comes from trim policy, not from a read-only restriction
+- the codemode sandbox never sees credentials
+- the allowed surface comes from the explicit allowlist
+- this server is currently aimed at sandbox/demo data first
 
-## OpenAPI Policy
+Read-only or role-based policy can be layered on later, but it is not part of the current product
+contract.
 
-The repo keeps the full upstream spec and generates the usable surface from policy.
+## Discovery Direction
 
-The generator pipeline should:
+`search` should stay concise.
 
-1. load the full spec
-2. apply allow/block policy
-3. emit a trimmed spec artifact
-4. emit generated TS types/client from the trimmed spec
-5. emit the raw MCP registry from the trimmed spec
+Current purpose:
 
-This keeps the surface reversible as policy changes over time.
+- fuzzy lookup over the real callable catalog
+- compact input-shape summaries
+- compact output-shape summaries
 
-## Included And Excluded Areas
+If result payloads start bloating context, the likely v2 is splitting discovery into `list_tools`
+plus `get_tool_info`.
 
-Included:
+## Surface Policy
 
-- approved reads and writes
-- `jobs`
+The repo keeps:
+
+- the full upstream Polarion spec
+- a checked-in trimmed spec artifact
+- generated TS types from the trimmed spec
+- a generated operation registry used for MCP registration and request adaptation
+
+Initial allowed scope is product-domain focused and intentionally broad enough for sandbox/demo
+learning:
+
+- projects
+- jobs
+- workitems
+- documents
+- metadata and enum/workflow discovery routes
+- plans
+- testruns
 
 Excluded by default:
 
-- admin-like routes
-- license routes
-- avatar/icon/binary content routes
+- user/global identity routes
+- admin or license routes
 - export/download routes
-- other low-signal or high-risk endpoints that do not fit the product
+- avatar/icon/binary content routes
+- other low-signal infrastructure endpoints
 
-## Batch Direction
+## Obsolete Directions
 
-`batch_id` orchestration is obsolete in this design.
+These are no longer part of the product plan:
 
-Codemode should replace the need for query-handle state, fingerprint caches, and most batch
-orchestration. If we later need a true bulk primitive for throughput, that should be added directly
-from the real API surface rather than reviving the old `batch_id` design.
+- `batch_id` orchestration
+- query-handle lifecycle state
+- fingerprint caches
+- curated-plus-raw mixed internal surfaces
+- generic `polarion_api_help` / `polarion_api_read` escape hatches
+
+If we later need higher-level abstractions, they should be added on top of the generated base rather
+than by reviving the old architecture.

@@ -5,7 +5,7 @@ import { McpError } from "@modelcontextprotocol/sdk/types.js";
 import { createServer } from "./register.ts";
 
 describe("createServer", () => {
-  test("registers current curated tools and exposes instructions", async () => {
+  test("registers generated operations and exposes raw-surface instructions", async () => {
     const server = createServer();
     const client = new Client({
       name: "test-client",
@@ -21,26 +21,16 @@ describe("createServer", () => {
     const tools = await client.listTools();
     const toolNames = tools.tools.map((tool) => tool.name).sort();
 
-    expect(toolNames).toEqual([
-      "add_work_item_comment",
-      "add_work_item_link",
-      "get_document",
-      "get_enum_options",
-      "get_fields_metadata",
-      "get_work_item",
-      "get_workflow_actions",
-      "list_documents",
-      "list_linked_work_items",
-      "list_projects",
-      "list_work_items",
-      "polarion_api_help",
-      "polarion_api_read",
-      "remove_work_item_link",
-      "update_work_item",
-      "update_work_item_link",
-    ]);
+    expect(toolNames).toContain("getProjects");
+    expect(toolNames).toContain("getWorkItems");
+    expect(toolNames).toContain("patchWorkItem");
+    expect(toolNames).toContain("getProjectFieldsMetadata");
+    expect(toolNames).toContain("executeJob");
+    expect(toolNames).not.toContain("list_projects");
+    expect(toolNames).not.toContain("polarion_api_help");
+    expect(toolNames).not.toContain("polarion_api_read");
 
-    expect(client.getInstructions()).toContain("Polarion tool-surface rules");
+    expect(client.getInstructions()).toContain("generated Polarion operations");
 
     let error: unknown;
     try {

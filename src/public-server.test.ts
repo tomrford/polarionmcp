@@ -1,24 +1,15 @@
 import { Client } from "@modelcontextprotocol/sdk/client/index.js";
 import { InMemoryTransport } from "@modelcontextprotocol/sdk/inMemory.js";
 import { type CallToolResult, McpError } from "@modelcontextprotocol/sdk/types.js";
-import {
-  afterEach,
-  beforeEach,
-  describe,
-  expect,
-  expectCalledWith,
-  test,
-  vi,
-} from "./test/test.ts";
-import { client as polarionClient } from "./client.ts";
+import { afterEach, beforeEach, describe, expect, test, vi } from "./test/test.ts";
 import { createPublicServer } from "./public-server.ts";
 
 describe("createPublicServer", () => {
-  let getSpy: ReturnType<typeof vi.spyOn<typeof polarionClient, "GET">>;
+  let fetchSpy: ReturnType<typeof vi.spyOn<typeof globalThis, "fetch">>;
 
   beforeEach(() => {
-    getSpy = vi.spyOn(polarionClient, "GET");
-    getSpy.mockReset();
+    fetchSpy = vi.spyOn(globalThis, "fetch");
+    fetchSpy.mockReset();
     Deno.env.delete("POLARION_ACCESS_TOKEN");
   });
 
@@ -52,6 +43,13 @@ describe("createPublicServer", () => {
     return { client, server, clientTransport, serverTransport };
   }
 
+  function jsonResponse(body: unknown, status = 200) {
+    return new Response(JSON.stringify(body), {
+      status,
+      headers: { "content-type": "application/json" },
+    });
+  }
+
   test("exposes search and code tools and no resources", async () => {
     const { client, server, clientTransport, serverTransport } = await connectClient();
 
@@ -77,27 +75,36 @@ describe("createPublicServer", () => {
     ]);
   });
 
-  test("runs codemode against the internal Polarion tool surface", async () => {
-    const { client, server, clientTransport, serverTransport } = await connectClient();
+  test("runs codemode against the internal generated Polarion tool surface", async () => {
+    fetchSpy.mockResolvedValueOnce(
+      jsonResponse({
+        data: { type: "fieldsmetadata", id: "fm", attributes: { fields: [] } },
+        links: {},
+      }),
+    );
+
+    const { client, server, clientTransport, serverTransport } = await connectClient(
+      "bridge-token",
+    );
 
     const result = await client.callTool({
       name: "code",
       arguments: {
-        code:
-          'async () => await codemode.polarion_api_help({ keyword: "workflow", resource_type: "workitems" })',
+        code: 'async () => await codemode.getGlobalFieldsMetadata({ resourceType: "workitems" })',
       },
     });
 
-    expect("content" in result).toBe(true);
-    if (!("content" in result)) return;
-
     const textResult = result as CallToolResult;
     expect(textResult.isError).toBeUndefined();
-    expect(textResult.content[0]?.type).toBe("text");
     expect(JSON.parse((textResult.content[0] as { text: string }).text)).toMatchObject({
-      summary: {
-        total_matches: expect.any(Number),
-      },
+      data: { type: "fieldsmetadata" },
+    });
+
+    const [url, init] = fetchSpy.calls[0]!.args as [string, RequestInit];
+    expect(url).toBe("https://example.invalid/actions/getFieldsMetadata?resourceType=workitems");
+    expect(init.headers).toEqual({
+      Accept: "application/json",
+      Authorization: "Bearer bridge-token",
     });
 
     await Promise.all([
@@ -108,15 +115,14 @@ describe("createPublicServer", () => {
     ]);
   });
 
-  test("bridges request auth into curated tool calls", async () => {
-    getSpy.mockResolvedValueOnce({
-      data: {
+  test("bridges request auth into generated tool calls", async () => {
+    fetchSpy.mockResolvedValueOnce(
+      jsonResponse({
         data: [{ id: "PRJ", type: "projects", attributes: { name: "Project" } }],
         meta: { totalCount: 1 },
         links: {},
-      },
-      response: { ok: true, status: 200 },
-    } as unknown as any);
+      }),
+    );
 
     const { client, server, clientTransport, serverTransport } = await connectClient(
       "bridge-token",
@@ -125,26 +131,21 @@ describe("createPublicServer", () => {
     const result = await client.callTool({
       name: "code",
       arguments: {
-        code: "async () => await codemode.list_projects({ page_size: 5 })",
+        code: "async () => await codemode.getProjects({ page: { size: 5 } })",
       },
     });
 
-    expectCalledWith(getSpy, "/projects", {
-      headers: { Authorization: "Bearer bridge-token" },
-      params: {
-        query: {
-          "page[size]": 5,
-          "page[number]": 1,
-          query: undefined,
-          fields: undefined,
-        },
-      },
+    const [url, init] = fetchSpy.calls[0]!.args as [string, RequestInit];
+    expect(url).toBe("https://example.invalid/projects?page%5Bsize%5D=5&page%5Bnumber%5D=1");
+    expect(init.headers).toEqual({
+      Accept: "application/json",
+      Authorization: "Bearer bridge-token",
     });
 
     const textResult = result as CallToolResult;
     expect(textResult.isError).toBeUndefined();
     expect(JSON.parse((textResult.content[0] as { text: string }).text)).toMatchObject({
-      items: [{ id: "PRJ", type: "projects", attributes: { name: "Project" } }],
+      data: [{ id: "PRJ", type: "projects" }],
     });
 
     await Promise.all([
@@ -157,34 +158,28 @@ describe("createPublicServer", () => {
 
   test("uses stdio env auth when request auth is absent", async () => {
     Deno.env.set("POLARION_ACCESS_TOKEN", "env-token");
-    getSpy.mockResolvedValueOnce({
-      data: {
+    fetchSpy.mockResolvedValueOnce(
+      jsonResponse({
         data: [{ id: "PRJ", type: "projects", attributes: { name: "Project" } }],
         meta: { totalCount: 1 },
         links: {},
-      },
-      response: { ok: true, status: 200 },
-    } as unknown as any);
+      }),
+    );
 
     const { client, server, clientTransport, serverTransport } = await connectClient();
 
     const result = await client.callTool({
       name: "code",
       arguments: {
-        code: "async () => await codemode.list_projects({})",
+        code: "async () => await codemode.getProjects({})",
       },
     });
 
-    expectCalledWith(getSpy, "/projects", {
-      headers: { Authorization: "Bearer env-token" },
-      params: {
-        query: {
-          "page[size]": 20,
-          "page[number]": 1,
-          query: undefined,
-          fields: undefined,
-        },
-      },
+    const [url, init] = fetchSpy.calls[0]!.args as [string, RequestInit];
+    expect(url).toBe("https://example.invalid/projects?page%5Bsize%5D=20&page%5Bnumber%5D=1");
+    expect(init.headers).toEqual({
+      Accept: "application/json",
+      Authorization: "Bearer env-token",
     });
 
     const textResult = result as CallToolResult;
@@ -198,7 +193,7 @@ describe("createPublicServer", () => {
     ]);
   });
 
-  test("search returns fuzzy matches with callable names and schemas", async () => {
+  test("search returns compact fuzzy matches with input and output summaries", async () => {
     const { client, server, clientTransport, serverTransport } = await connectClient();
 
     const result = await client.callTool({
@@ -208,20 +203,17 @@ describe("createPublicServer", () => {
       },
     });
 
-    expect("content" in result).toBe(true);
-    if (!("content" in result)) return;
-
     const textResult = result as CallToolResult;
     const payload = JSON.parse((textResult.content[0] as { text: string }).text);
     expect(payload.total_matches).toBeGreaterThan(0);
     expect(
       payload.matches.some((entry: { callable: string }) =>
-        entry.callable.includes("work_item")
+        entry.callable === "codemode.getWorkflowActionsForWorkItem"
       ),
     ).toBe(true);
     expect(
-      payload.matches.every((entry: { input_schema: unknown }) =>
-        typeof entry.input_schema === "object"
+      payload.matches.every((entry: { input_summary: string; output_summary: string }) =>
+        typeof entry.input_summary === "string" && typeof entry.output_summary === "string"
       ),
     ).toBe(true);
 
@@ -241,6 +233,7 @@ describe("createPublicServer", () => {
 
     expect(codeTool?.description).toContain("Before writing code, use the top-level search tool");
     expect(codeTool?.description).toContain("codemode.*");
+    expect(codeTool?.description).toContain("codemode.getProjects");
     expect(codeTool?.description).not.toContain("declare const codemode");
 
     await Promise.all([
