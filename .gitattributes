@@ -1,0 +1,6 @@
+# Mark auto-generated files so GitHub collapses them in diffs
+# and excludes them from PR line-count stats.
+generated/polarion.trimmed.json linguist-generated=true
+generated/polarion.ts linguist-generated=true
+src/generated/operations.ts linguist-generated=true
+deno.lock linguist-generated=true
