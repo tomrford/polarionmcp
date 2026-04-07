@@ -1,7 +1,7 @@
 type HostInitMessage = {
   type: "init";
   code: string;
-  providers: Array<{ name: string; positionalArgs?: boolean }>;
+  providers: Array<{ name: string; positionalArgs?: boolean; tools: string[] }>;
 };
 
 type HostResponseMessage = {
@@ -119,28 +119,24 @@ void (async () => {
 
 let callId = 0;
 
-function createProvider(name: string, positionalArgs = false) {
-  return new Proxy({}, {
-    get: (_target, toolName) => {
-      return async (...args: unknown[]) => {
-        const id = ++callId;
-        const callArgs = positionalArgs ? args : args[0] ?? {};
-        const response = new Promise<unknown>((resolve, reject) => {
-          pending.set(id, { resolve, reject });
-        });
+function createToolFn(providerName: string, toolName: string, positionalArgs = false) {
+  return async (...args: unknown[]) => {
+    const id = ++callId;
+    const callArgs = positionalArgs ? args : args[0] ?? {};
+    const response = new Promise<unknown>((resolve, reject) => {
+      pending.set(id, { resolve, reject });
+    });
 
-        await send({
-          type: "call",
-          id,
-          provider: name,
-          tool: String(toolName),
-          args: callArgs,
-        });
+    await send({
+      type: "call",
+      id,
+      provider: providerName,
+      tool: toolName,
+      args: callArgs,
+    });
 
-        return await response;
-      };
-    },
-  });
+    return await response;
+  };
 }
 
 globalThis.console = {
@@ -158,12 +154,16 @@ globalThis.console = {
 } as typeof console;
 
 try {
-  const providerNames = init.providers.map((provider) => provider.name);
-  const providerValues = init.providers.map((provider) =>
-    createProvider(provider.name, provider.positionalArgs)
-  );
-  const execute = new Function(...providerNames, `return (${init.code})();`);
-  const result = await execute(...providerValues);
+  const toolNames: string[] = [];
+  const toolFns: ((...args: unknown[]) => Promise<unknown>)[] = [];
+  for (const provider of init.providers) {
+    for (const tool of provider.tools) {
+      toolNames.push(tool);
+      toolFns.push(createToolFn(provider.name, tool, provider.positionalArgs));
+    }
+  }
+  const execute = new Function(...toolNames, `return (${init.code})();`);
+  const result = await execute(...toolFns);
   await send({ type: "result", result });
 } catch (error) {
   await send({

@@ -5,8 +5,8 @@
     "@std/testing/bdd": "jsr:@std/testing@^1.0.15/bdd"
   },
   "tasks": {
-    "start": "deno run --allow-env --allow-net --allow-read --allow-run src/main.ts",
-    "start:stdio": "deno run --allow-env --allow-net --allow-read --allow-run src/main.ts --stdio",
+    "start": "deno run --env --allow-env --allow-net --allow-read --allow-run src/main.ts",
+    "start:stdio": "deno run --env --allow-env --allow-net --allow-read --allow-run src/main.ts --stdio",
     "generate": "deno run -A npm:openapi-typescript@7.10.1 polarionrest.json -o generated/polarion.ts",
     "check": "POLARION_BASE_URL=https://example.invalid deno test --no-run --allow-env --allow-read --allow-run",
     "test": "POLARION_BASE_URL=https://example.invalid deno test --allow-env --allow-read --allow-run"

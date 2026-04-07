@@ -84,7 +84,7 @@ describe("createPublicServer", () => {
       name: "code",
       arguments: {
         code:
-          'async () => await codemode.polarion_api_help({ keyword: "workflow", resource_type: "workitems" })',
+          'async () => await polarion_api_help({ keyword: "workflow", resource_type: "workitems" })',
       },
     });
 
@@ -123,7 +123,7 @@ describe("createPublicServer", () => {
     const result = await client.callTool({
       name: "code",
       arguments: {
-        code: "async () => await codemode.list_projects({ page_size: 5 })",
+        code: "async () => await list_projects({ page_size: 5 })",
       },
     });
 
@@ -169,7 +169,7 @@ describe("createPublicServer", () => {
     const result = await client.callTool({
       name: "code",
       arguments: {
-        code: "async () => await codemode.list_projects({})",
+        code: "async () => await list_projects({})",
       },
     });
 

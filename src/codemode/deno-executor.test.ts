@@ -8,8 +8,8 @@ describe("DenoSubprocessExecutor", () => {
     const result = await executor.execute(
       `async () => {
         const [left, right] = await Promise.all([
-          codemode.slow_tool({ value: 1 }),
-          codemode.fast_tool({ value: 2 }),
+          slow_tool({ value: 1 }),
+          fast_tool({ value: 2 }),
         ]);
         console.warn("joined", left, right);
         return { left, right };

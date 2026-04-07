@@ -108,7 +108,7 @@ function sanitizeToolName(name: string): string {
 type HostInitMessage = {
   type: "init";
   code: string;
-  providers: Array<{ name: string; positionalArgs?: boolean }>;
+  providers: Array<{ name: string; positionalArgs?: boolean; tools: string[] }>;
 };
 
 type HostResponseMessage = {
@@ -336,9 +336,10 @@ export class DenoSubprocessExecutor implements Executor {
     await queueWrite({
       type: "init",
       code: normalizeCode(code),
-      providers: providers.map((provider) => ({
-        name: provider.name,
-        positionalArgs: provider.positionalArgs,
+      providers: [...dispatchers.entries()].map(([name, d]) => ({
+        name,
+        positionalArgs: d.positionalArgs,
+        tools: Object.keys(d.fns),
       })),
     });
 

@@ -2,8 +2,8 @@
   "mcpServers": {
     "polarion": {
       "type": "stdio",
-      "command": "bun",
-      "args": ["run", "src/server.ts", "--stdio"],
+      "command": "nix",
+      "args": ["develop", "-c", "deno", "task", "start:stdio"],
       "env": {}
     }
   }
