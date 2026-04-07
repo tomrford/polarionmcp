@@ -46,7 +46,7 @@ Current included domains:
 - jobs
 - workitems
 - documents
-- metadata
+- read-only metadata
 - plans
 - testruns
 
@@ -54,6 +54,7 @@ Current excluded domains:
 
 - user/global identity
 - admin or license routes
+- project-admin and project-metadata mutation routes
 - export/download routes
 - avatar/icon/binary content routes
 - other low-signal infrastructure endpoints

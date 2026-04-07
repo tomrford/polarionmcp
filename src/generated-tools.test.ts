@@ -3,6 +3,7 @@ import { InMemoryTransport } from "@modelcontextprotocol/sdk/inMemory.js";
 import type { CallToolResult } from "@modelcontextprotocol/sdk/types.js";
 import { afterEach, beforeEach, describe, expect, test, vi } from "./test/test.ts";
 import { createServer } from "./register.ts";
+import { runWithPolarionAccessToken } from "./request-context.ts";
 
 describe("generated tools", () => {
   let fetchSpy: ReturnType<typeof vi.spyOn<typeof globalThis, "fetch">>;
@@ -16,7 +17,7 @@ describe("generated tools", () => {
     vi.restoreAllMocks();
   });
 
-  async function connectClient(authToken = "token") {
+  async function connectClient() {
     const server = createServer();
     const client = new Client({
       name: "test-client",
@@ -29,14 +30,20 @@ describe("generated tools", () => {
       server.connect(serverTransport),
     ]);
 
-    const originalSend = clientTransport.send.bind(clientTransport);
-    clientTransport.send = (message, options) =>
-      originalSend(message, {
-        ...options,
-        authInfo: { token: authToken, clientId: "test-client", scopes: [] },
-      });
-
     return { client, server, clientTransport, serverTransport };
+  }
+
+  async function callToolWithToken(
+    client: Client,
+    name: string,
+    args: Record<string, unknown>,
+    authToken = "token",
+  ) {
+    return await runWithPolarionAccessToken(authToken, async () =>
+      await client.callTool({
+        name,
+        arguments: args,
+      }));
   }
 
   function textPayload(result: CallToolResult) {
@@ -63,12 +70,9 @@ describe("generated tools", () => {
 
     const { client, server, clientTransport, serverTransport } = await connectClient();
 
-    const result = await client.callTool({
-      name: "getProjects",
-      arguments: {
-        query: "id:PRJ*",
-        page: { size: 5, number: 2 },
-      },
+    const result = await callToolWithToken(client, "getProjects", {
+      query: "id:PRJ*",
+      page: { size: 5, number: 2 },
     });
 
     const [url, init] = fetchSpy.calls[0]!.args as [string, RequestInit];
@@ -97,18 +101,15 @@ describe("generated tools", () => {
 
     const { client, server, clientTransport, serverTransport } = await connectClient();
 
-    const result = await client.callTool({
-      name: "patchWorkItem",
-      arguments: {
-        projectId: "PRJ",
-        workItemId: "REQ-1",
-        workflowAction: "start_progress",
-        body: {
-          data: {
-            type: "workitems",
-            id: "PRJ/REQ-1",
-            attributes: { title: "Updated" },
-          },
+    const result = await callToolWithToken(client, "patchWorkItem", {
+      projectId: "PRJ",
+      workItemId: "REQ-1",
+      workflowAction: "start_progress",
+      body: {
+        data: {
+          type: "workitems",
+          id: "PRJ/REQ-1",
+          attributes: { title: "Updated" },
         },
       },
     });
@@ -153,13 +154,10 @@ describe("generated tools", () => {
 
     const { client, server, clientTransport, serverTransport } = await connectClient();
 
-    const result = await client.callTool({
-      name: "getProjectFieldsMetadata",
-      arguments: {
-        projectId: "PRJ",
-        resourceType: "workitems",
-        targetType: "requirement",
-      },
+    const result = await callToolWithToken(client, "getProjectFieldsMetadata", {
+      projectId: "PRJ",
+      resourceType: "workitems",
+      targetType: "requirement",
     });
 
     const [url] = fetchSpy.calls[0]!.args as [string, RequestInit];
@@ -185,10 +183,7 @@ describe("generated tools", () => {
 
     const { client, server, clientTransport, serverTransport } = await connectClient();
 
-    const result = await client.callTool({
-      name: "getProjects",
-      arguments: {},
-    });
+    const result = await callToolWithToken(client, "getProjects", {});
 
     const text = (result as CallToolResult).content[0] as { text: string };
     expect((result as CallToolResult).isError).toBe(true);
@@ -228,10 +223,7 @@ describe("generated tools", () => {
 
     const { client, server, clientTransport, serverTransport } = await connectClient();
 
-    const result = await client.callTool({
-      name: "getProjects",
-      arguments: {},
-    });
+    const result = await callToolWithToken(client, "getProjects", {});
 
     expect(textPayload(result as CallToolResult)).toEqual({
       data: [{
@@ -248,6 +240,80 @@ describe("generated tools", () => {
         next: "https://example.invalid/projects?page[number]=2",
       },
     });
+
+    await Promise.all([
+      client.close(),
+      clientTransport.close(),
+      serverTransport.close(),
+      server.close(),
+    ]);
+  });
+
+  test("includes item-limit truncation metadata in tool responses", async () => {
+    fetchSpy.mockResolvedValueOnce(
+      jsonResponse({
+        data: [
+          { id: "1", type: "projects" },
+          { id: "2", type: "projects" },
+          { id: "3", type: "projects" },
+        ],
+        links: {},
+      }),
+    );
+
+    const { client, server, clientTransport, serverTransport } = await connectClient();
+
+    const result = await callToolWithToken(client, "getProjects", {
+      page: { size: 2 },
+    });
+
+    expect(textPayload(result as CallToolResult)).toMatchObject({
+      data: [
+        { id: "1", type: "projects" },
+        { id: "2", type: "projects" },
+      ],
+      truncation: {
+        reason: "item_limit",
+        original_item_count: 3,
+        returned_item_count: 2,
+        max_items: 2,
+        max_chars: 16384,
+        hint: "Use page_number and page_size to fetch the next slice.",
+      },
+    });
+
+    await Promise.all([
+      client.close(),
+      clientTransport.close(),
+      serverTransport.close(),
+      server.close(),
+    ]);
+  });
+
+  test("includes char-limit truncation metadata in tool responses", async () => {
+    fetchSpy.mockResolvedValueOnce(
+      jsonResponse({
+        data: [
+          { id: "1", type: "projects", attributes: { description: "a".repeat(10_000) } },
+          { id: "2", type: "projects", attributes: { description: "b".repeat(10_000) } },
+        ],
+        links: {},
+      }),
+    );
+
+    const { client, server, clientTransport, serverTransport } = await connectClient();
+
+    const result = await callToolWithToken(client, "getProjects", {});
+    const payload = textPayload(result as CallToolResult);
+
+    expect(payload.truncation).toMatchObject({
+      reason: "char_limit",
+      original_item_count: 2,
+      returned_item_count: 1,
+      max_items: 20,
+      max_chars: 16384,
+    });
+    expect(payload.data).toHaveLength(1);
 
     await Promise.all([
       client.close(),

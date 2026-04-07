@@ -26,6 +26,11 @@ describe("createServer", () => {
     expect(toolNames).toContain("patchWorkItem");
     expect(toolNames).toContain("getProjectFieldsMetadata");
     expect(toolNames).toContain("executeJob");
+    expect(toolNames).toContain("getJob");
+    expect(toolNames).toContain("getJobs");
+    expect(toolNames).not.toContain("createProject");
+    expect(toolNames).not.toContain("patchProject");
+    expect(toolNames).not.toContain("postGlobalCustomFields");
     expect(toolNames).not.toContain("list_projects");
     expect(toolNames).not.toContain("polarion_api_help");
     expect(toolNames).not.toContain("polarion_api_read");

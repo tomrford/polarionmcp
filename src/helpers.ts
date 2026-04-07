@@ -47,10 +47,9 @@ export function pagination(
   };
 }
 
-/** Extract a Bearer token from the request bridge, or direct authInfo in internal/test call paths. */
+/** Render the bridged Polarion token into an Authorization header for downstream fetches. */
 export function authHeaders(extra: RequestContextLike): { Authorization: string } {
-  const token = getPolarionAccessToken() ?? extra.authInfo?.token ??
-    Deno.env.get("POLARION_ACCESS_TOKEN");
+  const token = getPolarionAccessToken();
 
   if (!token) throw new Error("No Polarion access token available");
 

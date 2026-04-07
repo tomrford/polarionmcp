@@ -12,6 +12,7 @@ import { z } from "zod";
 import type { RequestContextLike } from "../helpers.ts";
 import { PUBLIC_CODE_TOOL_DESCRIPTION } from "../instructions.ts";
 import { runWithPolarionAccessToken } from "../request-context.ts";
+import type { ResolveAccessToken } from "../public-server.ts";
 import { sanitizeToolName } from "./json-schema-types.ts";
 
 const CHARS_PER_TOKEN = 4;
@@ -55,8 +56,14 @@ function unwrapMcpResult(result: CallToolResult | CompatibilityCallToolResult): 
   return result;
 }
 
-function resolveEntryAuthToken(extra: RequestContextLike): string | undefined {
-  return extra.authInfo?.token ?? Deno.env.get("POLARION_ACCESS_TOKEN");
+async function runWithResolvedAccessToken<T>(
+  extra: RequestContextLike,
+  resolveAccessToken: ResolveAccessToken,
+  fn: () => Promise<T>,
+): Promise<T> {
+  const token = resolveAccessToken(extra);
+  if (!token) throw new Error("No Polarion access token available");
+  return await runWithPolarionAccessToken(token, fn);
 }
 
 type ToolCatalogEntry = {
@@ -220,11 +227,19 @@ function searchCatalog(entries: ToolCatalogEntry[], query: string, limit: number
 export async function createPolarionCodeMcpServer(options: {
   server: McpServer;
   executor: Executor;
+  resolveAccessToken: ResolveAccessToken;
   name?: string;
   version?: string;
   instructions?: string;
 }) {
-  const { server, executor, name = "polarion-mcp", version = "0.2.0", instructions } = options;
+  const {
+    server,
+    executor,
+    resolveAccessToken,
+    name = "polarion-mcp",
+    version = "0.2.0",
+    instructions,
+  } = options;
 
   const [clientTransport, serverTransport] = InMemoryTransport.createLinkedPair();
   await server.connect(serverTransport);
@@ -273,14 +288,32 @@ export async function createPolarionCodeMcpServer(options: {
         ),
       },
     },
-    async ({ query, limit }) => ({
-      content: [
-        {
-          type: "text" as const,
-          text: JSON.stringify(searchCatalog(entries, query, limit), null, 2),
-        },
-      ],
-    }),
+    async ({ query, limit }, extra) => {
+      try {
+        return await runWithResolvedAccessToken(
+          extra as RequestContextLike,
+          resolveAccessToken,
+          async () => ({
+            content: [
+              {
+                type: "text" as const,
+                text: JSON.stringify(searchCatalog(entries, query, limit), null, 2),
+              },
+            ],
+          }),
+        );
+      } catch (error) {
+        return {
+          content: [
+            {
+              type: "text" as const,
+              text: `Error: ${formatError(error)}`,
+            },
+          ],
+          isError: true,
+        };
+      }
+    },
   );
 
   codemodeServer.registerTool(
@@ -293,8 +326,9 @@ export async function createPolarionCodeMcpServer(options: {
     },
     async ({ code }, extra) => {
       try {
-        const result = await runWithPolarionAccessToken(
-          resolveEntryAuthToken(extra),
+        const result = await runWithResolvedAccessToken(
+          extra as RequestContextLike,
+          resolveAccessToken,
           async () =>
             await executor.execute(code, [
               {

@@ -4,8 +4,12 @@ import { createPublicServer } from "./public-server.ts";
 
 // ---------- start ----------
 
-const server = await createPublicServer();
 const isStdio = Deno.args.includes("--stdio");
+const server = await createPublicServer({
+  resolveAccessToken: isStdio
+    ? () => Deno.env.get("POLARION_ACCESS_TOKEN")
+    : (extra) => extra.authInfo?.token,
+});
 const defaultHttpPort = 8080;
 
 function httpPort(): number {
@@ -64,7 +68,7 @@ if (isStdio) {
       }
 
       const authHeader = req.headers.get("authorization");
-      const token = authHeader?.replace(/^Bearer\s+/i, "");
+      const token = authHeader?.match(/^Bearer\s+(.+)$/i)?.[1];
 
       return transport.handleRequest(req, {
         authInfo: token ? { token, clientId: "polarion-mcp-client", scopes: [] } : undefined,

@@ -18,8 +18,13 @@ describe("createPublicServer", () => {
     Deno.env.delete("POLARION_ACCESS_TOKEN");
   });
 
-  async function connectClient(authToken?: string) {
-    const server = await createPublicServer();
+  async function connectClient(options: {
+    authToken?: string;
+    resolveAccessToken: Parameters<typeof createPublicServer>[0]["resolveAccessToken"];
+  }) {
+    const server = await createPublicServer({
+      resolveAccessToken: options.resolveAccessToken,
+    });
     const client = new Client({
       name: "test-client",
       version: "1.0.0",
@@ -31,17 +36,21 @@ describe("createPublicServer", () => {
       server.connect(serverTransport),
     ]);
 
-    if (authToken) {
+    if (options.authToken) {
       const originalSend = clientTransport.send.bind(clientTransport);
-      clientTransport.send = (message, options) =>
+      const authToken = options.authToken;
+      clientTransport.send = (message, sendOptions) =>
         originalSend(message, {
-          ...options,
+          ...sendOptions,
           authInfo: { token: authToken, clientId: "test-client", scopes: [] },
         });
     }
 
     return { client, server, clientTransport, serverTransport };
   }
+
+  const httpAccessToken = (extra: { authInfo?: { token?: string } }) => extra.authInfo?.token;
+  const stdioAccessToken = () => Deno.env.get("POLARION_ACCESS_TOKEN");
 
   function jsonResponse(body: unknown, status = 200) {
     return new Response(JSON.stringify(body), {
@@ -51,7 +60,9 @@ describe("createPublicServer", () => {
   }
 
   test("exposes search and code tools and no resources", async () => {
-    const { client, server, clientTransport, serverTransport } = await connectClient();
+    const { client, server, clientTransport, serverTransport } = await connectClient({
+      resolveAccessToken: httpAccessToken,
+    });
 
     const tools = await client.listTools();
     expect(tools.tools.map((tool) => tool.name).sort()).toEqual(["code", "search"]);
@@ -83,9 +94,10 @@ describe("createPublicServer", () => {
       }),
     );
 
-    const { client, server, clientTransport, serverTransport } = await connectClient(
-      "bridge-token",
-    );
+    const { client, server, clientTransport, serverTransport } = await connectClient({
+      authToken: "bridge-token",
+      resolveAccessToken: httpAccessToken,
+    });
 
     const result = await client.callTool({
       name: "code",
@@ -124,9 +136,10 @@ describe("createPublicServer", () => {
       }),
     );
 
-    const { client, server, clientTransport, serverTransport } = await connectClient(
-      "bridge-token",
-    );
+    const { client, server, clientTransport, serverTransport } = await connectClient({
+      authToken: "bridge-token",
+      resolveAccessToken: httpAccessToken,
+    });
 
     const result = await client.callTool({
       name: "code",
@@ -166,7 +179,9 @@ describe("createPublicServer", () => {
       }),
     );
 
-    const { client, server, clientTransport, serverTransport } = await connectClient();
+    const { client, server, clientTransport, serverTransport } = await connectClient({
+      resolveAccessToken: stdioAccessToken,
+    });
 
     const result = await client.callTool({
       name: "code",
@@ -194,7 +209,10 @@ describe("createPublicServer", () => {
   });
 
   test("search returns compact fuzzy matches with input and output summaries", async () => {
-    const { client, server, clientTransport, serverTransport } = await connectClient();
+    const { client, server, clientTransport, serverTransport } = await connectClient({
+      authToken: "bridge-token",
+      resolveAccessToken: httpAccessToken,
+    });
 
     const result = await client.callTool({
       name: "search",
@@ -226,7 +244,9 @@ describe("createPublicServer", () => {
   });
 
   test("uses compact custom code description", async () => {
-    const { client, server, clientTransport, serverTransport } = await connectClient();
+    const { client, server, clientTransport, serverTransport } = await connectClient({
+      resolveAccessToken: httpAccessToken,
+    });
 
     const tools = await client.listTools();
     const codeTool = tools.tools.find((tool) => tool.name === "code");
@@ -235,6 +255,33 @@ describe("createPublicServer", () => {
     expect(codeTool?.description).toContain("codemode.*");
     expect(codeTool?.description).toContain("codemode.getProjects");
     expect(codeTool?.description).not.toContain("declare const codemode");
+
+    await Promise.all([
+      client.close(),
+      clientTransport.close(),
+      serverTransport.close(),
+      server.close(),
+    ]);
+  });
+
+  test("rejects missing bridge auth in HTTP mode", async () => {
+    const { client, server, clientTransport, serverTransport } = await connectClient({
+      resolveAccessToken: httpAccessToken,
+    });
+
+    const result = await client.callTool({
+      name: "code",
+      arguments: {
+        code: "async () => await codemode.getProjects({})",
+      },
+    });
+
+    const textResult = result as CallToolResult;
+    expect(textResult.isError).toBe(true);
+    expect((textResult.content[0] as { text: string }).text).toContain(
+      "No Polarion access token available",
+    );
+    expect(fetchSpy.calls).toHaveLength(0);
 
     await Promise.all([
       client.close(),

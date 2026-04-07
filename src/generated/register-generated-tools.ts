@@ -62,6 +62,22 @@ function extractPageSize(args: Record<string, unknown>, hasPageObject: boolean) 
   return typeof size === "number" && Number.isFinite(size) ? size : DEFAULT_PAGE_SIZE;
 }
 
+function responsePayloadWithTruncation(
+  truncated: ReturnType<typeof truncateResponse>,
+): Record<string, unknown> | unknown {
+  if (!truncated.truncation) return truncated.data;
+  if (truncated.data && typeof truncated.data === "object" && !Array.isArray(truncated.data)) {
+    return {
+      ...(truncated.data as Record<string, unknown>),
+      truncation: truncated.truncation,
+    };
+  }
+  return {
+    result: truncated.data,
+    truncation: truncated.truncation,
+  };
+}
+
 function buildQuery(
   args: Record<string, unknown>,
   operation: (typeof GENERATED_OPERATIONS)[number],
@@ -153,13 +169,13 @@ async function executeOperation(
       maxItems: extractPageSize(args, operation.input.hasPageObject),
       maxChars: MAX_RESPONSE_CHARS,
     });
+    const payload = responsePayloadWithTruncation(truncated);
 
     return {
-      ...ok(truncated.data),
-      structuredContent:
-        truncated.data && typeof truncated.data === "object" && !Array.isArray(truncated.data)
-          ? truncated.data as Record<string, unknown>
-          : { result: truncated.data },
+      ...ok(payload),
+      structuredContent: payload && typeof payload === "object" && !Array.isArray(payload)
+        ? payload as Record<string, unknown>
+        : { result: payload },
     };
   } catch (error) {
     return errorResult(networkError(error));

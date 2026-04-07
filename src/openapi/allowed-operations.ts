@@ -24,10 +24,6 @@ const DOCUMENT_OPERATION_IDS = [
 ] as const;
 
 const METADATA_OPERATION_IDS = [
-  "deleteGlobalCustomFields",
-  "deleteGlobalEnumeration",
-  "deleteProjectCustomFields",
-  "deleteProjectEnumeration",
   "getGlobalCustomFields",
   "getGlobalEnumeration",
   "getGlobalEnumerations",
@@ -37,14 +33,6 @@ const METADATA_OPERATION_IDS = [
   "getProjectEnumeration",
   "getProjectEnumerations",
   "getProjectFieldsMetadata",
-  "patchCustomField",
-  "patchGlobalCustomFields",
-  "patchGlobalEnumeration",
-  "patchProjectEnumeration",
-  "postGlobalCustomFields",
-  "postGlobalEnumeration",
-  "postProjectCustomFields",
-  "postProjectEnumeration",
 ] as const;
 
 const PLAN_OPERATION_IDS = [
@@ -60,24 +48,23 @@ const PLAN_OPERATION_IDS = [
   "postPlans",
 ] as const;
 
-const PROJECT_AND_JOB_OPERATION_IDS = [
+const JOB_OPERATION_IDS = [
+  "executeJob",
+  "getJob",
+  "getJobs",
+] as const;
+
+const PROJECT_OPERATION_IDS = [
   "closeCollection",
-  "createProject",
   "deleteCollection",
   "deleteCollections",
   "deleteCollectionsRelationship",
   "deletePage",
   "deletePageAttachment",
   "deletePageRelationships",
-  "deleteProject",
-  "deleteProjectTestParameterDefinition",
-  "deleteProjectTestParameterDefinitions",
-  "executeJob",
   "getCollection",
   "getCollections",
   "getCollectionsRelationship",
-  "getJob",
-  "getJobs",
   "getPage",
   "getPageAttachment",
   "getPageAttachments",
@@ -87,27 +74,21 @@ const PROJECT_AND_JOB_OPERATION_IDS = [
   "getPages",
   "getProject",
   "getProjects",
-  "getProjectTemplates",
   "getProjectTestParameterDefinition",
   "getProjectTestParameterDefinitions",
   "getSpacePages",
-  "markProject",
-  "moveProjectAction",
   "patchCollections",
   "patchCollectionsRelationships",
   "patchPageComment",
   "patchPageRelationships",
-  "patchProject",
   "patchRichPage",
   "postCollections",
   "postCollectionsRelationships",
   "postPageComments",
   "postPageRelationships",
   "postPages",
-  "postProjectTestParameterDefinitions",
   "reopenCollection",
   "reuseCollection",
-  "unmarkProject",
 ] as const;
 
 const TEST_RUN_OPERATION_IDS = [
@@ -231,7 +212,8 @@ export const ALLOWED_OPERATION_IDS = new Set<string>([
   ...DOCUMENT_OPERATION_IDS,
   ...METADATA_OPERATION_IDS,
   ...PLAN_OPERATION_IDS,
-  ...PROJECT_AND_JOB_OPERATION_IDS,
+  ...JOB_OPERATION_IDS,
+  ...PROJECT_OPERATION_IDS,
   ...TEST_RUN_OPERATION_IDS,
   ...WORK_ITEM_OPERATION_IDS,
 ]);

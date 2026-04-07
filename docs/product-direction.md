@@ -77,7 +77,7 @@ learning:
 - jobs
 - workitems
 - documents
-- metadata and enum/workflow discovery routes
+- read-only metadata and enum/workflow discovery routes
 - plans
 - testruns
 
@@ -85,6 +85,7 @@ Excluded by default:
 
 - user/global identity routes
 - admin or license routes
+- project-admin and project-metadata mutation routes
 - export/download routes
 - avatar/icon/binary content routes
 - other low-signal infrastructure endpoints

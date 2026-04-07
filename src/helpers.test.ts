@@ -88,14 +88,6 @@ describe("authHeaders", () => {
     expect(headers).toEqual({ Authorization: "Bearer token-a" });
   });
 
-  test("falls back to authInfo token", () => {
-    expect(
-      authHeaders({
-        authInfo: { token: "token-b" },
-      }),
-    ).toEqual({ Authorization: "Bearer token-b" });
-  });
-
   test("throws when no token is available", () => {
     expect(() => authHeaders({})).toThrow("No Polarion access token available");
   });

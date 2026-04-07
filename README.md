@@ -18,6 +18,7 @@ See:
 
 - [docs/product-direction.md](/Users/tomford/code/projects/polarionmcp/docs/product-direction.md)
 - [docs/generated-tools-design.md](/Users/tomford/code/projects/polarionmcp/docs/generated-tools-design.md)
+- [docs/allowlist.md](/Users/tomford/code/projects/polarionmcp/docs/allowlist.md)
 
 ## Setup
 
@@ -131,6 +132,8 @@ The generator task:
    [generated/polarion.ts](/Users/tomford/code/projects/polarionmcp/generated/polarion.ts)
 5. emits the generated operation registry at
    [src/generated/operations.ts](/Users/tomford/code/projects/polarionmcp/src/generated/operations.ts)
+6. emits the exhaustive allowed-vs-blocked inventory at
+   [docs/allowlist.md](/Users/tomford/code/projects/polarionmcp/docs/allowlist.md)
 
 Run it with:
 
