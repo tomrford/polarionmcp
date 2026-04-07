@@ -10,8 +10,9 @@ import type {
 import type { Executor } from "npm:@cloudflare/codemode";
 import { z } from "zod";
 import type { RequestContextLike } from "../helpers.ts";
+import { PUBLIC_CODE_TOOL_DESCRIPTION } from "../instructions.ts";
 import { runWithPolarionAccessToken } from "../request-context.ts";
-import { generateTypesFromJsonSchema, sanitizeToolName } from "./json-schema-types.ts";
+import { sanitizeToolName } from "./json-schema-types.ts";
 
 const CHARS_PER_TOKEN = 4;
 const MAX_TOKENS = 6_000;
@@ -54,19 +55,139 @@ function unwrapMcpResult(result: CallToolResult | CompatibilityCallToolResult): 
   return result;
 }
 
-const CODE_DESCRIPTION = `Execute code to achieve a goal.
-
-Available:
-{{types}}
-
-Write an async arrow function in JavaScript that returns the result.
-Do NOT use TypeScript syntax - no type annotations, interfaces, or generics.
-Do NOT define named functions then call them - just write the arrow function body directly.
-
-{{example}}`;
-
 function resolveEntryAuthToken(extra: RequestContextLike): string | undefined {
   return extra.authInfo?.token ?? Deno.env.get("POLARION_ACCESS_TOKEN");
+}
+
+type ToolCatalogEntry = {
+  name: string;
+  callable: string;
+  description?: string;
+  required_params: string[];
+  optional_params: string[];
+  input_schema: Record<string, unknown>;
+  search_text: string;
+  compact_text: string;
+};
+
+function schemaProperties(inputSchema: Record<string, unknown>): Record<string, unknown> {
+  const properties = inputSchema.properties;
+  if (!properties || typeof properties !== "object" || Array.isArray(properties)) return {};
+  return properties as Record<string, unknown>;
+}
+
+function schemaRequired(inputSchema: Record<string, unknown>): string[] {
+  const required = inputSchema.required;
+  if (!Array.isArray(required)) return [];
+  return required.filter((value): value is string => typeof value === "string");
+}
+
+function schemaPropertyDescriptions(inputSchema: Record<string, unknown>): string[] {
+  return Object.values(schemaProperties(inputSchema))
+    .map((property) =>
+      typeof property === "object" && property && "description" in property
+        ? property.description
+        : undefined
+    )
+    .filter((value): value is string => typeof value === "string");
+}
+
+function compactSearchText(value: string): string {
+  return value.toLowerCase().replace(/[^a-z0-9]+/g, "");
+}
+
+function stemSearchToken(value: string): string {
+  if (value.length > 4 && value.endsWith("ies")) return `${value.slice(0, -3)}y`;
+  if (value.length > 3 && value.endsWith("s")) return value.slice(0, -1);
+  return value;
+}
+
+function buildToolCatalog(
+  tools: Array<{ name: string; description?: string; inputSchema: Record<string, unknown> }>,
+) {
+  const entries: ToolCatalogEntry[] = tools.map((tool) => {
+    const required = new Set(schemaRequired(tool.inputSchema));
+    const properties = schemaProperties(tool.inputSchema);
+    const propertyDescriptions = schemaPropertyDescriptions(tool.inputSchema);
+    const paramNames = Object.keys(properties);
+    const searchSource = [
+      tool.name,
+      sanitizeToolName(tool.name),
+      tool.description ?? "",
+      ...paramNames,
+      ...propertyDescriptions,
+    ].join(" ");
+    return {
+      name: tool.name,
+      callable: `codemode.${sanitizeToolName(tool.name)}`,
+      description: tool.description,
+      required_params: paramNames.filter((name) => required.has(name)),
+      optional_params: paramNames.filter((name) => !required.has(name)),
+      input_schema: tool.inputSchema,
+      search_text: normalizeSearchText(searchSource),
+      compact_text: compactSearchText(searchSource),
+    };
+  });
+
+  return { entries };
+}
+
+function normalizeSearchText(value: string): string {
+  return value.toLowerCase().replace(/[^a-z0-9]+/g, " ").trim();
+}
+
+function searchCatalog(entries: ToolCatalogEntry[], query: string, limit: number) {
+  const normalizedQuery = normalizeSearchText(query);
+  const tokens = normalizedQuery.split(/\s+/).filter(Boolean);
+  const normalizedNameCache = new Map<string, string>();
+  const normalizedCallableCache = new Map<string, string>();
+  const compactQuery = compactSearchText(query);
+  const compactTokens = compactQuery.match(/[a-z0-9]+/g) ?? [];
+
+  const scored = entries
+    .map((entry) => {
+      let score = 0;
+      const haystack = entry.search_text;
+      const compactHaystack = entry.compact_text;
+      const normalizedName = normalizedNameCache.get(entry.name) ?? normalizeSearchText(entry.name);
+      normalizedNameCache.set(entry.name, normalizedName);
+      const normalizedCallable = normalizedCallableCache.get(entry.callable) ??
+        normalizeSearchText(entry.callable);
+      normalizedCallableCache.set(entry.callable, normalizedCallable);
+      if (haystack.includes(normalizedQuery)) score += 100;
+      if (compactQuery && compactHaystack.includes(compactQuery)) score += 90;
+      if (normalizedName === normalizedQuery) score += 120;
+      if (normalizedCallable.includes(normalizedQuery)) score += 80;
+      for (const token of tokens) {
+        const stemmedToken = stemSearchToken(token);
+        if (normalizedName.includes(token) || normalizedName.includes(stemmedToken)) score += 30;
+        if (
+          normalizedCallable.includes(token) || normalizedCallable.includes(stemmedToken)
+        ) score += 20;
+        if (haystack.includes(token)) score += 10;
+      }
+      for (const token of compactTokens) {
+        const stemmedToken = stemSearchToken(token);
+        if (compactHaystack.includes(token) || compactHaystack.includes(stemmedToken)) score += 12;
+      }
+      return { entry, score };
+    })
+    .filter((item) => item.score > 0)
+    .sort((a, b) => b.score - a.score || a.entry.name.localeCompare(b.entry.name));
+
+  return {
+    query,
+    total_matches: scored.length,
+    matches: scored.slice(0, limit).map(({ entry, score }) => ({
+      name: entry.name,
+      callable: entry.callable,
+      description: entry.description,
+      required_params: entry.required_params,
+      optional_params: entry.optional_params,
+      input_schema: entry.input_schema,
+      score,
+    })),
+  };
 }
 
 export async function createPolarionCodeMcpServer(options: {
@@ -88,17 +209,7 @@ export async function createPolarionCodeMcpServer(options: {
   await client.connect(clientTransport);
 
   const { tools } = await client.listTools();
-  const toolDescriptors = Object.fromEntries(
-    tools.map((tool) => [
-      tool.name,
-      {
-        description: tool.description,
-        inputSchema: tool.inputSchema,
-      },
-    ]),
-  );
-
-  const types = generateTypesFromJsonSchema(toolDescriptors);
+  const { entries } = buildToolCatalog(tools);
   const fns = Object.fromEntries(
     tools.map((tool) => [
       tool.name,
@@ -106,32 +217,13 @@ export async function createPolarionCodeMcpServer(options: {
         unwrapMcpResult(
           await client.callTool({
             name: tool.name,
-            arguments:
-              args && typeof args === "object" && !Array.isArray(args)
-                ? args as Record<string, unknown>
-                : {},
+            arguments: args && typeof args === "object" && !Array.isArray(args)
+              ? args as Record<string, unknown>
+              : {},
           }) as CallToolResult | CompatibilityCallToolResult,
         ),
     ]),
   );
-
-  const firstTool = tools[0];
-  let example = "";
-  if (firstTool) {
-    const props = (firstTool.inputSchema.properties ?? {}) as Record<string, { type?: string }>;
-    const parts: string[] = [];
-    for (const [key, prop] of Object.entries(props)) {
-      if (prop.type === "number" || prop.type === "integer") parts.push(`${key}: 0`);
-      else if (prop.type === "boolean") parts.push(`${key}: true`);
-      else parts.push(`${key}: "..."`);
-    }
-    const args = parts.length > 0 ? `{ ${parts.join(", ")} }` : "{}";
-    example = `Example: async () => { const r = await codemode.${
-      sanitizeToolName(firstTool.name)
-    }(${args}); return r; }`;
-  }
-
-  const description = CODE_DESCRIPTION.replace("{{types}}", types).replace("{{example}}", example);
   const codemodeServer = new McpServer(
     {
       name,
@@ -141,9 +233,33 @@ export async function createPolarionCodeMcpServer(options: {
   );
 
   codemodeServer.registerTool(
+    "search",
+    {
+      description:
+        "Fuzzy-search the Polarion code tool catalog by function name, partial name, route intent, or parameter name. Use this before code when you are unsure what to call.",
+      inputSchema: {
+        query: z
+          .string()
+          .describe("Partial tool name, route intent, or parameter keyword to search for"),
+        limit: z.number().min(1).max(20).optional().default(8).describe(
+          "Maximum matches to return",
+        ),
+      },
+    },
+    async ({ query, limit }) => ({
+      content: [
+        {
+          type: "text" as const,
+          text: JSON.stringify(searchCatalog(entries, query, limit), null, 2),
+        },
+      ],
+    }),
+  );
+
+  codemodeServer.registerTool(
     "code",
     {
-      description,
+      description: PUBLIC_CODE_TOOL_DESCRIPTION,
       inputSchema: {
         code: z.string().describe("JavaScript async arrow function to execute"),
       },
