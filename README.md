@@ -17,7 +17,6 @@ are gone.
 See:
 
 - [docs/product-direction.md](/Users/tomford/code/projects/polarionmcp/docs/product-direction.md)
-- [docs/codemode-plan.md](/Users/tomford/code/projects/polarionmcp/docs/codemode-plan.md)
 - [docs/generated-tools-design.md](/Users/tomford/code/projects/polarionmcp/docs/generated-tools-design.md)
 
 ## Setup

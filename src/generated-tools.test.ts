@@ -201,4 +201,59 @@ describe("generated tools", () => {
       server.close(),
     ]);
   });
+
+  test("normalizes rich text wrappers and removes links.self noise", async () => {
+    fetchSpy.mockResolvedValueOnce(
+      jsonResponse({
+        data: [{
+          id: "PRJ",
+          type: "projects",
+          attributes: {
+            description: {
+              type: "text/plain",
+              value: "Sandbox project",
+            },
+          },
+          links: {
+            self: "https://example.invalid/projects/PRJ",
+            related: "https://example.invalid/projects/PRJ/related",
+          },
+        }],
+        links: {
+          self: "https://example.invalid/projects",
+          next: "https://example.invalid/projects?page[number]=2",
+        },
+      }),
+    );
+
+    const { client, server, clientTransport, serverTransport } = await connectClient();
+
+    const result = await client.callTool({
+      name: "getProjects",
+      arguments: {},
+    });
+
+    expect(textPayload(result as CallToolResult)).toEqual({
+      data: [{
+        id: "PRJ",
+        type: "projects",
+        attributes: {
+          description: "Sandbox project",
+        },
+        links: {
+          related: "https://example.invalid/projects/PRJ/related",
+        },
+      }],
+      links: {
+        next: "https://example.invalid/projects?page[number]=2",
+      },
+    });
+
+    await Promise.all([
+      client.close(),
+      clientTransport.close(),
+      serverTransport.close(),
+      server.close(),
+    ]);
+  });
 });

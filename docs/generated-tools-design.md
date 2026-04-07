@@ -179,3 +179,9 @@ Not part of the current contract:
 - splitting `search` into `list_tools` plus `get_tool_info`
 - heavier request normalization beyond the current light tuning
 - reintroducing curated wrappers unless real workflow value justifies them
+- richer write-body discovery in `search` likely shape: preserve shallow object body properties
+  during generation, then expose a compact `body_summary` or richer `input_summary` instead of only
+  saying that `body` exists
+- structured handling for composite relationship ids likely shape: keep the raw id, then add
+  targeted post-processing by resource group or route to expose parsed relationship components where
+  it clearly improves workflows

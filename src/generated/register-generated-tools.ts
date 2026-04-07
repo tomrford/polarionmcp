@@ -17,6 +17,43 @@ import { jsonSchemaToZod } from "./schema-to-zod.ts";
 const MAX_RESPONSE_CHARS = 16_384;
 const DEFAULT_PAGE_SIZE = 20;
 
+function isPlainTextValueWrapper(value: unknown): value is { type: string; value: string } {
+  if (!value || typeof value !== "object" || Array.isArray(value)) return false;
+  const record = value as Record<string, unknown>;
+  const keys = Object.keys(record);
+  return keys.length === 2 &&
+    typeof record.type === "string" &&
+    record.type.startsWith("text/") &&
+    typeof record.value === "string";
+}
+
+function normalizeResponseValue(value: unknown, parentKey?: string): unknown {
+  if (isPlainTextValueWrapper(value)) return value.value;
+  if (Array.isArray(value)) {
+    return value.map((item) => normalizeResponseValue(item));
+  }
+  if (!value || typeof value !== "object") return value;
+
+  const normalized = Object.fromEntries(
+    Object.entries(value as Record<string, unknown>)
+      .flatMap(([key, entryValue]) => {
+        if (parentKey === "links" && key === "self") return [];
+
+        const nextValue = normalizeResponseValue(entryValue, key);
+        if (
+          key === "links" && nextValue && typeof nextValue === "object" &&
+          !Array.isArray(nextValue) && Object.keys(nextValue).length === 0
+        ) {
+          return [];
+        }
+
+        return [[key, nextValue] as const];
+      }),
+  );
+
+  return normalized;
+}
+
 function extractPageSize(args: Record<string, unknown>, hasPageObject: boolean) {
   if (!hasPageObject) return DEFAULT_PAGE_SIZE;
   const page = args.page;
@@ -111,7 +148,8 @@ async function executeOperation(
     }
 
     const rawData = await response.json();
-    const truncated = truncateResponse(rawData, {
+    const normalizedData = normalizeResponseValue(rawData);
+    const truncated = truncateResponse(normalizedData, {
       maxItems: extractPageSize(args, operation.input.hasPageObject),
       maxChars: MAX_RESPONSE_CHARS,
     });
