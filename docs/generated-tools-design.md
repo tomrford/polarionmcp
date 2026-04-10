@@ -15,6 +15,9 @@ Top-level MCP tools:
 
 Inside `code`, the model calls generated Polarion operations through `codemode.*`.
 
+If the final `code` result is too large, truncation happens only when returning that final value to
+the agent. The generated Polarion calls inside the script still run against the full fetched data.
+
 ## Internal Surface
 
 The internal surface is generated-only:
@@ -78,6 +81,7 @@ Generated responses stay close to the Polarion API:
 - preserve JSON API envelopes like `data`, `meta`, `links`, `included`
 - preserve operation-native JSON payloads
 - normalize `204 No Content` to `{ ok: true }`
+- serialize successful generated-tool payloads as compact JSON
 
 ## Search Contract
 

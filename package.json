@@ -12,6 +12,10 @@
     "start": "deno task start",
     "start:stdio": "deno task start:stdio",
     "generate": "deno task generate",
+    "lint": "deno task lint",
+    "lint:fix": "deno task lint:fix",
+    "fmt": "deno task fmt",
+    "fmt:check": "deno task fmt:check",
     "typecheck": "deno task check",
     "test": "deno task test"
   }

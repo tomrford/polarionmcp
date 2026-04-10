@@ -46,9 +46,10 @@ function normalizeCode(code: string): string {
 
     const last = ast.body[ast.body.length - 1];
     if (last?.type === "ExpressionStatement") {
-      return `async () => {\n${source.slice(0, last.start)}return (${
-        source.slice(last.expression.start, last.expression.end)
-      })\n}`;
+      return `async () => {\n${source.slice(0, last.start)}return (${source.slice(
+        last.expression.start,
+        last.expression.end,
+      )})\n}`;
     }
 
     return `async () => {\n${source}\n}`;
@@ -122,30 +123,28 @@ type HostMessage = HostInitMessage | HostResponseMessage;
 
 type SandboxMessage =
   | {
-    type: "call";
-    id: number;
-    provider: string;
-    tool: string;
-    args: unknown;
-  }
+      type: "call";
+      id: number;
+      provider: string;
+      tool: string;
+      args: unknown;
+    }
   | {
-    type: "log";
-    level: "log" | "warn" | "error";
-    message: string;
-  }
+      type: "log";
+      level: "log" | "warn" | "error";
+      message: string;
+    }
   | {
-    type: "result";
-    result: unknown;
-  }
+      type: "result";
+      result: unknown;
+    }
   | {
-    type: "error";
-    error: string;
-  };
+      type: "error";
+      error: string;
+    };
 
 function normalizeProviders(
-  providersOrFns:
-    | ResolvedProvider[]
-    | Record<string, (...args: unknown[]) => Promise<unknown>>,
+  providersOrFns: ResolvedProvider[] | Record<string, (...args: unknown[]) => Promise<unknown>>,
 ): ResolvedProvider[] {
   if (Array.isArray(providersOrFns)) return providersOrFns;
   console.warn(
@@ -214,9 +213,7 @@ export class DenoSubprocessExecutor implements Executor {
 
   async execute(
     code: string,
-    providersOrFns:
-      | ResolvedProvider[]
-      | Record<string, (...args: unknown[]) => Promise<unknown>>,
+    providersOrFns: ResolvedProvider[] | Record<string, (...args: unknown[]) => Promise<unknown>>,
   ): Promise<ExecuteResult> {
     const providers = normalizeProviders(providersOrFns);
     const validationError = validateProviders(providers);
@@ -263,9 +260,7 @@ export class DenoSubprocessExecutor implements Executor {
     };
 
     const stdoutTask = (async () => {
-      const lines = child.stdout
-        .pipeThrough(new TextDecoderStream())
-        .pipeThrough(splitLines());
+      const lines = child.stdout.pipeThrough(new TextDecoderStream()).pipeThrough(splitLines());
 
       for await (const line of lines) {
         if (!line.trim()) continue;
@@ -279,11 +274,8 @@ export class DenoSubprocessExecutor implements Executor {
         }
 
         if (message.type === "log") {
-          const prefix = message.level === "warn"
-            ? "[warn] "
-            : message.level === "error"
-            ? "[error] "
-            : "";
+          const prefix =
+            message.level === "warn" ? "[warn] " : message.level === "error" ? "[error] " : "";
           logs.push(`${prefix}${message.message}`);
           continue;
         }
@@ -304,7 +296,9 @@ export class DenoSubprocessExecutor implements Executor {
           void (async () => {
             try {
               const args = provider.positionalArgs
-                ? Array.isArray(message.args) ? message.args : []
+                ? Array.isArray(message.args)
+                  ? message.args
+                  : []
                 : [message.args ?? {}];
               const result = await tool(...args);
               await queueWrite({ type: "response", id: message.id, result });

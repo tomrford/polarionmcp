@@ -48,11 +48,7 @@ const PLAN_OPERATION_IDS = [
   "postPlans",
 ] as const;
 
-const JOB_OPERATION_IDS = [
-  "executeJob",
-  "getJob",
-  "getJobs",
-] as const;
+const JOB_OPERATION_IDS = ["executeJob", "getJob", "getJobs"] as const;
 
 const PROJECT_OPERATION_IDS = [
   "closeCollection",

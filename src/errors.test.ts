@@ -20,6 +20,16 @@ describe("errors", () => {
     expect(e.details).toContain("bad token");
   });
 
+  test("httpError adds short 403 guidance", () => {
+    const e = httpError(403, "forbidden");
+    expect(e.suggestion).toBe("Access denied. User action required.");
+  });
+
+  test("httpError adds short 404 guidance", () => {
+    const e = httpError(404, "missing");
+    expect(e.suggestion).toBe("Not found at this path.");
+  });
+
   test("networkError wraps Error instance", () => {
     const e = networkError(new Error("ECONNREFUSED"));
     expect(e.error).toBe(true);

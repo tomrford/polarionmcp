@@ -8,7 +8,7 @@ export interface RequestContextLike {
 }
 
 /** Render the bridged Polarion token into an Authorization header for downstream fetches. */
-export function authHeaders(extra: RequestContextLike): { Authorization: string } {
+export function authHeaders(_extra: RequestContextLike): { Authorization: string } {
   const token = getPolarionAccessToken();
 
   if (!token) throw new Error("No Polarion access token available");
@@ -58,11 +58,7 @@ type QueryValue =
   | QueryValue[]
   | { [key: string]: QueryValue };
 
-function appendQueryValue(
-  params: URLSearchParams,
-  key: string,
-  value: QueryValue,
-) {
+function appendQueryValue(params: URLSearchParams, key: string, value: QueryValue) {
   if (value === null || typeof value === "undefined") return;
 
   if (Array.isArray(value)) {
@@ -80,9 +76,7 @@ function appendQueryValue(
   params.append(key, String(value));
 }
 
-export function toQueryString(
-  query: Record<string, QueryValue> | undefined,
-): string {
+export function toQueryString(query: Record<string, QueryValue> | undefined): string {
   if (!query) return "";
 
   const params = new URLSearchParams();
@@ -94,4 +88,3 @@ export function toQueryString(
   const rendered = params.toString();
   return rendered ? `?${rendered}` : "";
 }
-

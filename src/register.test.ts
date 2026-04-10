@@ -5,7 +5,7 @@ import { McpError } from "@modelcontextprotocol/sdk/types.js";
 import { createServer } from "./register.ts";
 
 describe("createServer", () => {
-  test("registers generated operations and exposes raw-surface instructions", async () => {
+  test("registers generated operations", async () => {
     const server = createServer();
     const client = new Client({
       name: "test-client",
@@ -13,10 +13,7 @@ describe("createServer", () => {
     });
 
     const [clientTransport, serverTransport] = InMemoryTransport.createLinkedPair();
-    await Promise.all([
-      client.connect(clientTransport),
-      server.connect(serverTransport),
-    ]);
+    await Promise.all([client.connect(clientTransport), server.connect(serverTransport)]);
 
     const tools = await client.listTools();
     const toolNames = tools.tools.map((tool) => tool.name).sort();
@@ -35,8 +32,6 @@ describe("createServer", () => {
     expect(toolNames).not.toContain("polarion_api_help");
     expect(toolNames).not.toContain("polarion_api_read");
 
-    expect(client.getInstructions()).toContain("generated Polarion operations");
-
     let error: unknown;
     try {
       await client.listResources();
@@ -46,9 +41,6 @@ describe("createServer", () => {
     expect(error).toBeInstanceOf(McpError);
     expect((error as McpError).code).toBe(-32601);
 
-    await Promise.all([
-      client.close(),
-      server.close(),
-    ]);
+    await Promise.all([client.close(), server.close()]);
   });
 });

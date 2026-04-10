@@ -20,9 +20,11 @@ describe("createPublicServer", () => {
 
   async function connectClient(options: {
     authToken?: string;
+    executor?: Parameters<typeof createPublicServer>[0]["executor"];
     resolveAccessToken: Parameters<typeof createPublicServer>[0]["resolveAccessToken"];
   }) {
     const server = await createPublicServer({
+      executor: options.executor,
       resolveAccessToken: options.resolveAccessToken,
     });
     const client = new Client({
@@ -31,10 +33,7 @@ describe("createPublicServer", () => {
     });
 
     const [clientTransport, serverTransport] = InMemoryTransport.createLinkedPair();
-    await Promise.all([
-      client.connect(clientTransport),
-      server.connect(serverTransport),
-    ]);
+    await Promise.all([client.connect(clientTransport), server.connect(serverTransport)]);
 
     if (options.authToken) {
       const originalSend = clientTransport.send.bind(clientTransport);
@@ -225,13 +224,15 @@ describe("createPublicServer", () => {
     const payload = JSON.parse((textResult.content[0] as { text: string }).text);
     expect(payload.total_matches).toBeGreaterThan(0);
     expect(
-      payload.matches.some((entry: { callable: string }) =>
-        entry.callable === "codemode.getWorkflowActionsForWorkItem"
+      payload.matches.some(
+        (entry: { callable: string }) =>
+          entry.callable === "codemode.getWorkflowActionsForWorkItem",
       ),
     ).toBe(true);
     expect(
-      payload.matches.every((entry: { input_summary: string; output_summary: string }) =>
-        typeof entry.input_summary === "string" && typeof entry.output_summary === "string"
+      payload.matches.every(
+        (entry: { input_summary: string; output_summary: string }) =>
+          typeof entry.input_summary === "string" && typeof entry.output_summary === "string",
       ),
     ).toBe(true);
 
@@ -255,6 +256,36 @@ describe("createPublicServer", () => {
     expect(codeTool?.description).toContain("codemode.*");
     expect(codeTool?.description).toContain("codemode.getProjects");
     expect(codeTool?.description).not.toContain("declare const codemode");
+
+    await Promise.all([
+      client.close(),
+      clientTransport.close(),
+      serverTransport.close(),
+      server.close(),
+    ]);
+  });
+
+  test("code truncation says the script already ran", async () => {
+    const { client, server, clientTransport, serverTransport } = await connectClient({
+      authToken: "bridge-token",
+      executor: {
+        execute: async () => ({
+          result: { payload: "x".repeat(30_000) },
+        }),
+      },
+      resolveAccessToken: httpAccessToken,
+    });
+
+    const result = await client.callTool({
+      name: "code",
+      arguments: {
+        code: "async () => ({ ok: true })",
+      },
+    });
+
+    const text = (result as CallToolResult).content[0] as { text: string };
+    expect(text.text).toContain("--- TRUNCATED ---");
+    expect(text.text).toContain("Your code already ran successfully.");
 
     await Promise.all([
       client.close(),

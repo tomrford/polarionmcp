@@ -25,10 +25,7 @@ describe("generated tools", () => {
     });
 
     const [clientTransport, serverTransport] = InMemoryTransport.createLinkedPair();
-    await Promise.all([
-      client.connect(clientTransport),
-      server.connect(serverTransport),
-    ]);
+    await Promise.all([client.connect(clientTransport), server.connect(serverTransport)]);
 
     return { client, server, clientTransport, serverTransport };
   }
@@ -39,11 +36,14 @@ describe("generated tools", () => {
     args: Record<string, unknown>,
     authToken = "token",
   ) {
-    return await runWithPolarionAccessToken(authToken, async () =>
-      await client.callTool({
-        name,
-        arguments: args,
-      }));
+    return await runWithPolarionAccessToken(
+      authToken,
+      async () =>
+        await client.callTool({
+          name,
+          arguments: args,
+        }),
+    );
   }
 
   function textPayload(result: CallToolResult) {
@@ -194,23 +194,73 @@ describe("generated tools", () => {
     ]);
   });
 
+  test("404 errors include a short not-found hint", async () => {
+    fetchSpy.mockResolvedValueOnce(
+      new Response("missing", { status: 404, headers: { "content-type": "text/plain" } }),
+    );
+
+    const { client, server, clientTransport, serverTransport } = await connectClient();
+
+    const result = await callToolWithToken(client, "getProjects", {});
+    const payload = textPayload(result as CallToolResult);
+
+    expect((result as CallToolResult).isError).toBe(true);
+    expect(payload).toMatchObject({
+      status_code: 404,
+      suggestion: "Not found at this path.",
+    });
+
+    await Promise.all([
+      client.close(),
+      clientTransport.close(),
+      serverTransport.close(),
+      server.close(),
+    ]);
+  });
+
+  test("403 errors include a short escalation hint", async () => {
+    fetchSpy.mockResolvedValueOnce(
+      new Response("forbidden", { status: 403, headers: { "content-type": "text/plain" } }),
+    );
+
+    const { client, server, clientTransport, serverTransport } = await connectClient();
+
+    const result = await callToolWithToken(client, "getProjects", {});
+    const payload = textPayload(result as CallToolResult);
+
+    expect((result as CallToolResult).isError).toBe(true);
+    expect(payload).toMatchObject({
+      status_code: 403,
+      suggestion: "Access denied. User action required.",
+    });
+
+    await Promise.all([
+      client.close(),
+      clientTransport.close(),
+      serverTransport.close(),
+      server.close(),
+    ]);
+  });
+
   test("normalizes rich text wrappers and removes links.self noise", async () => {
     fetchSpy.mockResolvedValueOnce(
       jsonResponse({
-        data: [{
-          id: "PRJ",
-          type: "projects",
-          attributes: {
-            description: {
-              type: "text/plain",
-              value: "Sandbox project",
+        data: [
+          {
+            id: "PRJ",
+            type: "projects",
+            attributes: {
+              description: {
+                type: "text/plain",
+                value: "Sandbox project",
+              },
+            },
+            links: {
+              self: "https://example.invalid/projects/PRJ",
+              related: "https://example.invalid/projects/PRJ/related",
             },
           },
-          links: {
-            self: "https://example.invalid/projects/PRJ",
-            related: "https://example.invalid/projects/PRJ/related",
-          },
-        }],
+        ],
         links: {
           self: "https://example.invalid/projects",
         },
@@ -222,16 +272,18 @@ describe("generated tools", () => {
     const result = await callToolWithToken(client, "getProjects", {});
     const payload = textPayload(result as CallToolResult);
 
-    expect(payload.data).toEqual([{
-      id: "PRJ",
-      type: "projects",
-      attributes: {
-        description: "Sandbox project",
+    expect(payload.data).toEqual([
+      {
+        id: "PRJ",
+        type: "projects",
+        attributes: {
+          description: "Sandbox project",
+        },
+        links: {
+          related: "https://example.invalid/projects/PRJ/related",
+        },
       },
-      links: {
-        related: "https://example.invalid/projects/PRJ/related",
-      },
-    }]);
+    ]);
     expect(payload.links).toBeUndefined();
 
     await Promise.all([
@@ -273,9 +325,7 @@ describe("generated tools", () => {
     );
     fetchSpy.mockResolvedValueOnce(
       jsonResponse({
-        data: [
-          { id: "3", type: "projects" },
-        ],
+        data: [{ id: "3", type: "projects" }],
         links: {},
         meta: { totalCount: 3 },
       }),
@@ -307,9 +357,7 @@ describe("generated tools", () => {
   test("rejects cross-origin pagination links before fetching follow-up pages", async () => {
     fetchSpy.mockResolvedValueOnce(
       jsonResponse({
-        data: [
-          { id: "1", type: "projects" },
-        ],
+        data: [{ id: "1", type: "projects" }],
         links: {
           next: "https://evil.invalid/projects?page[number]=2",
         },
@@ -340,9 +388,7 @@ describe("generated tools", () => {
   test("errors when a follow-up page returns non-JSON content", async () => {
     fetchSpy.mockResolvedValueOnce(
       jsonResponse({
-        data: [
-          { id: "1", type: "projects" },
-        ],
+        data: [{ id: "1", type: "projects" }],
         links: {
           next: "https://example.invalid/projects?page[number]=2",
         },
@@ -393,12 +439,13 @@ describe("generated tools", () => {
     const result = await callToolWithToken(client, "getProjects", {});
 
     expect((result as CallToolResult).isError).toBe(true);
-    expect(JSON.parse(((result as CallToolResult).content[0] as { text: string }).text))
-      .toMatchObject({
-        error: true,
-        status_code: 409,
-        message: "Polarion returned a partial collection",
-      });
+    expect(
+      JSON.parse(((result as CallToolResult).content[0] as { text: string }).text),
+    ).toMatchObject({
+      error: true,
+      status_code: 409,
+      message: "Polarion returned a partial collection",
+    });
 
     await Promise.all([
       client.close(),

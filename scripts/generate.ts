@@ -119,9 +119,10 @@ function resolveRefs(obj: unknown, root: unknown, seen = new Set<string>()): unk
     if (!ref.startsWith("#/")) return record;
 
     seen.add(ref);
-    const parts = ref.slice(2).split("/").map((part) =>
-      part.replaceAll("~1", "/").replaceAll("~0", "~")
-    );
+    const parts = ref
+      .slice(2)
+      .split("/")
+      .map((part) => part.replaceAll("~1", "/").replaceAll("~0", "~"));
 
     let resolved = root as Record<string, unknown> | undefined;
     for (const part of parts) {
@@ -197,20 +198,18 @@ function sanitizeSchema(schema: OpenApiSchema | undefined): Record<string, unkno
   if ("$circular" in schema) return {};
 
   const out: Record<string, unknown> = {};
-  for (
-    const key of [
-      "type",
-      "format",
-      "description",
-      "enum",
-      "const",
-      "nullable",
-      "minimum",
-      "maximum",
-      "minLength",
-      "maxLength",
-    ]
-  ) {
+  for (const key of [
+    "type",
+    "format",
+    "description",
+    "enum",
+    "const",
+    "nullable",
+    "minimum",
+    "maximum",
+    "minLength",
+    "maxLength",
+  ]) {
     if (key in schema && typeof schema[key as keyof OpenApiSchema] !== "undefined") {
       out[key] = schema[key as keyof OpenApiSchema];
     }
@@ -283,7 +282,7 @@ function bodyInputSchema(
   return {
     type: "object",
     additionalProperties: true,
-    ...(description ?? schema.description
+    ...((description ?? schema.description)
       ? { description: description ?? schema.description }
       : {}),
   };
@@ -335,11 +334,7 @@ function buildOutputSummary(
   return { mode: "json", summary: `${status} JSON response` };
 }
 
-function summarizeInput(
-  required: string[],
-  properties: string[],
-  hasBody: boolean,
-) {
+function summarizeInput(required: string[], properties: string[], hasBody: boolean) {
   const optional = properties.filter((name) => !required.includes(name));
   const parts: string[] = [];
   if (required.length > 0) parts.push(`required: ${required.join(", ")}`);
@@ -348,16 +343,13 @@ function summarizeInput(
   return parts.join("; ") || "no parameters";
 }
 
-function assertJsonRequestBody(
-  operationId: string,
-  requestBody: OpenApiRequestBody | undefined,
-) {
+function assertJsonRequestBody(operationId: string, requestBody: OpenApiRequestBody | undefined) {
   if (!requestBody?.content) return;
   if (requestBody.content["application/json"]) return;
   throw new Error(
-    `Allowed operation ${operationId} has unsupported request body content types: ${
-      Object.keys(requestBody.content).join(", ")
-    }`,
+    `Allowed operation ${operationId} has unsupported request body content types: ${Object.keys(
+      requestBody.content,
+    ).join(", ")}`,
   );
 }
 
@@ -385,8 +377,8 @@ function createTrimmedSpec(fullSpec: OpenApiSpec): {
   }
 
   const selectedIds = new Set(selected.map((entry) => entry.operation.operationId));
-  const missingIds = [...ALLOWED_OPERATION_IDS].filter((operationId) =>
-    !selectedIds.has(operationId)
+  const missingIds = [...ALLOWED_OPERATION_IDS].filter(
+    (operationId) => !selectedIds.has(operationId),
   );
   if (missingIds.length > 0) {
     throw new Error(`Allowed operation IDs missing from spec: ${missingIds.join(", ")}`);
@@ -427,10 +419,7 @@ function buildGeneratedOperations(
 
     for (const parameter of params) {
       if (!parameter.name || (parameter.in !== "path" && parameter.in !== "query")) continue;
-      const schema = withDescription(
-        sanitizeSchema(parameter.schema),
-        parameter.description,
-      );
+      const schema = withDescription(sanitizeSchema(parameter.schema), parameter.description);
 
       if (parameter.in === "path") {
         properties[parameter.name] = schema;
@@ -454,10 +443,7 @@ function buildGeneratedOperations(
     const bodySchema = resolvedOperation.requestBody?.content?.["application/json"]?.schema;
     const hasBody = !!bodySchema;
     if (bodySchema) {
-      properties.body = bodyInputSchema(
-        bodySchema,
-        resolvedOperation.requestBody?.description,
-      );
+      properties.body = bodyInputSchema(bodySchema, resolvedOperation.requestBody?.description);
       if (resolvedOperation.requestBody?.required) required.add("body");
     }
 
@@ -477,11 +463,9 @@ function buildGeneratedOperations(
       name: operation.operationId!,
       method: methodUpper,
       pathTemplate: path,
-      description: (
-        operation.description ??
-          operation.summary ??
-          `${methodUpper} ${path}`
-      ).replace(/\s+/g, " ").trim(),
+      description: (operation.description ?? operation.summary ?? `${methodUpper} ${path}`)
+        .replace(/\s+/g, " ")
+        .trim(),
       resourceGroup: resourceGroupForPath(path),
       annotations: annotationsForMethod(methodUpper),
       input: {
@@ -512,22 +496,17 @@ function renderOperationsModule(operations: GeneratedOperation[]) {
 
 import type { GeneratedOperation } from "./types.ts";
 
-export const GENERATED_OPERATIONS = ${
-    JSON.stringify(operations, null, 2)
-  } satisfies GeneratedOperation[];
+export const GENERATED_OPERATIONS = ${JSON.stringify(
+    operations,
+    null,
+    2,
+  )} satisfies GeneratedOperation[];
 `;
 }
 
 async function runOpenApiTypescript(trimmedSpecPath: string, outputPath: string) {
   const command = new Deno.Command(Deno.execPath(), {
-    args: [
-      "run",
-      "-A",
-      "npm:openapi-typescript@7.10.1",
-      trimmedSpecPath,
-      "-o",
-      outputPath,
-    ],
+    args: ["run", "-A", "npm:openapi-typescript@7.10.1", trimmedSpecPath, "-o", outputPath],
     stdout: "inherit",
     stderr: "inherit",
   });
@@ -545,12 +524,14 @@ function renderAllowlistDoc(
       METHOD_ORDER.flatMap((method) => {
         const operation = pathItem[method];
         if (!operation?.operationId) return [];
-        return [{
-          operationId: operation.operationId,
-          method: method.toUpperCase(),
-          path,
-        }];
-      })
+        return [
+          {
+            operationId: operation.operationId,
+            method: method.toUpperCase(),
+            path,
+          },
+        ];
+      }),
     )
     .sort((left, right) => left.operationId.localeCompare(right.operationId));
 
@@ -559,9 +540,9 @@ function renderAllowlistDoc(
   const blocked = allOperations.filter((entry) => !allowedIds.has(entry.operationId));
 
   const renderEntries = (entries: typeof allOperations) =>
-    entries.map((entry) => `- \`${entry.operationId}\` | ${entry.method} \`${entry.path}\``).join(
-      "\n",
-    );
+    entries
+      .map((entry) => `- \`${entry.operationId}\` | ${entry.method} \`${entry.path}\``)
+      .join("\n");
 
   return `# Operation Allowlist
 

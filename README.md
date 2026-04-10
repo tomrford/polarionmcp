@@ -42,6 +42,9 @@ Run in HTTP mode:
 deno task start
 ```
 
+HTTP mode serves MCP at `http://localhost:8080/mcp` by default and a simple unauthenticated health
+endpoint at `http://localhost:8080/healthz`.
+
 Run in stdio mode:
 
 ```bash
@@ -77,6 +80,22 @@ Example MCP client config:
 In HTTP mode, callers must send their own `Authorization: Bearer ...` header. Auth stays host-side;
 the codemode sandbox never receives credentials directly.
 
+## Deployment
+
+Build the container:
+
+```bash
+docker build -t polarion-mcp .
+```
+
+Run it:
+
+```bash
+docker run --rm -p 8080:8080 --env-file .env polarion-mcp
+```
+
+Use `GET /healthz` or `GET /readyz` for container or load-balancer health checks.
+
 ## Public MCP Surface
 
 Top-level tools:
@@ -97,6 +116,10 @@ Example:
   return await codemode.getProjects({});
 });
 ```
+
+- generated Polarion calls inside `code` run against the full fetched data they receive
+- only the final `code` result sent back to the agent may be truncated if it is too large
+- when truncation happens, rewrite the script to return a narrower or aggregated result
 
 ## Internal Generated Surface
 
@@ -144,6 +167,8 @@ deno task generate
 ## Tests
 
 ```bash
+deno task fmt:check
+deno task lint
 deno task test
 deno task check
 ```

@@ -7,7 +7,7 @@ import {
   type RequestContextLike,
   toQueryString,
 } from "../helpers.ts";
-import { makeError, networkError } from "../errors.ts";
+import { httpError, makeError, networkError } from "../errors.ts";
 import { withToolLogging } from "../logging.ts";
 import { getPolarionBaseUrl } from "../client.ts";
 import { GENERATED_OPERATIONS } from "./operations.ts";
@@ -36,10 +36,12 @@ function isPlainTextValueWrapper(value: unknown): value is { type: string; value
   if (!value || typeof value !== "object" || Array.isArray(value)) return false;
   const record = value as Record<string, unknown>;
   const keys = Object.keys(record);
-  return keys.length === 2 &&
+  return (
+    keys.length === 2 &&
     typeof record.type === "string" &&
     record.type.startsWith("text/") &&
-    typeof record.value === "string";
+    typeof record.value === "string"
+  );
 }
 
 function normalizeResponseValue(value: unknown, parentKey?: string): unknown {
@@ -50,42 +52,39 @@ function normalizeResponseValue(value: unknown, parentKey?: string): unknown {
   if (!value || typeof value !== "object") return value;
 
   const normalized = Object.fromEntries(
-    Object.entries(value as Record<string, unknown>)
-      .flatMap(([key, entryValue]) => {
-        if (parentKey === "links" && key === "self") return [];
+    Object.entries(value as Record<string, unknown>).flatMap(([key, entryValue]) => {
+      if (parentKey === "links" && key === "self") return [];
 
-        const nextValue = normalizeResponseValue(entryValue, key);
-        if (
-          key === "links" && nextValue && typeof nextValue === "object" &&
-          !Array.isArray(nextValue) && Object.keys(nextValue).length === 0
-        ) {
-          return [];
-        }
+      const nextValue = normalizeResponseValue(entryValue, key);
+      if (
+        key === "links" &&
+        nextValue &&
+        typeof nextValue === "object" &&
+        !Array.isArray(nextValue) &&
+        Object.keys(nextValue).length === 0
+      ) {
+        return [];
+      }
 
-        return [[key, nextValue] as const];
-      }),
+      return [[key, nextValue] as const];
+    }),
   );
 
   return normalized;
 }
 
-function isJsonApiCollection(
-  payload: unknown,
-): payload is JsonApiCollection {
-  return !!payload && typeof payload === "object" && "data" in payload &&
-    Array.isArray(payload.data);
+function isJsonApiCollection(payload: unknown): payload is JsonApiCollection {
+  return (
+    !!payload && typeof payload === "object" && "data" in payload && Array.isArray(payload.data)
+  );
 }
 
-function nextPageLink(payload: {
-  links?: Record<string, unknown>;
-}) {
+function nextPageLink(payload: { links?: Record<string, unknown> }) {
   const next = payload.links?.next;
   return typeof next === "string" && next.length > 0 ? next : undefined;
 }
 
-function totalCount(payload: {
-  meta?: Record<string, unknown>;
-}) {
+function totalCount(payload: { meta?: Record<string, unknown> }) {
   const total = payload.meta?.totalCount;
   return typeof total === "number" && Number.isFinite(total) ? total : undefined;
 }
@@ -97,8 +96,8 @@ function partialResultError(message: string, details: string) {
 function stripPagingLinks(links: Record<string, unknown> | undefined) {
   if (!links) return undefined;
   const filtered = Object.fromEntries(
-    Object.entries(links).filter(([key]) =>
-      key !== "first" && key !== "last" && key !== "next" && key !== "prev"
+    Object.entries(links).filter(
+      ([key]) => key !== "first" && key !== "last" && key !== "next" && key !== "prev",
     ),
   );
   return Object.keys(filtered).length > 0 ? filtered : undefined;
@@ -113,9 +112,10 @@ function includedIdentity(entry: unknown) {
 }
 
 function isUnderBasePath(candidate: URL, base: URL) {
-  const basePath = base.pathname.endsWith("/") && base.pathname !== "/"
-    ? base.pathname.slice(0, -1)
-    : base.pathname;
+  const basePath =
+    base.pathname.endsWith("/") && base.pathname !== "/"
+      ? base.pathname.slice(0, -1)
+      : base.pathname;
   if (basePath === "/") return true;
   return candidate.pathname === basePath || candidate.pathname.startsWith(`${basePath}/`);
 }
@@ -174,11 +174,11 @@ function mergeCollectionPage(
   }
 
   if (page.meta && typeof page.meta === "object") {
-    acc.meta = { ...(acc.meta ?? {}), ...page.meta };
+    acc.meta = { ...acc.meta, ...page.meta };
   }
 
   const links = stripPagingLinks(page.links);
-  if (links) acc.links = { ...(acc.links ?? {}), ...links };
+  if (links) acc.links = { ...acc.links, ...links };
 }
 
 async function fetchJsonPage(
@@ -188,9 +188,7 @@ async function fetchJsonPage(
   const response = await fetch(url, init);
   if (!response.ok) {
     return {
-      error: errorResult(
-        makeError(response.status, `HTTP ${response.status}`, await response.text()),
-      ),
+      error: errorResult(httpError(response.status, await response.text())),
     };
   }
 
@@ -211,10 +209,7 @@ async function fetchJsonPage(
   };
 }
 
-async function fetchAllPages(
-  firstPage: JsonApiCollection,
-  init: RequestInit,
-): Promise<ToolResult> {
+async function fetchAllPages(firstPage: JsonApiCollection, init: RequestInit): Promise<ToolResult> {
   const visited = new Set<string>();
   const seenIncluded = new Set<string>();
   let currentPage: JsonApiCollection | undefined = firstPage;
@@ -228,8 +223,8 @@ async function fetchAllPages(
   let pageCount = 1;
   const merged: JsonApiCollection = {
     ...Object.fromEntries(
-      Object.entries(firstPage).filter(([key]) =>
-        key !== "data" && key !== "included" && key !== "links" && key !== "meta"
+      Object.entries(firstPage).filter(
+        ([key]) => key !== "data" && key !== "included" && key !== "links" && key !== "meta",
       ),
     ),
     data: [],
@@ -314,9 +309,10 @@ async function executeOperation(
       Object.entries(operation.wire.pathParamMap).map(([key, wireName]) => [wireName, args[key]]),
     );
     const queryString = toQueryString(buildQuery(args, operation) as any);
-    const url = `${getPolarionBaseUrl()}${
-      interpolatePath(operation.pathTemplate, pathParams)
-    }${queryString}`;
+    const url = `${getPolarionBaseUrl()}${interpolatePath(
+      operation.pathTemplate,
+      pathParams,
+    )}${queryString}`;
 
     const headers: Record<string, string> = {
       Accept: "application/json",
@@ -337,9 +333,7 @@ async function executeOperation(
 
     const response = await fetch(url, init);
     if (!response.ok) {
-      return errorResult(
-        makeError(response.status, `HTTP ${response.status}`, await response.text()),
-      );
+      return errorResult(httpError(response.status, await response.text()));
     }
 
     if (operation.output.mode === "no_content" || response.status === 204) {
@@ -362,7 +356,8 @@ async function executeOperation(
     const normalizedData = normalizeResponseValue(rawData);
 
     if (
-      operation.method === "GET" && operation.output.collection?.autoPaginate &&
+      operation.method === "GET" &&
+      operation.output.collection?.autoPaginate &&
       isJsonApiCollection(normalizedData)
     ) {
       const next = nextPageLink(normalizedData);
@@ -382,9 +377,10 @@ async function executeOperation(
 
     return {
       ...ok(payload),
-      structuredContent: payload && typeof payload === "object" && !Array.isArray(payload)
-        ? payload as Record<string, unknown>
-        : { result: payload },
+      structuredContent:
+        payload && typeof payload === "object" && !Array.isArray(payload)
+          ? (payload as Record<string, unknown>)
+          : { result: payload },
     };
   } catch (error) {
     return errorResult(networkError(error));
@@ -397,8 +393,7 @@ export function registerGeneratedTools(server: McpServer) {
       operation.name,
       {
         title: operation.name,
-        description:
-          `${operation.method} ${operation.pathTemplate}. Returns ${operation.output.summary}.`,
+        description: `${operation.method} ${operation.pathTemplate}. Returns ${operation.output.summary}.`,
         inputSchema: jsonSchemaToZod(operation.input.schema),
         annotations: operation.annotations,
         _meta: {

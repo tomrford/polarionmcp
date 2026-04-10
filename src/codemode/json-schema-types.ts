@@ -3,22 +3,22 @@
 type JsonSchema =
   | boolean
   | {
-    $ref?: string;
-    type?: string | string[];
-    anyOf?: JsonSchema[];
-    oneOf?: JsonSchema[];
-    allOf?: JsonSchema[];
-    enum?: unknown[];
-    const?: unknown;
-    nullable?: boolean;
-    prefixItems?: JsonSchema[];
-    items?: JsonSchema | JsonSchema[];
-    properties?: Record<string, JsonSchema>;
-    required?: string[];
-    additionalProperties?: boolean | JsonSchema;
-    description?: string;
-    format?: string;
-  };
+      $ref?: string;
+      type?: string | string[];
+      anyOf?: JsonSchema[];
+      oneOf?: JsonSchema[];
+      allOf?: JsonSchema[];
+      enum?: unknown[];
+      const?: unknown;
+      nullable?: boolean;
+      prefixItems?: JsonSchema[];
+      items?: JsonSchema | JsonSchema[];
+      properties?: Record<string, JsonSchema>;
+      required?: string[];
+      additionalProperties?: boolean | JsonSchema;
+      description?: string;
+      format?: string;
+    };
 
 const JS_RESERVED = new Set([
   "abstract",
@@ -99,10 +99,9 @@ export function sanitizeToolName(name: string): string {
 }
 
 function toPascalCase(str: string): string {
-  return str.replace(/_([a-z])/g, (_match, letter: string) => letter.toUpperCase()).replace(
-    /^[a-z]/,
-    (letter) => letter.toUpperCase(),
-  );
+  return str
+    .replace(/_([a-z])/g, (_match, letter: string) => letter.toUpperCase())
+    .replace(/^[a-z]/, (letter) => letter.toUpperCase());
 }
 
 function escapeControlChar(ch: string): string {
@@ -151,7 +150,10 @@ function escapeJsDoc(text: string): string {
 function resolveRef(ref: string, root: JsonSchema): JsonSchema | null {
   if (ref === "#") return root;
   if (!ref.startsWith("#/")) return null;
-  const segments = ref.slice(2).split("/").map((s) => s.replace(/~1/g, "/").replace(/~0/g, "~"));
+  const segments = ref
+    .slice(2)
+    .split("/")
+    .map((s) => s.replace(/~1/g, "/").replace(/~0/g, "~"));
   let current: unknown = root;
   for (const seg of segments) {
     if (current === null || typeof current !== "object") return null;
@@ -214,12 +216,14 @@ function jsonSchemaToTypeString(
     if (schema.enum) {
       if (schema.enum.length === 0) return "never";
       return applyNullable(
-        schema.enum.map((value) => {
-          if (value === null) return "null";
-          if (typeof value === "string") return `"${escapeStringLiteral(value)}"`;
-          if (typeof value === "object") return JSON.stringify(value) ?? "unknown";
-          return String(value);
-        }).join(" | "),
+        schema.enum
+          .map((value) => {
+            if (value === null) return "null";
+            if (typeof value === "string") return `"${escapeStringLiteral(value)}"`;
+            if (typeof value === "object") return JSON.stringify(value) ?? "unknown";
+            return String(value);
+          })
+          .join(" | "),
         schema,
       );
     }
@@ -228,10 +232,10 @@ function jsonSchemaToTypeString(
         schema.const === null
           ? "null"
           : typeof schema.const === "string"
-          ? `"${escapeStringLiteral(schema.const)}"`
-          : typeof schema.const === "object"
-          ? JSON.stringify(schema.const) ?? "unknown"
-          : String(schema.const),
+            ? `"${escapeStringLiteral(schema.const)}"`
+            : typeof schema.const === "object"
+              ? (JSON.stringify(schema.const) ?? "unknown")
+              : String(schema.const),
         schema,
       );
     }
@@ -246,9 +250,9 @@ function jsonSchemaToTypeString(
     if (schema.type === "array") {
       if (Array.isArray(schema.prefixItems)) {
         return applyNullable(
-          `[${
-            schema.prefixItems.map((s) => jsonSchemaToTypeString(s, indent, nextCtx)).join(", ")
-          }]`,
+          `[${schema.prefixItems
+            .map((s) => jsonSchemaToTypeString(s, indent, nextCtx))
+            .join(", ")}]`,
           schema,
         );
       }
@@ -259,10 +263,7 @@ function jsonSchemaToTypeString(
         );
       }
       if (schema.items) {
-        return applyNullable(
-          `${jsonSchemaToTypeString(schema.items, indent, nextCtx)}[]`,
-          schema,
-        );
+        return applyNullable(`${jsonSchemaToTypeString(schema.items, indent, nextCtx)}[]`, schema);
       }
       return applyNullable("unknown[]", schema);
     }
@@ -306,9 +307,10 @@ function jsonSchemaToTypeString(
       }
 
       if (schema.additionalProperties) {
-        const valueType = schema.additionalProperties === true
-          ? "unknown"
-          : jsonSchemaToTypeString(schema.additionalProperties, `${indent}    `, nextCtx);
+        const valueType =
+          schema.additionalProperties === true
+            ? "unknown"
+            : jsonSchemaToTypeString(schema.additionalProperties, `${indent}    `, nextCtx);
         lines.push(`${indent}    [key: string]: ${valueType};`);
       }
 
@@ -322,15 +324,17 @@ function jsonSchemaToTypeString(
 
     if (Array.isArray(schema.type)) {
       return applyNullable(
-        schema.type.map((type) => {
-          if (type === "string") return "string";
-          if (type === "number" || type === "integer") return "number";
-          if (type === "boolean") return "boolean";
-          if (type === "null") return "null";
-          if (type === "array") return "unknown[]";
-          if (type === "object") return "Record<string, unknown>";
-          return "unknown";
-        }).join(" | "),
+        schema.type
+          .map((type) => {
+            if (type === "string") return "string";
+            if (type === "number" || type === "integer") return "number";
+            if (type === "boolean") return "boolean";
+            if (type === "null") return "null";
+            if (type === "array") return "unknown[]";
+            if (type === "object") return "Record<string, unknown>";
+            return "unknown";
+          })
+          .join(" | "),
         schema,
       );
     }
@@ -342,14 +346,12 @@ function jsonSchemaToTypeString(
 }
 
 function jsonSchemaToType(schema: JsonSchema, typeName: string): string {
-  return `type ${typeName} = ${
-    jsonSchemaToTypeString(schema, "", {
-      root: schema,
-      depth: 0,
-      seen: new Set(),
-      maxDepth: 20,
-    })
-  }`;
+  return `type ${typeName} = ${jsonSchemaToTypeString(schema, "", {
+    root: schema,
+    depth: 0,
+    seen: new Set(),
+    maxDepth: 20,
+  })}`;
 }
 
 function extractJsonSchemaDescriptions(
@@ -397,8 +399,8 @@ export function generateTypesFromJsonSchema(
           const paramDescs = extractJsonSchemaDescriptions(
             tool.inputSchema as Exclude<JsonSchema, boolean>,
           );
-          return Object.entries(paramDescs).map(([fieldName, desc]) =>
-            `@param input.${fieldName} - ${desc}`
+          return Object.entries(paramDescs).map(
+            ([fieldName, desc]) => `@param input.${fieldName} - ${desc}`,
           );
         } catch {
           return [] as string[];

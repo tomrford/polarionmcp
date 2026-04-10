@@ -15,25 +15,25 @@ type HostMessage = HostInitMessage | HostResponseMessage;
 
 type SandboxMessage =
   | {
-    type: "call";
-    id: number;
-    provider: string;
-    tool: string;
-    args: unknown;
-  }
+      type: "call";
+      id: number;
+      provider: string;
+      tool: string;
+      args: unknown;
+    }
   | {
-    type: "log";
-    level: "log" | "warn" | "error";
-    message: string;
-  }
+      type: "log";
+      level: "log" | "warn" | "error";
+      message: string;
+    }
   | {
-    type: "result";
-    result: unknown;
-  }
+      type: "result";
+      result: unknown;
+    }
   | {
-    type: "error";
-    error: string;
-  };
+      type: "error";
+      error: string;
+    };
 
 function splitLines(): TransformStream<string, string> {
   let buffer = "";
@@ -122,7 +122,7 @@ let callId = 0;
 function createToolFn(providerName: string, toolName: string, positionalArgs = false) {
   return async (...args: unknown[]) => {
     const id = ++callId;
-    const callArgs = positionalArgs ? args : args[0] ?? {};
+    const callArgs = positionalArgs ? args : (args[0] ?? {});
     const response = new Promise<unknown>((resolve, reject) => {
       pending.set(id, { resolve, reject });
     });
@@ -141,12 +141,15 @@ function createToolFn(providerName: string, toolName: string, positionalArgs = f
 
 function createProviderProxy(providerName: string, tools: string[], positionalArgs = false) {
   const allowedTools = new Set(tools);
-  return new Proxy({}, {
-    get: (_target, toolName) => {
-      if (typeof toolName !== "string" || !allowedTools.has(toolName)) return undefined;
-      return createToolFn(providerName, toolName, positionalArgs);
+  return new Proxy(
+    {},
+    {
+      get: (_target, toolName) => {
+        if (typeof toolName !== "string" || !allowedTools.has(toolName)) return undefined;
+        return createToolFn(providerName, toolName, positionalArgs);
+      },
     },
-  });
+  );
 }
 
 globalThis.console = {
@@ -166,7 +169,7 @@ globalThis.console = {
 try {
   const providerNames = init.providers.map((provider) => provider.name);
   const providerValues = init.providers.map((provider) =>
-    createProviderProxy(provider.name, provider.tools, provider.positionalArgs)
+    createProviderProxy(provider.name, provider.tools, provider.positionalArgs),
   );
   const execute = new Function(...providerNames, `return (${init.code})();`);
   const result = await execute(...providerValues);

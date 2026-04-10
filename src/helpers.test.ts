@@ -58,7 +58,8 @@ describe("authHeaders", () => {
       authHeaders({
         authInfo: { token: "token-b" },
         requestInfo: { headers: { authorization: "Bearer token-c" } },
-      }));
+      }),
+    );
 
     expect(headers).toEqual({ Authorization: "Bearer token-a" });
   });
@@ -91,7 +92,7 @@ describe("interpolatePath", () => {
     expect(() =>
       interpolatePath("/projects/{projectId}/workitems/{workItemId}", {
         projectId: "MYPROJ",
-      })
+      }),
     ).toThrow("Missing required path parameter: workItemId");
   });
 });
@@ -117,9 +118,7 @@ describe("toQueryString", () => {
         fields: { workitems: "title,status" },
         page: { size: 20, number: 2 },
       }),
-    ).toBe(
-      "?fields%5Bworkitems%5D=title%2Cstatus&page%5Bsize%5D=20&page%5Bnumber%5D=2",
-    );
+    ).toBe("?fields%5Bworkitems%5D=title%2Cstatus&page%5Bsize%5D=20&page%5Bnumber%5D=2");
   });
 
   test("serializes array values as repeated keys", () => {
@@ -130,4 +129,3 @@ describe("toQueryString", () => {
     ).toBe("?include=project&include=author");
   });
 });
-

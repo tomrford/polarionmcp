@@ -58,15 +58,12 @@ export function spyOn<T extends object, K extends keyof T & string>(
 }
 
 export function restoreAllSpies() {
-  for (const spy of [...activeSpies]) {
+  for (const spy of activeSpies) {
     spy.restore();
   }
 }
 
-export function expectCalledWith(
-  spy: Spy<AnyFn>,
-  ...expectedArgs: unknown[]
-) {
+export function expectCalledWith(spy: Spy<AnyFn>, ...expectedArgs: unknown[]) {
   const matched = spy.calls.some((call) => {
     try {
       expect(call.args).toEqual(expectedArgs);

@@ -40,10 +40,9 @@ describe("DenoSubprocessExecutor", () => {
   test("times out runaway code", async () => {
     const executor = new DenoSubprocessExecutor({ timeout: 50 });
 
-    const result = await executor.execute(
-      "async () => await new Promise(() => {})",
-      [{ name: "codemode", fns: {} }],
-    );
+    const result = await executor.execute("async () => await new Promise(() => {})", [
+      { name: "codemode", fns: {} },
+    ]);
 
     expect(result.error).toBe("Execution timed out");
   });

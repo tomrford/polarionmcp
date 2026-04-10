@@ -25,10 +25,7 @@ function unionSchemas(schemas: z.ZodTypeAny[]) {
   return current;
 }
 
-function applyCommonValidations(
-  base: z.ZodTypeAny,
-  schema: JsonSchema,
-) {
+function applyCommonValidations(base: z.ZodTypeAny, schema: JsonSchema) {
   let current = base;
 
   if (typeof schema.description === "string") {
@@ -110,14 +107,12 @@ export function jsonSchemaToZod(schema: JsonSchema | undefined): z.ZodTypeAny {
     case "boolean":
       return applyCommonValidations(z.boolean(), schema);
     case "array":
-      return applyCommonValidations(
-        z.array(propertySchema(schema.items)),
-        schema,
-      );
+      return applyCommonValidations(z.array(propertySchema(schema.items)), schema);
     case "object": {
-      const properties = schema.properties && typeof schema.properties === "object"
-        ? schema.properties as Record<string, unknown>
-        : {};
+      const properties =
+        schema.properties && typeof schema.properties === "object"
+          ? (schema.properties as Record<string, unknown>)
+          : {};
       const required = new Set(
         Array.isArray(schema.required)
           ? schema.required.filter((value): value is string => typeof value === "string")

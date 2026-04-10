@@ -37,6 +37,10 @@ if (isStdio) {
 
   Deno.serve({ port }, async (req) => {
     const url = new URL(req.url);
+    if (req.method === "GET" && (url.pathname === "/healthz" || url.pathname === "/readyz")) {
+      return Response.json({ ok: true });
+    }
+
     if (url.pathname !== "/mcp") {
       return new Response("Not found", { status: 404 });
     }
@@ -86,6 +90,6 @@ if (isStdio) {
   });
 
   console.log(
-    `Polarion MCP running on http://localhost:${port}/mcp (TLS should terminate at the proxy/load balancer)`,
+    `Polarion MCP running on http://localhost:${port}/mcp (health: /healthz, TLS should terminate at the proxy/load balancer)`,
   );
 }

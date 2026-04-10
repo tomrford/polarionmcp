@@ -81,7 +81,7 @@ function parseStructuredPayload(result: unknown): Record<string, unknown> | unde
 
   try {
     const parsed = JSON.parse(text);
-    return parsed && typeof parsed === "object" ? parsed as Record<string, unknown> : undefined;
+    return parsed && typeof parsed === "object" ? (parsed as Record<string, unknown>) : undefined;
   } catch {
     return undefined;
   }
@@ -104,23 +104,16 @@ export function withToolLogging<Args, Result>(
     try {
       const result = await handler(args, extra);
       const payload = parseStructuredPayload(result);
-      const isError = !!result &&
-        typeof result === "object" &&
-        "isError" in result &&
-        result.isError === true;
+      const isError =
+        !!result && typeof result === "object" && "isError" in result && result.isError === true;
 
       if (isError) {
-        logToolError(
-          toolName,
-          startedAt,
-          {
-            ...details?.(args, result),
-            http_status: typeof payload?.["status_code"] === "number"
-              ? payload["status_code"]
-              : undefined,
-            error_type: typeof payload?.["message"] === "string" ? payload["message"] : undefined,
-          },
-        );
+        logToolError(toolName, startedAt, {
+          ...details?.(args, result),
+          http_status:
+            typeof payload?.["status_code"] === "number" ? payload["status_code"] : undefined,
+          error_type: typeof payload?.["message"] === "string" ? payload["message"] : undefined,
+        });
       } else {
         logToolSuccess(toolName, startedAt, {
           ...details?.(args, result),
@@ -129,12 +122,7 @@ export function withToolLogging<Args, Result>(
 
       return result;
     } catch (error) {
-      logToolError(
-        toolName,
-        startedAt,
-        details?.(args),
-        error,
-      );
+      logToolError(toolName, startedAt, details?.(args), error);
       throw error;
     }
   };

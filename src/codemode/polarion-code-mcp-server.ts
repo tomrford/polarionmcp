@@ -20,13 +20,11 @@ const MAX_TOKENS = 6_000;
 const MAX_CHARS = MAX_TOKENS * CHARS_PER_TOKEN;
 
 function truncateResponse(content: unknown) {
-  const text = typeof content === "string"
-    ? content
-    : JSON.stringify(content) ?? "undefined";
+  const text = typeof content === "string" ? content : (JSON.stringify(content) ?? "undefined");
   if (text.length <= MAX_CHARS) return text;
-  return `${text.slice(0, MAX_CHARS)}\n\n--- TRUNCATED ---\nResponse was ~${
-    Math.ceil(text.length / CHARS_PER_TOKEN).toLocaleString()
-  } tokens (limit: ${MAX_TOKENS.toLocaleString()}). Use more specific queries to reduce response size.`;
+  return `${text.slice(0, MAX_CHARS)}\n\n--- TRUNCATED ---\nResponse was ~${Math.ceil(
+    text.length / CHARS_PER_TOKEN,
+  ).toLocaleString()} tokens (limit: ${MAX_TOKENS.toLocaleString()}). Your code already ran successfully. Return a smaller filtered or aggregated value to send less data back to the agent.`;
 }
 
 function formatError(error: unknown) {
@@ -36,17 +34,18 @@ function formatError(error: unknown) {
 function unwrapMcpResult(result: CallToolResult | CompatibilityCallToolResult): unknown {
   if ("toolResult" in result) return result.toolResult;
   if (result.isError) {
-    const message = result.content
-      .filter((content) => content.type === "text")
-      .map((content) => ("text" in content ? content.text : ""))
-      .join("\n") || "Tool call failed";
+    const message =
+      result.content
+        .filter((content) => content.type === "text")
+        .map((content) => ("text" in content ? content.text : ""))
+        .join("\n") || "Tool call failed";
     throw new Error(message);
   }
   if (result.structuredContent != null) return result.structuredContent;
   if (result.content.length > 0 && result.content.every((content) => content.type === "text")) {
-    const text = result.content.map((content) => ("text" in content ? content.text : "")).join(
-      "\n",
-    );
+    const text = result.content
+      .map((content) => ("text" in content ? content.text : ""))
+      .join("\n");
     try {
       return JSON.parse(text);
     } catch {
@@ -97,7 +96,7 @@ function schemaPropertyDescriptions(inputSchema: Record<string, unknown>): strin
     .map((property) =>
       typeof property === "object" && property && "description" in property
         ? property.description
-        : undefined
+        : undefined,
     )
     .filter((value): value is string => typeof value === "string");
 }
@@ -126,15 +125,12 @@ function buildToolCatalog(
     const properties = schemaProperties(tool.inputSchema);
     const propertyDescriptions = schemaPropertyDescriptions(tool.inputSchema);
     const paramNames = Object.keys(properties);
-    const resourceGroup = typeof tool._meta?.resourceGroup === "string"
-      ? tool._meta.resourceGroup
-      : undefined;
-    const inputSummary = typeof tool._meta?.inputSummary === "string"
-      ? tool._meta.inputSummary
-      : undefined;
-    const outputSummary = typeof tool._meta?.outputSummary === "string"
-      ? tool._meta.outputSummary
-      : undefined;
+    const resourceGroup =
+      typeof tool._meta?.resourceGroup === "string" ? tool._meta.resourceGroup : undefined;
+    const inputSummary =
+      typeof tool._meta?.inputSummary === "string" ? tool._meta.inputSummary : undefined;
+    const outputSummary =
+      typeof tool._meta?.outputSummary === "string" ? tool._meta.outputSummary : undefined;
     const searchSource = [
       tool.name,
       sanitizeToolName(tool.name),
@@ -164,7 +160,10 @@ function buildToolCatalog(
 }
 
 function normalizeSearchText(value: string): string {
-  return value.toLowerCase().replace(/[^a-z0-9]+/g, " ").trim();
+  return value
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, " ")
+    .trim();
 }
 
 function searchCatalog(entries: ToolCatalogEntry[], query: string, limit: number) {
@@ -182,8 +181,8 @@ function searchCatalog(entries: ToolCatalogEntry[], query: string, limit: number
       const compactHaystack = entry.compact_text;
       const normalizedName = normalizedNameCache.get(entry.name) ?? normalizeSearchText(entry.name);
       normalizedNameCache.set(entry.name, normalizedName);
-      const normalizedCallable = normalizedCallableCache.get(entry.callable) ??
-        normalizeSearchText(entry.callable);
+      const normalizedCallable =
+        normalizedCallableCache.get(entry.callable) ?? normalizeSearchText(entry.callable);
       normalizedCallableCache.set(entry.callable, normalizedCallable);
       if (haystack.includes(normalizedQuery)) score += 100;
       if (compactQuery && compactHaystack.includes(compactQuery)) score += 90;
@@ -192,9 +191,8 @@ function searchCatalog(entries: ToolCatalogEntry[], query: string, limit: number
       for (const token of tokens) {
         const stemmedToken = stemSearchToken(token);
         if (normalizedName.includes(token) || normalizedName.includes(stemmedToken)) score += 30;
-        if (
-          normalizedCallable.includes(token) || normalizedCallable.includes(stemmedToken)
-        ) score += 20;
+        if (normalizedCallable.includes(token) || normalizedCallable.includes(stemmedToken))
+          score += 20;
         if (haystack.includes(token)) score += 10;
       }
       for (const token of compactTokens) {
@@ -257,12 +255,13 @@ export async function createPolarionCodeMcpServer(options: {
       tool.name,
       async (args: unknown) =>
         unwrapMcpResult(
-          await client.callTool({
+          (await client.callTool({
             name: tool.name,
-            arguments: args && typeof args === "object" && !Array.isArray(args)
-              ? args as Record<string, unknown>
-              : {},
-          }) as CallToolResult | CompatibilityCallToolResult,
+            arguments:
+              args && typeof args === "object" && !Array.isArray(args)
+                ? (args as Record<string, unknown>)
+                : {},
+          })) as CallToolResult | CompatibilityCallToolResult,
         ),
     ]),
   );
@@ -283,9 +282,13 @@ export async function createPolarionCodeMcpServer(options: {
         query: z
           .string()
           .describe("Partial tool name, route intent, or parameter keyword to search for"),
-        limit: z.number().min(1).max(20).optional().default(8).describe(
-          "Maximum matches to return",
-        ),
+        limit: z
+          .number()
+          .min(1)
+          .max(20)
+          .optional()
+          .default(8)
+          .describe("Maximum matches to return"),
       },
     },
     async ({ query, limit }, extra) => {
@@ -374,10 +377,7 @@ export async function createPolarionCodeMcpServer(options: {
 
   const originalClose = codemodeServer.close.bind(codemodeServer);
   codemodeServer.close = async () => {
-    await Promise.allSettled([
-      client.close(),
-      server.close(),
-    ]);
+    await Promise.allSettled([client.close(), server.close()]);
     return await originalClose();
   };
 
