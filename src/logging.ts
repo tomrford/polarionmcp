@@ -7,10 +7,6 @@ export interface ToolLogEvent {
   operation_id?: string;
   policy_mode?: string;
   scope_mode?: string;
-  page_size?: number;
-  page_number?: number;
-  truncated?: boolean;
-  has_next?: boolean;
   error_type?: string;
   target_id?: string;
   attribute_count?: number;
@@ -128,15 +124,6 @@ export function withToolLogging<Args, Result>(
       } else {
         logToolSuccess(toolName, startedAt, {
           ...details?.(args, result),
-          has_next: !!payload &&
-              typeof payload["pagination"] === "object" &&
-              payload["pagination"] !== null &&
-              typeof (payload["pagination"] as Record<string, unknown>)["has_next"] === "boolean"
-            ? (payload["pagination"] as Record<string, unknown>)["has_next"] as boolean
-            : undefined,
-          truncated: !!payload &&
-            typeof payload["truncation"] === "object" &&
-            payload["truncation"] !== null,
         });
       }
 

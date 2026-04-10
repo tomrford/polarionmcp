@@ -108,7 +108,7 @@ Properties:
 - request shapes are lightly tuned for scripting
 - path params are promoted to top-level
 - ordinary query params are promoted to top-level
-- pagination is normalized to `page: { size, number }`
+- pagination is handled internally; generated tools return full collections
 - request bodies live under top-level `body`
 - responses stay close to the raw API
 - `204` responses normalize to `{ ok: true }`

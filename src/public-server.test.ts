@@ -144,12 +144,12 @@ describe("createPublicServer", () => {
     const result = await client.callTool({
       name: "code",
       arguments: {
-        code: "async () => await codemode.getProjects({ page: { size: 5 } })",
+        code: "async () => await codemode.getProjects({})",
       },
     });
 
     const [url, init] = fetchSpy.calls[0]!.args as [string, RequestInit];
-    expect(url).toBe("https://example.invalid/projects?page%5Bsize%5D=5&page%5Bnumber%5D=1");
+    expect(url).toBe("https://example.invalid/projects");
     expect(init.headers).toEqual({
       Accept: "application/json",
       Authorization: "Bearer bridge-token",
@@ -191,7 +191,7 @@ describe("createPublicServer", () => {
     });
 
     const [url, init] = fetchSpy.calls[0]!.args as [string, RequestInit];
-    expect(url).toBe("https://example.invalid/projects?page%5Bsize%5D=20&page%5Bnumber%5D=1");
+    expect(url).toBe("https://example.invalid/projects");
     expect(init.headers).toEqual({
       Accept: "application/json",
       Authorization: "Bearer env-token",

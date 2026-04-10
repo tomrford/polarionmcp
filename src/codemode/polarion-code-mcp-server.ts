@@ -22,7 +22,7 @@ const MAX_CHARS = MAX_TOKENS * CHARS_PER_TOKEN;
 function truncateResponse(content: unknown) {
   const text = typeof content === "string"
     ? content
-    : JSON.stringify(content, null, 2) ?? "undefined";
+    : JSON.stringify(content) ?? "undefined";
   if (text.length <= MAX_CHARS) return text;
   return `${text.slice(0, MAX_CHARS)}\n\n--- TRUNCATED ---\nResponse was ~${
     Math.ceil(text.length / CHARS_PER_TOKEN).toLocaleString()
@@ -297,7 +297,7 @@ export async function createPolarionCodeMcpServer(options: {
             content: [
               {
                 type: "text" as const,
-                text: JSON.stringify(searchCatalog(entries, query, limit), null, 2),
+                text: JSON.stringify(searchCatalog(entries, query, limit)),
               },
             ],
           }),

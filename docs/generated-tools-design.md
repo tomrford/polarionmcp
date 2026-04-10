@@ -65,7 +65,7 @@ Generated input schemas are lightly tuned at generation time:
 
 - path params promoted to top-level
 - ordinary query params promoted to top-level
-- bracketed pagination normalized to `page: { size, number }`
+- bracketed pagination retained only in wire adaptation; generated tools walk pages internally
 - request payload under top-level `body`
 - operation-native names preserved, for example `workflowAction`
 

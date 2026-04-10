@@ -72,13 +72,10 @@ describe("generated tools", () => {
 
     const result = await callToolWithToken(client, "getProjects", {
       query: "id:PRJ*",
-      page: { size: 5, number: 2 },
     });
 
     const [url, init] = fetchSpy.calls[0]!.args as [string, RequestInit];
-    expect(url).toBe(
-      "https://example.invalid/projects?query=id%3APRJ*&page%5Bsize%5D=5&page%5Bnumber%5D=2",
-    );
+    expect(url).toBe("https://example.invalid/projects?query=id%3APRJ*");
     expect(init.headers).toEqual({
       Accept: "application/json",
       Authorization: "Bearer token",
@@ -216,88 +213,7 @@ describe("generated tools", () => {
         }],
         links: {
           self: "https://example.invalid/projects",
-          next: "https://example.invalid/projects?page[number]=2",
         },
-      }),
-    );
-
-    const { client, server, clientTransport, serverTransport } = await connectClient();
-
-    const result = await callToolWithToken(client, "getProjects", {});
-
-    expect(textPayload(result as CallToolResult)).toEqual({
-      data: [{
-        id: "PRJ",
-        type: "projects",
-        attributes: {
-          description: "Sandbox project",
-        },
-        links: {
-          related: "https://example.invalid/projects/PRJ/related",
-        },
-      }],
-      links: {
-        next: "https://example.invalid/projects?page[number]=2",
-      },
-    });
-
-    await Promise.all([
-      client.close(),
-      clientTransport.close(),
-      serverTransport.close(),
-      server.close(),
-    ]);
-  });
-
-  test("includes item-limit truncation metadata in tool responses", async () => {
-    fetchSpy.mockResolvedValueOnce(
-      jsonResponse({
-        data: [
-          { id: "1", type: "projects" },
-          { id: "2", type: "projects" },
-          { id: "3", type: "projects" },
-        ],
-        links: {},
-      }),
-    );
-
-    const { client, server, clientTransport, serverTransport } = await connectClient();
-
-    const result = await callToolWithToken(client, "getProjects", {
-      page: { size: 2 },
-    });
-
-    expect(textPayload(result as CallToolResult)).toMatchObject({
-      data: [
-        { id: "1", type: "projects" },
-        { id: "2", type: "projects" },
-      ],
-      truncation: {
-        reason: "item_limit",
-        original_item_count: 3,
-        returned_item_count: 2,
-        max_items: 2,
-        max_chars: 16384,
-        hint: "Use page_number and page_size to fetch the next slice.",
-      },
-    });
-
-    await Promise.all([
-      client.close(),
-      clientTransport.close(),
-      serverTransport.close(),
-      server.close(),
-    ]);
-  });
-
-  test("includes char-limit truncation metadata in tool responses", async () => {
-    fetchSpy.mockResolvedValueOnce(
-      jsonResponse({
-        data: [
-          { id: "1", type: "projects", attributes: { description: "a".repeat(10_000) } },
-          { id: "2", type: "projects", attributes: { description: "b".repeat(10_000) } },
-        ],
-        links: {},
       }),
     );
 
@@ -306,14 +222,183 @@ describe("generated tools", () => {
     const result = await callToolWithToken(client, "getProjects", {});
     const payload = textPayload(result as CallToolResult);
 
-    expect(payload.truncation).toMatchObject({
-      reason: "char_limit",
-      original_item_count: 2,
-      returned_item_count: 1,
-      max_items: 20,
-      max_chars: 16384,
+    expect(payload.data).toEqual([{
+      id: "PRJ",
+      type: "projects",
+      attributes: {
+        description: "Sandbox project",
+      },
+      links: {
+        related: "https://example.invalid/projects/PRJ/related",
+      },
+    }]);
+    expect(payload.links).toBeUndefined();
+
+    await Promise.all([
+      client.close(),
+      clientTransport.close(),
+      serverTransport.close(),
+      server.close(),
+    ]);
+  });
+
+  test("rejects page controls in generated tool input", async () => {
+    const { client, server, clientTransport, serverTransport } = await connectClient();
+
+    const result = await callToolWithToken(client, "getProjects", { page: { size: 5, number: 2 } });
+
+    expect((result as CallToolResult).isError).toBe(true);
+    expect(((result as CallToolResult).content[0] as { text: string }).text).toContain("page");
+
+    await Promise.all([
+      client.close(),
+      clientTransport.close(),
+      serverTransport.close(),
+      server.close(),
+    ]);
+  });
+
+  test("walks Polarion pagination links and returns the full collection", async () => {
+    fetchSpy.mockResolvedValueOnce(
+      jsonResponse({
+        data: [
+          { id: "1", type: "projects" },
+          { id: "2", type: "projects" },
+        ],
+        links: {
+          next: "https://example.invalid/projects?page[number]=2",
+        },
+        meta: { totalCount: 3 },
+      }),
+    );
+    fetchSpy.mockResolvedValueOnce(
+      jsonResponse({
+        data: [
+          { id: "3", type: "projects" },
+        ],
+        links: {},
+        meta: { totalCount: 3 },
+      }),
+    );
+
+    const { client, server, clientTransport, serverTransport } = await connectClient();
+
+    const result = await callToolWithToken(client, "getProjects", {});
+
+    expect(textPayload(result as CallToolResult)).toMatchObject({
+      data: [
+        { id: "1", type: "projects" },
+        { id: "2", type: "projects" },
+        { id: "3", type: "projects" },
+      ],
+      meta: { totalCount: 3 },
     });
-    expect(payload.data).toHaveLength(1);
+    expect(fetchSpy.calls).toHaveLength(2);
+    expect(fetchSpy.calls[1]!.args[0]).toBe("https://example.invalid/projects?page[number]=2");
+
+    await Promise.all([
+      client.close(),
+      clientTransport.close(),
+      serverTransport.close(),
+      server.close(),
+    ]);
+  });
+
+  test("rejects cross-origin pagination links before fetching follow-up pages", async () => {
+    fetchSpy.mockResolvedValueOnce(
+      jsonResponse({
+        data: [
+          { id: "1", type: "projects" },
+        ],
+        links: {
+          next: "https://evil.invalid/projects?page[number]=2",
+        },
+        meta: { totalCount: 2 },
+      }),
+    );
+
+    const { client, server, clientTransport, serverTransport } = await connectClient();
+
+    const result = await callToolWithToken(client, "getProjects", {});
+
+    expect((result as CallToolResult).isError).toBe(true);
+    expect(textPayload(result as CallToolResult)).toMatchObject({
+      error: true,
+      status_code: 409,
+      message: "Polarion pagination returned a cross-origin next link",
+    });
+    expect(fetchSpy.calls).toHaveLength(1);
+
+    await Promise.all([
+      client.close(),
+      clientTransport.close(),
+      serverTransport.close(),
+      server.close(),
+    ]);
+  });
+
+  test("errors when a follow-up page returns non-JSON content", async () => {
+    fetchSpy.mockResolvedValueOnce(
+      jsonResponse({
+        data: [
+          { id: "1", type: "projects" },
+        ],
+        links: {
+          next: "https://example.invalid/projects?page[number]=2",
+        },
+        meta: { totalCount: 2 },
+      }),
+    );
+    fetchSpy.mockResolvedValueOnce(
+      new Response("<html>login</html>", {
+        status: 200,
+        headers: { "content-type": "text/html" },
+      }),
+    );
+
+    const { client, server, clientTransport, serverTransport } = await connectClient();
+
+    const result = await callToolWithToken(client, "getProjects", {});
+
+    expect((result as CallToolResult).isError).toBe(true);
+    expect(textPayload(result as CallToolResult)).toMatchObject({
+      error: true,
+      status_code: 409,
+      message: "Polarion pagination returned non-JSON content",
+    });
+    expect(fetchSpy.calls).toHaveLength(2);
+
+    await Promise.all([
+      client.close(),
+      clientTransport.close(),
+      serverTransport.close(),
+      server.close(),
+    ]);
+  });
+
+  test("errors when meta.totalCount exceeds the returned collection size", async () => {
+    fetchSpy.mockResolvedValueOnce(
+      jsonResponse({
+        data: [
+          { id: "1", type: "projects" },
+          { id: "2", type: "projects" },
+        ],
+        links: {},
+        meta: { totalCount: 3 },
+      }),
+    );
+
+    const { client, server, clientTransport, serverTransport } = await connectClient();
+
+    const result = await callToolWithToken(client, "getProjects", {});
+
+    expect((result as CallToolResult).isError).toBe(true);
+    expect(JSON.parse(((result as CallToolResult).content[0] as { text: string }).text))
+      .toMatchObject({
+        error: true,
+        status_code: 409,
+        message: "Polarion returned a partial collection",
+      });
 
     await Promise.all([
       client.close(),

@@ -41,7 +41,6 @@ export const GENERATED_OPERATIONS = [
         "resourceType",
         "targetType"
       ],
-      "hasPageObject": false,
       "hasBody": false
     },
     "wire": {
@@ -292,7 +291,6 @@ export const GENERATED_OPERATIONS = [
         "fields",
         "include"
       ],
-      "hasPageObject": false,
       "hasBody": false
     },
     "wire": {
@@ -515,23 +513,6 @@ export const GENERATED_OPERATIONS = [
               }
             },
             "description": "Filter returned resource fields. See <a href=\"https://docs.sw.siemens.com/en-US/doc/230235217/PL20250606201928474.polarion_help_sc.xid2134849/xid2134871\" target=\"_blank\">REST API User Guide</a> for details."
-          },
-          "page": {
-            "type": "object",
-            "properties": {
-              "size": {
-                "type": "integer",
-                "format": "int32",
-                "description": "Limit the number of entities returned in a single response. See <a href=\"https://docs.sw.siemens.com/en-US/doc/230235217/PL20250606201928474.polarion_help_sc.xid2134849/xid2134871\" target=\"_blank\">REST API User Guide</a> for details."
-              },
-              "number": {
-                "type": "integer",
-                "format": "int32",
-                "description": "Specify the page number to be returned. Counting starts from 1. See <a href=\"https://docs.sw.siemens.com/en-US/doc/230235217/PL20250606201928474.polarion_help_sc.xid2134849/xid2134871\" target=\"_blank\">REST API User Guide</a> for details."
-              }
-            },
-            "required": [],
-            "additionalProperties": false
           }
         },
         "additionalProperties": false
@@ -540,26 +521,23 @@ export const GENERATED_OPERATIONS = [
       "queryParams": [
         "fields"
       ],
-      "hasPageObject": true,
       "hasBody": false
     },
     "wire": {
       "pathParamMap": {},
       "queryParamMap": {
-        "fields": "fields",
-        "page": "page"
-      },
-      "pageParamMap": {
-        "size": "page[size]",
-        "number": "page[number]"
+        "fields": "fields"
       }
     },
     "output": {
       "mode": "json",
-      "summary": "enumerationsListGetResponse (data/included/links/meta)"
+      "summary": "enumerationsListGetResponse (data/included/links/meta)",
+      "collection": {
+        "autoPaginate": true
+      }
     },
     "meta": {
-      "inputSummary": "optional: fields, page"
+      "inputSummary": "optional: fields"
     }
   },
   {
@@ -802,7 +780,6 @@ export const GENERATED_OPERATIONS = [
         "fields",
         "include"
       ],
-      "hasPageObject": false,
       "hasBody": false
     },
     "wire": {
@@ -1034,23 +1011,6 @@ export const GENERATED_OPERATIONS = [
           "projectId": {
             "type": "string",
             "description": "The Project ID."
-          },
-          "page": {
-            "type": "object",
-            "properties": {
-              "size": {
-                "type": "integer",
-                "format": "int32",
-                "description": "Limit the number of entities returned in a single response. See <a href=\"https://docs.sw.siemens.com/en-US/doc/230235217/PL20250606201928474.polarion_help_sc.xid2134849/xid2134871\" target=\"_blank\">REST API User Guide</a> for details."
-              },
-              "number": {
-                "type": "integer",
-                "format": "int32",
-                "description": "Specify the page number to be returned. Counting starts from 1. See <a href=\"https://docs.sw.siemens.com/en-US/doc/230235217/PL20250606201928474.polarion_help_sc.xid2134849/xid2134871\" target=\"_blank\">REST API User Guide</a> for details."
-              }
-            },
-            "required": [],
-            "additionalProperties": false
           }
         },
         "additionalProperties": false
@@ -1061,7 +1021,6 @@ export const GENERATED_OPERATIONS = [
         "include",
         "projectId"
       ],
-      "hasPageObject": true,
       "hasBody": false
     },
     "wire": {
@@ -1069,20 +1028,18 @@ export const GENERATED_OPERATIONS = [
       "queryParamMap": {
         "fields": "fields",
         "include": "include",
-        "projectId": "projectId",
-        "page": "page"
-      },
-      "pageParamMap": {
-        "size": "page[size]",
-        "number": "page[number]"
+        "projectId": "projectId"
       }
     },
     "output": {
       "mode": "json",
-      "summary": "jobsListGetResponse (data/included/links/meta)"
+      "summary": "jobsListGetResponse (data/included/links/meta)",
+      "collection": {
+        "autoPaginate": true
+      }
     },
     "meta": {
-      "inputSummary": "optional: fields, include, projectId, page"
+      "inputSummary": "optional: fields, include, projectId"
     }
   },
   {
@@ -1311,7 +1268,6 @@ export const GENERATED_OPERATIONS = [
         "fields",
         "include"
       ],
-      "hasPageObject": false,
       "hasBody": false
     },
     "wire": {
@@ -1363,7 +1319,6 @@ export const GENERATED_OPERATIONS = [
       },
       "pathParams": [],
       "queryParams": [],
-      "hasPageObject": false,
       "hasBody": true
     },
     "wire": {
@@ -1594,7 +1549,6 @@ export const GENERATED_OPERATIONS = [
         "fields",
         "include"
       ],
-      "hasPageObject": false,
       "hasBody": false
     },
     "wire": {
@@ -1830,23 +1784,6 @@ export const GENERATED_OPERATIONS = [
           "revision": {
             "type": "string",
             "description": "The revision ID."
-          },
-          "page": {
-            "type": "object",
-            "properties": {
-              "size": {
-                "type": "integer",
-                "format": "int32",
-                "description": "Limit the number of entities returned in a single response. See <a href=\"https://docs.sw.siemens.com/en-US/doc/230235217/PL20250606201928474.polarion_help_sc.xid2134849/xid2134871\" target=\"_blank\">REST API User Guide</a> for details."
-              },
-              "number": {
-                "type": "integer",
-                "format": "int32",
-                "description": "Specify the page number to be returned. Counting starts from 1. See <a href=\"https://docs.sw.siemens.com/en-US/doc/230235217/PL20250606201928474.polarion_help_sc.xid2134849/xid2134871\" target=\"_blank\">REST API User Guide</a> for details."
-              }
-            },
-            "required": [],
-            "additionalProperties": false
           }
         },
         "additionalProperties": false
@@ -1859,7 +1796,6 @@ export const GENERATED_OPERATIONS = [
         "sort",
         "revision"
       ],
-      "hasPageObject": true,
       "hasBody": false
     },
     "wire": {
@@ -1869,20 +1805,18 @@ export const GENERATED_OPERATIONS = [
         "include": "include",
         "query": "query",
         "sort": "sort",
-        "revision": "revision",
-        "page": "page"
-      },
-      "pageParamMap": {
-        "size": "page[size]",
-        "number": "page[number]"
+        "revision": "revision"
       }
     },
     "output": {
       "mode": "json",
-      "summary": "projectsListGetResponse (data/included/links/meta)"
+      "summary": "projectsListGetResponse (data/included/links/meta)",
+      "collection": {
+        "autoPaginate": true
+      }
     },
     "meta": {
-      "inputSummary": "optional: fields, include, query, sort, revision, page"
+      "inputSummary": "optional: fields, include, query, sort, revision"
     }
   },
   {
@@ -2116,7 +2050,6 @@ export const GENERATED_OPERATIONS = [
         "include",
         "revision"
       ],
-      "hasPageObject": false,
       "hasBody": false
     },
     "wire": {
@@ -2183,7 +2116,6 @@ export const GENERATED_OPERATIONS = [
         "resourceType",
         "targetType"
       ],
-      "hasPageObject": false,
       "hasBody": false
     },
     "wire": {
@@ -2427,23 +2359,6 @@ export const GENERATED_OPERATIONS = [
           "revision": {
             "type": "string",
             "description": "The revision ID."
-          },
-          "page": {
-            "type": "object",
-            "properties": {
-              "size": {
-                "type": "integer",
-                "format": "int32",
-                "description": "Limit the number of entities returned in a single response. See <a href=\"https://docs.sw.siemens.com/en-US/doc/230235217/PL20250606201928474.polarion_help_sc.xid2134849/xid2134871\" target=\"_blank\">REST API User Guide</a> for details."
-              },
-              "number": {
-                "type": "integer",
-                "format": "int32",
-                "description": "Specify the page number to be returned. Counting starts from 1. See <a href=\"https://docs.sw.siemens.com/en-US/doc/230235217/PL20250606201928474.polarion_help_sc.xid2134849/xid2134871\" target=\"_blank\">REST API User Guide</a> for details."
-              }
-            },
-            "required": [],
-            "additionalProperties": false
           }
         },
         "required": [
@@ -2461,7 +2376,6 @@ export const GENERATED_OPERATIONS = [
         "sort",
         "revision"
       ],
-      "hasPageObject": true,
       "hasBody": false
     },
     "wire": {
@@ -2473,20 +2387,18 @@ export const GENERATED_OPERATIONS = [
         "include": "include",
         "query": "query",
         "sort": "sort",
-        "revision": "revision",
-        "page": "page"
-      },
-      "pageParamMap": {
-        "size": "page[size]",
-        "number": "page[number]"
+        "revision": "revision"
       }
     },
     "output": {
       "mode": "json",
-      "summary": "collectionsListGetResponse (data/included/links/meta)"
+      "summary": "collectionsListGetResponse (data/included/links/meta)",
+      "collection": {
+        "autoPaginate": true
+      }
     },
     "meta": {
-      "inputSummary": "required: projectId; optional: fields, include, query, sort, revision, page"
+      "inputSummary": "required: projectId; optional: fields, include, query, sort, revision"
     }
   },
   {
@@ -2529,7 +2441,6 @@ export const GENERATED_OPERATIONS = [
         "projectId"
       ],
       "queryParams": [],
-      "hasPageObject": false,
       "hasBody": true
     },
     "wire": {
@@ -2587,7 +2498,6 @@ export const GENERATED_OPERATIONS = [
         "projectId"
       ],
       "queryParams": [],
-      "hasPageObject": false,
       "hasBody": true
     },
     "wire": {
@@ -2843,7 +2753,6 @@ export const GENERATED_OPERATIONS = [
         "include",
         "revision"
       ],
-      "hasPageObject": false,
       "hasBody": false
     },
     "wire": {
@@ -2912,7 +2821,6 @@ export const GENERATED_OPERATIONS = [
         "collectionId"
       ],
       "queryParams": [],
-      "hasPageObject": false,
       "hasBody": true
     },
     "wire": {
@@ -2971,7 +2879,6 @@ export const GENERATED_OPERATIONS = [
         "collectionId"
       ],
       "queryParams": [],
-      "hasPageObject": false,
       "hasBody": false
     },
     "wire": {
@@ -3029,7 +2936,6 @@ export const GENERATED_OPERATIONS = [
         "collectionId"
       ],
       "queryParams": [],
-      "hasPageObject": false,
       "hasBody": false
     },
     "wire": {
@@ -3087,7 +2993,6 @@ export const GENERATED_OPERATIONS = [
         "collectionId"
       ],
       "queryParams": [],
-      "hasPageObject": false,
       "hasBody": false
     },
     "wire": {
@@ -3158,7 +3063,6 @@ export const GENERATED_OPERATIONS = [
       "queryParams": [
         "revision"
       ],
-      "hasPageObject": false,
       "hasBody": true
     },
     "wire": {
@@ -3405,23 +3309,6 @@ export const GENERATED_OPERATIONS = [
           "revision": {
             "type": "string",
             "description": "The revision ID."
-          },
-          "page": {
-            "type": "object",
-            "properties": {
-              "size": {
-                "type": "integer",
-                "format": "int32",
-                "description": "Limit the number of entities returned in a single response. See <a href=\"https://docs.sw.siemens.com/en-US/doc/230235217/PL20250606201928474.polarion_help_sc.xid2134849/xid2134871\" target=\"_blank\">REST API User Guide</a> for details."
-              },
-              "number": {
-                "type": "integer",
-                "format": "int32",
-                "description": "Specify the page number to be returned. Counting starts from 1. See <a href=\"https://docs.sw.siemens.com/en-US/doc/230235217/PL20250606201928474.polarion_help_sc.xid2134849/xid2134871\" target=\"_blank\">REST API User Guide</a> for details."
-              }
-            },
-            "required": [],
-            "additionalProperties": false
           }
         },
         "required": [
@@ -3441,7 +3328,6 @@ export const GENERATED_OPERATIONS = [
         "include",
         "revision"
       ],
-      "hasPageObject": true,
       "hasBody": false
     },
     "wire": {
@@ -3453,20 +3339,18 @@ export const GENERATED_OPERATIONS = [
       "queryParamMap": {
         "fields": "fields",
         "include": "include",
-        "revision": "revision",
-        "page": "page"
-      },
-      "pageParamMap": {
-        "size": "page[size]",
-        "number": "page[number]"
+        "revision": "revision"
       }
     },
     "output": {
       "mode": "json",
-      "summary": "RelationshipResponseBody"
+      "summary": "RelationshipResponseBody",
+      "collection": {
+        "autoPaginate": true
+      }
     },
     "meta": {
-      "inputSummary": "required: projectId, collectionId, relationshipId; optional: fields, include, revision, page"
+      "inputSummary": "required: projectId, collectionId, relationshipId; optional: fields, include, revision"
     }
   },
   {
@@ -3523,7 +3407,6 @@ export const GENERATED_OPERATIONS = [
         "relationshipId"
       ],
       "queryParams": [],
-      "hasPageObject": false,
       "hasBody": true
     },
     "wire": {
@@ -3597,7 +3480,6 @@ export const GENERATED_OPERATIONS = [
         "relationshipId"
       ],
       "queryParams": [],
-      "hasPageObject": false,
       "hasBody": true
     },
     "wire": {
@@ -3671,7 +3553,6 @@ export const GENERATED_OPERATIONS = [
         "relationshipId"
       ],
       "queryParams": [],
-      "hasPageObject": false,
       "hasBody": true
     },
     "wire": {
@@ -3931,7 +3812,6 @@ export const GENERATED_OPERATIONS = [
         "fields",
         "include"
       ],
-      "hasPageObject": false,
       "hasBody": false
     },
     "wire": {
@@ -4177,23 +4057,6 @@ export const GENERATED_OPERATIONS = [
           "revision": {
             "type": "string",
             "description": "The revision ID."
-          },
-          "page": {
-            "type": "object",
-            "properties": {
-              "size": {
-                "type": "integer",
-                "format": "int32",
-                "description": "Limit the number of entities returned in a single response. See <a href=\"https://docs.sw.siemens.com/en-US/doc/230235217/PL20250606201928474.polarion_help_sc.xid2134849/xid2134871\" target=\"_blank\">REST API User Guide</a> for details."
-              },
-              "number": {
-                "type": "integer",
-                "format": "int32",
-                "description": "Specify the page number to be returned. Counting starts from 1. See <a href=\"https://docs.sw.siemens.com/en-US/doc/230235217/PL20250606201928474.polarion_help_sc.xid2134849/xid2134871\" target=\"_blank\">REST API User Guide</a> for details."
-              }
-            },
-            "required": [],
-            "additionalProperties": false
           }
         },
         "required": [
@@ -4211,7 +4074,6 @@ export const GENERATED_OPERATIONS = [
         "sort",
         "revision"
       ],
-      "hasPageObject": true,
       "hasBody": false
     },
     "wire": {
@@ -4223,20 +4085,18 @@ export const GENERATED_OPERATIONS = [
         "include": "include",
         "query": "query",
         "sort": "sort",
-        "revision": "revision",
-        "page": "page"
-      },
-      "pageParamMap": {
-        "size": "page[size]",
-        "number": "page[number]"
+        "revision": "revision"
       }
     },
     "output": {
       "mode": "json",
-      "summary": "documentsListGetResponse (data/included/links/meta)"
+      "summary": "documentsListGetResponse (data/included/links/meta)",
+      "collection": {
+        "autoPaginate": true
+      }
     },
     "meta": {
-      "inputSummary": "required: projectId; optional: fields, include, query, sort, revision, page"
+      "inputSummary": "required: projectId; optional: fields, include, query, sort, revision"
     }
   },
   {
@@ -4270,23 +4130,6 @@ export const GENERATED_OPERATIONS = [
           "type": {
             "type": "string",
             "description": "The Type of the object. Use '~' without quotes to represent no target Type."
-          },
-          "page": {
-            "type": "object",
-            "properties": {
-              "size": {
-                "type": "integer",
-                "format": "int32",
-                "description": "Limit the number of entities returned in a single response. See <a href=\"https://docs.sw.siemens.com/en-US/doc/230235217/PL20250606201928474.polarion_help_sc.xid2134849/xid2134871\" target=\"_blank\">REST API User Guide</a> for details."
-              },
-              "number": {
-                "type": "integer",
-                "format": "int32",
-                "description": "Specify the page number to be returned. Counting starts from 1. See <a href=\"https://docs.sw.siemens.com/en-US/doc/230235217/PL20250606201928474.polarion_help_sc.xid2134849/xid2134871\" target=\"_blank\">REST API User Guide</a> for details."
-              }
-            },
-            "required": [],
-            "additionalProperties": false
           }
         },
         "required": [
@@ -4302,7 +4145,6 @@ export const GENERATED_OPERATIONS = [
       "queryParams": [
         "type"
       ],
-      "hasPageObject": true,
       "hasBody": false
     },
     "wire": {
@@ -4311,20 +4153,18 @@ export const GENERATED_OPERATIONS = [
         "fieldId": "fieldId"
       },
       "queryParamMap": {
-        "type": "type",
-        "page": "page"
-      },
-      "pageParamMap": {
-        "size": "page[size]",
-        "number": "page[number]"
+        "type": "type"
       }
     },
     "output": {
       "mode": "json",
-      "summary": "enumOptionsActionResponseBody (data/links/meta)"
+      "summary": "enumOptionsActionResponseBody (data/links/meta)",
+      "collection": {
+        "autoPaginate": true
+      }
     },
     "meta": {
-      "inputSummary": "required: projectId, fieldId; optional: type, page"
+      "inputSummary": "required: projectId, fieldId; optional: type"
     }
   },
   {
@@ -4535,23 +4375,6 @@ export const GENERATED_OPERATIONS = [
               }
             },
             "description": "Filter returned resource fields. See <a href=\"https://docs.sw.siemens.com/en-US/doc/230235217/PL20250606201928474.polarion_help_sc.xid2134849/xid2134871\" target=\"_blank\">REST API User Guide</a> for details."
-          },
-          "page": {
-            "type": "object",
-            "properties": {
-              "size": {
-                "type": "integer",
-                "format": "int32",
-                "description": "Limit the number of entities returned in a single response. See <a href=\"https://docs.sw.siemens.com/en-US/doc/230235217/PL20250606201928474.polarion_help_sc.xid2134849/xid2134871\" target=\"_blank\">REST API User Guide</a> for details."
-              },
-              "number": {
-                "type": "integer",
-                "format": "int32",
-                "description": "Specify the page number to be returned. Counting starts from 1. See <a href=\"https://docs.sw.siemens.com/en-US/doc/230235217/PL20250606201928474.polarion_help_sc.xid2134849/xid2134871\" target=\"_blank\">REST API User Guide</a> for details."
-              }
-            },
-            "required": [],
-            "additionalProperties": false
           }
         },
         "required": [
@@ -4565,7 +4388,6 @@ export const GENERATED_OPERATIONS = [
       "queryParams": [
         "fields"
       ],
-      "hasPageObject": true,
       "hasBody": false
     },
     "wire": {
@@ -4573,20 +4395,18 @@ export const GENERATED_OPERATIONS = [
         "projectId": "projectId"
       },
       "queryParamMap": {
-        "fields": "fields",
-        "page": "page"
-      },
-      "pageParamMap": {
-        "size": "page[size]",
-        "number": "page[number]"
+        "fields": "fields"
       }
     },
     "output": {
       "mode": "json",
-      "summary": "enumerationsListGetResponse (data/included/links/meta)"
+      "summary": "enumerationsListGetResponse (data/included/links/meta)",
+      "collection": {
+        "autoPaginate": true
+      }
     },
     "meta": {
-      "inputSummary": "required: projectId; optional: fields, page"
+      "inputSummary": "required: projectId; optional: fields"
     }
   },
   {
@@ -4836,7 +4656,6 @@ export const GENERATED_OPERATIONS = [
         "fields",
         "include"
       ],
-      "hasPageObject": false,
       "hasBody": false
     },
     "wire": {
@@ -5083,23 +4902,6 @@ export const GENERATED_OPERATIONS = [
           "revision": {
             "type": "string",
             "description": "The revision ID."
-          },
-          "page": {
-            "type": "object",
-            "properties": {
-              "size": {
-                "type": "integer",
-                "format": "int32",
-                "description": "Limit the number of entities returned in a single response. See <a href=\"https://docs.sw.siemens.com/en-US/doc/230235217/PL20250606201928474.polarion_help_sc.xid2134849/xid2134871\" target=\"_blank\">REST API User Guide</a> for details."
-              },
-              "number": {
-                "type": "integer",
-                "format": "int32",
-                "description": "Specify the page number to be returned. Counting starts from 1. See <a href=\"https://docs.sw.siemens.com/en-US/doc/230235217/PL20250606201928474.polarion_help_sc.xid2134849/xid2134871\" target=\"_blank\">REST API User Guide</a> for details."
-              }
-            },
-            "required": [],
-            "additionalProperties": false
           }
         },
         "required": [
@@ -5117,7 +4919,6 @@ export const GENERATED_OPERATIONS = [
         "sort",
         "revision"
       ],
-      "hasPageObject": true,
       "hasBody": false
     },
     "wire": {
@@ -5129,20 +4930,18 @@ export const GENERATED_OPERATIONS = [
         "include": "include",
         "query": "query",
         "sort": "sort",
-        "revision": "revision",
-        "page": "page"
-      },
-      "pageParamMap": {
-        "size": "page[size]",
-        "number": "page[number]"
+        "revision": "revision"
       }
     },
     "output": {
       "mode": "json",
-      "summary": "pagesListGetResponse (data/included/links/meta)"
+      "summary": "pagesListGetResponse (data/included/links/meta)",
+      "collection": {
+        "autoPaginate": true
+      }
     },
     "meta": {
-      "inputSummary": "required: projectId; optional: fields, include, query, sort, revision, page"
+      "inputSummary": "required: projectId; optional: fields, include, query, sort, revision"
     }
   },
   {
@@ -5373,23 +5172,6 @@ export const GENERATED_OPERATIONS = [
           "templates": {
             "type": "boolean",
             "description": "If set to true, only templates will be returned, otherwise only actual instances will be returned."
-          },
-          "page": {
-            "type": "object",
-            "properties": {
-              "size": {
-                "type": "integer",
-                "format": "int32",
-                "description": "Limit the number of entities returned in a single response. See <a href=\"https://docs.sw.siemens.com/en-US/doc/230235217/PL20250606201928474.polarion_help_sc.xid2134849/xid2134871\" target=\"_blank\">REST API User Guide</a> for details."
-              },
-              "number": {
-                "type": "integer",
-                "format": "int32",
-                "description": "Specify the page number to be returned. Counting starts from 1. See <a href=\"https://docs.sw.siemens.com/en-US/doc/230235217/PL20250606201928474.polarion_help_sc.xid2134849/xid2134871\" target=\"_blank\">REST API User Guide</a> for details."
-              }
-            },
-            "required": [],
-            "additionalProperties": false
           }
         },
         "required": [
@@ -5408,7 +5190,6 @@ export const GENERATED_OPERATIONS = [
         "revision",
         "templates"
       ],
-      "hasPageObject": true,
       "hasBody": false
     },
     "wire": {
@@ -5421,20 +5202,18 @@ export const GENERATED_OPERATIONS = [
         "query": "query",
         "sort": "sort",
         "revision": "revision",
-        "templates": "templates",
-        "page": "page"
-      },
-      "pageParamMap": {
-        "size": "page[size]",
-        "number": "page[number]"
+        "templates": "templates"
       }
     },
     "output": {
       "mode": "json",
-      "summary": "plansListGetResponse (data/included/links/meta)"
+      "summary": "plansListGetResponse (data/included/links/meta)",
+      "collection": {
+        "autoPaginate": true
+      }
     },
     "meta": {
-      "inputSummary": "required: projectId; optional: fields, include, query, sort, revision, templates, page"
+      "inputSummary": "required: projectId; optional: fields, include, query, sort, revision, templates"
     }
   },
   {
@@ -5477,7 +5256,6 @@ export const GENERATED_OPERATIONS = [
         "projectId"
       ],
       "queryParams": [],
-      "hasPageObject": false,
       "hasBody": true
     },
     "wire": {
@@ -5535,7 +5313,6 @@ export const GENERATED_OPERATIONS = [
         "projectId"
       ],
       "queryParams": [],
-      "hasPageObject": false,
       "hasBody": true
     },
     "wire": {
@@ -5791,7 +5568,6 @@ export const GENERATED_OPERATIONS = [
         "include",
         "revision"
       ],
-      "hasPageObject": false,
       "hasBody": false
     },
     "wire": {
@@ -5860,7 +5636,6 @@ export const GENERATED_OPERATIONS = [
         "planId"
       ],
       "queryParams": [],
-      "hasPageObject": false,
       "hasBody": true
     },
     "wire": {
@@ -5919,7 +5694,6 @@ export const GENERATED_OPERATIONS = [
         "planId"
       ],
       "queryParams": [],
-      "hasPageObject": false,
       "hasBody": false
     },
     "wire": {
@@ -6163,23 +5937,6 @@ export const GENERATED_OPERATIONS = [
           "revision": {
             "type": "string",
             "description": "The revision ID."
-          },
-          "page": {
-            "type": "object",
-            "properties": {
-              "size": {
-                "type": "integer",
-                "format": "int32",
-                "description": "Limit the number of entities returned in a single response. See <a href=\"https://docs.sw.siemens.com/en-US/doc/230235217/PL20250606201928474.polarion_help_sc.xid2134849/xid2134871\" target=\"_blank\">REST API User Guide</a> for details."
-              },
-              "number": {
-                "type": "integer",
-                "format": "int32",
-                "description": "Specify the page number to be returned. Counting starts from 1. See <a href=\"https://docs.sw.siemens.com/en-US/doc/230235217/PL20250606201928474.polarion_help_sc.xid2134849/xid2134871\" target=\"_blank\">REST API User Guide</a> for details."
-              }
-            },
-            "required": [],
-            "additionalProperties": false
           }
         },
         "required": [
@@ -6199,7 +5956,6 @@ export const GENERATED_OPERATIONS = [
         "include",
         "revision"
       ],
-      "hasPageObject": true,
       "hasBody": false
     },
     "wire": {
@@ -6211,20 +5967,18 @@ export const GENERATED_OPERATIONS = [
       "queryParamMap": {
         "fields": "fields",
         "include": "include",
-        "revision": "revision",
-        "page": "page"
-      },
-      "pageParamMap": {
-        "size": "page[size]",
-        "number": "page[number]"
+        "revision": "revision"
       }
     },
     "output": {
       "mode": "json",
-      "summary": "RelationshipResponseBody"
+      "summary": "RelationshipResponseBody",
+      "collection": {
+        "autoPaginate": true
+      }
     },
     "meta": {
-      "inputSummary": "required: projectId, planId, relationshipId; optional: fields, include, revision, page"
+      "inputSummary": "required: projectId, planId, relationshipId; optional: fields, include, revision"
     }
   },
   {
@@ -6281,7 +6035,6 @@ export const GENERATED_OPERATIONS = [
         "relationshipId"
       ],
       "queryParams": [],
-      "hasPageObject": false,
       "hasBody": true
     },
     "wire": {
@@ -6355,7 +6108,6 @@ export const GENERATED_OPERATIONS = [
         "relationshipId"
       ],
       "queryParams": [],
-      "hasPageObject": false,
       "hasBody": true
     },
     "wire": {
@@ -6429,7 +6181,6 @@ export const GENERATED_OPERATIONS = [
         "relationshipId"
       ],
       "queryParams": [],
-      "hasPageObject": false,
       "hasBody": true
     },
     "wire": {
@@ -6674,23 +6425,6 @@ export const GENERATED_OPERATIONS = [
           "sort": {
             "type": "string",
             "description": "The sort string."
-          },
-          "page": {
-            "type": "object",
-            "properties": {
-              "size": {
-                "type": "integer",
-                "format": "int32",
-                "description": "Limit the number of entities returned in a single response. See <a href=\"https://docs.sw.siemens.com/en-US/doc/230235217/PL20250606201928474.polarion_help_sc.xid2134849/xid2134871\" target=\"_blank\">REST API User Guide</a> for details."
-              },
-              "number": {
-                "type": "integer",
-                "format": "int32",
-                "description": "Specify the page number to be returned. Counting starts from 1. See <a href=\"https://docs.sw.siemens.com/en-US/doc/230235217/PL20250606201928474.polarion_help_sc.xid2134849/xid2134871\" target=\"_blank\">REST API User Guide</a> for details."
-              }
-            },
-            "required": [],
-            "additionalProperties": false
           }
         },
         "required": [
@@ -6709,7 +6443,6 @@ export const GENERATED_OPERATIONS = [
         "query",
         "sort"
       ],
-      "hasPageObject": true,
       "hasBody": false
     },
     "wire": {
@@ -6721,20 +6454,18 @@ export const GENERATED_OPERATIONS = [
         "fields": "fields",
         "include": "include",
         "query": "query",
-        "sort": "sort",
-        "page": "page"
-      },
-      "pageParamMap": {
-        "size": "page[size]",
-        "number": "page[number]"
+        "sort": "sort"
       }
     },
     "output": {
       "mode": "json",
-      "summary": "documentsListGetResponse (data/included/links/meta)"
+      "summary": "documentsListGetResponse (data/included/links/meta)",
+      "collection": {
+        "autoPaginate": true
+      }
     },
     "meta": {
-      "inputSummary": "required: projectId, spaceId; optional: fields, include, query, sort, page"
+      "inputSummary": "required: projectId, spaceId; optional: fields, include, query, sort"
     }
   },
   {
@@ -6784,7 +6515,6 @@ export const GENERATED_OPERATIONS = [
         "spaceId"
       ],
       "queryParams": [],
-      "hasPageObject": false,
       "hasBody": true
     },
     "wire": {
@@ -7048,7 +6778,6 @@ export const GENERATED_OPERATIONS = [
         "include",
         "revision"
       ],
-      "hasPageObject": false,
       "hasBody": false
     },
     "wire": {
@@ -7131,7 +6860,6 @@ export const GENERATED_OPERATIONS = [
       "queryParams": [
         "workflowAction"
       ],
-      "hasPageObject": false,
       "hasBody": true
     },
     "wire": {
@@ -7213,7 +6941,6 @@ export const GENERATED_OPERATIONS = [
       "queryParams": [
         "revision"
       ],
-      "hasPageObject": false,
       "hasBody": true
     },
     "wire": {
@@ -7295,7 +7022,6 @@ export const GENERATED_OPERATIONS = [
       "queryParams": [
         "revision"
       ],
-      "hasPageObject": false,
       "hasBody": true
     },
     "wire": {
@@ -7369,7 +7095,6 @@ export const GENERATED_OPERATIONS = [
         "documentName"
       ],
       "queryParams": [],
-      "hasPageObject": false,
       "hasBody": true
     },
     "wire": {
@@ -7441,7 +7166,6 @@ export const GENERATED_OPERATIONS = [
         "documentName"
       ],
       "queryParams": [],
-      "hasPageObject": false,
       "hasBody": true
     },
     "wire": {
@@ -7687,23 +7411,6 @@ export const GENERATED_OPERATIONS = [
           "revision": {
             "type": "string",
             "description": "The revision ID."
-          },
-          "page": {
-            "type": "object",
-            "properties": {
-              "size": {
-                "type": "integer",
-                "format": "int32",
-                "description": "Limit the number of entities returned in a single response. See <a href=\"https://docs.sw.siemens.com/en-US/doc/230235217/PL20250606201928474.polarion_help_sc.xid2134849/xid2134871\" target=\"_blank\">REST API User Guide</a> for details."
-              },
-              "number": {
-                "type": "integer",
-                "format": "int32",
-                "description": "Specify the page number to be returned. Counting starts from 1. See <a href=\"https://docs.sw.siemens.com/en-US/doc/230235217/PL20250606201928474.polarion_help_sc.xid2134849/xid2134871\" target=\"_blank\">REST API User Guide</a> for details."
-              }
-            },
-            "required": [],
-            "additionalProperties": false
           }
         },
         "required": [
@@ -7723,7 +7430,6 @@ export const GENERATED_OPERATIONS = [
         "include",
         "revision"
       ],
-      "hasPageObject": true,
       "hasBody": false
     },
     "wire": {
@@ -7735,20 +7441,18 @@ export const GENERATED_OPERATIONS = [
       "queryParamMap": {
         "fields": "fields",
         "include": "include",
-        "revision": "revision",
-        "page": "page"
-      },
-      "pageParamMap": {
-        "size": "page[size]",
-        "number": "page[number]"
+        "revision": "revision"
       }
     },
     "output": {
       "mode": "json",
-      "summary": "document_attachmentsListGetResponse (data/included/links/meta)"
+      "summary": "document_attachmentsListGetResponse (data/included/links/meta)",
+      "collection": {
+        "autoPaginate": true
+      }
     },
     "meta": {
-      "inputSummary": "required: projectId, spaceId, documentName; optional: fields, include, revision, page"
+      "inputSummary": "required: projectId, spaceId, documentName; optional: fields, include, revision"
     }
   },
   {
@@ -8003,7 +7707,6 @@ export const GENERATED_OPERATIONS = [
         "include",
         "revision"
       ],
-      "hasPageObject": false,
       "hasBody": false
     },
     "wire": {
@@ -8253,23 +7956,6 @@ export const GENERATED_OPERATIONS = [
           "revision": {
             "type": "string",
             "description": "The revision ID."
-          },
-          "page": {
-            "type": "object",
-            "properties": {
-              "size": {
-                "type": "integer",
-                "format": "int32",
-                "description": "Limit the number of entities returned in a single response. See <a href=\"https://docs.sw.siemens.com/en-US/doc/230235217/PL20250606201928474.polarion_help_sc.xid2134849/xid2134871\" target=\"_blank\">REST API User Guide</a> for details."
-              },
-              "number": {
-                "type": "integer",
-                "format": "int32",
-                "description": "Specify the page number to be returned. Counting starts from 1. See <a href=\"https://docs.sw.siemens.com/en-US/doc/230235217/PL20250606201928474.polarion_help_sc.xid2134849/xid2134871\" target=\"_blank\">REST API User Guide</a> for details."
-              }
-            },
-            "required": [],
-            "additionalProperties": false
           }
         },
         "required": [
@@ -8289,7 +7975,6 @@ export const GENERATED_OPERATIONS = [
         "include",
         "revision"
       ],
-      "hasPageObject": true,
       "hasBody": false
     },
     "wire": {
@@ -8301,20 +7986,18 @@ export const GENERATED_OPERATIONS = [
       "queryParamMap": {
         "fields": "fields",
         "include": "include",
-        "revision": "revision",
-        "page": "page"
-      },
-      "pageParamMap": {
-        "size": "page[size]",
-        "number": "page[number]"
+        "revision": "revision"
       }
     },
     "output": {
       "mode": "json",
-      "summary": "document_commentsListGetResponse (data/included/links/meta)"
+      "summary": "document_commentsListGetResponse (data/included/links/meta)",
+      "collection": {
+        "autoPaginate": true
+      }
     },
     "meta": {
-      "inputSummary": "required: projectId, spaceId, documentName; optional: fields, include, revision, page"
+      "inputSummary": "required: projectId, spaceId, documentName; optional: fields, include, revision"
     }
   },
   {
@@ -8371,7 +8054,6 @@ export const GENERATED_OPERATIONS = [
         "documentName"
       ],
       "queryParams": [],
-      "hasPageObject": false,
       "hasBody": true
     },
     "wire": {
@@ -8643,7 +8325,6 @@ export const GENERATED_OPERATIONS = [
         "include",
         "revision"
       ],
-      "hasPageObject": false,
       "hasBody": false
     },
     "wire": {
@@ -8728,7 +8409,6 @@ export const GENERATED_OPERATIONS = [
         "commentId"
       ],
       "queryParams": [],
-      "hasPageObject": false,
       "hasBody": true
     },
     "wire": {
@@ -8786,23 +8466,6 @@ export const GENERATED_OPERATIONS = [
           "fieldId": {
             "type": "string",
             "description": "The Field ID."
-          },
-          "page": {
-            "type": "object",
-            "properties": {
-              "size": {
-                "type": "integer",
-                "format": "int32",
-                "description": "Limit the number of entities returned in a single response. See <a href=\"https://docs.sw.siemens.com/en-US/doc/230235217/PL20250606201928474.polarion_help_sc.xid2134849/xid2134871\" target=\"_blank\">REST API User Guide</a> for details."
-              },
-              "number": {
-                "type": "integer",
-                "format": "int32",
-                "description": "Specify the page number to be returned. Counting starts from 1. See <a href=\"https://docs.sw.siemens.com/en-US/doc/230235217/PL20250606201928474.polarion_help_sc.xid2134849/xid2134871\" target=\"_blank\">REST API User Guide</a> for details."
-              }
-            },
-            "required": [],
-            "additionalProperties": false
           }
         },
         "required": [
@@ -8820,7 +8483,6 @@ export const GENERATED_OPERATIONS = [
         "fieldId"
       ],
       "queryParams": [],
-      "hasPageObject": true,
       "hasBody": false
     },
     "wire": {
@@ -8830,20 +8492,17 @@ export const GENERATED_OPERATIONS = [
         "documentName": "documentName",
         "fieldId": "fieldId"
       },
-      "queryParamMap": {
-        "page": "page"
-      },
-      "pageParamMap": {
-        "size": "page[size]",
-        "number": "page[number]"
-      }
+      "queryParamMap": {}
     },
     "output": {
       "mode": "json",
-      "summary": "enumOptionsActionResponseBody (data/links/meta)"
+      "summary": "enumOptionsActionResponseBody (data/links/meta)",
+      "collection": {
+        "autoPaginate": true
+      }
     },
     "meta": {
-      "inputSummary": "required: projectId, spaceId, documentName, fieldId; optional: page"
+      "inputSummary": "required: projectId, spaceId, documentName, fieldId"
     }
   },
   {
@@ -8887,23 +8546,6 @@ export const GENERATED_OPERATIONS = [
           "revision": {
             "type": "string",
             "description": "The revision ID."
-          },
-          "page": {
-            "type": "object",
-            "properties": {
-              "size": {
-                "type": "integer",
-                "format": "int32",
-                "description": "Limit the number of entities returned in a single response. See <a href=\"https://docs.sw.siemens.com/en-US/doc/230235217/PL20250606201928474.polarion_help_sc.xid2134849/xid2134871\" target=\"_blank\">REST API User Guide</a> for details."
-              },
-              "number": {
-                "type": "integer",
-                "format": "int32",
-                "description": "Specify the page number to be returned. Counting starts from 1. See <a href=\"https://docs.sw.siemens.com/en-US/doc/230235217/PL20250606201928474.polarion_help_sc.xid2134849/xid2134871\" target=\"_blank\">REST API User Guide</a> for details."
-              }
-            },
-            "required": [],
-            "additionalProperties": false
           }
         },
         "required": [
@@ -8923,7 +8565,6 @@ export const GENERATED_OPERATIONS = [
       "queryParams": [
         "revision"
       ],
-      "hasPageObject": true,
       "hasBody": false
     },
     "wire": {
@@ -8934,20 +8575,18 @@ export const GENERATED_OPERATIONS = [
         "fieldId": "fieldId"
       },
       "queryParamMap": {
-        "revision": "revision",
-        "page": "page"
-      },
-      "pageParamMap": {
-        "size": "page[size]",
-        "number": "page[number]"
+        "revision": "revision"
       }
     },
     "output": {
       "mode": "json",
-      "summary": "enumOptionsActionResponseBody (data/links/meta)"
+      "summary": "enumOptionsActionResponseBody (data/links/meta)",
+      "collection": {
+        "autoPaginate": true
+      }
     },
     "meta": {
-      "inputSummary": "required: projectId, spaceId, documentName, fieldId; optional: revision, page"
+      "inputSummary": "required: projectId, spaceId, documentName, fieldId; optional: revision"
     }
   },
   {
@@ -9176,23 +8815,6 @@ export const GENERATED_OPERATIONS = [
           "revision": {
             "type": "string",
             "description": "The revision ID."
-          },
-          "page": {
-            "type": "object",
-            "properties": {
-              "size": {
-                "type": "integer",
-                "format": "int32",
-                "description": "Limit the number of entities returned in a single response. See <a href=\"https://docs.sw.siemens.com/en-US/doc/230235217/PL20250606201928474.polarion_help_sc.xid2134849/xid2134871\" target=\"_blank\">REST API User Guide</a> for details."
-              },
-              "number": {
-                "type": "integer",
-                "format": "int32",
-                "description": "Specify the page number to be returned. Counting starts from 1. See <a href=\"https://docs.sw.siemens.com/en-US/doc/230235217/PL20250606201928474.polarion_help_sc.xid2134849/xid2134871\" target=\"_blank\">REST API User Guide</a> for details."
-              }
-            },
-            "required": [],
-            "additionalProperties": false
           }
         },
         "required": [
@@ -9212,7 +8834,6 @@ export const GENERATED_OPERATIONS = [
         "include",
         "revision"
       ],
-      "hasPageObject": true,
       "hasBody": false
     },
     "wire": {
@@ -9224,20 +8845,18 @@ export const GENERATED_OPERATIONS = [
       "queryParamMap": {
         "fields": "fields",
         "include": "include",
-        "revision": "revision",
-        "page": "page"
-      },
-      "pageParamMap": {
-        "size": "page[size]",
-        "number": "page[number]"
+        "revision": "revision"
       }
     },
     "output": {
       "mode": "json",
-      "summary": "document_partsListGetResponse (data/included/links/meta)"
+      "summary": "document_partsListGetResponse (data/included/links/meta)",
+      "collection": {
+        "autoPaginate": true
+      }
     },
     "meta": {
-      "inputSummary": "required: projectId, spaceId, documentName; optional: fields, include, revision, page"
+      "inputSummary": "required: projectId, spaceId, documentName; optional: fields, include, revision"
     }
   },
   {
@@ -9294,7 +8913,6 @@ export const GENERATED_OPERATIONS = [
         "documentName"
       ],
       "queryParams": [],
-      "hasPageObject": false,
       "hasBody": true
     },
     "wire": {
@@ -9566,7 +9184,6 @@ export const GENERATED_OPERATIONS = [
         "include",
         "revision"
       ],
-      "hasPageObject": false,
       "hasBody": false
     },
     "wire": {
@@ -9651,7 +9268,6 @@ export const GENERATED_OPERATIONS = [
         "partId"
       ],
       "queryParams": [],
-      "hasPageObject": false,
       "hasBody": true
     },
     "wire": {
@@ -9897,23 +9513,6 @@ export const GENERATED_OPERATIONS = [
           "sort": {
             "type": "string",
             "description": "The sort string."
-          },
-          "page": {
-            "type": "object",
-            "properties": {
-              "size": {
-                "type": "integer",
-                "format": "int32",
-                "description": "Limit the number of entities returned in a single response. See <a href=\"https://docs.sw.siemens.com/en-US/doc/230235217/PL20250606201928474.polarion_help_sc.xid2134849/xid2134871\" target=\"_blank\">REST API User Guide</a> for details."
-              },
-              "number": {
-                "type": "integer",
-                "format": "int32",
-                "description": "Specify the page number to be returned. Counting starts from 1. See <a href=\"https://docs.sw.siemens.com/en-US/doc/230235217/PL20250606201928474.polarion_help_sc.xid2134849/xid2134871\" target=\"_blank\">REST API User Guide</a> for details."
-              }
-            },
-            "required": [],
-            "additionalProperties": false
           }
         },
         "required": [
@@ -9932,7 +9531,6 @@ export const GENERATED_OPERATIONS = [
         "query",
         "sort"
       ],
-      "hasPageObject": true,
       "hasBody": false
     },
     "wire": {
@@ -9944,20 +9542,18 @@ export const GENERATED_OPERATIONS = [
         "fields": "fields",
         "include": "include",
         "query": "query",
-        "sort": "sort",
-        "page": "page"
-      },
-      "pageParamMap": {
-        "size": "page[size]",
-        "number": "page[number]"
+        "sort": "sort"
       }
     },
     "output": {
       "mode": "json",
-      "summary": "pagesListGetResponse (data/included/links/meta)"
+      "summary": "pagesListGetResponse (data/included/links/meta)",
+      "collection": {
+        "autoPaginate": true
+      }
     },
     "meta": {
-      "inputSummary": "required: projectId, spaceId; optional: fields, include, query, sort, page"
+      "inputSummary": "required: projectId, spaceId; optional: fields, include, query, sort"
     }
   },
   {
@@ -10007,7 +9603,6 @@ export const GENERATED_OPERATIONS = [
         "spaceId"
       ],
       "queryParams": [],
-      "hasPageObject": false,
       "hasBody": true
     },
     "wire": {
@@ -10271,7 +9866,6 @@ export const GENERATED_OPERATIONS = [
         "include",
         "revision"
       ],
-      "hasPageObject": false,
       "hasBody": false
     },
     "wire": {
@@ -10348,7 +9942,6 @@ export const GENERATED_OPERATIONS = [
         "pageName"
       ],
       "queryParams": [],
-      "hasPageObject": false,
       "hasBody": true
     },
     "wire": {
@@ -10415,7 +10008,6 @@ export const GENERATED_OPERATIONS = [
         "pageName"
       ],
       "queryParams": [],
-      "hasPageObject": false,
       "hasBody": false
     },
     "wire": {
@@ -10660,23 +10252,6 @@ export const GENERATED_OPERATIONS = [
           "revision": {
             "type": "string",
             "description": "The revision ID."
-          },
-          "page": {
-            "type": "object",
-            "properties": {
-              "size": {
-                "type": "integer",
-                "format": "int32",
-                "description": "Limit the number of entities returned in a single response. See <a href=\"https://docs.sw.siemens.com/en-US/doc/230235217/PL20250606201928474.polarion_help_sc.xid2134849/xid2134871\" target=\"_blank\">REST API User Guide</a> for details."
-              },
-              "number": {
-                "type": "integer",
-                "format": "int32",
-                "description": "Specify the page number to be returned. Counting starts from 1. See <a href=\"https://docs.sw.siemens.com/en-US/doc/230235217/PL20250606201928474.polarion_help_sc.xid2134849/xid2134871\" target=\"_blank\">REST API User Guide</a> for details."
-              }
-            },
-            "required": [],
-            "additionalProperties": false
           }
         },
         "required": [
@@ -10696,7 +10271,6 @@ export const GENERATED_OPERATIONS = [
         "include",
         "revision"
       ],
-      "hasPageObject": true,
       "hasBody": false
     },
     "wire": {
@@ -10708,20 +10282,18 @@ export const GENERATED_OPERATIONS = [
       "queryParamMap": {
         "fields": "fields",
         "include": "include",
-        "revision": "revision",
-        "page": "page"
-      },
-      "pageParamMap": {
-        "size": "page[size]",
-        "number": "page[number]"
+        "revision": "revision"
       }
     },
     "output": {
       "mode": "json",
-      "summary": "page_attachmentsListGetResponse (data/included/links/meta)"
+      "summary": "page_attachmentsListGetResponse (data/included/links/meta)",
+      "collection": {
+        "autoPaginate": true
+      }
     },
     "meta": {
-      "inputSummary": "required: projectId, spaceId, pageName; optional: fields, include, revision, page"
+      "inputSummary": "required: projectId, spaceId, pageName; optional: fields, include, revision"
     }
   },
   {
@@ -10976,7 +10548,6 @@ export const GENERATED_OPERATIONS = [
         "include",
         "revision"
       ],
-      "hasPageObject": false,
       "hasBody": false
     },
     "wire": {
@@ -11054,7 +10625,6 @@ export const GENERATED_OPERATIONS = [
         "attachmentId"
       ],
       "queryParams": [],
-      "hasPageObject": false,
       "hasBody": false
     },
     "wire": {
@@ -11300,23 +10870,6 @@ export const GENERATED_OPERATIONS = [
           "revision": {
             "type": "string",
             "description": "The revision ID."
-          },
-          "page": {
-            "type": "object",
-            "properties": {
-              "size": {
-                "type": "integer",
-                "format": "int32",
-                "description": "Limit the number of entities returned in a single response. See <a href=\"https://docs.sw.siemens.com/en-US/doc/230235217/PL20250606201928474.polarion_help_sc.xid2134849/xid2134871\" target=\"_blank\">REST API User Guide</a> for details."
-              },
-              "number": {
-                "type": "integer",
-                "format": "int32",
-                "description": "Specify the page number to be returned. Counting starts from 1. See <a href=\"https://docs.sw.siemens.com/en-US/doc/230235217/PL20250606201928474.polarion_help_sc.xid2134849/xid2134871\" target=\"_blank\">REST API User Guide</a> for details."
-              }
-            },
-            "required": [],
-            "additionalProperties": false
           }
         },
         "required": [
@@ -11336,7 +10889,6 @@ export const GENERATED_OPERATIONS = [
         "include",
         "revision"
       ],
-      "hasPageObject": true,
       "hasBody": false
     },
     "wire": {
@@ -11348,20 +10900,18 @@ export const GENERATED_OPERATIONS = [
       "queryParamMap": {
         "fields": "fields",
         "include": "include",
-        "revision": "revision",
-        "page": "page"
-      },
-      "pageParamMap": {
-        "size": "page[size]",
-        "number": "page[number]"
+        "revision": "revision"
       }
     },
     "output": {
       "mode": "json",
-      "summary": "page_commentsListGetResponse (data/included/links/meta)"
+      "summary": "page_commentsListGetResponse (data/included/links/meta)",
+      "collection": {
+        "autoPaginate": true
+      }
     },
     "meta": {
-      "inputSummary": "required: projectId, spaceId, pageName; optional: fields, include, revision, page"
+      "inputSummary": "required: projectId, spaceId, pageName; optional: fields, include, revision"
     }
   },
   {
@@ -11418,7 +10968,6 @@ export const GENERATED_OPERATIONS = [
         "pageName"
       ],
       "queryParams": [],
-      "hasPageObject": false,
       "hasBody": true
     },
     "wire": {
@@ -11690,7 +11239,6 @@ export const GENERATED_OPERATIONS = [
         "include",
         "revision"
       ],
-      "hasPageObject": false,
       "hasBody": false
     },
     "wire": {
@@ -11775,7 +11323,6 @@ export const GENERATED_OPERATIONS = [
         "commentId"
       ],
       "queryParams": [],
-      "hasPageObject": false,
       "hasBody": true
     },
     "wire": {
@@ -12027,23 +11574,6 @@ export const GENERATED_OPERATIONS = [
           "revision": {
             "type": "string",
             "description": "The revision ID."
-          },
-          "page": {
-            "type": "object",
-            "properties": {
-              "size": {
-                "type": "integer",
-                "format": "int32",
-                "description": "Limit the number of entities returned in a single response. See <a href=\"https://docs.sw.siemens.com/en-US/doc/230235217/PL20250606201928474.polarion_help_sc.xid2134849/xid2134871\" target=\"_blank\">REST API User Guide</a> for details."
-              },
-              "number": {
-                "type": "integer",
-                "format": "int32",
-                "description": "Specify the page number to be returned. Counting starts from 1. See <a href=\"https://docs.sw.siemens.com/en-US/doc/230235217/PL20250606201928474.polarion_help_sc.xid2134849/xid2134871\" target=\"_blank\">REST API User Guide</a> for details."
-              }
-            },
-            "required": [],
-            "additionalProperties": false
           }
         },
         "required": [
@@ -12065,7 +11595,6 @@ export const GENERATED_OPERATIONS = [
         "include",
         "revision"
       ],
-      "hasPageObject": true,
       "hasBody": false
     },
     "wire": {
@@ -12078,20 +11607,18 @@ export const GENERATED_OPERATIONS = [
       "queryParamMap": {
         "fields": "fields",
         "include": "include",
-        "revision": "revision",
-        "page": "page"
-      },
-      "pageParamMap": {
-        "size": "page[size]",
-        "number": "page[number]"
+        "revision": "revision"
       }
     },
     "output": {
       "mode": "json",
-      "summary": "RelationshipResponseBody"
+      "summary": "RelationshipResponseBody",
+      "collection": {
+        "autoPaginate": true
+      }
     },
     "meta": {
-      "inputSummary": "required: projectId, spaceId, pageName, relationshipId; optional: fields, include, revision, page"
+      "inputSummary": "required: projectId, spaceId, pageName, relationshipId; optional: fields, include, revision"
     }
   },
   {
@@ -12155,7 +11682,6 @@ export const GENERATED_OPERATIONS = [
         "relationshipId"
       ],
       "queryParams": [],
-      "hasPageObject": false,
       "hasBody": true
     },
     "wire": {
@@ -12237,7 +11763,6 @@ export const GENERATED_OPERATIONS = [
         "relationshipId"
       ],
       "queryParams": [],
-      "hasPageObject": false,
       "hasBody": true
     },
     "wire": {
@@ -12319,7 +11844,6 @@ export const GENERATED_OPERATIONS = [
         "relationshipId"
       ],
       "queryParams": [],
-      "hasPageObject": false,
       "hasBody": true
     },
     "wire": {
@@ -12552,23 +12076,6 @@ export const GENERATED_OPERATIONS = [
           "include": {
             "type": "string",
             "description": "Include related entities. See <a href=\"https://docs.sw.siemens.com/en-US/doc/230235217/PL20250606201928474.polarion_help_sc.xid2134849/xid2134871\" target=\"_blank\">REST API User Guide</a> for details."
-          },
-          "page": {
-            "type": "object",
-            "properties": {
-              "size": {
-                "type": "integer",
-                "format": "int32",
-                "description": "Limit the number of entities returned in a single response. See <a href=\"https://docs.sw.siemens.com/en-US/doc/230235217/PL20250606201928474.polarion_help_sc.xid2134849/xid2134871\" target=\"_blank\">REST API User Guide</a> for details."
-              },
-              "number": {
-                "type": "integer",
-                "format": "int32",
-                "description": "Specify the page number to be returned. Counting starts from 1. See <a href=\"https://docs.sw.siemens.com/en-US/doc/230235217/PL20250606201928474.polarion_help_sc.xid2134849/xid2134871\" target=\"_blank\">REST API User Guide</a> for details."
-              }
-            },
-            "required": [],
-            "additionalProperties": false
           }
         },
         "required": [
@@ -12583,7 +12090,6 @@ export const GENERATED_OPERATIONS = [
         "fields",
         "include"
       ],
-      "hasPageObject": true,
       "hasBody": false
     },
     "wire": {
@@ -12592,20 +12098,18 @@ export const GENERATED_OPERATIONS = [
       },
       "queryParamMap": {
         "fields": "fields",
-        "include": "include",
-        "page": "page"
-      },
-      "pageParamMap": {
-        "size": "page[size]",
-        "number": "page[number]"
+        "include": "include"
       }
     },
     "output": {
       "mode": "json",
-      "summary": "testparameter_definitionsListGetResponse (data/included/links/meta)"
+      "summary": "testparameter_definitionsListGetResponse (data/included/links/meta)",
+      "collection": {
+        "autoPaginate": true
+      }
     },
     "meta": {
-      "inputSummary": "required: projectId; optional: fields, include, page"
+      "inputSummary": "required: projectId; optional: fields, include"
     }
   },
   {
@@ -12841,7 +12345,6 @@ export const GENERATED_OPERATIONS = [
         "fields",
         "include"
       ],
-      "hasPageObject": false,
       "hasBody": false
     },
     "wire": {
@@ -13090,23 +12593,6 @@ export const GENERATED_OPERATIONS = [
           "templates": {
             "type": "boolean",
             "description": "If set to true, only templates will be returned, otherwise only actual instances will be returned."
-          },
-          "page": {
-            "type": "object",
-            "properties": {
-              "size": {
-                "type": "integer",
-                "format": "int32",
-                "description": "Limit the number of entities returned in a single response. See <a href=\"https://docs.sw.siemens.com/en-US/doc/230235217/PL20250606201928474.polarion_help_sc.xid2134849/xid2134871\" target=\"_blank\">REST API User Guide</a> for details."
-              },
-              "number": {
-                "type": "integer",
-                "format": "int32",
-                "description": "Specify the page number to be returned. Counting starts from 1. See <a href=\"https://docs.sw.siemens.com/en-US/doc/230235217/PL20250606201928474.polarion_help_sc.xid2134849/xid2134871\" target=\"_blank\">REST API User Guide</a> for details."
-              }
-            },
-            "required": [],
-            "additionalProperties": false
           }
         },
         "required": [
@@ -13125,7 +12611,6 @@ export const GENERATED_OPERATIONS = [
         "revision",
         "templates"
       ],
-      "hasPageObject": true,
       "hasBody": false
     },
     "wire": {
@@ -13138,20 +12623,18 @@ export const GENERATED_OPERATIONS = [
         "query": "query",
         "sort": "sort",
         "revision": "revision",
-        "templates": "templates",
-        "page": "page"
-      },
-      "pageParamMap": {
-        "size": "page[size]",
-        "number": "page[number]"
+        "templates": "templates"
       }
     },
     "output": {
       "mode": "json",
-      "summary": "testrunsListGetResponse (data/included/links/meta)"
+      "summary": "testrunsListGetResponse (data/included/links/meta)",
+      "collection": {
+        "autoPaginate": true
+      }
     },
     "meta": {
-      "inputSummary": "required: projectId; optional: fields, include, query, sort, revision, templates, page"
+      "inputSummary": "required: projectId; optional: fields, include, query, sort, revision, templates"
     }
   },
   {
@@ -13194,7 +12677,6 @@ export const GENERATED_OPERATIONS = [
         "projectId"
       ],
       "queryParams": [],
-      "hasPageObject": false,
       "hasBody": true
     },
     "wire": {
@@ -13252,7 +12734,6 @@ export const GENERATED_OPERATIONS = [
         "projectId"
       ],
       "queryParams": [],
-      "hasPageObject": false,
       "hasBody": true
     },
     "wire": {
@@ -13310,7 +12791,6 @@ export const GENERATED_OPERATIONS = [
         "projectId"
       ],
       "queryParams": [],
-      "hasPageObject": false,
       "hasBody": true
     },
     "wire": {
@@ -13566,7 +13046,6 @@ export const GENERATED_OPERATIONS = [
         "include",
         "revision"
       ],
-      "hasPageObject": false,
       "hasBody": false
     },
     "wire": {
@@ -13635,7 +13114,6 @@ export const GENERATED_OPERATIONS = [
         "testRunId"
       ],
       "queryParams": [],
-      "hasPageObject": false,
       "hasBody": true
     },
     "wire": {
@@ -13694,7 +13172,6 @@ export const GENERATED_OPERATIONS = [
         "testRunId"
       ],
       "queryParams": [],
-      "hasPageObject": false,
       "hasBody": false
     },
     "wire": {
@@ -13743,23 +13220,6 @@ export const GENERATED_OPERATIONS = [
           "revision": {
             "type": "string",
             "description": "The revision ID."
-          },
-          "page": {
-            "type": "object",
-            "properties": {
-              "size": {
-                "type": "integer",
-                "format": "int32",
-                "description": "Limit the number of entities returned in a single response. See <a href=\"https://docs.sw.siemens.com/en-US/doc/230235217/PL20250606201928474.polarion_help_sc.xid2134849/xid2134871\" target=\"_blank\">REST API User Guide</a> for details."
-              },
-              "number": {
-                "type": "integer",
-                "format": "int32",
-                "description": "Specify the page number to be returned. Counting starts from 1. See <a href=\"https://docs.sw.siemens.com/en-US/doc/230235217/PL20250606201928474.polarion_help_sc.xid2134849/xid2134871\" target=\"_blank\">REST API User Guide</a> for details."
-              }
-            },
-            "required": [],
-            "additionalProperties": false
           }
         },
         "required": [
@@ -13775,7 +13235,6 @@ export const GENERATED_OPERATIONS = [
       "queryParams": [
         "revision"
       ],
-      "hasPageObject": true,
       "hasBody": false
     },
     "wire": {
@@ -13784,20 +13243,18 @@ export const GENERATED_OPERATIONS = [
         "testRunId": "testRunId"
       },
       "queryParamMap": {
-        "revision": "revision",
-        "page": "page"
-      },
-      "pageParamMap": {
-        "size": "page[size]",
-        "number": "page[number]"
+        "revision": "revision"
       }
     },
     "output": {
       "mode": "json",
-      "summary": "workflowActionsActionResponseBody (data/links/meta)"
+      "summary": "workflowActionsActionResponseBody (data/links/meta)",
+      "collection": {
+        "autoPaginate": true
+      }
     },
     "meta": {
-      "inputSummary": "required: projectId, testRunId; optional: revision, page"
+      "inputSummary": "required: projectId, testRunId; optional: revision"
     }
   },
   {
@@ -14019,23 +13476,6 @@ export const GENERATED_OPERATIONS = [
           "revision": {
             "type": "string",
             "description": "The revision ID."
-          },
-          "page": {
-            "type": "object",
-            "properties": {
-              "size": {
-                "type": "integer",
-                "format": "int32",
-                "description": "Limit the number of entities returned in a single response. See <a href=\"https://docs.sw.siemens.com/en-US/doc/230235217/PL20250606201928474.polarion_help_sc.xid2134849/xid2134871\" target=\"_blank\">REST API User Guide</a> for details."
-              },
-              "number": {
-                "type": "integer",
-                "format": "int32",
-                "description": "Specify the page number to be returned. Counting starts from 1. See <a href=\"https://docs.sw.siemens.com/en-US/doc/230235217/PL20250606201928474.polarion_help_sc.xid2134849/xid2134871\" target=\"_blank\">REST API User Guide</a> for details."
-              }
-            },
-            "required": [],
-            "additionalProperties": false
           }
         },
         "required": [
@@ -14053,7 +13493,6 @@ export const GENERATED_OPERATIONS = [
         "include",
         "revision"
       ],
-      "hasPageObject": true,
       "hasBody": false
     },
     "wire": {
@@ -14064,20 +13503,18 @@ export const GENERATED_OPERATIONS = [
       "queryParamMap": {
         "fields": "fields",
         "include": "include",
-        "revision": "revision",
-        "page": "page"
-      },
-      "pageParamMap": {
-        "size": "page[size]",
-        "number": "page[number]"
+        "revision": "revision"
       }
     },
     "output": {
       "mode": "json",
-      "summary": "testrun_attachmentsListGetResponse (data/included/links/meta)"
+      "summary": "testrun_attachmentsListGetResponse (data/included/links/meta)",
+      "collection": {
+        "autoPaginate": true
+      }
     },
     "meta": {
-      "inputSummary": "required: projectId, testRunId; optional: fields, include, revision, page"
+      "inputSummary": "required: projectId, testRunId; optional: fields, include, revision"
     }
   },
   {
@@ -14127,7 +13564,6 @@ export const GENERATED_OPERATIONS = [
         "testRunId"
       ],
       "queryParams": [],
-      "hasPageObject": false,
       "hasBody": true
     },
     "wire": {
@@ -14391,7 +13827,6 @@ export const GENERATED_OPERATIONS = [
         "include",
         "revision"
       ],
-      "hasPageObject": false,
       "hasBody": false
     },
     "wire": {
@@ -14461,7 +13896,6 @@ export const GENERATED_OPERATIONS = [
         "attachmentId"
       ],
       "queryParams": [],
-      "hasPageObject": false,
       "hasBody": false
     },
     "wire": {
@@ -14701,23 +14135,6 @@ export const GENERATED_OPERATIONS = [
           "revision": {
             "type": "string",
             "description": "The revision ID."
-          },
-          "page": {
-            "type": "object",
-            "properties": {
-              "size": {
-                "type": "integer",
-                "format": "int32",
-                "description": "Limit the number of entities returned in a single response. See <a href=\"https://docs.sw.siemens.com/en-US/doc/230235217/PL20250606201928474.polarion_help_sc.xid2134849/xid2134871\" target=\"_blank\">REST API User Guide</a> for details."
-              },
-              "number": {
-                "type": "integer",
-                "format": "int32",
-                "description": "Specify the page number to be returned. Counting starts from 1. See <a href=\"https://docs.sw.siemens.com/en-US/doc/230235217/PL20250606201928474.polarion_help_sc.xid2134849/xid2134871\" target=\"_blank\">REST API User Guide</a> for details."
-              }
-            },
-            "required": [],
-            "additionalProperties": false
           }
         },
         "required": [
@@ -14735,7 +14152,6 @@ export const GENERATED_OPERATIONS = [
         "include",
         "revision"
       ],
-      "hasPageObject": true,
       "hasBody": false
     },
     "wire": {
@@ -14746,20 +14162,18 @@ export const GENERATED_OPERATIONS = [
       "queryParamMap": {
         "fields": "fields",
         "include": "include",
-        "revision": "revision",
-        "page": "page"
-      },
-      "pageParamMap": {
-        "size": "page[size]",
-        "number": "page[number]"
+        "revision": "revision"
       }
     },
     "output": {
       "mode": "json",
-      "summary": "testrun_commentsListGetResponse (data/included/links/meta)"
+      "summary": "testrun_commentsListGetResponse (data/included/links/meta)",
+      "collection": {
+        "autoPaginate": true
+      }
     },
     "meta": {
-      "inputSummary": "required: projectId, testRunId; optional: fields, include, revision, page"
+      "inputSummary": "required: projectId, testRunId; optional: fields, include, revision"
     }
   },
   {
@@ -14809,7 +14223,6 @@ export const GENERATED_OPERATIONS = [
         "testRunId"
       ],
       "queryParams": [],
-      "hasPageObject": false,
       "hasBody": true
     },
     "wire": {
@@ -14875,7 +14288,6 @@ export const GENERATED_OPERATIONS = [
         "testRunId"
       ],
       "queryParams": [],
-      "hasPageObject": false,
       "hasBody": true
     },
     "wire": {
@@ -15139,7 +14551,6 @@ export const GENERATED_OPERATIONS = [
         "include",
         "revision"
       ],
-      "hasPageObject": false,
       "hasBody": false
     },
     "wire": {
@@ -15216,7 +14627,6 @@ export const GENERATED_OPERATIONS = [
         "commentId"
       ],
       "queryParams": [],
-      "hasPageObject": false,
       "hasBody": true
     },
     "wire": {
@@ -15457,23 +14867,6 @@ export const GENERATED_OPERATIONS = [
           "revision": {
             "type": "string",
             "description": "The revision ID."
-          },
-          "page": {
-            "type": "object",
-            "properties": {
-              "size": {
-                "type": "integer",
-                "format": "int32",
-                "description": "Limit the number of entities returned in a single response. See <a href=\"https://docs.sw.siemens.com/en-US/doc/230235217/PL20250606201928474.polarion_help_sc.xid2134849/xid2134871\" target=\"_blank\">REST API User Guide</a> for details."
-              },
-              "number": {
-                "type": "integer",
-                "format": "int32",
-                "description": "Specify the page number to be returned. Counting starts from 1. See <a href=\"https://docs.sw.siemens.com/en-US/doc/230235217/PL20250606201928474.polarion_help_sc.xid2134849/xid2134871\" target=\"_blank\">REST API User Guide</a> for details."
-              }
-            },
-            "required": [],
-            "additionalProperties": false
           }
         },
         "required": [
@@ -15491,7 +14884,6 @@ export const GENERATED_OPERATIONS = [
         "include",
         "revision"
       ],
-      "hasPageObject": true,
       "hasBody": false
     },
     "wire": {
@@ -15502,20 +14894,18 @@ export const GENERATED_OPERATIONS = [
       "queryParamMap": {
         "fields": "fields",
         "include": "include",
-        "revision": "revision",
-        "page": "page"
-      },
-      "pageParamMap": {
-        "size": "page[size]",
-        "number": "page[number]"
+        "revision": "revision"
       }
     },
     "output": {
       "mode": "json",
-      "summary": "testparameter_definitionsListGetResponse (data/included/links/meta)"
+      "summary": "testparameter_definitionsListGetResponse (data/included/links/meta)",
+      "collection": {
+        "autoPaginate": true
+      }
     },
     "meta": {
-      "inputSummary": "required: projectId, testRunId; optional: fields, include, revision, page"
+      "inputSummary": "required: projectId, testRunId; optional: fields, include, revision"
     }
   },
   {
@@ -15565,7 +14955,6 @@ export const GENERATED_OPERATIONS = [
         "testRunId"
       ],
       "queryParams": [],
-      "hasPageObject": false,
       "hasBody": true
     },
     "wire": {
@@ -15829,7 +15218,6 @@ export const GENERATED_OPERATIONS = [
         "include",
         "revision"
       ],
-      "hasPageObject": false,
       "hasBody": false
     },
     "wire": {
@@ -15899,7 +15287,6 @@ export const GENERATED_OPERATIONS = [
         "testParamId"
       ],
       "queryParams": [],
-      "hasPageObject": false,
       "hasBody": false
     },
     "wire": {
@@ -16139,23 +15526,6 @@ export const GENERATED_OPERATIONS = [
           "revision": {
             "type": "string",
             "description": "The revision ID."
-          },
-          "page": {
-            "type": "object",
-            "properties": {
-              "size": {
-                "type": "integer",
-                "format": "int32",
-                "description": "Limit the number of entities returned in a single response. See <a href=\"https://docs.sw.siemens.com/en-US/doc/230235217/PL20250606201928474.polarion_help_sc.xid2134849/xid2134871\" target=\"_blank\">REST API User Guide</a> for details."
-              },
-              "number": {
-                "type": "integer",
-                "format": "int32",
-                "description": "Specify the page number to be returned. Counting starts from 1. See <a href=\"https://docs.sw.siemens.com/en-US/doc/230235217/PL20250606201928474.polarion_help_sc.xid2134849/xid2134871\" target=\"_blank\">REST API User Guide</a> for details."
-              }
-            },
-            "required": [],
-            "additionalProperties": false
           }
         },
         "required": [
@@ -16173,7 +15543,6 @@ export const GENERATED_OPERATIONS = [
         "include",
         "revision"
       ],
-      "hasPageObject": true,
       "hasBody": false
     },
     "wire": {
@@ -16184,20 +15553,18 @@ export const GENERATED_OPERATIONS = [
       "queryParamMap": {
         "fields": "fields",
         "include": "include",
-        "revision": "revision",
-        "page": "page"
-      },
-      "pageParamMap": {
-        "size": "page[size]",
-        "number": "page[number]"
+        "revision": "revision"
       }
     },
     "output": {
       "mode": "json",
-      "summary": "testparametersListGetResponse (data/included/links/meta)"
+      "summary": "testparametersListGetResponse (data/included/links/meta)",
+      "collection": {
+        "autoPaginate": true
+      }
     },
     "meta": {
-      "inputSummary": "required: projectId, testRunId; optional: fields, include, revision, page"
+      "inputSummary": "required: projectId, testRunId; optional: fields, include, revision"
     }
   },
   {
@@ -16247,7 +15614,6 @@ export const GENERATED_OPERATIONS = [
         "testRunId"
       ],
       "queryParams": [],
-      "hasPageObject": false,
       "hasBody": true
     },
     "wire": {
@@ -16313,7 +15679,6 @@ export const GENERATED_OPERATIONS = [
         "testRunId"
       ],
       "queryParams": [],
-      "hasPageObject": false,
       "hasBody": true
     },
     "wire": {
@@ -16577,7 +15942,6 @@ export const GENERATED_OPERATIONS = [
         "include",
         "revision"
       ],
-      "hasPageObject": false,
       "hasBody": false
     },
     "wire": {
@@ -16647,7 +16011,6 @@ export const GENERATED_OPERATIONS = [
         "testParamId"
       ],
       "queryParams": [],
-      "hasPageObject": false,
       "hasBody": false
     },
     "wire": {
@@ -16899,23 +16262,6 @@ export const GENERATED_OPERATIONS = [
           "testResultId": {
             "type": "string",
             "description": "testResultId"
-          },
-          "page": {
-            "type": "object",
-            "properties": {
-              "size": {
-                "type": "integer",
-                "format": "int32",
-                "description": "Limit the number of entities returned in a single response. See <a href=\"https://docs.sw.siemens.com/en-US/doc/230235217/PL20250606201928474.polarion_help_sc.xid2134849/xid2134871\" target=\"_blank\">REST API User Guide</a> for details."
-              },
-              "number": {
-                "type": "integer",
-                "format": "int32",
-                "description": "Specify the page number to be returned. Counting starts from 1. See <a href=\"https://docs.sw.siemens.com/en-US/doc/230235217/PL20250606201928474.polarion_help_sc.xid2134849/xid2134871\" target=\"_blank\">REST API User Guide</a> for details."
-              }
-            },
-            "required": [],
-            "additionalProperties": false
           }
         },
         "required": [
@@ -16936,7 +16282,6 @@ export const GENERATED_OPERATIONS = [
         "testCaseId",
         "testResultId"
       ],
-      "hasPageObject": true,
       "hasBody": false
     },
     "wire": {
@@ -16950,20 +16295,18 @@ export const GENERATED_OPERATIONS = [
         "revision": "revision",
         "testCaseProjectId": "testCaseProjectId",
         "testCaseId": "testCaseId",
-        "testResultId": "testResultId",
-        "page": "page"
-      },
-      "pageParamMap": {
-        "size": "page[size]",
-        "number": "page[number]"
+        "testResultId": "testResultId"
       }
     },
     "output": {
       "mode": "json",
-      "summary": "testrecordsListGetResponse (data/included/links/meta)"
+      "summary": "testrecordsListGetResponse (data/included/links/meta)",
+      "collection": {
+        "autoPaginate": true
+      }
     },
     "meta": {
-      "inputSummary": "required: projectId, testRunId; optional: fields, include, revision, testCaseProjectId, testCaseId, testResultId, page"
+      "inputSummary": "required: projectId, testRunId; optional: fields, include, revision, testCaseProjectId, testCaseId, testResultId"
     }
   },
   {
@@ -17013,7 +16356,6 @@ export const GENERATED_OPERATIONS = [
         "testRunId"
       ],
       "queryParams": [],
-      "hasPageObject": false,
       "hasBody": true
     },
     "wire": {
@@ -17079,7 +16421,6 @@ export const GENERATED_OPERATIONS = [
         "testRunId"
       ],
       "queryParams": [],
-      "hasPageObject": false,
       "hasBody": true
     },
     "wire": {
@@ -17357,7 +16698,6 @@ export const GENERATED_OPERATIONS = [
         "include",
         "revision"
       ],
-      "hasPageObject": false,
       "hasBody": false
     },
     "wire": {
@@ -17450,7 +16790,6 @@ export const GENERATED_OPERATIONS = [
         "iteration"
       ],
       "queryParams": [],
-      "hasPageObject": false,
       "hasBody": true
     },
     "wire": {
@@ -17533,7 +16872,6 @@ export const GENERATED_OPERATIONS = [
         "iteration"
       ],
       "queryParams": [],
-      "hasPageObject": false,
       "hasBody": false
     },
     "wire": {
@@ -17790,23 +17128,6 @@ export const GENERATED_OPERATIONS = [
           "revision": {
             "type": "string",
             "description": "The revision ID."
-          },
-          "page": {
-            "type": "object",
-            "properties": {
-              "size": {
-                "type": "integer",
-                "format": "int32",
-                "description": "Limit the number of entities returned in a single response. See <a href=\"https://docs.sw.siemens.com/en-US/doc/230235217/PL20250606201928474.polarion_help_sc.xid2134849/xid2134871\" target=\"_blank\">REST API User Guide</a> for details."
-              },
-              "number": {
-                "type": "integer",
-                "format": "int32",
-                "description": "Specify the page number to be returned. Counting starts from 1. See <a href=\"https://docs.sw.siemens.com/en-US/doc/230235217/PL20250606201928474.polarion_help_sc.xid2134849/xid2134871\" target=\"_blank\">REST API User Guide</a> for details."
-              }
-            },
-            "required": [],
-            "additionalProperties": false
           }
         },
         "required": [
@@ -17830,7 +17151,6 @@ export const GENERATED_OPERATIONS = [
         "include",
         "revision"
       ],
-      "hasPageObject": true,
       "hasBody": false
     },
     "wire": {
@@ -17844,20 +17164,18 @@ export const GENERATED_OPERATIONS = [
       "queryParamMap": {
         "fields": "fields",
         "include": "include",
-        "revision": "revision",
-        "page": "page"
-      },
-      "pageParamMap": {
-        "size": "page[size]",
-        "number": "page[number]"
+        "revision": "revision"
       }
     },
     "output": {
       "mode": "json",
-      "summary": "testrecord_attachmentsListGetResponse (data/included/links/meta)"
+      "summary": "testrecord_attachmentsListGetResponse (data/included/links/meta)",
+      "collection": {
+        "autoPaginate": true
+      }
     },
     "meta": {
-      "inputSummary": "required: projectId, testRunId, testCaseProjectId, testCaseId, iteration; optional: fields, include, revision, page"
+      "inputSummary": "required: projectId, testRunId, testCaseProjectId, testCaseId, iteration; optional: fields, include, revision"
     }
   },
   {
@@ -17928,7 +17246,6 @@ export const GENERATED_OPERATIONS = [
         "iteration"
       ],
       "queryParams": [],
-      "hasPageObject": false,
       "hasBody": true
     },
     "wire": {
@@ -18216,7 +17533,6 @@ export const GENERATED_OPERATIONS = [
         "include",
         "revision"
       ],
-      "hasPageObject": false,
       "hasBody": false
     },
     "wire": {
@@ -18310,7 +17626,6 @@ export const GENERATED_OPERATIONS = [
         "attachmentId"
       ],
       "queryParams": [],
-      "hasPageObject": false,
       "hasBody": false
     },
     "wire": {
@@ -18568,23 +17883,6 @@ export const GENERATED_OPERATIONS = [
           "revision": {
             "type": "string",
             "description": "The revision ID."
-          },
-          "page": {
-            "type": "object",
-            "properties": {
-              "size": {
-                "type": "integer",
-                "format": "int32",
-                "description": "Limit the number of entities returned in a single response. See <a href=\"https://docs.sw.siemens.com/en-US/doc/230235217/PL20250606201928474.polarion_help_sc.xid2134849/xid2134871\" target=\"_blank\">REST API User Guide</a> for details."
-              },
-              "number": {
-                "type": "integer",
-                "format": "int32",
-                "description": "Specify the page number to be returned. Counting starts from 1. See <a href=\"https://docs.sw.siemens.com/en-US/doc/230235217/PL20250606201928474.polarion_help_sc.xid2134849/xid2134871\" target=\"_blank\">REST API User Guide</a> for details."
-              }
-            },
-            "required": [],
-            "additionalProperties": false
           }
         },
         "required": [
@@ -18608,7 +17906,6 @@ export const GENERATED_OPERATIONS = [
         "include",
         "revision"
       ],
-      "hasPageObject": true,
       "hasBody": false
     },
     "wire": {
@@ -18622,20 +17919,18 @@ export const GENERATED_OPERATIONS = [
       "queryParamMap": {
         "fields": "fields",
         "include": "include",
-        "revision": "revision",
-        "page": "page"
-      },
-      "pageParamMap": {
-        "size": "page[size]",
-        "number": "page[number]"
+        "revision": "revision"
       }
     },
     "output": {
       "mode": "json",
-      "summary": "testparametersListGetResponse (data/included/links/meta)"
+      "summary": "testparametersListGetResponse (data/included/links/meta)",
+      "collection": {
+        "autoPaginate": true
+      }
     },
     "meta": {
-      "inputSummary": "required: projectId, testRunId, testCaseProjectId, testCaseId, iteration; optional: fields, include, revision, page"
+      "inputSummary": "required: projectId, testRunId, testCaseProjectId, testCaseId, iteration; optional: fields, include, revision"
     }
   },
   {
@@ -18706,7 +18001,6 @@ export const GENERATED_OPERATIONS = [
         "iteration"
       ],
       "queryParams": [],
-      "hasPageObject": false,
       "hasBody": true
     },
     "wire": {
@@ -18994,7 +18288,6 @@ export const GENERATED_OPERATIONS = [
         "include",
         "revision"
       ],
-      "hasPageObject": false,
       "hasBody": false
     },
     "wire": {
@@ -19088,7 +18381,6 @@ export const GENERATED_OPERATIONS = [
         "testParamId"
       ],
       "queryParams": [],
-      "hasPageObject": false,
       "hasBody": false
     },
     "wire": {
@@ -19346,23 +18638,6 @@ export const GENERATED_OPERATIONS = [
           "revision": {
             "type": "string",
             "description": "The revision ID."
-          },
-          "page": {
-            "type": "object",
-            "properties": {
-              "size": {
-                "type": "integer",
-                "format": "int32",
-                "description": "Limit the number of entities returned in a single response. See <a href=\"https://docs.sw.siemens.com/en-US/doc/230235217/PL20250606201928474.polarion_help_sc.xid2134849/xid2134871\" target=\"_blank\">REST API User Guide</a> for details."
-              },
-              "number": {
-                "type": "integer",
-                "format": "int32",
-                "description": "Specify the page number to be returned. Counting starts from 1. See <a href=\"https://docs.sw.siemens.com/en-US/doc/230235217/PL20250606201928474.polarion_help_sc.xid2134849/xid2134871\" target=\"_blank\">REST API User Guide</a> for details."
-              }
-            },
-            "required": [],
-            "additionalProperties": false
           }
         },
         "required": [
@@ -19386,7 +18661,6 @@ export const GENERATED_OPERATIONS = [
         "include",
         "revision"
       ],
-      "hasPageObject": true,
       "hasBody": false
     },
     "wire": {
@@ -19400,20 +18674,18 @@ export const GENERATED_OPERATIONS = [
       "queryParamMap": {
         "fields": "fields",
         "include": "include",
-        "revision": "revision",
-        "page": "page"
-      },
-      "pageParamMap": {
-        "size": "page[size]",
-        "number": "page[number]"
+        "revision": "revision"
       }
     },
     "output": {
       "mode": "json",
-      "summary": "teststep_resultsListGetResponse (data/included/links/meta)"
+      "summary": "teststep_resultsListGetResponse (data/included/links/meta)",
+      "collection": {
+        "autoPaginate": true
+      }
     },
     "meta": {
-      "inputSummary": "required: projectId, testRunId, testCaseProjectId, testCaseId, iteration; optional: fields, include, revision, page"
+      "inputSummary": "required: projectId, testRunId, testCaseProjectId, testCaseId, iteration; optional: fields, include, revision"
     }
   },
   {
@@ -19484,7 +18756,6 @@ export const GENERATED_OPERATIONS = [
         "iteration"
       ],
       "queryParams": [],
-      "hasPageObject": false,
       "hasBody": true
     },
     "wire": {
@@ -19574,7 +18845,6 @@ export const GENERATED_OPERATIONS = [
         "iteration"
       ],
       "queryParams": [],
-      "hasPageObject": false,
       "hasBody": true
     },
     "wire": {
@@ -19862,7 +19132,6 @@ export const GENERATED_OPERATIONS = [
         "include",
         "revision"
       ],
-      "hasPageObject": false,
       "hasBody": false
     },
     "wire": {
@@ -19963,7 +19232,6 @@ export const GENERATED_OPERATIONS = [
         "testStepIndex"
       ],
       "queryParams": [],
-      "hasPageObject": false,
       "hasBody": true
     },
     "wire": {
@@ -20227,23 +19495,6 @@ export const GENERATED_OPERATIONS = [
           "revision": {
             "type": "string",
             "description": "The revision ID."
-          },
-          "page": {
-            "type": "object",
-            "properties": {
-              "size": {
-                "type": "integer",
-                "format": "int32",
-                "description": "Limit the number of entities returned in a single response. See <a href=\"https://docs.sw.siemens.com/en-US/doc/230235217/PL20250606201928474.polarion_help_sc.xid2134849/xid2134871\" target=\"_blank\">REST API User Guide</a> for details."
-              },
-              "number": {
-                "type": "integer",
-                "format": "int32",
-                "description": "Specify the page number to be returned. Counting starts from 1. See <a href=\"https://docs.sw.siemens.com/en-US/doc/230235217/PL20250606201928474.polarion_help_sc.xid2134849/xid2134871\" target=\"_blank\">REST API User Guide</a> for details."
-              }
-            },
-            "required": [],
-            "additionalProperties": false
           }
         },
         "required": [
@@ -20269,7 +19520,6 @@ export const GENERATED_OPERATIONS = [
         "include",
         "revision"
       ],
-      "hasPageObject": true,
       "hasBody": false
     },
     "wire": {
@@ -20284,20 +19534,18 @@ export const GENERATED_OPERATIONS = [
       "queryParamMap": {
         "fields": "fields",
         "include": "include",
-        "revision": "revision",
-        "page": "page"
-      },
-      "pageParamMap": {
-        "size": "page[size]",
-        "number": "page[number]"
+        "revision": "revision"
       }
     },
     "output": {
       "mode": "json",
-      "summary": "teststepresult_attachmentsListGetResponse (data/included/links/meta)"
+      "summary": "teststepresult_attachmentsListGetResponse (data/included/links/meta)",
+      "collection": {
+        "autoPaginate": true
+      }
     },
     "meta": {
-      "inputSummary": "required: projectId, testRunId, testCaseProjectId, testCaseId, iteration, testStepIndex; optional: fields, include, revision, page"
+      "inputSummary": "required: projectId, testRunId, testCaseProjectId, testCaseId, iteration, testStepIndex; optional: fields, include, revision"
     }
   },
   {
@@ -20375,7 +19623,6 @@ export const GENERATED_OPERATIONS = [
         "testStepIndex"
       ],
       "queryParams": [],
-      "hasPageObject": false,
       "hasBody": true
     },
     "wire": {
@@ -20671,7 +19918,6 @@ export const GENERATED_OPERATIONS = [
         "include",
         "revision"
       ],
-      "hasPageObject": false,
       "hasBody": false
     },
     "wire": {
@@ -20773,7 +20019,6 @@ export const GENERATED_OPERATIONS = [
         "attachmentId"
       ],
       "queryParams": [],
-      "hasPageObject": false,
       "hasBody": false
     },
     "wire": {
@@ -21020,23 +20265,6 @@ export const GENERATED_OPERATIONS = [
           "revision": {
             "type": "string",
             "description": "The revision ID."
-          },
-          "page": {
-            "type": "object",
-            "properties": {
-              "size": {
-                "type": "integer",
-                "format": "int32",
-                "description": "Limit the number of entities returned in a single response. See <a href=\"https://docs.sw.siemens.com/en-US/doc/230235217/PL20250606201928474.polarion_help_sc.xid2134849/xid2134871\" target=\"_blank\">REST API User Guide</a> for details."
-              },
-              "number": {
-                "type": "integer",
-                "format": "int32",
-                "description": "Specify the page number to be returned. Counting starts from 1. See <a href=\"https://docs.sw.siemens.com/en-US/doc/230235217/PL20250606201928474.polarion_help_sc.xid2134849/xid2134871\" target=\"_blank\">REST API User Guide</a> for details."
-              }
-            },
-            "required": [],
-            "additionalProperties": false
           }
         },
         "required": [
@@ -21054,7 +20282,6 @@ export const GENERATED_OPERATIONS = [
         "sort",
         "revision"
       ],
-      "hasPageObject": true,
       "hasBody": false
     },
     "wire": {
@@ -21066,20 +20293,18 @@ export const GENERATED_OPERATIONS = [
         "include": "include",
         "query": "query",
         "sort": "sort",
-        "revision": "revision",
-        "page": "page"
-      },
-      "pageParamMap": {
-        "size": "page[size]",
-        "number": "page[number]"
+        "revision": "revision"
       }
     },
     "output": {
       "mode": "json",
-      "summary": "workitemsListGetResponse (data/included/links/meta)"
+      "summary": "workitemsListGetResponse (data/included/links/meta)",
+      "collection": {
+        "autoPaginate": true
+      }
     },
     "meta": {
-      "inputSummary": "required: projectId; optional: fields, include, query, sort, revision, page"
+      "inputSummary": "required: projectId; optional: fields, include, query, sort, revision"
     }
   },
   {
@@ -21122,7 +20347,6 @@ export const GENERATED_OPERATIONS = [
         "projectId"
       ],
       "queryParams": [],
-      "hasPageObject": false,
       "hasBody": true
     },
     "wire": {
@@ -21191,7 +20415,6 @@ export const GENERATED_OPERATIONS = [
         "workflowAction",
         "changeTypeTo"
       ],
-      "hasPageObject": false,
       "hasBody": true
     },
     "wire": {
@@ -21252,7 +20475,6 @@ export const GENERATED_OPERATIONS = [
         "projectId"
       ],
       "queryParams": [],
-      "hasPageObject": false,
       "hasBody": true
     },
     "wire": {
@@ -21508,7 +20730,6 @@ export const GENERATED_OPERATIONS = [
         "include",
         "revision"
       ],
-      "hasPageObject": false,
       "hasBody": false
     },
     "wire": {
@@ -21588,7 +20809,6 @@ export const GENERATED_OPERATIONS = [
         "workflowAction",
         "changeTypeTo"
       ],
-      "hasPageObject": false,
       "hasBody": true
     },
     "wire": {
@@ -21641,23 +20861,6 @@ export const GENERATED_OPERATIONS = [
           "revision": {
             "type": "string",
             "description": "The revision ID."
-          },
-          "page": {
-            "type": "object",
-            "properties": {
-              "size": {
-                "type": "integer",
-                "format": "int32",
-                "description": "Limit the number of entities returned in a single response. See <a href=\"https://docs.sw.siemens.com/en-US/doc/230235217/PL20250606201928474.polarion_help_sc.xid2134849/xid2134871\" target=\"_blank\">REST API User Guide</a> for details."
-              },
-              "number": {
-                "type": "integer",
-                "format": "int32",
-                "description": "Specify the page number to be returned. Counting starts from 1. See <a href=\"https://docs.sw.siemens.com/en-US/doc/230235217/PL20250606201928474.polarion_help_sc.xid2134849/xid2134871\" target=\"_blank\">REST API User Guide</a> for details."
-              }
-            },
-            "required": [],
-            "additionalProperties": false
           }
         },
         "required": [
@@ -21673,7 +20876,6 @@ export const GENERATED_OPERATIONS = [
       "queryParams": [
         "revision"
       ],
-      "hasPageObject": true,
       "hasBody": false
     },
     "wire": {
@@ -21682,20 +20884,18 @@ export const GENERATED_OPERATIONS = [
         "workItemId": "workItemId"
       },
       "queryParamMap": {
-        "revision": "revision",
-        "page": "page"
-      },
-      "pageParamMap": {
-        "size": "page[size]",
-        "number": "page[number]"
+        "revision": "revision"
       }
     },
     "output": {
       "mode": "json",
-      "summary": "workflowActionsActionResponseBody (data/links/meta)"
+      "summary": "workflowActionsActionResponseBody (data/links/meta)",
+      "collection": {
+        "autoPaginate": true
+      }
     },
     "meta": {
-      "inputSummary": "required: projectId, workItemId; optional: revision, page"
+      "inputSummary": "required: projectId, workItemId; optional: revision"
     }
   },
   {
@@ -21738,7 +20938,6 @@ export const GENERATED_OPERATIONS = [
         "workItemId"
       ],
       "queryParams": [],
-      "hasPageObject": false,
       "hasBody": false
     },
     "wire": {
@@ -21803,7 +21002,6 @@ export const GENERATED_OPERATIONS = [
         "workItemId"
       ],
       "queryParams": [],
-      "hasPageObject": false,
       "hasBody": true
     },
     "wire": {
@@ -22043,23 +21241,6 @@ export const GENERATED_OPERATIONS = [
           "revision": {
             "type": "string",
             "description": "The revision ID."
-          },
-          "page": {
-            "type": "object",
-            "properties": {
-              "size": {
-                "type": "integer",
-                "format": "int32",
-                "description": "Limit the number of entities returned in a single response. See <a href=\"https://docs.sw.siemens.com/en-US/doc/230235217/PL20250606201928474.polarion_help_sc.xid2134849/xid2134871\" target=\"_blank\">REST API User Guide</a> for details."
-              },
-              "number": {
-                "type": "integer",
-                "format": "int32",
-                "description": "Specify the page number to be returned. Counting starts from 1. See <a href=\"https://docs.sw.siemens.com/en-US/doc/230235217/PL20250606201928474.polarion_help_sc.xid2134849/xid2134871\" target=\"_blank\">REST API User Guide</a> for details."
-              }
-            },
-            "required": [],
-            "additionalProperties": false
           }
         },
         "required": [
@@ -22077,7 +21258,6 @@ export const GENERATED_OPERATIONS = [
         "include",
         "revision"
       ],
-      "hasPageObject": true,
       "hasBody": false
     },
     "wire": {
@@ -22088,20 +21268,18 @@ export const GENERATED_OPERATIONS = [
       "queryParamMap": {
         "fields": "fields",
         "include": "include",
-        "revision": "revision",
-        "page": "page"
-      },
-      "pageParamMap": {
-        "size": "page[size]",
-        "number": "page[number]"
+        "revision": "revision"
       }
     },
     "output": {
       "mode": "json",
-      "summary": "workitem_approvalsListGetResponse (data/included/links/meta)"
+      "summary": "workitem_approvalsListGetResponse (data/included/links/meta)",
+      "collection": {
+        "autoPaginate": true
+      }
     },
     "meta": {
-      "inputSummary": "required: projectId, workItemId; optional: fields, include, revision, page"
+      "inputSummary": "required: projectId, workItemId; optional: fields, include, revision"
     }
   },
   {
@@ -22151,7 +21329,6 @@ export const GENERATED_OPERATIONS = [
         "workItemId"
       ],
       "queryParams": [],
-      "hasPageObject": false,
       "hasBody": true
     },
     "wire": {
@@ -22217,7 +21394,6 @@ export const GENERATED_OPERATIONS = [
         "workItemId"
       ],
       "queryParams": [],
-      "hasPageObject": false,
       "hasBody": true
     },
     "wire": {
@@ -22283,7 +21459,6 @@ export const GENERATED_OPERATIONS = [
         "workItemId"
       ],
       "queryParams": [],
-      "hasPageObject": false,
       "hasBody": true
     },
     "wire": {
@@ -22547,7 +21722,6 @@ export const GENERATED_OPERATIONS = [
         "include",
         "revision"
       ],
-      "hasPageObject": false,
       "hasBody": false
     },
     "wire": {
@@ -22624,7 +21798,6 @@ export const GENERATED_OPERATIONS = [
         "userId"
       ],
       "queryParams": [],
-      "hasPageObject": false,
       "hasBody": true
     },
     "wire": {
@@ -22691,7 +21864,6 @@ export const GENERATED_OPERATIONS = [
         "userId"
       ],
       "queryParams": [],
-      "hasPageObject": false,
       "hasBody": false
     },
     "wire": {
@@ -22929,23 +22101,6 @@ export const GENERATED_OPERATIONS = [
           "revision": {
             "type": "string",
             "description": "The revision ID."
-          },
-          "page": {
-            "type": "object",
-            "properties": {
-              "size": {
-                "type": "integer",
-                "format": "int32",
-                "description": "Limit the number of entities returned in a single response. See <a href=\"https://docs.sw.siemens.com/en-US/doc/230235217/PL20250606201928474.polarion_help_sc.xid2134849/xid2134871\" target=\"_blank\">REST API User Guide</a> for details."
-              },
-              "number": {
-                "type": "integer",
-                "format": "int32",
-                "description": "Specify the page number to be returned. Counting starts from 1. See <a href=\"https://docs.sw.siemens.com/en-US/doc/230235217/PL20250606201928474.polarion_help_sc.xid2134849/xid2134871\" target=\"_blank\">REST API User Guide</a> for details."
-              }
-            },
-            "required": [],
-            "additionalProperties": false
           }
         },
         "required": [
@@ -22963,7 +22118,6 @@ export const GENERATED_OPERATIONS = [
         "include",
         "revision"
       ],
-      "hasPageObject": true,
       "hasBody": false
     },
     "wire": {
@@ -22974,20 +22128,18 @@ export const GENERATED_OPERATIONS = [
       "queryParamMap": {
         "fields": "fields",
         "include": "include",
-        "revision": "revision",
-        "page": "page"
-      },
-      "pageParamMap": {
-        "size": "page[size]",
-        "number": "page[number]"
+        "revision": "revision"
       }
     },
     "output": {
       "mode": "json",
-      "summary": "workitem_attachmentsListGetResponse (data/included/links/meta)"
+      "summary": "workitem_attachmentsListGetResponse (data/included/links/meta)",
+      "collection": {
+        "autoPaginate": true
+      }
     },
     "meta": {
-      "inputSummary": "required: projectId, workItemId; optional: fields, include, revision, page"
+      "inputSummary": "required: projectId, workItemId; optional: fields, include, revision"
     }
   },
   {
@@ -23235,7 +22387,6 @@ export const GENERATED_OPERATIONS = [
         "include",
         "revision"
       ],
-      "hasPageObject": false,
       "hasBody": false
     },
     "wire": {
@@ -23305,7 +22456,6 @@ export const GENERATED_OPERATIONS = [
         "attachmentId"
       ],
       "queryParams": [],
-      "hasPageObject": false,
       "hasBody": false
     },
     "wire": {
@@ -23545,23 +22695,6 @@ export const GENERATED_OPERATIONS = [
           "revision": {
             "type": "string",
             "description": "The revision ID."
-          },
-          "page": {
-            "type": "object",
-            "properties": {
-              "size": {
-                "type": "integer",
-                "format": "int32",
-                "description": "Limit the number of entities returned in a single response. See <a href=\"https://docs.sw.siemens.com/en-US/doc/230235217/PL20250606201928474.polarion_help_sc.xid2134849/xid2134871\" target=\"_blank\">REST API User Guide</a> for details."
-              },
-              "number": {
-                "type": "integer",
-                "format": "int32",
-                "description": "Specify the page number to be returned. Counting starts from 1. See <a href=\"https://docs.sw.siemens.com/en-US/doc/230235217/PL20250606201928474.polarion_help_sc.xid2134849/xid2134871\" target=\"_blank\">REST API User Guide</a> for details."
-              }
-            },
-            "required": [],
-            "additionalProperties": false
           }
         },
         "required": [
@@ -23579,7 +22712,6 @@ export const GENERATED_OPERATIONS = [
         "include",
         "revision"
       ],
-      "hasPageObject": true,
       "hasBody": false
     },
     "wire": {
@@ -23590,20 +22722,18 @@ export const GENERATED_OPERATIONS = [
       "queryParamMap": {
         "fields": "fields",
         "include": "include",
-        "revision": "revision",
-        "page": "page"
-      },
-      "pageParamMap": {
-        "size": "page[size]",
-        "number": "page[number]"
+        "revision": "revision"
       }
     },
     "output": {
       "mode": "json",
-      "summary": "linkedworkitemsListGetResponse (data/included/links/meta)"
+      "summary": "linkedworkitemsListGetResponse (data/included/links/meta)",
+      "collection": {
+        "autoPaginate": true
+      }
     },
     "meta": {
-      "inputSummary": "required: projectId, workItemId; optional: fields, include, revision, page"
+      "inputSummary": "required: projectId, workItemId; optional: fields, include, revision"
     }
   },
   {
@@ -23653,7 +22783,6 @@ export const GENERATED_OPERATIONS = [
         "workItemId"
       ],
       "queryParams": [],
-      "hasPageObject": false,
       "hasBody": true
     },
     "wire": {
@@ -23893,23 +23022,6 @@ export const GENERATED_OPERATIONS = [
           "revision": {
             "type": "string",
             "description": "The revision ID."
-          },
-          "page": {
-            "type": "object",
-            "properties": {
-              "size": {
-                "type": "integer",
-                "format": "int32",
-                "description": "Limit the number of entities returned in a single response. See <a href=\"https://docs.sw.siemens.com/en-US/doc/230235217/PL20250606201928474.polarion_help_sc.xid2134849/xid2134871\" target=\"_blank\">REST API User Guide</a> for details."
-              },
-              "number": {
-                "type": "integer",
-                "format": "int32",
-                "description": "Specify the page number to be returned. Counting starts from 1. See <a href=\"https://docs.sw.siemens.com/en-US/doc/230235217/PL20250606201928474.polarion_help_sc.xid2134849/xid2134871\" target=\"_blank\">REST API User Guide</a> for details."
-              }
-            },
-            "required": [],
-            "additionalProperties": false
           }
         },
         "required": [
@@ -23927,7 +23039,6 @@ export const GENERATED_OPERATIONS = [
         "include",
         "revision"
       ],
-      "hasPageObject": true,
       "hasBody": false
     },
     "wire": {
@@ -23938,20 +23049,18 @@ export const GENERATED_OPERATIONS = [
       "queryParamMap": {
         "fields": "fields",
         "include": "include",
-        "revision": "revision",
-        "page": "page"
-      },
-      "pageParamMap": {
-        "size": "page[size]",
-        "number": "page[number]"
+        "revision": "revision"
       }
     },
     "output": {
       "mode": "json",
-      "summary": "workitem_commentsListGetResponse (data/included/links/meta)"
+      "summary": "workitem_commentsListGetResponse (data/included/links/meta)",
+      "collection": {
+        "autoPaginate": true
+      }
     },
     "meta": {
-      "inputSummary": "required: projectId, workItemId; optional: fields, include, revision, page"
+      "inputSummary": "required: projectId, workItemId; optional: fields, include, revision"
     }
   },
   {
@@ -24001,7 +23110,6 @@ export const GENERATED_OPERATIONS = [
         "workItemId"
       ],
       "queryParams": [],
-      "hasPageObject": false,
       "hasBody": true
     },
     "wire": {
@@ -24265,7 +23373,6 @@ export const GENERATED_OPERATIONS = [
         "include",
         "revision"
       ],
-      "hasPageObject": false,
       "hasBody": false
     },
     "wire": {
@@ -24342,7 +23449,6 @@ export const GENERATED_OPERATIONS = [
         "commentId"
       ],
       "queryParams": [],
-      "hasPageObject": false,
       "hasBody": true
     },
     "wire": {
@@ -24583,23 +23689,6 @@ export const GENERATED_OPERATIONS = [
           "revision": {
             "type": "string",
             "description": "The revision ID."
-          },
-          "page": {
-            "type": "object",
-            "properties": {
-              "size": {
-                "type": "integer",
-                "format": "int32",
-                "description": "Limit the number of entities returned in a single response. See <a href=\"https://docs.sw.siemens.com/en-US/doc/230235217/PL20250606201928474.polarion_help_sc.xid2134849/xid2134871\" target=\"_blank\">REST API User Guide</a> for details."
-              },
-              "number": {
-                "type": "integer",
-                "format": "int32",
-                "description": "Specify the page number to be returned. Counting starts from 1. See <a href=\"https://docs.sw.siemens.com/en-US/doc/230235217/PL20250606201928474.polarion_help_sc.xid2134849/xid2134871\" target=\"_blank\">REST API User Guide</a> for details."
-              }
-            },
-            "required": [],
-            "additionalProperties": false
           }
         },
         "required": [
@@ -24617,7 +23706,6 @@ export const GENERATED_OPERATIONS = [
         "include",
         "revision"
       ],
-      "hasPageObject": true,
       "hasBody": false
     },
     "wire": {
@@ -24628,20 +23716,18 @@ export const GENERATED_OPERATIONS = [
       "queryParamMap": {
         "fields": "fields",
         "include": "include",
-        "revision": "revision",
-        "page": "page"
-      },
-      "pageParamMap": {
-        "size": "page[size]",
-        "number": "page[number]"
+        "revision": "revision"
       }
     },
     "output": {
       "mode": "json",
-      "summary": "externallylinkedworkitemsListGetResponse (data/included/links/meta)"
+      "summary": "externallylinkedworkitemsListGetResponse (data/included/links/meta)",
+      "collection": {
+        "autoPaginate": true
+      }
     },
     "meta": {
-      "inputSummary": "required: projectId, workItemId; optional: fields, include, revision, page"
+      "inputSummary": "required: projectId, workItemId; optional: fields, include, revision"
     }
   },
   {
@@ -24691,7 +23777,6 @@ export const GENERATED_OPERATIONS = [
         "workItemId"
       ],
       "queryParams": [],
-      "hasPageObject": false,
       "hasBody": true
     },
     "wire": {
@@ -24757,7 +23842,6 @@ export const GENERATED_OPERATIONS = [
         "workItemId"
       ],
       "queryParams": [],
-      "hasPageObject": false,
       "hasBody": true
     },
     "wire": {
@@ -25042,7 +24126,6 @@ export const GENERATED_OPERATIONS = [
         "include",
         "revision"
       ],
-      "hasPageObject": false,
       "hasBody": false
     },
     "wire": {
@@ -25136,7 +24219,6 @@ export const GENERATED_OPERATIONS = [
         "linkedWorkItemId"
       ],
       "queryParams": [],
-      "hasPageObject": false,
       "hasBody": false
     },
     "wire": {
@@ -25379,23 +24461,6 @@ export const GENERATED_OPERATIONS = [
           "revision": {
             "type": "string",
             "description": "The revision ID."
-          },
-          "page": {
-            "type": "object",
-            "properties": {
-              "size": {
-                "type": "integer",
-                "format": "int32",
-                "description": "Limit the number of entities returned in a single response. See <a href=\"https://docs.sw.siemens.com/en-US/doc/230235217/PL20250606201928474.polarion_help_sc.xid2134849/xid2134871\" target=\"_blank\">REST API User Guide</a> for details."
-              },
-              "number": {
-                "type": "integer",
-                "format": "int32",
-                "description": "Specify the page number to be returned. Counting starts from 1. See <a href=\"https://docs.sw.siemens.com/en-US/doc/230235217/PL20250606201928474.polarion_help_sc.xid2134849/xid2134871\" target=\"_blank\">REST API User Guide</a> for details."
-              }
-            },
-            "required": [],
-            "additionalProperties": false
           }
         },
         "required": [
@@ -25413,7 +24478,6 @@ export const GENERATED_OPERATIONS = [
         "include",
         "revision"
       ],
-      "hasPageObject": true,
       "hasBody": false
     },
     "wire": {
@@ -25424,20 +24488,18 @@ export const GENERATED_OPERATIONS = [
       "queryParamMap": {
         "fields": "fields",
         "include": "include",
-        "revision": "revision",
-        "page": "page"
-      },
-      "pageParamMap": {
-        "size": "page[size]",
-        "number": "page[number]"
+        "revision": "revision"
       }
     },
     "output": {
       "mode": "json",
-      "summary": "featureselectionsListGetResponse (data/included/links/meta)"
+      "summary": "featureselectionsListGetResponse (data/included/links/meta)",
+      "collection": {
+        "autoPaginate": true
+      }
     },
     "meta": {
-      "inputSummary": "required: projectId, workItemId; optional: fields, include, revision, page"
+      "inputSummary": "required: projectId, workItemId; optional: fields, include, revision"
     }
   },
   {
@@ -25699,7 +24761,6 @@ export const GENERATED_OPERATIONS = [
         "include",
         "revision"
       ],
-      "hasPageObject": false,
       "hasBody": false
     },
     "wire": {
@@ -25756,23 +24817,6 @@ export const GENERATED_OPERATIONS = [
           "fieldId": {
             "type": "string",
             "description": "The Field ID."
-          },
-          "page": {
-            "type": "object",
-            "properties": {
-              "size": {
-                "type": "integer",
-                "format": "int32",
-                "description": "Limit the number of entities returned in a single response. See <a href=\"https://docs.sw.siemens.com/en-US/doc/230235217/PL20250606201928474.polarion_help_sc.xid2134849/xid2134871\" target=\"_blank\">REST API User Guide</a> for details."
-              },
-              "number": {
-                "type": "integer",
-                "format": "int32",
-                "description": "Specify the page number to be returned. Counting starts from 1. See <a href=\"https://docs.sw.siemens.com/en-US/doc/230235217/PL20250606201928474.polarion_help_sc.xid2134849/xid2134871\" target=\"_blank\">REST API User Guide</a> for details."
-              }
-            },
-            "required": [],
-            "additionalProperties": false
           }
         },
         "required": [
@@ -25788,7 +24832,6 @@ export const GENERATED_OPERATIONS = [
         "fieldId"
       ],
       "queryParams": [],
-      "hasPageObject": true,
       "hasBody": false
     },
     "wire": {
@@ -25797,20 +24840,17 @@ export const GENERATED_OPERATIONS = [
         "workItemId": "workItemId",
         "fieldId": "fieldId"
       },
-      "queryParamMap": {
-        "page": "page"
-      },
-      "pageParamMap": {
-        "size": "page[size]",
-        "number": "page[number]"
-      }
+      "queryParamMap": {}
     },
     "output": {
       "mode": "json",
-      "summary": "enumOptionsActionResponseBody (data/links/meta)"
+      "summary": "enumOptionsActionResponseBody (data/links/meta)",
+      "collection": {
+        "autoPaginate": true
+      }
     },
     "meta": {
-      "inputSummary": "required: projectId, workItemId, fieldId; optional: page"
+      "inputSummary": "required: projectId, workItemId, fieldId"
     }
   },
   {
@@ -25849,23 +24889,6 @@ export const GENERATED_OPERATIONS = [
           "revision": {
             "type": "string",
             "description": "The revision ID."
-          },
-          "page": {
-            "type": "object",
-            "properties": {
-              "size": {
-                "type": "integer",
-                "format": "int32",
-                "description": "Limit the number of entities returned in a single response. See <a href=\"https://docs.sw.siemens.com/en-US/doc/230235217/PL20250606201928474.polarion_help_sc.xid2134849/xid2134871\" target=\"_blank\">REST API User Guide</a> for details."
-              },
-              "number": {
-                "type": "integer",
-                "format": "int32",
-                "description": "Specify the page number to be returned. Counting starts from 1. See <a href=\"https://docs.sw.siemens.com/en-US/doc/230235217/PL20250606201928474.polarion_help_sc.xid2134849/xid2134871\" target=\"_blank\">REST API User Guide</a> for details."
-              }
-            },
-            "required": [],
-            "additionalProperties": false
           }
         },
         "required": [
@@ -25883,7 +24906,6 @@ export const GENERATED_OPERATIONS = [
       "queryParams": [
         "revision"
       ],
-      "hasPageObject": true,
       "hasBody": false
     },
     "wire": {
@@ -25893,20 +24915,18 @@ export const GENERATED_OPERATIONS = [
         "fieldId": "fieldId"
       },
       "queryParamMap": {
-        "revision": "revision",
-        "page": "page"
-      },
-      "pageParamMap": {
-        "size": "page[size]",
-        "number": "page[number]"
+        "revision": "revision"
       }
     },
     "output": {
       "mode": "json",
-      "summary": "enumOptionsActionResponseBody (data/links/meta)"
+      "summary": "enumOptionsActionResponseBody (data/links/meta)",
+      "collection": {
+        "autoPaginate": true
+      }
     },
     "meta": {
-      "inputSummary": "required: projectId, workItemId, fieldId; optional: revision, page"
+      "inputSummary": "required: projectId, workItemId, fieldId; optional: revision"
     }
   },
   {
@@ -26138,23 +25158,6 @@ export const GENERATED_OPERATIONS = [
           "revision": {
             "type": "string",
             "description": "The revision ID."
-          },
-          "page": {
-            "type": "object",
-            "properties": {
-              "size": {
-                "type": "integer",
-                "format": "int32",
-                "description": "Limit the number of entities returned in a single response. See <a href=\"https://docs.sw.siemens.com/en-US/doc/230235217/PL20250606201928474.polarion_help_sc.xid2134849/xid2134871\" target=\"_blank\">REST API User Guide</a> for details."
-              },
-              "number": {
-                "type": "integer",
-                "format": "int32",
-                "description": "Specify the page number to be returned. Counting starts from 1. See <a href=\"https://docs.sw.siemens.com/en-US/doc/230235217/PL20250606201928474.polarion_help_sc.xid2134849/xid2134871\" target=\"_blank\">REST API User Guide</a> for details."
-              }
-            },
-            "required": [],
-            "additionalProperties": false
           }
         },
         "required": [
@@ -26174,7 +25177,6 @@ export const GENERATED_OPERATIONS = [
         "sort",
         "revision"
       ],
-      "hasPageObject": true,
       "hasBody": false
     },
     "wire": {
@@ -26187,20 +25189,18 @@ export const GENERATED_OPERATIONS = [
         "include": "include",
         "query": "query",
         "sort": "sort",
-        "revision": "revision",
-        "page": "page"
-      },
-      "pageParamMap": {
-        "size": "page[size]",
-        "number": "page[number]"
+        "revision": "revision"
       }
     },
     "output": {
       "mode": "json",
-      "summary": "linkedoslcresourcesListGetResponse (data/included/meta)"
+      "summary": "linkedoslcresourcesListGetResponse (data/included/meta)",
+      "collection": {
+        "autoPaginate": true
+      }
     },
     "meta": {
-      "inputSummary": "required: projectId, workItemId; optional: fields, include, query, sort, revision, page"
+      "inputSummary": "required: projectId, workItemId; optional: fields, include, query, sort, revision"
     }
   },
   {
@@ -26250,7 +25250,6 @@ export const GENERATED_OPERATIONS = [
         "workItemId"
       ],
       "queryParams": [],
-      "hasPageObject": false,
       "hasBody": true
     },
     "wire": {
@@ -26316,7 +25315,6 @@ export const GENERATED_OPERATIONS = [
         "workItemId"
       ],
       "queryParams": [],
-      "hasPageObject": false,
       "hasBody": true
     },
     "wire": {
@@ -26556,23 +25554,6 @@ export const GENERATED_OPERATIONS = [
           "revision": {
             "type": "string",
             "description": "The revision ID."
-          },
-          "page": {
-            "type": "object",
-            "properties": {
-              "size": {
-                "type": "integer",
-                "format": "int32",
-                "description": "Limit the number of entities returned in a single response. See <a href=\"https://docs.sw.siemens.com/en-US/doc/230235217/PL20250606201928474.polarion_help_sc.xid2134849/xid2134871\" target=\"_blank\">REST API User Guide</a> for details."
-              },
-              "number": {
-                "type": "integer",
-                "format": "int32",
-                "description": "Specify the page number to be returned. Counting starts from 1. See <a href=\"https://docs.sw.siemens.com/en-US/doc/230235217/PL20250606201928474.polarion_help_sc.xid2134849/xid2134871\" target=\"_blank\">REST API User Guide</a> for details."
-              }
-            },
-            "required": [],
-            "additionalProperties": false
           }
         },
         "required": [
@@ -26590,7 +25571,6 @@ export const GENERATED_OPERATIONS = [
         "include",
         "revision"
       ],
-      "hasPageObject": true,
       "hasBody": false
     },
     "wire": {
@@ -26601,20 +25581,18 @@ export const GENERATED_OPERATIONS = [
       "queryParamMap": {
         "fields": "fields",
         "include": "include",
-        "revision": "revision",
-        "page": "page"
-      },
-      "pageParamMap": {
-        "size": "page[size]",
-        "number": "page[number]"
+        "revision": "revision"
       }
     },
     "output": {
       "mode": "json",
-      "summary": "linkedworkitemsListGetResponse (data/included/links/meta)"
+      "summary": "linkedworkitemsListGetResponse (data/included/links/meta)",
+      "collection": {
+        "autoPaginate": true
+      }
     },
     "meta": {
-      "inputSummary": "required: projectId, workItemId; optional: fields, include, revision, page"
+      "inputSummary": "required: projectId, workItemId; optional: fields, include, revision"
     }
   },
   {
@@ -26664,7 +25642,6 @@ export const GENERATED_OPERATIONS = [
         "workItemId"
       ],
       "queryParams": [],
-      "hasPageObject": false,
       "hasBody": true
     },
     "wire": {
@@ -26730,7 +25707,6 @@ export const GENERATED_OPERATIONS = [
         "workItemId"
       ],
       "queryParams": [],
-      "hasPageObject": false,
       "hasBody": true
     },
     "wire": {
@@ -27008,7 +25984,6 @@ export const GENERATED_OPERATIONS = [
         "include",
         "revision"
       ],
-      "hasPageObject": false,
       "hasBody": false
     },
     "wire": {
@@ -27101,7 +26076,6 @@ export const GENERATED_OPERATIONS = [
         "linkedWorkItemId"
       ],
       "queryParams": [],
-      "hasPageObject": false,
       "hasBody": true
     },
     "wire": {
@@ -27184,7 +26158,6 @@ export const GENERATED_OPERATIONS = [
         "linkedWorkItemId"
       ],
       "queryParams": [],
-      "hasPageObject": false,
       "hasBody": false
     },
     "wire": {
@@ -27431,23 +26404,6 @@ export const GENERATED_OPERATIONS = [
           "revision": {
             "type": "string",
             "description": "The revision ID."
-          },
-          "page": {
-            "type": "object",
-            "properties": {
-              "size": {
-                "type": "integer",
-                "format": "int32",
-                "description": "Limit the number of entities returned in a single response. See <a href=\"https://docs.sw.siemens.com/en-US/doc/230235217/PL20250606201928474.polarion_help_sc.xid2134849/xid2134871\" target=\"_blank\">REST API User Guide</a> for details."
-              },
-              "number": {
-                "type": "integer",
-                "format": "int32",
-                "description": "Specify the page number to be returned. Counting starts from 1. See <a href=\"https://docs.sw.siemens.com/en-US/doc/230235217/PL20250606201928474.polarion_help_sc.xid2134849/xid2134871\" target=\"_blank\">REST API User Guide</a> for details."
-              }
-            },
-            "required": [],
-            "additionalProperties": false
           }
         },
         "required": [
@@ -27467,7 +26423,6 @@ export const GENERATED_OPERATIONS = [
         "include",
         "revision"
       ],
-      "hasPageObject": true,
       "hasBody": false
     },
     "wire": {
@@ -27479,20 +26434,18 @@ export const GENERATED_OPERATIONS = [
       "queryParamMap": {
         "fields": "fields",
         "include": "include",
-        "revision": "revision",
-        "page": "page"
-      },
-      "pageParamMap": {
-        "size": "page[size]",
-        "number": "page[number]"
+        "revision": "revision"
       }
     },
     "output": {
       "mode": "json",
-      "summary": "RelationshipResponseBody"
+      "summary": "RelationshipResponseBody",
+      "collection": {
+        "autoPaginate": true
+      }
     },
     "meta": {
-      "inputSummary": "required: projectId, workItemId, relationshipId; optional: fields, include, revision, page"
+      "inputSummary": "required: projectId, workItemId, relationshipId; optional: fields, include, revision"
     }
   },
   {
@@ -27549,7 +26502,6 @@ export const GENERATED_OPERATIONS = [
         "relationshipId"
       ],
       "queryParams": [],
-      "hasPageObject": false,
       "hasBody": true
     },
     "wire": {
@@ -27623,7 +26575,6 @@ export const GENERATED_OPERATIONS = [
         "relationshipId"
       ],
       "queryParams": [],
-      "hasPageObject": false,
       "hasBody": true
     },
     "wire": {
@@ -27697,7 +26648,6 @@ export const GENERATED_OPERATIONS = [
         "relationshipId"
       ],
       "queryParams": [],
-      "hasPageObject": false,
       "hasBody": true
     },
     "wire": {
@@ -27938,23 +26888,6 @@ export const GENERATED_OPERATIONS = [
           "revision": {
             "type": "string",
             "description": "The revision ID."
-          },
-          "page": {
-            "type": "object",
-            "properties": {
-              "size": {
-                "type": "integer",
-                "format": "int32",
-                "description": "Limit the number of entities returned in a single response. See <a href=\"https://docs.sw.siemens.com/en-US/doc/230235217/PL20250606201928474.polarion_help_sc.xid2134849/xid2134871\" target=\"_blank\">REST API User Guide</a> for details."
-              },
-              "number": {
-                "type": "integer",
-                "format": "int32",
-                "description": "Specify the page number to be returned. Counting starts from 1. See <a href=\"https://docs.sw.siemens.com/en-US/doc/230235217/PL20250606201928474.polarion_help_sc.xid2134849/xid2134871\" target=\"_blank\">REST API User Guide</a> for details."
-              }
-            },
-            "required": [],
-            "additionalProperties": false
           }
         },
         "required": [
@@ -27972,7 +26905,6 @@ export const GENERATED_OPERATIONS = [
         "include",
         "revision"
       ],
-      "hasPageObject": true,
       "hasBody": false
     },
     "wire": {
@@ -27983,20 +26915,18 @@ export const GENERATED_OPERATIONS = [
       "queryParamMap": {
         "fields": "fields",
         "include": "include",
-        "revision": "revision",
-        "page": "page"
-      },
-      "pageParamMap": {
-        "size": "page[size]",
-        "number": "page[number]"
+        "revision": "revision"
       }
     },
     "output": {
       "mode": "json",
-      "summary": "testparameter_definitionsListGetResponse (data/included/links/meta)"
+      "summary": "testparameter_definitionsListGetResponse (data/included/links/meta)",
+      "collection": {
+        "autoPaginate": true
+      }
     },
     "meta": {
-      "inputSummary": "required: projectId, workItemId; optional: fields, include, revision, page"
+      "inputSummary": "required: projectId, workItemId; optional: fields, include, revision"
     }
   },
   {
@@ -28244,7 +27174,6 @@ export const GENERATED_OPERATIONS = [
         "include",
         "revision"
       ],
-      "hasPageObject": false,
       "hasBody": false
     },
     "wire": {
@@ -28488,23 +27417,6 @@ export const GENERATED_OPERATIONS = [
           "revision": {
             "type": "string",
             "description": "The revision ID."
-          },
-          "page": {
-            "type": "object",
-            "properties": {
-              "size": {
-                "type": "integer",
-                "format": "int32",
-                "description": "Limit the number of entities returned in a single response. See <a href=\"https://docs.sw.siemens.com/en-US/doc/230235217/PL20250606201928474.polarion_help_sc.xid2134849/xid2134871\" target=\"_blank\">REST API User Guide</a> for details."
-              },
-              "number": {
-                "type": "integer",
-                "format": "int32",
-                "description": "Specify the page number to be returned. Counting starts from 1. See <a href=\"https://docs.sw.siemens.com/en-US/doc/230235217/PL20250606201928474.polarion_help_sc.xid2134849/xid2134871\" target=\"_blank\">REST API User Guide</a> for details."
-              }
-            },
-            "required": [],
-            "additionalProperties": false
           }
         },
         "required": [
@@ -28522,7 +27434,6 @@ export const GENERATED_OPERATIONS = [
         "include",
         "revision"
       ],
-      "hasPageObject": true,
       "hasBody": false
     },
     "wire": {
@@ -28533,20 +27444,18 @@ export const GENERATED_OPERATIONS = [
       "queryParamMap": {
         "fields": "fields",
         "include": "include",
-        "revision": "revision",
-        "page": "page"
-      },
-      "pageParamMap": {
-        "size": "page[size]",
-        "number": "page[number]"
+        "revision": "revision"
       }
     },
     "output": {
       "mode": "json",
-      "summary": "teststepsListGetResponse (data/included/links/meta)"
+      "summary": "teststepsListGetResponse (data/included/links/meta)",
+      "collection": {
+        "autoPaginate": true
+      }
     },
     "meta": {
-      "inputSummary": "required: projectId, workItemId; optional: fields, include, revision, page"
+      "inputSummary": "required: projectId, workItemId; optional: fields, include, revision"
     }
   },
   {
@@ -28596,7 +27505,6 @@ export const GENERATED_OPERATIONS = [
         "workItemId"
       ],
       "queryParams": [],
-      "hasPageObject": false,
       "hasBody": true
     },
     "wire": {
@@ -28662,7 +27570,6 @@ export const GENERATED_OPERATIONS = [
         "workItemId"
       ],
       "queryParams": [],
-      "hasPageObject": false,
       "hasBody": true
     },
     "wire": {
@@ -28728,7 +27635,6 @@ export const GENERATED_OPERATIONS = [
         "workItemId"
       ],
       "queryParams": [],
-      "hasPageObject": false,
       "hasBody": true
     },
     "wire": {
@@ -28992,7 +27898,6 @@ export const GENERATED_OPERATIONS = [
         "include",
         "revision"
       ],
-      "hasPageObject": false,
       "hasBody": false
     },
     "wire": {
@@ -29069,7 +27974,6 @@ export const GENERATED_OPERATIONS = [
         "testStepIndex"
       ],
       "queryParams": [],
-      "hasPageObject": false,
       "hasBody": true
     },
     "wire": {
@@ -29136,7 +28040,6 @@ export const GENERATED_OPERATIONS = [
         "testStepIndex"
       ],
       "queryParams": [],
-      "hasPageObject": false,
       "hasBody": false
     },
     "wire": {
@@ -29376,23 +28279,6 @@ export const GENERATED_OPERATIONS = [
           "revision": {
             "type": "string",
             "description": "The revision ID."
-          },
-          "page": {
-            "type": "object",
-            "properties": {
-              "size": {
-                "type": "integer",
-                "format": "int32",
-                "description": "Limit the number of entities returned in a single response. See <a href=\"https://docs.sw.siemens.com/en-US/doc/230235217/PL20250606201928474.polarion_help_sc.xid2134849/xid2134871\" target=\"_blank\">REST API User Guide</a> for details."
-              },
-              "number": {
-                "type": "integer",
-                "format": "int32",
-                "description": "Specify the page number to be returned. Counting starts from 1. See <a href=\"https://docs.sw.siemens.com/en-US/doc/230235217/PL20250606201928474.polarion_help_sc.xid2134849/xid2134871\" target=\"_blank\">REST API User Guide</a> for details."
-              }
-            },
-            "required": [],
-            "additionalProperties": false
           }
         },
         "required": [
@@ -29410,7 +28296,6 @@ export const GENERATED_OPERATIONS = [
         "include",
         "revision"
       ],
-      "hasPageObject": true,
       "hasBody": false
     },
     "wire": {
@@ -29421,20 +28306,18 @@ export const GENERATED_OPERATIONS = [
       "queryParamMap": {
         "fields": "fields",
         "include": "include",
-        "revision": "revision",
-        "page": "page"
-      },
-      "pageParamMap": {
-        "size": "page[size]",
-        "number": "page[number]"
+        "revision": "revision"
       }
     },
     "output": {
       "mode": "json",
-      "summary": "workrecordsListGetResponse (data/included/links/meta)"
+      "summary": "workrecordsListGetResponse (data/included/links/meta)",
+      "collection": {
+        "autoPaginate": true
+      }
     },
     "meta": {
-      "inputSummary": "required: projectId, workItemId; optional: fields, include, revision, page"
+      "inputSummary": "required: projectId, workItemId; optional: fields, include, revision"
     }
   },
   {
@@ -29484,7 +28367,6 @@ export const GENERATED_OPERATIONS = [
         "workItemId"
       ],
       "queryParams": [],
-      "hasPageObject": false,
       "hasBody": true
     },
     "wire": {
@@ -29550,7 +28432,6 @@ export const GENERATED_OPERATIONS = [
         "workItemId"
       ],
       "queryParams": [],
-      "hasPageObject": false,
       "hasBody": true
     },
     "wire": {
@@ -29814,7 +28695,6 @@ export const GENERATED_OPERATIONS = [
         "include",
         "revision"
       ],
-      "hasPageObject": false,
       "hasBody": false
     },
     "wire": {
@@ -29884,7 +28764,6 @@ export const GENERATED_OPERATIONS = [
         "workRecordId"
       ],
       "queryParams": [],
-      "hasPageObject": false,
       "hasBody": false
     },
     "wire": {
@@ -29934,23 +28813,6 @@ export const GENERATED_OPERATIONS = [
           "type": {
             "type": "string",
             "description": "The Type of the object. Use '~' without quotes to represent no target Type."
-          },
-          "page": {
-            "type": "object",
-            "properties": {
-              "size": {
-                "type": "integer",
-                "format": "int32",
-                "description": "Limit the number of entities returned in a single response. See <a href=\"https://docs.sw.siemens.com/en-US/doc/230235217/PL20250606201928474.polarion_help_sc.xid2134849/xid2134871\" target=\"_blank\">REST API User Guide</a> for details."
-              },
-              "number": {
-                "type": "integer",
-                "format": "int32",
-                "description": "Specify the page number to be returned. Counting starts from 1. See <a href=\"https://docs.sw.siemens.com/en-US/doc/230235217/PL20250606201928474.polarion_help_sc.xid2134849/xid2134871\" target=\"_blank\">REST API User Guide</a> for details."
-              }
-            },
-            "required": [],
-            "additionalProperties": false
           }
         },
         "required": [
@@ -29966,7 +28828,6 @@ export const GENERATED_OPERATIONS = [
       "queryParams": [
         "type"
       ],
-      "hasPageObject": true,
       "hasBody": false
     },
     "wire": {
@@ -29975,20 +28836,18 @@ export const GENERATED_OPERATIONS = [
         "fieldId": "fieldId"
       },
       "queryParamMap": {
-        "type": "type",
-        "page": "page"
-      },
-      "pageParamMap": {
-        "size": "page[size]",
-        "number": "page[number]"
+        "type": "type"
       }
     },
     "output": {
       "mode": "json",
-      "summary": "enumOptionsActionResponseBody (data/links/meta)"
+      "summary": "enumOptionsActionResponseBody (data/links/meta)",
+      "collection": {
+        "autoPaginate": true
+      }
     },
     "meta": {
-      "inputSummary": "required: projectId, fieldId; optional: type, page"
+      "inputSummary": "required: projectId, fieldId; optional: type"
     }
   }
 ] satisfies GeneratedOperation[];

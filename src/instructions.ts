@@ -1,7 +1,7 @@
 export const SERVER_INSTRUCTIONS = `Polarion tool-surface rules:
 1. This server exposes generated Polarion operations using exact OpenAPI operationId names.
 2. Prefer project-scoped work; only use cross-project routes when clearly necessary.
-3. Fetch incrementally. Default page size is 20 and responses may be truncated.
+3. Generated list operations auto-follow Polarion pagination and return full collections; use project scope, query filters, and fields to keep results targeted.
 4. Use the generated metadata and workflow action routes before unfamiliar updates.
 5. Most write operations take a top-level body object mirroring the JSON API request payload.
 
@@ -29,7 +29,8 @@ Inside code, call functions through codemode.*.
 Prefer project-scoped work over all-project reads.
 
 Guidance:
-- fetch incrementally; default page size is 20 and responses may be truncated
+- generated list operations auto-follow Polarion pagination and return full collections
+- use project scope, query filters, and fields to keep reads targeted
 - generated tools use exact OpenAPI operationId names such as getProjects, getWorkItems, and patchWorkItem
 - write operations usually take a top-level body object mirroring the JSON API request payload
 - use metadata and workflow action routes before unfamiliar updates

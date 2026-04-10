@@ -5,33 +5,9 @@ import {
   fieldsParam,
   interpolatePath,
   ok,
-  pagination,
   toQueryString,
-  truncateResponse,
 } from "./helpers.ts";
 import { runWithPolarionAccessToken } from "./request-context.ts";
-
-describe("pagination", () => {
-  test("returns metadata with all fields", () => {
-    const p = pagination(1500, 50, 1, "https://next");
-    expect(p).toEqual({
-      total: 1500,
-      page_size: 50,
-      page_number: 1,
-      has_next: true,
-    });
-  });
-
-  test("has_next false when nextLink undefined", () => {
-    const p = pagination(10, 50, 1, undefined);
-    expect(p.has_next).toBe(false);
-  });
-
-  test("total can be undefined", () => {
-    const p = pagination(undefined, 25, 2, undefined);
-    expect(p.total).toBeUndefined();
-  });
-});
 
 describe("errorResult", () => {
   test("wraps payload as JSON text with isError", () => {
@@ -47,14 +23,13 @@ describe("errorResult", () => {
 });
 
 describe("ok", () => {
-  test("wraps payload as pretty-printed JSON text", () => {
+  test("wraps payload as compact JSON text", () => {
     const r = ok({ items: [], pagination: {} });
     expect(r).not.toHaveProperty("isError");
     expect(r.content).toHaveLength(1);
     const parsed = JSON.parse(r.content[0]!.text);
     expect(parsed).toEqual({ items: [], pagination: {} });
-    // pretty-printed = contains newlines
-    expect(r.content[0]!.text).toContain("\n");
+    expect(r.content[0]!.text).toBe('{"items":[],"pagination":{}}');
   });
 });
 
@@ -156,48 +131,3 @@ describe("toQueryString", () => {
   });
 });
 
-describe("truncateResponse", () => {
-  test("returns unchanged payload when under limits", () => {
-    const payload = { data: [{ id: "1" }, { id: "2" }] };
-    expect(
-      truncateResponse(payload, { maxItems: 10, maxChars: 1000 }),
-    ).toEqual({ data: payload });
-  });
-
-  test("truncates by item count", () => {
-    const payload = {
-      data: [{ id: "1" }, { id: "2" }, { id: "3" }],
-    };
-
-    expect(
-      truncateResponse(payload, { maxItems: 2, maxChars: 1000 }),
-    ).toEqual({
-      data: { data: [{ id: "1" }, { id: "2" }] },
-      truncation: {
-        reason: "item_limit",
-        original_item_count: 3,
-        returned_item_count: 2,
-        max_items: 2,
-        max_chars: 1000,
-        hint: "Use page_number and page_size to fetch the next slice.",
-      },
-    });
-  });
-
-  test("truncates by char count when needed", () => {
-    const payload = {
-      data: [
-        { id: "1", text: "a".repeat(200) },
-        { id: "2", text: "b".repeat(200) },
-      ],
-    };
-
-    const result = truncateResponse(payload, { maxItems: 10, maxChars: 260 });
-    expect(result.truncation?.reason).toBe("char_limit");
-    expect(result.truncation?.original_item_count).toBe(2);
-    expect(result.truncation?.returned_item_count).toBe(1);
-    expect(result.data).toEqual({
-      data: [{ id: "1", text: "a".repeat(200) }],
-    });
-  });
-});

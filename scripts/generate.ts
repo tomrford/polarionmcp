@@ -86,18 +86,19 @@ type GeneratedOperation = {
     schema: Record<string, unknown>;
     pathParams: string[];
     queryParams: string[];
-    hasPageObject: boolean;
     hasBody: boolean;
   };
   wire: {
     pathParamMap: Record<string, string>;
     queryParamMap: Record<string, string>;
-    pageParamMap?: { size: "page[size]"; number: "page[number]" };
     bodyContentType?: "application/json";
   };
   output: {
     mode: "json" | "no_content";
     summary: string;
+    collection?: {
+      autoPaginate: true;
+    };
   };
 };
 
@@ -107,8 +108,6 @@ const GENERATED_TYPES_PATH = "generated/polarion.ts";
 const GENERATED_OPERATIONS_PATH = "src/generated/operations.ts";
 const ALLOWLIST_DOC_PATH = "docs/allowlist.md";
 const METHOD_ORDER: HttpMethod[] = ["get", "post", "patch", "delete"];
-const DEFAULT_PAGE_SIZE = 20;
-
 function resolveRefs(obj: unknown, root: unknown, seen = new Set<string>()): unknown {
   if (obj === null || typeof obj !== "object") return obj;
   if (Array.isArray(obj)) return obj.map((item) => resolveRefs(item, root, seen));
@@ -340,14 +339,12 @@ function summarizeInput(
   required: string[],
   properties: string[],
   hasBody: boolean,
-  hasPageObject: boolean,
 ) {
   const optional = properties.filter((name) => !required.includes(name));
   const parts: string[] = [];
   if (required.length > 0) parts.push(`required: ${required.join(", ")}`);
   if (optional.length > 0) parts.push(`optional: ${optional.join(", ")}`);
   if (hasBody && !properties.includes("body")) parts.push("includes body");
-  if (hasPageObject && !properties.includes("page")) parts.push("supports page");
   return parts.join("; ") || "no parameters";
 }
 
@@ -426,14 +423,7 @@ function buildGeneratedOperations(
     const queryParams: string[] = [];
     const pathParamMap: Record<string, string> = {};
     const queryParamMap: Record<string, string> = {};
-    let pageSchema:
-      | {
-        type: "object";
-        properties: Record<string, unknown>;
-        required: string[];
-        additionalProperties: false;
-      }
-      | undefined;
+    let autoPaginateCollection = false;
 
     for (const parameter of params) {
       if (!parameter.name || (parameter.in !== "path" && parameter.in !== "query")) continue;
@@ -451,15 +441,7 @@ function buildGeneratedOperations(
       }
 
       if (parameter.name === "page[size]" || parameter.name === "page[number]") {
-        pageSchema ??= {
-          type: "object",
-          properties: {},
-          required: [],
-          additionalProperties: false,
-        };
-        const key = parameter.name === "page[size]" ? "size" : "number";
-        pageSchema.properties[key] = schema;
-        if (parameter.required) pageSchema.required.push(key);
+        autoPaginateCollection = true;
         continue;
       }
 
@@ -467,12 +449,6 @@ function buildGeneratedOperations(
       queryParams.push(parameter.name);
       queryParamMap[parameter.name] = parameter.name;
       if (parameter.required) required.add(parameter.name);
-    }
-
-    if (pageSchema) {
-      properties.page = pageSchema;
-      queryParams.push("page");
-      queryParamMap.page = "page";
     }
 
     const bodySchema = resolvedOperation.requestBody?.content?.["application/json"]?.schema;
@@ -512,21 +488,20 @@ function buildGeneratedOperations(
         required: requiredList,
         schema: inputSchema,
         pathParams,
-        queryParams: queryParams.filter((name) => name !== "page"),
-        hasPageObject: !!pageSchema,
+        queryParams,
         hasBody,
       },
       wire: {
         pathParamMap,
         queryParamMap,
-        ...(pageSchema
-          ? { pageParamMap: { size: "page[size]" as const, number: "page[number]" as const } }
-          : {}),
         ...(bodySchema ? { bodyContentType: "application/json" as const } : {}),
       },
-      output,
+      output: {
+        ...output,
+        ...(autoPaginateCollection ? { collection: { autoPaginate: true as const } } : {}),
+      },
       meta: {
-        inputSummary: summarizeInput(requiredList, propertyNames, hasBody, !!pageSchema),
+        inputSummary: summarizeInput(requiredList, propertyNames, hasBody),
       },
     };
   });
