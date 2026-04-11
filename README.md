@@ -3,55 +3,61 @@
 MCP server that exposes Polarion ALM's REST API to AI coding agents through
 [Model Context Protocol](https://modelcontextprotocol.io).
 
-## Status
+Rather than mapping each Polarion endpoint to its own MCP tool, the server exposes a
+code-mode interface: agents discover operations with `search`, then compose calls freely
+inside a single `code` execution. This keeps the public tool surface small while the
+generated Polarion operation coverage stays broad.
 
-Current runtime:
+Background on the code-mode pattern:
 
-- Deno host under `src/`
-- public MCP surface: top-level `search` and `code`
-- internal codemode surface: generated Polarion operations named by exact OpenAPI `operationId`
+- [Cloudflare Code Mode article](https://blog.cloudflare.com/code-mode/)
+- [`@cloudflare/codemode`](https://www.npmjs.com/package/@cloudflare/codemode) package (used in this project)
 
-This is now a raw-first codemode server. The old curated tools and generic help/read escape hatches
-are gone.
+## How It Works
 
-See:
+The server exposes two MCP tools:
 
-- [docs/product-direction.md](/Users/tomford/code/projects/polarionmcp/docs/product-direction.md)
-- [docs/generated-tools-design.md](/Users/tomford/code/projects/polarionmcp/docs/generated-tools-design.md)
-- [docs/allowlist.md](/Users/tomford/code/projects/polarionmcp/docs/allowlist.md)
+- **`search`** — fuzzy lookup over the callable Polarion operation catalog. Use it to
+  discover function names, parameter shapes, and return types.
+- **`code`** — execute JavaScript against the internal `codemode.*` surface.
 
-## Setup
+A typical agent flow:
 
-```bash
-nix develop
-cp .env.example .env
+1. Call `search` to find the right operation and its signature.
+2. Call `code` with a script that uses `codemode.<operationId>(...)`.
+
+```js
+(async () => {
+  return await codemode.getProjects({});
+})();
 ```
 
-Fill in:
+More examples:
 
-- `POLARION_BASE_URL`
-- `POLARION_ACCESS_TOKEN` for local stdio usage
-
-`.envrc` is configured for `use flake`.
-
-## Usage
-
-Run in HTTP mode:
-
-```bash
-deno task start
+```js
+codemode.getWorkItems({ projectId: "PRJ", query: "type:requirement" })
+codemode.patchWorkItem({ projectId: "PRJ", workItemId: "REQ-1", body: { ... } })
 ```
 
-HTTP mode serves MCP at `http://localhost:8080/mcp` by default and a simple unauthenticated health
-endpoint at `http://localhost:8080/healthz`.
+The internal `codemode.*` operations are generated from the checked-in Polarion OpenAPI
+spec. Operation names match the upstream `operationId`. An allowlist controls which
+operations are exposed — see [docs/allowlist.md](docs/allowlist.md) for the full
+inventory.
 
-Run in stdio mode:
+### Design Notes
 
-```bash
-deno task start:stdio
-```
+- Generated list operations auto-follow Polarion pagination and return full collections.
+- Request shapes are tuned for scripting: path params and query params sit at top level;
+  request payload goes under `body`.
+- Responses stay close to the Polarion wire format; `204` normalizes to `{ ok: true }`.
+- Only the final `code` result returned to the MCP client may be truncated.
+- Auth stays host-side — the sandboxed code path never receives credentials.
 
-Example MCP client config:
+## Client Configuration
+
+Configure your MCP client or agent harness to connect to the server.
+
+### stdio
 
 ```json
 {
@@ -69,108 +75,92 @@ Example MCP client config:
 }
 ```
 
-## Configuration
+### Streamable HTTP
+
+```json
+{
+  "mcpServers": {
+    "polarion": {
+      "type": "streamable-http",
+      "url": "http://localhost:8080/mcp",
+      "headers": {
+        "Authorization": "Bearer your-token"
+      }
+    }
+  }
+}
+```
+
+## Running the Server
+
+### Setup
+
+```bash
+nix develop        # optional — sets up the Deno toolchain
+cp .env.example .env
+# fill in POLARION_BASE_URL (required) and POLARION_ACCESS_TOKEN (stdio only)
+```
+
+### Environment
 
 | Variable                | Required   | Description                                                         |
 | ----------------------- | ---------- | ------------------------------------------------------------------- |
 | `POLARION_BASE_URL`     | yes        | Full base URL, e.g. `https://polarion.example.com/polarion/rest/v1` |
 | `POLARION_ACCESS_TOKEN` | stdio only | Bearer token for local stdio mode                                   |
-| `PORT`                  | HTTP only  | Listen port for HTTP mode. Defaults to `8080`                       |
+| `PORT`                  | no         | HTTP listen port (default `8080`)                                   |
 
-In HTTP mode, callers must send their own `Authorization: Bearer ...` header. Auth stays host-side;
-the codemode sandbox never receives credentials directly.
+### Transports
+
+Start in HTTP mode:
+
+```bash
+deno task start
+```
+
+Start in stdio mode:
+
+```bash
+deno task start:stdio
+```
+
+HTTP mode serves the MCP endpoint at `/mcp` and unauthenticated health checks at
+`GET /healthz` and `GET /readyz`. Callers authenticate with an `Authorization: Bearer <token>`
+header. In stdio mode the server reads `POLARION_ACCESS_TOKEN` from the environment instead.
 
 ## Deployment
 
-Build the container:
+Build and run the container:
 
 ```bash
 docker build -t polarion-mcp .
-```
-
-Run it:
-
-```bash
 docker run --rm -p 8080:8080 --env-file .env polarion-mcp
 ```
 
-Use `GET /healthz` or `GET /readyz` for container or load-balancer health checks.
+Use `GET /healthz` or `GET /readyz` for container or load-balancer probes.
 
-## Public MCP Surface
+## Code Generation
 
-Top-level tools:
+The generator reads the full upstream spec from
+[polarionrest.json](polarionrest.json), trims it through the allowlist, and writes:
 
-- `search`: fuzzy discovery over the real callable Polarion catalog
-- `code`: execute JavaScript against the internal `codemode.*` Polarion surface
+- [generated/polarion.trimmed.json](generated/polarion.trimmed.json) — trimmed OpenAPI spec
+- [generated/polarion.ts](generated/polarion.ts) — TypeScript client
+- [src/generated/operations.ts](src/generated/operations.ts) — operation registry
+- [docs/allowlist.md](docs/allowlist.md) — allowed-vs-blocked inventory
 
-Typical flow:
-
-1. call `search` if you need to discover function names, parameter shapes, or return shapes
-2. call `code`
-3. inside `code`, use `codemode.<operationId>(...)`
-
-Example:
-
-```js
-(async () => {
-  return await codemode.getProjects({});
-});
-```
-
-- generated Polarion calls inside `code` run against the full fetched data they receive
-- only the final `code` result sent back to the agent may be truncated if it is too large
-- when truncation happens, rewrite the script to return a narrower or aggregated result
-
-## Internal Generated Surface
-
-The internal codemode surface is generated from a trimmed checked-in OpenAPI spec.
-
-Properties:
-
-- generated operation names use the exact OpenAPI `operationId`
-- request shapes are lightly tuned for scripting
-- path params are promoted to top-level
-- ordinary query params are promoted to top-level
-- pagination is handled internally; generated tools return full collections
-- request bodies live under top-level `body`
-- responses stay close to the raw API
-- `204` responses normalize to `{ ok: true }`
-
-Examples:
-
-- `codemode.getProjects({})`
-- `codemode.getWorkItems({ projectId: "PRJ", query: "type:requirement" })`
-- `codemode.patchWorkItem({ projectId: "PRJ", workItemId: "REQ-1", body: { ... } })`
-
-## Generation Pipeline
-
-The generator task:
-
-1. loads the full upstream spec from
-   [polarionrest.json](/Users/tomford/code/projects/polarionmcp/polarionrest.json)
-2. trims it through an explicit allowlist
-3. writes
-   [generated/polarion.trimmed.json](/Users/tomford/code/projects/polarionmcp/generated/polarion.trimmed.json)
-4. regenerates
-   [generated/polarion.ts](/Users/tomford/code/projects/polarionmcp/generated/polarion.ts)
-5. emits the generated operation registry at
-   [src/generated/operations.ts](/Users/tomford/code/projects/polarionmcp/src/generated/operations.ts)
-6. emits the exhaustive allowed-vs-blocked inventory at
-   [docs/allowlist.md](/Users/tomford/code/projects/polarionmcp/docs/allowlist.md)
-
-Run it with:
+Regenerate with:
 
 ```bash
 deno task generate
 ```
 
-## Tests
+## Development
 
 ```bash
-deno task fmt:check
-deno task lint
-deno task test
-deno task check
+deno task fmt:check   # formatting
+deno task lint        # linting
+deno task test        # tests
+deno task check       # type-check
 ```
 
 ## License

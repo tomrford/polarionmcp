@@ -1,28 +1,26 @@
 Default to using Deno in this repo.
 
-- Use `deno task <name>` instead of `npm run <script>` or `bun run <script>`
-- Use `deno test` instead of `jest` or `vitest`
-- Use `deno run` for local scripts and server entrypoints
-- Use `Deno.serve()` for HTTP server work in this repo
-- Use `Deno.readTextFile` / `Deno.writeTextFile` for simple file IO
-- Keep npm dependencies behind Deno import maps or `npm:` specifiers
+## Repo Shape
 
-## APIs
+- MCP server for Polarion ALM
+- Public surface: top-level `search` and `code`
+- `code` executes JavaScript against generated `codemode.*` operations
+- Generated operation names match Polarion OpenAPI `operationId`
+- Allowed API surface is defined by the checked-in allowlist; see `docs/allowlist.md`
 
-- `Deno.serve()` for the MCP HTTP server
-- Web APIs first unless there is a repo-local reason not to
-- Keep auth/env handling explicit; Deno does not auto-load `.env`
+## Runtime And Auth
 
-## Testing
+- Start HTTP mode with `deno task start`
+- Start stdio mode with `deno task start:stdio`
+- HTTP mode serves `/mcp` plus unauthenticated `GET /healthz` and `GET /readyz`
+- HTTP mode expects caller `Authorization: Bearer <token>` headers
+- stdio mode reads `POLARION_ACCESS_TOKEN` from env
+- Required base config: `POLARION_BASE_URL`
+- Start tasks load `.env`
+- Keep auth host-side; sandboxed code paths should not read credentials directly
 
-Use `deno test` to run tests.
+## Commands
 
-```ts#index.test.ts
-import { describe, expect, test } from "./src/test/test.ts";
-
-describe("hello world", () => {
-  test("works", () => {
-    expect(1).toBe(1);
-  });
-});
-```
+- Use `deno task <name>` for repo tasks
+- Regenerate generated artifacts with `deno task generate`
+- Full gate: `deno task fmt:check`, `deno task lint`, `deno task test`, `deno task check`
