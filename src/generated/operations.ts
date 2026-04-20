@@ -52,7 +52,8 @@ export const GENERATED_OPERATIONS = [
     },
     "output": {
       "mode": "json",
-      "summary": "fieldsMetadataActionResponseBody (data/links)"
+      "shape": "resource",
+      "summary": "resource: fieldsMetadataActionResponseBody (data/links)"
     },
     "meta": {
       "inputSummary": "required: resourceType; optional: targetType"
@@ -305,7 +306,8 @@ export const GENERATED_OPERATIONS = [
     },
     "output": {
       "mode": "json",
-      "summary": "customfieldsSingleGetResponse (data/included/links)"
+      "shape": "resource",
+      "summary": "resource: customfieldsSingleGetResponse (data/included/links)"
     },
     "meta": {
       "inputSummary": "required: resourceType, targetType; optional: fields, include"
@@ -531,7 +533,8 @@ export const GENERATED_OPERATIONS = [
     },
     "output": {
       "mode": "json",
-      "summary": "enumerationsListGetResponse (data/included/links/meta)",
+      "shape": "collection",
+      "summary": "collection: enumerationsListGetResponse (data/included/links/meta)",
       "collection": {
         "autoPaginate": true
       }
@@ -795,7 +798,8 @@ export const GENERATED_OPERATIONS = [
     },
     "output": {
       "mode": "json",
-      "summary": "enumerationsSingleGetResponse (data/included/links)"
+      "shape": "resource",
+      "summary": "resource: enumerationsSingleGetResponse (data/included/links)"
     },
     "meta": {
       "inputSummary": "required: enumContext, enumName, targetType; optional: fields, include"
@@ -1033,7 +1037,8 @@ export const GENERATED_OPERATIONS = [
     },
     "output": {
       "mode": "json",
-      "summary": "jobsListGetResponse (data/included/links/meta)",
+      "shape": "collection",
+      "summary": "collection: jobsListGetResponse (data/included/links/meta)",
       "collection": {
         "autoPaginate": true
       }
@@ -1281,7 +1286,8 @@ export const GENERATED_OPERATIONS = [
     },
     "output": {
       "mode": "json",
-      "summary": "jobsSingleGetResponse (data/included/links)"
+      "shape": "resource",
+      "summary": "resource: jobsSingleGetResponse (data/included/links)"
     },
     "meta": {
       "inputSummary": "required: jobId; optional: fields, include"
@@ -1328,7 +1334,8 @@ export const GENERATED_OPERATIONS = [
     },
     "output": {
       "mode": "json",
-      "summary": "jobsSinglePostResponse (data)"
+      "shape": "resource",
+      "summary": "resource: jobsSinglePostResponse (data)"
     },
     "meta": {
       "inputSummary": "required: body"
@@ -1560,7 +1567,8 @@ export const GENERATED_OPERATIONS = [
     },
     "output": {
       "mode": "json",
-      "summary": "metadataSingleGetResponse (data/included/links)"
+      "shape": "resource",
+      "summary": "resource: metadataSingleGetResponse (data/included/links)"
     },
     "meta": {
       "inputSummary": "optional: fields, include"
@@ -1810,7 +1818,8 @@ export const GENERATED_OPERATIONS = [
     },
     "output": {
       "mode": "json",
-      "summary": "projectsListGetResponse (data/included/links/meta)",
+      "shape": "collection",
+      "summary": "collection: projectsListGetResponse (data/included/links/meta)",
       "collection": {
         "autoPaginate": true
       }
@@ -2064,7 +2073,8 @@ export const GENERATED_OPERATIONS = [
     },
     "output": {
       "mode": "json",
-      "summary": "projectsSingleGetResponse (data/included/links)"
+      "shape": "resource",
+      "summary": "resource: projectsSingleGetResponse (data/included/links)"
     },
     "meta": {
       "inputSummary": "required: projectId; optional: fields, include, revision"
@@ -2129,7 +2139,8 @@ export const GENERATED_OPERATIONS = [
     },
     "output": {
       "mode": "json",
-      "summary": "fieldsMetadataActionResponseBody (data/links)"
+      "shape": "resource",
+      "summary": "resource: fieldsMetadataActionResponseBody (data/links)"
     },
     "meta": {
       "inputSummary": "required: projectId, resourceType; optional: targetType"
@@ -2392,7 +2403,8 @@ export const GENERATED_OPERATIONS = [
     },
     "output": {
       "mode": "json",
-      "summary": "collectionsListGetResponse (data/included/links/meta)",
+      "shape": "collection",
+      "summary": "collection: collectionsListGetResponse (data/included/links/meta)",
       "collection": {
         "autoPaginate": true
       }
@@ -2452,7 +2464,8 @@ export const GENERATED_OPERATIONS = [
     },
     "output": {
       "mode": "json",
-      "summary": "collectionsListPostResponse (data)"
+      "shape": "collection",
+      "summary": "collection: collectionsListPostResponse (data)"
     },
     "meta": {
       "inputSummary": "required: projectId, body"
@@ -2509,7 +2522,8 @@ export const GENERATED_OPERATIONS = [
     },
     "output": {
       "mode": "no_content",
-      "summary": "{ ok: true }"
+      "shape": "ok",
+      "summary": "ok: { ok: true }"
     },
     "meta": {
       "inputSummary": "required: projectId, body"
@@ -2768,7 +2782,8 @@ export const GENERATED_OPERATIONS = [
     },
     "output": {
       "mode": "json",
-      "summary": "collectionsSingleGetResponse (data/included/links)"
+      "shape": "resource",
+      "summary": "resource: collectionsSingleGetResponse (data/included/links)"
     },
     "meta": {
       "inputSummary": "required: projectId, collectionId; optional: fields, include, revision"
@@ -2833,7 +2848,8 @@ export const GENERATED_OPERATIONS = [
     },
     "output": {
       "mode": "no_content",
-      "summary": "{ ok: true }"
+      "shape": "ok",
+      "summary": "ok: { ok: true }"
     },
     "meta": {
       "inputSummary": "required: projectId, collectionId, body"
@@ -2890,7 +2906,8 @@ export const GENERATED_OPERATIONS = [
     },
     "output": {
       "mode": "no_content",
-      "summary": "{ ok: true }"
+      "shape": "ok",
+      "summary": "ok: { ok: true }"
     },
     "meta": {
       "inputSummary": "required: projectId, collectionId"
@@ -2947,7 +2964,8 @@ export const GENERATED_OPERATIONS = [
     },
     "output": {
       "mode": "no_content",
-      "summary": "{ ok: true }"
+      "shape": "ok",
+      "summary": "ok: { ok: true }"
     },
     "meta": {
       "inputSummary": "required: projectId, collectionId"
@@ -3004,7 +3022,8 @@ export const GENERATED_OPERATIONS = [
     },
     "output": {
       "mode": "no_content",
-      "summary": "{ ok: true }"
+      "shape": "ok",
+      "summary": "ok: { ok: true }"
     },
     "meta": {
       "inputSummary": "required: projectId, collectionId"
@@ -3077,7 +3096,8 @@ export const GENERATED_OPERATIONS = [
     },
     "output": {
       "mode": "json",
-      "summary": "collectionsSinglePostResponse (data)"
+      "shape": "resource",
+      "summary": "resource: collectionsSinglePostResponse (data)"
     },
     "meta": {
       "inputSummary": "required: projectId, collectionId, body; optional: revision"
@@ -3344,7 +3364,8 @@ export const GENERATED_OPERATIONS = [
     },
     "output": {
       "mode": "json",
-      "summary": "RelationshipResponseBody",
+      "shape": "json",
+      "summary": "json: RelationshipResponseBody",
       "collection": {
         "autoPaginate": true
       }
@@ -3420,7 +3441,8 @@ export const GENERATED_OPERATIONS = [
     },
     "output": {
       "mode": "no_content",
-      "summary": "{ ok: true }"
+      "shape": "ok",
+      "summary": "ok: { ok: true }"
     },
     "meta": {
       "inputSummary": "required: projectId, collectionId, relationshipId, body"
@@ -3493,7 +3515,8 @@ export const GENERATED_OPERATIONS = [
     },
     "output": {
       "mode": "no_content",
-      "summary": "{ ok: true }"
+      "shape": "ok",
+      "summary": "ok: { ok: true }"
     },
     "meta": {
       "inputSummary": "required: projectId, collectionId, relationshipId, body"
@@ -3566,7 +3589,8 @@ export const GENERATED_OPERATIONS = [
     },
     "output": {
       "mode": "no_content",
-      "summary": "{ ok: true }"
+      "shape": "ok",
+      "summary": "ok: { ok: true }"
     },
     "meta": {
       "inputSummary": "required: projectId, collectionId, relationshipId, body"
@@ -3827,7 +3851,8 @@ export const GENERATED_OPERATIONS = [
     },
     "output": {
       "mode": "json",
-      "summary": "customfieldsSingleGetResponse (data/included/links)"
+      "shape": "resource",
+      "summary": "resource: customfieldsSingleGetResponse (data/included/links)"
     },
     "meta": {
       "inputSummary": "required: projectId, resourceType, targetType; optional: fields, include"
@@ -4090,7 +4115,8 @@ export const GENERATED_OPERATIONS = [
     },
     "output": {
       "mode": "json",
-      "summary": "documentsListGetResponse (data/included/links/meta)",
+      "shape": "collection",
+      "summary": "collection: documentsListGetResponse (data/included/links/meta)",
       "collection": {
         "autoPaginate": true
       }
@@ -4158,7 +4184,8 @@ export const GENERATED_OPERATIONS = [
     },
     "output": {
       "mode": "json",
-      "summary": "enumOptionsActionResponseBody (data/links/meta)",
+      "shape": "collection",
+      "summary": "collection: enumOptionsActionResponseBody (data/links/meta)",
       "collection": {
         "autoPaginate": true
       }
@@ -4400,7 +4427,8 @@ export const GENERATED_OPERATIONS = [
     },
     "output": {
       "mode": "json",
-      "summary": "enumerationsListGetResponse (data/included/links/meta)",
+      "shape": "collection",
+      "summary": "collection: enumerationsListGetResponse (data/included/links/meta)",
       "collection": {
         "autoPaginate": true
       }
@@ -4672,7 +4700,8 @@ export const GENERATED_OPERATIONS = [
     },
     "output": {
       "mode": "json",
-      "summary": "enumerationsSingleGetResponse (data/included/links)"
+      "shape": "resource",
+      "summary": "resource: enumerationsSingleGetResponse (data/included/links)"
     },
     "meta": {
       "inputSummary": "required: projectId, enumContext, enumName, targetType; optional: fields, include"
@@ -4935,7 +4964,8 @@ export const GENERATED_OPERATIONS = [
     },
     "output": {
       "mode": "json",
-      "summary": "pagesListGetResponse (data/included/links/meta)",
+      "shape": "collection",
+      "summary": "collection: pagesListGetResponse (data/included/links/meta)",
       "collection": {
         "autoPaginate": true
       }
@@ -5207,7 +5237,8 @@ export const GENERATED_OPERATIONS = [
     },
     "output": {
       "mode": "json",
-      "summary": "plansListGetResponse (data/included/links/meta)",
+      "shape": "collection",
+      "summary": "collection: plansListGetResponse (data/included/links/meta)",
       "collection": {
         "autoPaginate": true
       }
@@ -5267,7 +5298,8 @@ export const GENERATED_OPERATIONS = [
     },
     "output": {
       "mode": "json",
-      "summary": "plansListPostResponse (data)"
+      "shape": "collection",
+      "summary": "collection: plansListPostResponse (data)"
     },
     "meta": {
       "inputSummary": "required: projectId, body"
@@ -5324,7 +5356,8 @@ export const GENERATED_OPERATIONS = [
     },
     "output": {
       "mode": "no_content",
-      "summary": "{ ok: true }"
+      "shape": "ok",
+      "summary": "ok: { ok: true }"
     },
     "meta": {
       "inputSummary": "required: projectId, body"
@@ -5583,7 +5616,8 @@ export const GENERATED_OPERATIONS = [
     },
     "output": {
       "mode": "json",
-      "summary": "plansSingleGetResponse (data/included/links)"
+      "shape": "resource",
+      "summary": "resource: plansSingleGetResponse (data/included/links)"
     },
     "meta": {
       "inputSummary": "required: projectId, planId; optional: fields, include, revision"
@@ -5648,7 +5682,8 @@ export const GENERATED_OPERATIONS = [
     },
     "output": {
       "mode": "no_content",
-      "summary": "{ ok: true }"
+      "shape": "ok",
+      "summary": "ok: { ok: true }"
     },
     "meta": {
       "inputSummary": "required: projectId, planId, body"
@@ -5705,7 +5740,8 @@ export const GENERATED_OPERATIONS = [
     },
     "output": {
       "mode": "no_content",
-      "summary": "{ ok: true }"
+      "shape": "ok",
+      "summary": "ok: { ok: true }"
     },
     "meta": {
       "inputSummary": "required: projectId, planId"
@@ -5972,7 +6008,8 @@ export const GENERATED_OPERATIONS = [
     },
     "output": {
       "mode": "json",
-      "summary": "RelationshipResponseBody",
+      "shape": "json",
+      "summary": "json: RelationshipResponseBody",
       "collection": {
         "autoPaginate": true
       }
@@ -6048,7 +6085,8 @@ export const GENERATED_OPERATIONS = [
     },
     "output": {
       "mode": "no_content",
-      "summary": "{ ok: true }"
+      "shape": "ok",
+      "summary": "ok: { ok: true }"
     },
     "meta": {
       "inputSummary": "required: projectId, planId, relationshipId, body"
@@ -6121,7 +6159,8 @@ export const GENERATED_OPERATIONS = [
     },
     "output": {
       "mode": "no_content",
-      "summary": "{ ok: true }"
+      "shape": "ok",
+      "summary": "ok: { ok: true }"
     },
     "meta": {
       "inputSummary": "required: projectId, planId, relationshipId, body"
@@ -6194,7 +6233,8 @@ export const GENERATED_OPERATIONS = [
     },
     "output": {
       "mode": "no_content",
-      "summary": "{ ok: true }"
+      "shape": "ok",
+      "summary": "ok: { ok: true }"
     },
     "meta": {
       "inputSummary": "required: projectId, planId, relationshipId, body"
@@ -6459,7 +6499,8 @@ export const GENERATED_OPERATIONS = [
     },
     "output": {
       "mode": "json",
-      "summary": "documentsListGetResponse (data/included/links/meta)",
+      "shape": "collection",
+      "summary": "collection: documentsListGetResponse (data/included/links/meta)",
       "collection": {
         "autoPaginate": true
       }
@@ -6527,7 +6568,8 @@ export const GENERATED_OPERATIONS = [
     },
     "output": {
       "mode": "json",
-      "summary": "documentsListPostResponse (data)"
+      "shape": "collection",
+      "summary": "collection: documentsListPostResponse (data)"
     },
     "meta": {
       "inputSummary": "required: projectId, spaceId, body"
@@ -6794,7 +6836,8 @@ export const GENERATED_OPERATIONS = [
     },
     "output": {
       "mode": "json",
-      "summary": "documentsSingleGetResponse (data/included/links)"
+      "shape": "resource",
+      "summary": "resource: documentsSingleGetResponse (data/included/links)"
     },
     "meta": {
       "inputSummary": "required: projectId, spaceId, documentName; optional: fields, include, revision"
@@ -6875,7 +6918,8 @@ export const GENERATED_OPERATIONS = [
     },
     "output": {
       "mode": "no_content",
-      "summary": "{ ok: true }"
+      "shape": "ok",
+      "summary": "ok: { ok: true }"
     },
     "meta": {
       "inputSummary": "required: projectId, spaceId, documentName, body; optional: workflowAction"
@@ -6956,7 +7000,8 @@ export const GENERATED_OPERATIONS = [
     },
     "output": {
       "mode": "json",
-      "summary": "documentsSinglePostResponse (data)"
+      "shape": "resource",
+      "summary": "resource: documentsSinglePostResponse (data)"
     },
     "meta": {
       "inputSummary": "required: projectId, spaceId, documentName, body; optional: revision"
@@ -7037,7 +7082,8 @@ export const GENERATED_OPERATIONS = [
     },
     "output": {
       "mode": "json",
-      "summary": "documentsSinglePostResponse (data)"
+      "shape": "resource",
+      "summary": "resource: documentsSinglePostResponse (data)"
     },
     "meta": {
       "inputSummary": "required: projectId, spaceId, documentName, body; optional: revision"
@@ -7108,7 +7154,8 @@ export const GENERATED_OPERATIONS = [
     },
     "output": {
       "mode": "json",
-      "summary": "jobsSinglePostResponse (data)"
+      "shape": "resource",
+      "summary": "resource: jobsSinglePostResponse (data)"
     },
     "meta": {
       "inputSummary": "required: projectId, spaceId, documentName; optional: body"
@@ -7179,7 +7226,8 @@ export const GENERATED_OPERATIONS = [
     },
     "output": {
       "mode": "json",
-      "summary": "jobsSinglePostResponse (data)"
+      "shape": "resource",
+      "summary": "resource: jobsSinglePostResponse (data)"
     },
     "meta": {
       "inputSummary": "required: projectId, spaceId, documentName; optional: body"
@@ -7446,7 +7494,8 @@ export const GENERATED_OPERATIONS = [
     },
     "output": {
       "mode": "json",
-      "summary": "document_attachmentsListGetResponse (data/included/links/meta)",
+      "shape": "collection",
+      "summary": "collection: document_attachmentsListGetResponse (data/included/links/meta)",
       "collection": {
         "autoPaginate": true
       }
@@ -7724,7 +7773,8 @@ export const GENERATED_OPERATIONS = [
     },
     "output": {
       "mode": "json",
-      "summary": "document_attachmentsSingleGetResponse (data/included/links)"
+      "shape": "resource",
+      "summary": "resource: document_attachmentsSingleGetResponse (data/included/links)"
     },
     "meta": {
       "inputSummary": "required: projectId, spaceId, documentName, attachmentId; optional: fields, include, revision"
@@ -7991,7 +8041,8 @@ export const GENERATED_OPERATIONS = [
     },
     "output": {
       "mode": "json",
-      "summary": "document_commentsListGetResponse (data/included/links/meta)",
+      "shape": "collection",
+      "summary": "collection: document_commentsListGetResponse (data/included/links/meta)",
       "collection": {
         "autoPaginate": true
       }
@@ -8067,7 +8118,8 @@ export const GENERATED_OPERATIONS = [
     },
     "output": {
       "mode": "json",
-      "summary": "document_commentsListPostResponse (data)"
+      "shape": "collection",
+      "summary": "collection: document_commentsListPostResponse (data)"
     },
     "meta": {
       "inputSummary": "required: projectId, spaceId, documentName, body"
@@ -8342,7 +8394,8 @@ export const GENERATED_OPERATIONS = [
     },
     "output": {
       "mode": "json",
-      "summary": "document_commentsSingleGetResponse (data/included/links)"
+      "shape": "resource",
+      "summary": "resource: document_commentsSingleGetResponse (data/included/links)"
     },
     "meta": {
       "inputSummary": "required: projectId, spaceId, documentName, commentId; optional: fields, include, revision"
@@ -8423,7 +8476,8 @@ export const GENERATED_OPERATIONS = [
     },
     "output": {
       "mode": "no_content",
-      "summary": "{ ok: true }"
+      "shape": "ok",
+      "summary": "ok: { ok: true }"
     },
     "meta": {
       "inputSummary": "required: projectId, spaceId, documentName, commentId, body"
@@ -8496,7 +8550,8 @@ export const GENERATED_OPERATIONS = [
     },
     "output": {
       "mode": "json",
-      "summary": "enumOptionsActionResponseBody (data/links/meta)",
+      "shape": "collection",
+      "summary": "collection: enumOptionsActionResponseBody (data/links/meta)",
       "collection": {
         "autoPaginate": true
       }
@@ -8580,7 +8635,8 @@ export const GENERATED_OPERATIONS = [
     },
     "output": {
       "mode": "json",
-      "summary": "enumOptionsActionResponseBody (data/links/meta)",
+      "shape": "collection",
+      "summary": "collection: enumOptionsActionResponseBody (data/links/meta)",
       "collection": {
         "autoPaginate": true
       }
@@ -8850,7 +8906,8 @@ export const GENERATED_OPERATIONS = [
     },
     "output": {
       "mode": "json",
-      "summary": "document_partsListGetResponse (data/included/links/meta)",
+      "shape": "collection",
+      "summary": "collection: document_partsListGetResponse (data/included/links/meta)",
       "collection": {
         "autoPaginate": true
       }
@@ -8926,7 +8983,8 @@ export const GENERATED_OPERATIONS = [
     },
     "output": {
       "mode": "json",
-      "summary": "document_partsListPostResponse (data)"
+      "shape": "collection",
+      "summary": "collection: document_partsListPostResponse (data)"
     },
     "meta": {
       "inputSummary": "required: projectId, spaceId, documentName, body"
@@ -9201,7 +9259,8 @@ export const GENERATED_OPERATIONS = [
     },
     "output": {
       "mode": "json",
-      "summary": "document_partsSingleGetResponse (data/included/links)"
+      "shape": "resource",
+      "summary": "resource: document_partsSingleGetResponse (data/included/links)"
     },
     "meta": {
       "inputSummary": "required: projectId, spaceId, documentName, partId; optional: fields, include, revision"
@@ -9282,7 +9341,8 @@ export const GENERATED_OPERATIONS = [
     },
     "output": {
       "mode": "no_content",
-      "summary": "{ ok: true }"
+      "shape": "ok",
+      "summary": "ok: { ok: true }"
     },
     "meta": {
       "inputSummary": "required: projectId, spaceId, documentName, partId, body"
@@ -9547,7 +9607,8 @@ export const GENERATED_OPERATIONS = [
     },
     "output": {
       "mode": "json",
-      "summary": "pagesListGetResponse (data/included/links/meta)",
+      "shape": "collection",
+      "summary": "collection: pagesListGetResponse (data/included/links/meta)",
       "collection": {
         "autoPaginate": true
       }
@@ -9615,7 +9676,8 @@ export const GENERATED_OPERATIONS = [
     },
     "output": {
       "mode": "json",
-      "summary": "pagesListPostResponse (data)"
+      "shape": "collection",
+      "summary": "collection: pagesListPostResponse (data)"
     },
     "meta": {
       "inputSummary": "required: projectId, spaceId, body"
@@ -9882,7 +9944,8 @@ export const GENERATED_OPERATIONS = [
     },
     "output": {
       "mode": "json",
-      "summary": "pagesSingleGetResponse (data/included/links)"
+      "shape": "resource",
+      "summary": "resource: pagesSingleGetResponse (data/included/links)"
     },
     "meta": {
       "inputSummary": "required: projectId, spaceId, pageName; optional: fields, include, revision"
@@ -9955,7 +10018,8 @@ export const GENERATED_OPERATIONS = [
     },
     "output": {
       "mode": "no_content",
-      "summary": "{ ok: true }"
+      "shape": "ok",
+      "summary": "ok: { ok: true }"
     },
     "meta": {
       "inputSummary": "required: projectId, spaceId, pageName, body"
@@ -10020,7 +10084,8 @@ export const GENERATED_OPERATIONS = [
     },
     "output": {
       "mode": "no_content",
-      "summary": "{ ok: true }"
+      "shape": "ok",
+      "summary": "ok: { ok: true }"
     },
     "meta": {
       "inputSummary": "required: projectId, spaceId, pageName"
@@ -10287,7 +10352,8 @@ export const GENERATED_OPERATIONS = [
     },
     "output": {
       "mode": "json",
-      "summary": "page_attachmentsListGetResponse (data/included/links/meta)",
+      "shape": "collection",
+      "summary": "collection: page_attachmentsListGetResponse (data/included/links/meta)",
       "collection": {
         "autoPaginate": true
       }
@@ -10565,7 +10631,8 @@ export const GENERATED_OPERATIONS = [
     },
     "output": {
       "mode": "json",
-      "summary": "page_attachmentsSingleGetResponse (data/included/links)"
+      "shape": "resource",
+      "summary": "resource: page_attachmentsSingleGetResponse (data/included/links)"
     },
     "meta": {
       "inputSummary": "required: projectId, spaceId, pageName, attachmentId; optional: fields, include, revision"
@@ -10638,7 +10705,8 @@ export const GENERATED_OPERATIONS = [
     },
     "output": {
       "mode": "no_content",
-      "summary": "{ ok: true }"
+      "shape": "ok",
+      "summary": "ok: { ok: true }"
     },
     "meta": {
       "inputSummary": "required: projectId, spaceId, pageName, attachmentId"
@@ -10905,7 +10973,8 @@ export const GENERATED_OPERATIONS = [
     },
     "output": {
       "mode": "json",
-      "summary": "page_commentsListGetResponse (data/included/links/meta)",
+      "shape": "collection",
+      "summary": "collection: page_commentsListGetResponse (data/included/links/meta)",
       "collection": {
         "autoPaginate": true
       }
@@ -10981,7 +11050,8 @@ export const GENERATED_OPERATIONS = [
     },
     "output": {
       "mode": "json",
-      "summary": "page_commentsListPostResponse (data)"
+      "shape": "collection",
+      "summary": "collection: page_commentsListPostResponse (data)"
     },
     "meta": {
       "inputSummary": "required: projectId, spaceId, pageName, body"
@@ -11256,7 +11326,8 @@ export const GENERATED_OPERATIONS = [
     },
     "output": {
       "mode": "json",
-      "summary": "page_commentsSingleGetResponse (data/included/links)"
+      "shape": "resource",
+      "summary": "resource: page_commentsSingleGetResponse (data/included/links)"
     },
     "meta": {
       "inputSummary": "required: projectId, spaceId, pageName, commentId; optional: fields, include, revision"
@@ -11337,7 +11408,8 @@ export const GENERATED_OPERATIONS = [
     },
     "output": {
       "mode": "no_content",
-      "summary": "{ ok: true }"
+      "shape": "ok",
+      "summary": "ok: { ok: true }"
     },
     "meta": {
       "inputSummary": "required: projectId, spaceId, pageName, commentId, body"
@@ -11612,7 +11684,8 @@ export const GENERATED_OPERATIONS = [
     },
     "output": {
       "mode": "json",
-      "summary": "RelationshipResponseBody",
+      "shape": "json",
+      "summary": "json: RelationshipResponseBody",
       "collection": {
         "autoPaginate": true
       }
@@ -11696,7 +11769,8 @@ export const GENERATED_OPERATIONS = [
     },
     "output": {
       "mode": "no_content",
-      "summary": "{ ok: true }"
+      "shape": "ok",
+      "summary": "ok: { ok: true }"
     },
     "meta": {
       "inputSummary": "required: projectId, spaceId, pageName, relationshipId, body"
@@ -11777,7 +11851,8 @@ export const GENERATED_OPERATIONS = [
     },
     "output": {
       "mode": "no_content",
-      "summary": "{ ok: true }"
+      "shape": "ok",
+      "summary": "ok: { ok: true }"
     },
     "meta": {
       "inputSummary": "required: projectId, spaceId, pageName, relationshipId, body"
@@ -11858,7 +11933,8 @@ export const GENERATED_OPERATIONS = [
     },
     "output": {
       "mode": "no_content",
-      "summary": "{ ok: true }"
+      "shape": "ok",
+      "summary": "ok: { ok: true }"
     },
     "meta": {
       "inputSummary": "required: projectId, spaceId, pageName, relationshipId, body"
@@ -12103,7 +12179,8 @@ export const GENERATED_OPERATIONS = [
     },
     "output": {
       "mode": "json",
-      "summary": "testparameter_definitionsListGetResponse (data/included/links/meta)",
+      "shape": "collection",
+      "summary": "collection: testparameter_definitionsListGetResponse (data/included/links/meta)",
       "collection": {
         "autoPaginate": true
       }
@@ -12359,7 +12436,8 @@ export const GENERATED_OPERATIONS = [
     },
     "output": {
       "mode": "json",
-      "summary": "testparameter_definitionsSingleGetResponse (data/included/links)"
+      "shape": "resource",
+      "summary": "resource: testparameter_definitionsSingleGetResponse (data/included/links)"
     },
     "meta": {
       "inputSummary": "required: projectId, testParamId; optional: fields, include"
@@ -12628,7 +12706,8 @@ export const GENERATED_OPERATIONS = [
     },
     "output": {
       "mode": "json",
-      "summary": "testrunsListGetResponse (data/included/links/meta)",
+      "shape": "collection",
+      "summary": "collection: testrunsListGetResponse (data/included/links/meta)",
       "collection": {
         "autoPaginate": true
       }
@@ -12688,7 +12767,8 @@ export const GENERATED_OPERATIONS = [
     },
     "output": {
       "mode": "json",
-      "summary": "testrunsListPostResponse (data)"
+      "shape": "collection",
+      "summary": "collection: testrunsListPostResponse (data)"
     },
     "meta": {
       "inputSummary": "required: projectId, body"
@@ -12745,7 +12825,8 @@ export const GENERATED_OPERATIONS = [
     },
     "output": {
       "mode": "no_content",
-      "summary": "{ ok: true }"
+      "shape": "ok",
+      "summary": "ok: { ok: true }"
     },
     "meta": {
       "inputSummary": "required: projectId, body"
@@ -12802,7 +12883,8 @@ export const GENERATED_OPERATIONS = [
     },
     "output": {
       "mode": "no_content",
-      "summary": "{ ok: true }"
+      "shape": "ok",
+      "summary": "ok: { ok: true }"
     },
     "meta": {
       "inputSummary": "required: projectId, body"
@@ -13061,7 +13143,8 @@ export const GENERATED_OPERATIONS = [
     },
     "output": {
       "mode": "json",
-      "summary": "testrunsSingleGetResponse (data/included/links)"
+      "shape": "resource",
+      "summary": "resource: testrunsSingleGetResponse (data/included/links)"
     },
     "meta": {
       "inputSummary": "required: projectId, testRunId; optional: fields, include, revision"
@@ -13126,7 +13209,8 @@ export const GENERATED_OPERATIONS = [
     },
     "output": {
       "mode": "no_content",
-      "summary": "{ ok: true }"
+      "shape": "ok",
+      "summary": "ok: { ok: true }"
     },
     "meta": {
       "inputSummary": "required: projectId, testRunId, body"
@@ -13183,7 +13267,8 @@ export const GENERATED_OPERATIONS = [
     },
     "output": {
       "mode": "no_content",
-      "summary": "{ ok: true }"
+      "shape": "ok",
+      "summary": "ok: { ok: true }"
     },
     "meta": {
       "inputSummary": "required: projectId, testRunId"
@@ -13248,7 +13333,8 @@ export const GENERATED_OPERATIONS = [
     },
     "output": {
       "mode": "json",
-      "summary": "workflowActionsActionResponseBody (data/links/meta)",
+      "shape": "collection",
+      "summary": "collection: workflowActionsActionResponseBody (data/links/meta)",
       "collection": {
         "autoPaginate": true
       }
@@ -13508,7 +13594,8 @@ export const GENERATED_OPERATIONS = [
     },
     "output": {
       "mode": "json",
-      "summary": "testrun_attachmentsListGetResponse (data/included/links/meta)",
+      "shape": "collection",
+      "summary": "collection: testrun_attachmentsListGetResponse (data/included/links/meta)",
       "collection": {
         "autoPaginate": true
       }
@@ -13576,7 +13663,8 @@ export const GENERATED_OPERATIONS = [
     },
     "output": {
       "mode": "no_content",
-      "summary": "{ ok: true }"
+      "shape": "ok",
+      "summary": "ok: { ok: true }"
     },
     "meta": {
       "inputSummary": "required: projectId, testRunId, body"
@@ -13843,7 +13931,8 @@ export const GENERATED_OPERATIONS = [
     },
     "output": {
       "mode": "json",
-      "summary": "testrun_attachmentsSingleGetResponse (data/included/links)"
+      "shape": "resource",
+      "summary": "resource: testrun_attachmentsSingleGetResponse (data/included/links)"
     },
     "meta": {
       "inputSummary": "required: projectId, testRunId, attachmentId; optional: fields, include, revision"
@@ -13908,7 +13997,8 @@ export const GENERATED_OPERATIONS = [
     },
     "output": {
       "mode": "no_content",
-      "summary": "{ ok: true }"
+      "shape": "ok",
+      "summary": "ok: { ok: true }"
     },
     "meta": {
       "inputSummary": "required: projectId, testRunId, attachmentId"
@@ -14167,7 +14257,8 @@ export const GENERATED_OPERATIONS = [
     },
     "output": {
       "mode": "json",
-      "summary": "testrun_commentsListGetResponse (data/included/links/meta)",
+      "shape": "collection",
+      "summary": "collection: testrun_commentsListGetResponse (data/included/links/meta)",
       "collection": {
         "autoPaginate": true
       }
@@ -14235,7 +14326,8 @@ export const GENERATED_OPERATIONS = [
     },
     "output": {
       "mode": "json",
-      "summary": "testrun_commentsListPostResponse (data)"
+      "shape": "collection",
+      "summary": "collection: testrun_commentsListPostResponse (data)"
     },
     "meta": {
       "inputSummary": "required: projectId, testRunId, body"
@@ -14300,7 +14392,8 @@ export const GENERATED_OPERATIONS = [
     },
     "output": {
       "mode": "no_content",
-      "summary": "{ ok: true }"
+      "shape": "ok",
+      "summary": "ok: { ok: true }"
     },
     "meta": {
       "inputSummary": "required: projectId, testRunId, body"
@@ -14567,7 +14660,8 @@ export const GENERATED_OPERATIONS = [
     },
     "output": {
       "mode": "json",
-      "summary": "testrun_commentsSingleGetResponse (data/included/links)"
+      "shape": "resource",
+      "summary": "resource: testrun_commentsSingleGetResponse (data/included/links)"
     },
     "meta": {
       "inputSummary": "required: projectId, testRunId, commentId; optional: fields, include, revision"
@@ -14640,7 +14734,8 @@ export const GENERATED_OPERATIONS = [
     },
     "output": {
       "mode": "no_content",
-      "summary": "{ ok: true }"
+      "shape": "ok",
+      "summary": "ok: { ok: true }"
     },
     "meta": {
       "inputSummary": "required: projectId, testRunId, commentId, body"
@@ -14899,7 +14994,8 @@ export const GENERATED_OPERATIONS = [
     },
     "output": {
       "mode": "json",
-      "summary": "testparameter_definitionsListGetResponse (data/included/links/meta)",
+      "shape": "collection",
+      "summary": "collection: testparameter_definitionsListGetResponse (data/included/links/meta)",
       "collection": {
         "autoPaginate": true
       }
@@ -14967,7 +15063,8 @@ export const GENERATED_OPERATIONS = [
     },
     "output": {
       "mode": "json",
-      "summary": "testparameter_definitionsListPostResponse (data)"
+      "shape": "collection",
+      "summary": "collection: testparameter_definitionsListPostResponse (data)"
     },
     "meta": {
       "inputSummary": "required: projectId, testRunId, body"
@@ -15234,7 +15331,8 @@ export const GENERATED_OPERATIONS = [
     },
     "output": {
       "mode": "json",
-      "summary": "testparameter_definitionsSingleGetResponse (data/included/links)"
+      "shape": "resource",
+      "summary": "resource: testparameter_definitionsSingleGetResponse (data/included/links)"
     },
     "meta": {
       "inputSummary": "required: projectId, testRunId, testParamId; optional: fields, include, revision"
@@ -15299,7 +15397,8 @@ export const GENERATED_OPERATIONS = [
     },
     "output": {
       "mode": "no_content",
-      "summary": "{ ok: true }"
+      "shape": "ok",
+      "summary": "ok: { ok: true }"
     },
     "meta": {
       "inputSummary": "required: projectId, testRunId, testParamId"
@@ -15558,7 +15657,8 @@ export const GENERATED_OPERATIONS = [
     },
     "output": {
       "mode": "json",
-      "summary": "testparametersListGetResponse (data/included/links/meta)",
+      "shape": "collection",
+      "summary": "collection: testparametersListGetResponse (data/included/links/meta)",
       "collection": {
         "autoPaginate": true
       }
@@ -15626,7 +15726,8 @@ export const GENERATED_OPERATIONS = [
     },
     "output": {
       "mode": "json",
-      "summary": "testparametersListPostResponse (data)"
+      "shape": "collection",
+      "summary": "collection: testparametersListPostResponse (data)"
     },
     "meta": {
       "inputSummary": "required: projectId, testRunId, body"
@@ -15691,7 +15792,8 @@ export const GENERATED_OPERATIONS = [
     },
     "output": {
       "mode": "no_content",
-      "summary": "{ ok: true }"
+      "shape": "ok",
+      "summary": "ok: { ok: true }"
     },
     "meta": {
       "inputSummary": "required: projectId, testRunId, body"
@@ -15958,7 +16060,8 @@ export const GENERATED_OPERATIONS = [
     },
     "output": {
       "mode": "json",
-      "summary": "testparametersSingleGetResponse (data/included/links)"
+      "shape": "resource",
+      "summary": "resource: testparametersSingleGetResponse (data/included/links)"
     },
     "meta": {
       "inputSummary": "required: projectId, testRunId, testParamId; optional: fields, include, revision"
@@ -16023,7 +16126,8 @@ export const GENERATED_OPERATIONS = [
     },
     "output": {
       "mode": "no_content",
-      "summary": "{ ok: true }"
+      "shape": "ok",
+      "summary": "ok: { ok: true }"
     },
     "meta": {
       "inputSummary": "required: projectId, testRunId, testParamId"
@@ -16300,7 +16404,8 @@ export const GENERATED_OPERATIONS = [
     },
     "output": {
       "mode": "json",
-      "summary": "testrecordsListGetResponse (data/included/links/meta)",
+      "shape": "collection",
+      "summary": "collection: testrecordsListGetResponse (data/included/links/meta)",
       "collection": {
         "autoPaginate": true
       }
@@ -16368,7 +16473,8 @@ export const GENERATED_OPERATIONS = [
     },
     "output": {
       "mode": "json",
-      "summary": "testrecordsListPostResponse (data)"
+      "shape": "collection",
+      "summary": "collection: testrecordsListPostResponse (data)"
     },
     "meta": {
       "inputSummary": "required: projectId, testRunId, body"
@@ -16433,7 +16539,8 @@ export const GENERATED_OPERATIONS = [
     },
     "output": {
       "mode": "no_content",
-      "summary": "{ ok: true }"
+      "shape": "ok",
+      "summary": "ok: { ok: true }"
     },
     "meta": {
       "inputSummary": "required: projectId, testRunId, body"
@@ -16716,7 +16823,8 @@ export const GENERATED_OPERATIONS = [
     },
     "output": {
       "mode": "json",
-      "summary": "testrecordsSingleGetResponse (data/included/links)"
+      "shape": "resource",
+      "summary": "resource: testrecordsSingleGetResponse (data/included/links)"
     },
     "meta": {
       "inputSummary": "required: projectId, testRunId, testCaseProjectId, testCaseId, iteration; optional: fields, include, revision"
@@ -16805,7 +16913,8 @@ export const GENERATED_OPERATIONS = [
     },
     "output": {
       "mode": "no_content",
-      "summary": "{ ok: true }"
+      "shape": "ok",
+      "summary": "ok: { ok: true }"
     },
     "meta": {
       "inputSummary": "required: projectId, testRunId, testCaseProjectId, testCaseId, iteration, body"
@@ -16886,7 +16995,8 @@ export const GENERATED_OPERATIONS = [
     },
     "output": {
       "mode": "no_content",
-      "summary": "{ ok: true }"
+      "shape": "ok",
+      "summary": "ok: { ok: true }"
     },
     "meta": {
       "inputSummary": "required: projectId, testRunId, testCaseProjectId, testCaseId, iteration"
@@ -17169,7 +17279,8 @@ export const GENERATED_OPERATIONS = [
     },
     "output": {
       "mode": "json",
-      "summary": "testrecord_attachmentsListGetResponse (data/included/links/meta)",
+      "shape": "collection",
+      "summary": "collection: testrecord_attachmentsListGetResponse (data/included/links/meta)",
       "collection": {
         "autoPaginate": true
       }
@@ -17261,7 +17372,8 @@ export const GENERATED_OPERATIONS = [
     },
     "output": {
       "mode": "no_content",
-      "summary": "{ ok: true }"
+      "shape": "ok",
+      "summary": "ok: { ok: true }"
     },
     "meta": {
       "inputSummary": "required: projectId, testRunId, testCaseProjectId, testCaseId, iteration, body"
@@ -17552,7 +17664,8 @@ export const GENERATED_OPERATIONS = [
     },
     "output": {
       "mode": "json",
-      "summary": "testrecord_attachmentsSingleGetResponse (data/included/links)"
+      "shape": "resource",
+      "summary": "resource: testrecord_attachmentsSingleGetResponse (data/included/links)"
     },
     "meta": {
       "inputSummary": "required: projectId, testRunId, testCaseProjectId, testCaseId, iteration, attachmentId; optional: fields, include, revision"
@@ -17641,7 +17754,8 @@ export const GENERATED_OPERATIONS = [
     },
     "output": {
       "mode": "no_content",
-      "summary": "{ ok: true }"
+      "shape": "ok",
+      "summary": "ok: { ok: true }"
     },
     "meta": {
       "inputSummary": "required: projectId, testRunId, testCaseProjectId, testCaseId, iteration, attachmentId"
@@ -17924,7 +18038,8 @@ export const GENERATED_OPERATIONS = [
     },
     "output": {
       "mode": "json",
-      "summary": "testparametersListGetResponse (data/included/links/meta)",
+      "shape": "collection",
+      "summary": "collection: testparametersListGetResponse (data/included/links/meta)",
       "collection": {
         "autoPaginate": true
       }
@@ -18016,7 +18131,8 @@ export const GENERATED_OPERATIONS = [
     },
     "output": {
       "mode": "json",
-      "summary": "testparametersListPostResponse (data)"
+      "shape": "collection",
+      "summary": "collection: testparametersListPostResponse (data)"
     },
     "meta": {
       "inputSummary": "required: projectId, testRunId, testCaseProjectId, testCaseId, iteration, body"
@@ -18307,7 +18423,8 @@ export const GENERATED_OPERATIONS = [
     },
     "output": {
       "mode": "json",
-      "summary": "testparametersSingleGetResponse (data/included/links)"
+      "shape": "resource",
+      "summary": "resource: testparametersSingleGetResponse (data/included/links)"
     },
     "meta": {
       "inputSummary": "required: projectId, testRunId, testCaseProjectId, testCaseId, iteration, testParamId; optional: fields, include, revision"
@@ -18396,7 +18513,8 @@ export const GENERATED_OPERATIONS = [
     },
     "output": {
       "mode": "no_content",
-      "summary": "{ ok: true }"
+      "shape": "ok",
+      "summary": "ok: { ok: true }"
     },
     "meta": {
       "inputSummary": "required: projectId, testRunId, testCaseProjectId, testCaseId, iteration, testParamId"
@@ -18679,7 +18797,8 @@ export const GENERATED_OPERATIONS = [
     },
     "output": {
       "mode": "json",
-      "summary": "teststep_resultsListGetResponse (data/included/links/meta)",
+      "shape": "collection",
+      "summary": "collection: teststep_resultsListGetResponse (data/included/links/meta)",
       "collection": {
         "autoPaginate": true
       }
@@ -18771,7 +18890,8 @@ export const GENERATED_OPERATIONS = [
     },
     "output": {
       "mode": "json",
-      "summary": "teststep_resultsListPostResponse (data)"
+      "shape": "collection",
+      "summary": "collection: teststep_resultsListPostResponse (data)"
     },
     "meta": {
       "inputSummary": "required: projectId, testRunId, testCaseProjectId, testCaseId, iteration, body"
@@ -18860,7 +18980,8 @@ export const GENERATED_OPERATIONS = [
     },
     "output": {
       "mode": "no_content",
-      "summary": "{ ok: true }"
+      "shape": "ok",
+      "summary": "ok: { ok: true }"
     },
     "meta": {
       "inputSummary": "required: projectId, testRunId, testCaseProjectId, testCaseId, iteration, body"
@@ -19151,7 +19272,8 @@ export const GENERATED_OPERATIONS = [
     },
     "output": {
       "mode": "json",
-      "summary": "teststep_resultsSingleGetResponse (data/included/links)"
+      "shape": "resource",
+      "summary": "resource: teststep_resultsSingleGetResponse (data/included/links)"
     },
     "meta": {
       "inputSummary": "required: projectId, testRunId, testCaseProjectId, testCaseId, iteration, testStepIndex; optional: fields, include, revision"
@@ -19248,7 +19370,8 @@ export const GENERATED_OPERATIONS = [
     },
     "output": {
       "mode": "no_content",
-      "summary": "{ ok: true }"
+      "shape": "ok",
+      "summary": "ok: { ok: true }"
     },
     "meta": {
       "inputSummary": "required: projectId, testRunId, testCaseProjectId, testCaseId, iteration, testStepIndex, body"
@@ -19539,7 +19662,8 @@ export const GENERATED_OPERATIONS = [
     },
     "output": {
       "mode": "json",
-      "summary": "teststepresult_attachmentsListGetResponse (data/included/links/meta)",
+      "shape": "collection",
+      "summary": "collection: teststepresult_attachmentsListGetResponse (data/included/links/meta)",
       "collection": {
         "autoPaginate": true
       }
@@ -19639,7 +19763,8 @@ export const GENERATED_OPERATIONS = [
     },
     "output": {
       "mode": "no_content",
-      "summary": "{ ok: true }"
+      "shape": "ok",
+      "summary": "ok: { ok: true }"
     },
     "meta": {
       "inputSummary": "required: projectId, testRunId, testCaseProjectId, testCaseId, iteration, testStepIndex, body"
@@ -19938,7 +20063,8 @@ export const GENERATED_OPERATIONS = [
     },
     "output": {
       "mode": "json",
-      "summary": "teststepresult_attachmentsSingleGetResponse (data/included/links)"
+      "shape": "resource",
+      "summary": "resource: teststepresult_attachmentsSingleGetResponse (data/included/links)"
     },
     "meta": {
       "inputSummary": "required: projectId, testRunId, testCaseProjectId, testCaseId, iteration, testStepIndex, attachmentId; optional: fields, include, revision"
@@ -20035,7 +20161,8 @@ export const GENERATED_OPERATIONS = [
     },
     "output": {
       "mode": "no_content",
-      "summary": "{ ok: true }"
+      "shape": "ok",
+      "summary": "ok: { ok: true }"
     },
     "meta": {
       "inputSummary": "required: projectId, testRunId, testCaseProjectId, testCaseId, iteration, testStepIndex, attachmentId"
@@ -20298,7 +20425,8 @@ export const GENERATED_OPERATIONS = [
     },
     "output": {
       "mode": "json",
-      "summary": "workitemsListGetResponse (data/included/links/meta)",
+      "shape": "collection",
+      "summary": "collection: workitemsListGetResponse (data/included/links/meta)",
       "collection": {
         "autoPaginate": true
       }
@@ -20358,7 +20486,8 @@ export const GENERATED_OPERATIONS = [
     },
     "output": {
       "mode": "json",
-      "summary": "workitemsListPostResponse (data)"
+      "shape": "collection",
+      "summary": "collection: workitemsListPostResponse (data)"
     },
     "meta": {
       "inputSummary": "required: projectId, body"
@@ -20429,7 +20558,8 @@ export const GENERATED_OPERATIONS = [
     },
     "output": {
       "mode": "no_content",
-      "summary": "{ ok: true }"
+      "shape": "ok",
+      "summary": "ok: { ok: true }"
     },
     "meta": {
       "inputSummary": "required: projectId, body; optional: workflowAction, changeTypeTo"
@@ -20486,7 +20616,8 @@ export const GENERATED_OPERATIONS = [
     },
     "output": {
       "mode": "no_content",
-      "summary": "{ ok: true }"
+      "shape": "ok",
+      "summary": "ok: { ok: true }"
     },
     "meta": {
       "inputSummary": "required: projectId, body"
@@ -20745,7 +20876,8 @@ export const GENERATED_OPERATIONS = [
     },
     "output": {
       "mode": "json",
-      "summary": "workitemsSingleGetResponse (data/included/links)"
+      "shape": "resource",
+      "summary": "resource: workitemsSingleGetResponse (data/included/links)"
     },
     "meta": {
       "inputSummary": "required: projectId, workItemId; optional: fields, include, revision"
@@ -20824,7 +20956,8 @@ export const GENERATED_OPERATIONS = [
     },
     "output": {
       "mode": "no_content",
-      "summary": "{ ok: true }"
+      "shape": "ok",
+      "summary": "ok: { ok: true }"
     },
     "meta": {
       "inputSummary": "required: projectId, workItemId, body; optional: workflowAction, changeTypeTo"
@@ -20889,7 +21022,8 @@ export const GENERATED_OPERATIONS = [
     },
     "output": {
       "mode": "json",
-      "summary": "workflowActionsActionResponseBody (data/links/meta)",
+      "shape": "collection",
+      "summary": "collection: workflowActionsActionResponseBody (data/links/meta)",
       "collection": {
         "autoPaginate": true
       }
@@ -20949,7 +21083,8 @@ export const GENERATED_OPERATIONS = [
     },
     "output": {
       "mode": "no_content",
-      "summary": "{ ok: true }"
+      "shape": "ok",
+      "summary": "ok: { ok: true }"
     },
     "meta": {
       "inputSummary": "required: projectId, workItemId"
@@ -21014,7 +21149,8 @@ export const GENERATED_OPERATIONS = [
     },
     "output": {
       "mode": "no_content",
-      "summary": "{ ok: true }"
+      "shape": "ok",
+      "summary": "ok: { ok: true }"
     },
     "meta": {
       "inputSummary": "required: projectId, workItemId, body"
@@ -21273,7 +21409,8 @@ export const GENERATED_OPERATIONS = [
     },
     "output": {
       "mode": "json",
-      "summary": "workitem_approvalsListGetResponse (data/included/links/meta)",
+      "shape": "collection",
+      "summary": "collection: workitem_approvalsListGetResponse (data/included/links/meta)",
       "collection": {
         "autoPaginate": true
       }
@@ -21341,7 +21478,8 @@ export const GENERATED_OPERATIONS = [
     },
     "output": {
       "mode": "json",
-      "summary": "workitem_approvalsListPostResponse (data)"
+      "shape": "collection",
+      "summary": "collection: workitem_approvalsListPostResponse (data)"
     },
     "meta": {
       "inputSummary": "required: projectId, workItemId, body"
@@ -21406,7 +21544,8 @@ export const GENERATED_OPERATIONS = [
     },
     "output": {
       "mode": "no_content",
-      "summary": "{ ok: true }"
+      "shape": "ok",
+      "summary": "ok: { ok: true }"
     },
     "meta": {
       "inputSummary": "required: projectId, workItemId, body"
@@ -21471,7 +21610,8 @@ export const GENERATED_OPERATIONS = [
     },
     "output": {
       "mode": "no_content",
-      "summary": "{ ok: true }"
+      "shape": "ok",
+      "summary": "ok: { ok: true }"
     },
     "meta": {
       "inputSummary": "required: projectId, workItemId, body"
@@ -21738,7 +21878,8 @@ export const GENERATED_OPERATIONS = [
     },
     "output": {
       "mode": "json",
-      "summary": "workitem_approvalsSingleGetResponse (data/included/links)"
+      "shape": "resource",
+      "summary": "resource: workitem_approvalsSingleGetResponse (data/included/links)"
     },
     "meta": {
       "inputSummary": "required: projectId, workItemId, userId; optional: fields, include, revision"
@@ -21811,7 +21952,8 @@ export const GENERATED_OPERATIONS = [
     },
     "output": {
       "mode": "no_content",
-      "summary": "{ ok: true }"
+      "shape": "ok",
+      "summary": "ok: { ok: true }"
     },
     "meta": {
       "inputSummary": "required: projectId, workItemId, userId, body"
@@ -21876,7 +22018,8 @@ export const GENERATED_OPERATIONS = [
     },
     "output": {
       "mode": "no_content",
-      "summary": "{ ok: true }"
+      "shape": "ok",
+      "summary": "ok: { ok: true }"
     },
     "meta": {
       "inputSummary": "required: projectId, workItemId, userId"
@@ -22133,7 +22276,8 @@ export const GENERATED_OPERATIONS = [
     },
     "output": {
       "mode": "json",
-      "summary": "workitem_attachmentsListGetResponse (data/included/links/meta)",
+      "shape": "collection",
+      "summary": "collection: workitem_attachmentsListGetResponse (data/included/links/meta)",
       "collection": {
         "autoPaginate": true
       }
@@ -22403,7 +22547,8 @@ export const GENERATED_OPERATIONS = [
     },
     "output": {
       "mode": "json",
-      "summary": "workitem_attachmentsSingleGetResponse (data/included/links)"
+      "shape": "resource",
+      "summary": "resource: workitem_attachmentsSingleGetResponse (data/included/links)"
     },
     "meta": {
       "inputSummary": "required: projectId, workItemId, attachmentId; optional: fields, include, revision"
@@ -22468,7 +22613,8 @@ export const GENERATED_OPERATIONS = [
     },
     "output": {
       "mode": "no_content",
-      "summary": "{ ok: true }"
+      "shape": "ok",
+      "summary": "ok: { ok: true }"
     },
     "meta": {
       "inputSummary": "required: projectId, workItemId, attachmentId"
@@ -22727,7 +22873,8 @@ export const GENERATED_OPERATIONS = [
     },
     "output": {
       "mode": "json",
-      "summary": "linkedworkitemsListGetResponse (data/included/links/meta)",
+      "shape": "collection",
+      "summary": "collection: linkedworkitemsListGetResponse (data/included/links/meta)",
       "collection": {
         "autoPaginate": true
       }
@@ -22795,7 +22942,8 @@ export const GENERATED_OPERATIONS = [
     },
     "output": {
       "mode": "json",
-      "summary": "linkedworkitemsListPostResponse (data)"
+      "shape": "collection",
+      "summary": "collection: linkedworkitemsListPostResponse (data)"
     },
     "meta": {
       "inputSummary": "required: projectId, workItemId, body"
@@ -23054,7 +23202,8 @@ export const GENERATED_OPERATIONS = [
     },
     "output": {
       "mode": "json",
-      "summary": "workitem_commentsListGetResponse (data/included/links/meta)",
+      "shape": "collection",
+      "summary": "collection: workitem_commentsListGetResponse (data/included/links/meta)",
       "collection": {
         "autoPaginate": true
       }
@@ -23122,7 +23271,8 @@ export const GENERATED_OPERATIONS = [
     },
     "output": {
       "mode": "json",
-      "summary": "workitem_commentsListPostResponse (data)"
+      "shape": "collection",
+      "summary": "collection: workitem_commentsListPostResponse (data)"
     },
     "meta": {
       "inputSummary": "required: projectId, workItemId, body"
@@ -23389,7 +23539,8 @@ export const GENERATED_OPERATIONS = [
     },
     "output": {
       "mode": "json",
-      "summary": "workitem_commentsSingleGetResponse (data/included/links)"
+      "shape": "resource",
+      "summary": "resource: workitem_commentsSingleGetResponse (data/included/links)"
     },
     "meta": {
       "inputSummary": "required: projectId, workItemId, commentId; optional: fields, include, revision"
@@ -23462,7 +23613,8 @@ export const GENERATED_OPERATIONS = [
     },
     "output": {
       "mode": "no_content",
-      "summary": "{ ok: true }"
+      "shape": "ok",
+      "summary": "ok: { ok: true }"
     },
     "meta": {
       "inputSummary": "required: projectId, workItemId, commentId, body"
@@ -23721,7 +23873,8 @@ export const GENERATED_OPERATIONS = [
     },
     "output": {
       "mode": "json",
-      "summary": "externallylinkedworkitemsListGetResponse (data/included/links/meta)",
+      "shape": "collection",
+      "summary": "collection: externallylinkedworkitemsListGetResponse (data/included/links/meta)",
       "collection": {
         "autoPaginate": true
       }
@@ -23789,7 +23942,8 @@ export const GENERATED_OPERATIONS = [
     },
     "output": {
       "mode": "json",
-      "summary": "externallylinkedworkitemsListPostResponse (data)"
+      "shape": "collection",
+      "summary": "collection: externallylinkedworkitemsListPostResponse (data)"
     },
     "meta": {
       "inputSummary": "required: projectId, workItemId, body"
@@ -23854,7 +24008,8 @@ export const GENERATED_OPERATIONS = [
     },
     "output": {
       "mode": "no_content",
-      "summary": "{ ok: true }"
+      "shape": "ok",
+      "summary": "ok: { ok: true }"
     },
     "meta": {
       "inputSummary": "required: projectId, workItemId, body"
@@ -24145,7 +24300,8 @@ export const GENERATED_OPERATIONS = [
     },
     "output": {
       "mode": "json",
-      "summary": "externallylinkedworkitemsSingleGetResponse (data/included/links)"
+      "shape": "resource",
+      "summary": "resource: externallylinkedworkitemsSingleGetResponse (data/included/links)"
     },
     "meta": {
       "inputSummary": "required: projectId, workItemId, roleId, hostname, targetProjectId, linkedWorkItemId; optional: fields, include, revision"
@@ -24234,7 +24390,8 @@ export const GENERATED_OPERATIONS = [
     },
     "output": {
       "mode": "no_content",
-      "summary": "{ ok: true }"
+      "shape": "ok",
+      "summary": "ok: { ok: true }"
     },
     "meta": {
       "inputSummary": "required: projectId, workItemId, roleId, hostname, targetProjectId, linkedWorkItemId"
@@ -24493,7 +24650,8 @@ export const GENERATED_OPERATIONS = [
     },
     "output": {
       "mode": "json",
-      "summary": "featureselectionsListGetResponse (data/included/links/meta)",
+      "shape": "collection",
+      "summary": "collection: featureselectionsListGetResponse (data/included/links/meta)",
       "collection": {
         "autoPaginate": true
       }
@@ -24779,7 +24937,8 @@ export const GENERATED_OPERATIONS = [
     },
     "output": {
       "mode": "json",
-      "summary": "featureselectionsSingleGetResponse (data/included/links)"
+      "shape": "resource",
+      "summary": "resource: featureselectionsSingleGetResponse (data/included/links)"
     },
     "meta": {
       "inputSummary": "required: projectId, workItemId, selectionTypeId, targetProjectId, targetWorkItemId; optional: fields, include, revision"
@@ -24844,7 +25003,8 @@ export const GENERATED_OPERATIONS = [
     },
     "output": {
       "mode": "json",
-      "summary": "enumOptionsActionResponseBody (data/links/meta)",
+      "shape": "collection",
+      "summary": "collection: enumOptionsActionResponseBody (data/links/meta)",
       "collection": {
         "autoPaginate": true
       }
@@ -24920,7 +25080,8 @@ export const GENERATED_OPERATIONS = [
     },
     "output": {
       "mode": "json",
-      "summary": "enumOptionsActionResponseBody (data/links/meta)",
+      "shape": "collection",
+      "summary": "collection: enumOptionsActionResponseBody (data/links/meta)",
       "collection": {
         "autoPaginate": true
       }
@@ -25194,7 +25355,8 @@ export const GENERATED_OPERATIONS = [
     },
     "output": {
       "mode": "json",
-      "summary": "linkedoslcresourcesListGetResponse (data/included/meta)",
+      "shape": "collection",
+      "summary": "collection: linkedoslcresourcesListGetResponse (data/included/meta)",
       "collection": {
         "autoPaginate": true
       }
@@ -25262,7 +25424,8 @@ export const GENERATED_OPERATIONS = [
     },
     "output": {
       "mode": "json",
-      "summary": "linkedoslcresourcesListPostResponse (data)"
+      "shape": "collection",
+      "summary": "collection: linkedoslcresourcesListPostResponse (data)"
     },
     "meta": {
       "inputSummary": "required: projectId, workItemId, body"
@@ -25327,7 +25490,8 @@ export const GENERATED_OPERATIONS = [
     },
     "output": {
       "mode": "no_content",
-      "summary": "{ ok: true }"
+      "shape": "ok",
+      "summary": "ok: { ok: true }"
     },
     "meta": {
       "inputSummary": "required: projectId, workItemId, body"
@@ -25586,7 +25750,8 @@ export const GENERATED_OPERATIONS = [
     },
     "output": {
       "mode": "json",
-      "summary": "linkedworkitemsListGetResponse (data/included/links/meta)",
+      "shape": "collection",
+      "summary": "collection: linkedworkitemsListGetResponse (data/included/links/meta)",
       "collection": {
         "autoPaginate": true
       }
@@ -25654,7 +25819,8 @@ export const GENERATED_OPERATIONS = [
     },
     "output": {
       "mode": "json",
-      "summary": "linkedworkitemsListPostResponse (data)"
+      "shape": "collection",
+      "summary": "collection: linkedworkitemsListPostResponse (data)"
     },
     "meta": {
       "inputSummary": "required: projectId, workItemId, body"
@@ -25719,7 +25885,8 @@ export const GENERATED_OPERATIONS = [
     },
     "output": {
       "mode": "no_content",
-      "summary": "{ ok: true }"
+      "shape": "ok",
+      "summary": "ok: { ok: true }"
     },
     "meta": {
       "inputSummary": "required: projectId, workItemId, body"
@@ -26002,7 +26169,8 @@ export const GENERATED_OPERATIONS = [
     },
     "output": {
       "mode": "json",
-      "summary": "linkedworkitemsSingleGetResponse (data/included/links)"
+      "shape": "resource",
+      "summary": "resource: linkedworkitemsSingleGetResponse (data/included/links)"
     },
     "meta": {
       "inputSummary": "required: projectId, workItemId, roleId, targetProjectId, linkedWorkItemId; optional: fields, include, revision"
@@ -26091,7 +26259,8 @@ export const GENERATED_OPERATIONS = [
     },
     "output": {
       "mode": "no_content",
-      "summary": "{ ok: true }"
+      "shape": "ok",
+      "summary": "ok: { ok: true }"
     },
     "meta": {
       "inputSummary": "required: projectId, workItemId, roleId, targetProjectId, linkedWorkItemId, body"
@@ -26172,7 +26341,8 @@ export const GENERATED_OPERATIONS = [
     },
     "output": {
       "mode": "no_content",
-      "summary": "{ ok: true }"
+      "shape": "ok",
+      "summary": "ok: { ok: true }"
     },
     "meta": {
       "inputSummary": "required: projectId, workItemId, roleId, targetProjectId, linkedWorkItemId"
@@ -26439,7 +26609,8 @@ export const GENERATED_OPERATIONS = [
     },
     "output": {
       "mode": "json",
-      "summary": "RelationshipResponseBody",
+      "shape": "json",
+      "summary": "json: RelationshipResponseBody",
       "collection": {
         "autoPaginate": true
       }
@@ -26515,7 +26686,8 @@ export const GENERATED_OPERATIONS = [
     },
     "output": {
       "mode": "no_content",
-      "summary": "{ ok: true }"
+      "shape": "ok",
+      "summary": "ok: { ok: true }"
     },
     "meta": {
       "inputSummary": "required: projectId, workItemId, relationshipId, body"
@@ -26588,7 +26760,8 @@ export const GENERATED_OPERATIONS = [
     },
     "output": {
       "mode": "no_content",
-      "summary": "{ ok: true }"
+      "shape": "ok",
+      "summary": "ok: { ok: true }"
     },
     "meta": {
       "inputSummary": "required: projectId, workItemId, relationshipId, body"
@@ -26661,7 +26834,8 @@ export const GENERATED_OPERATIONS = [
     },
     "output": {
       "mode": "no_content",
-      "summary": "{ ok: true }"
+      "shape": "ok",
+      "summary": "ok: { ok: true }"
     },
     "meta": {
       "inputSummary": "required: projectId, workItemId, relationshipId, body"
@@ -26920,7 +27094,8 @@ export const GENERATED_OPERATIONS = [
     },
     "output": {
       "mode": "json",
-      "summary": "testparameter_definitionsListGetResponse (data/included/links/meta)",
+      "shape": "collection",
+      "summary": "collection: testparameter_definitionsListGetResponse (data/included/links/meta)",
       "collection": {
         "autoPaginate": true
       }
@@ -27190,7 +27365,8 @@ export const GENERATED_OPERATIONS = [
     },
     "output": {
       "mode": "json",
-      "summary": "testparameter_definitionsSingleGetResponse (data/included/links)"
+      "shape": "resource",
+      "summary": "resource: testparameter_definitionsSingleGetResponse (data/included/links)"
     },
     "meta": {
       "inputSummary": "required: projectId, workItemId, testParamId; optional: fields, include, revision"
@@ -27449,7 +27625,8 @@ export const GENERATED_OPERATIONS = [
     },
     "output": {
       "mode": "json",
-      "summary": "teststepsListGetResponse (data/included/links/meta)",
+      "shape": "collection",
+      "summary": "collection: teststepsListGetResponse (data/included/links/meta)",
       "collection": {
         "autoPaginate": true
       }
@@ -27517,7 +27694,8 @@ export const GENERATED_OPERATIONS = [
     },
     "output": {
       "mode": "json",
-      "summary": "teststepsListPostResponse (data)"
+      "shape": "collection",
+      "summary": "collection: teststepsListPostResponse (data)"
     },
     "meta": {
       "inputSummary": "required: projectId, workItemId, body"
@@ -27582,7 +27760,8 @@ export const GENERATED_OPERATIONS = [
     },
     "output": {
       "mode": "no_content",
-      "summary": "{ ok: true }"
+      "shape": "ok",
+      "summary": "ok: { ok: true }"
     },
     "meta": {
       "inputSummary": "required: projectId, workItemId, body"
@@ -27647,7 +27826,8 @@ export const GENERATED_OPERATIONS = [
     },
     "output": {
       "mode": "no_content",
-      "summary": "{ ok: true }"
+      "shape": "ok",
+      "summary": "ok: { ok: true }"
     },
     "meta": {
       "inputSummary": "required: projectId, workItemId, body"
@@ -27914,7 +28094,8 @@ export const GENERATED_OPERATIONS = [
     },
     "output": {
       "mode": "json",
-      "summary": "teststepsSingleGetResponse (data/included/links)"
+      "shape": "resource",
+      "summary": "resource: teststepsSingleGetResponse (data/included/links)"
     },
     "meta": {
       "inputSummary": "required: projectId, workItemId, testStepIndex; optional: fields, include, revision"
@@ -27987,7 +28168,8 @@ export const GENERATED_OPERATIONS = [
     },
     "output": {
       "mode": "no_content",
-      "summary": "{ ok: true }"
+      "shape": "ok",
+      "summary": "ok: { ok: true }"
     },
     "meta": {
       "inputSummary": "required: projectId, workItemId, testStepIndex, body"
@@ -28052,7 +28234,8 @@ export const GENERATED_OPERATIONS = [
     },
     "output": {
       "mode": "no_content",
-      "summary": "{ ok: true }"
+      "shape": "ok",
+      "summary": "ok: { ok: true }"
     },
     "meta": {
       "inputSummary": "required: projectId, workItemId, testStepIndex"
@@ -28311,7 +28494,8 @@ export const GENERATED_OPERATIONS = [
     },
     "output": {
       "mode": "json",
-      "summary": "workrecordsListGetResponse (data/included/links/meta)",
+      "shape": "collection",
+      "summary": "collection: workrecordsListGetResponse (data/included/links/meta)",
       "collection": {
         "autoPaginate": true
       }
@@ -28379,7 +28563,8 @@ export const GENERATED_OPERATIONS = [
     },
     "output": {
       "mode": "json",
-      "summary": "workrecordsListPostResponse (data)"
+      "shape": "collection",
+      "summary": "collection: workrecordsListPostResponse (data)"
     },
     "meta": {
       "inputSummary": "required: projectId, workItemId, body"
@@ -28444,7 +28629,8 @@ export const GENERATED_OPERATIONS = [
     },
     "output": {
       "mode": "no_content",
-      "summary": "{ ok: true }"
+      "shape": "ok",
+      "summary": "ok: { ok: true }"
     },
     "meta": {
       "inputSummary": "required: projectId, workItemId, body"
@@ -28711,7 +28897,8 @@ export const GENERATED_OPERATIONS = [
     },
     "output": {
       "mode": "json",
-      "summary": "workrecordsSingleGetResponse (data/included/links)"
+      "shape": "resource",
+      "summary": "resource: workrecordsSingleGetResponse (data/included/links)"
     },
     "meta": {
       "inputSummary": "required: projectId, workItemId, workRecordId; optional: fields, include, revision"
@@ -28776,7 +28963,8 @@ export const GENERATED_OPERATIONS = [
     },
     "output": {
       "mode": "no_content",
-      "summary": "{ ok: true }"
+      "shape": "ok",
+      "summary": "ok: { ok: true }"
     },
     "meta": {
       "inputSummary": "required: projectId, workItemId, workRecordId"
@@ -28841,7 +29029,8 @@ export const GENERATED_OPERATIONS = [
     },
     "output": {
       "mode": "json",
-      "summary": "enumOptionsActionResponseBody (data/links/meta)",
+      "shape": "collection",
+      "summary": "collection: enumOptionsActionResponseBody (data/links/meta)",
       "collection": {
         "autoPaginate": true
       }

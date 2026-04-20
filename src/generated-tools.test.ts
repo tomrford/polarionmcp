@@ -82,7 +82,8 @@ describe("generated tools", () => {
     });
 
     expect(textPayload(result as CallToolResult)).toMatchObject({
-      data: [{ id: "PRJ", type: "projects" }],
+      kind: "collection",
+      items: [{ id: "PRJ", type: "projects" }],
     });
 
     await Promise.all([
@@ -162,7 +163,8 @@ describe("generated tools", () => {
       "https://example.invalid/projects/PRJ/actions/getFieldsMetadata?resourceType=workitems&targetType=requirement",
     );
     expect(textPayload(result as CallToolResult)).toMatchObject({
-      data: { type: "fieldsmetadata" },
+      kind: "resource",
+      item: { type: "fieldsmetadata" },
     });
 
     await Promise.all([
@@ -272,7 +274,8 @@ describe("generated tools", () => {
     const result = await callToolWithToken(client, "getProjects", {});
     const payload = textPayload(result as CallToolResult);
 
-    expect(payload.data).toEqual([
+    expect(payload.kind).toBe("collection");
+    expect(payload.items).toEqual([
       {
         id: "PRJ",
         type: "projects",
@@ -336,7 +339,8 @@ describe("generated tools", () => {
     const result = await callToolWithToken(client, "getProjects", {});
 
     expect(textPayload(result as CallToolResult)).toMatchObject({
-      data: [
+      kind: "collection",
+      items: [
         { id: "1", type: "projects" },
         { id: "2", type: "projects" },
         { id: "3", type: "projects" },

@@ -49,7 +49,10 @@ inventory.
 - Generated list operations auto-follow Polarion pagination and return full collections.
 - Request shapes are tuned for scripting: path params and query params sit at top level;
   request payload goes under `body`.
-- Responses stay close to the Polarion wire format; `204` normalizes to `{ ok: true }`.
+- Generated reads return stable top-level envelopes: collections use
+  `{ kind: "collection", items, ... }`, single resources use
+  `{ kind: "resource", item, ... }`, and `204` writes normalize to
+  `{ ok: true }`.
 - Only the final `code` result returned to the MCP client may be truncated.
 - Auth stays host-side — the sandboxed code path never receives credentials.
 

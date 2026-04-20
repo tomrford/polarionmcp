@@ -310,6 +310,17 @@ function topLevelKeys(schema: OpenApiSchema | undefined): string[] {
   return Object.keys(properties).slice(0, 4);
 }
 
+function responseShape(schema: OpenApiSchema | undefined): GeneratedOperation["output"]["shape"] {
+  const properties = schema?.properties;
+  if (!properties || typeof properties !== "object") return "json";
+  const dataProperty = properties.data;
+  if (!dataProperty || typeof dataProperty !== "object" || Array.isArray(dataProperty)) {
+    return "json";
+  }
+  if (dataProperty.type === "array") return "collection";
+  return "resource";
+}
+
 function buildOutputSummary(
   rawOperation: OpenApiOperation,
   resolvedOperation: OpenApiOperation,
@@ -317,21 +328,30 @@ function buildOutputSummary(
   const rawSuccess = pickSuccessResponse(rawOperation.responses);
   const resolvedSuccess = pickSuccessResponse(resolvedOperation.responses);
   if (!rawSuccess || !resolvedSuccess) {
-    return { mode: "json", summary: "JSON response" };
+    return { mode: "json", shape: "json", summary: "json: JSON response" };
   }
 
   const [status, rawResponse] = rawSuccess;
   const [, resolvedResponse] = resolvedSuccess;
-  if (status === "204") return { mode: "no_content", summary: "{ ok: true }" };
+  if (status === "204") {
+    return { mode: "no_content", shape: "ok", summary: "ok: { ok: true }" };
+  }
 
   const rawSchema = rawResponse.content?.["application/json"]?.schema;
   const resolvedSchema = resolvedResponse.content?.["application/json"]?.schema;
+  const shape = responseShape(resolvedSchema);
+  const shapeLabel =
+    shape === "collection" ? "collection" : shape === "resource" ? "resource" : "json";
   const name = refName(rawSchema);
   const keys = topLevelKeys(resolvedSchema);
-  if (name && keys.length > 0) return { mode: "json", summary: `${name} (${keys.join("/")})` };
-  if (name) return { mode: "json", summary: name };
-  if (keys.length > 0) return { mode: "json", summary: `object (${keys.join("/")})` };
-  return { mode: "json", summary: `${status} JSON response` };
+  if (name && keys.length > 0) {
+    return { mode: "json", shape, summary: `${shapeLabel}: ${name} (${keys.join("/")})` };
+  }
+  if (name) return { mode: "json", shape, summary: `${shapeLabel}: ${name}` };
+  if (keys.length > 0) {
+    return { mode: "json", shape, summary: `${shapeLabel}: object (${keys.join("/")})` };
+  }
+  return { mode: "json", shape, summary: `${shapeLabel}: ${status} JSON response` };
 }
 
 function summarizeInput(required: string[], properties: string[], hasBody: boolean) {

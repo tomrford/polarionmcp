@@ -32,6 +32,14 @@ type JsonApiCollection = {
   [key: string]: unknown;
 };
 
+type JsonApiResource = {
+  data: Record<string, unknown>;
+  included?: unknown[];
+  links?: Record<string, unknown>;
+  meta?: Record<string, unknown>;
+  [key: string]: unknown;
+};
+
 function isPlainTextValueWrapper(value: unknown): value is { type: string; value: string } {
   if (!value || typeof value !== "object" || Array.isArray(value)) return false;
   const record = value as Record<string, unknown>;
@@ -79,6 +87,17 @@ function isJsonApiCollection(payload: unknown): payload is JsonApiCollection {
   );
 }
 
+function isJsonApiResource(payload: unknown): payload is JsonApiResource {
+  return (
+    !!payload &&
+    typeof payload === "object" &&
+    "data" in payload &&
+    !!payload.data &&
+    typeof payload.data === "object" &&
+    !Array.isArray(payload.data)
+  );
+}
+
 function nextPageLink(payload: { links?: Record<string, unknown> }) {
   const next = payload.links?.next;
   return typeof next === "string" && next.length > 0 ? next : undefined;
@@ -101,6 +120,52 @@ function stripPagingLinks(links: Record<string, unknown> | undefined) {
     ),
   );
   return Object.keys(filtered).length > 0 ? filtered : undefined;
+}
+
+function extraTopLevelFields(
+  payload: Record<string, unknown>,
+): Record<string, unknown> | undefined {
+  const extra = Object.fromEntries(
+    Object.entries(payload).filter(
+      ([key]) => key !== "data" && key !== "included" && key !== "links" && key !== "meta",
+    ),
+  );
+  return Object.keys(extra).length > 0 ? extra : undefined;
+}
+
+function stablePayload(
+  operation: (typeof GENERATED_OPERATIONS)[number],
+  payload: unknown,
+): Record<string, unknown> {
+  if (operation.output.shape === "collection" && isJsonApiCollection(payload)) {
+    const extra = extraTopLevelFields(payload);
+    return {
+      kind: "collection",
+      items: payload.data,
+      ...(payload.included ? { included: payload.included } : {}),
+      ...(payload.links ? { links: payload.links } : {}),
+      ...(payload.meta ? { meta: payload.meta } : {}),
+      ...(extra ? { extra } : {}),
+    };
+  }
+
+  if (operation.output.shape === "resource" && isJsonApiResource(payload)) {
+    const extra = extraTopLevelFields(payload);
+    return {
+      kind: "resource",
+      item: payload.data,
+      ...(payload.included ? { included: payload.included } : {}),
+      ...(payload.links ? { links: payload.links } : {}),
+      ...(payload.meta ? { meta: payload.meta } : {}),
+      ...(extra ? { extra } : {}),
+    };
+  }
+
+  if (operation.output.shape === "ok") {
+    return { ok: true };
+  }
+
+  return { kind: "json", value: payload };
 }
 
 function includedIdentity(entry: unknown) {
@@ -209,7 +274,11 @@ async function fetchJsonPage(
   };
 }
 
-async function fetchAllPages(firstPage: JsonApiCollection, init: RequestInit): Promise<ToolResult> {
+async function fetchAllPages(
+  operation: (typeof GENERATED_OPERATIONS)[number],
+  firstPage: JsonApiCollection,
+  init: RequestInit,
+): Promise<ToolResult> {
   const visited = new Set<string>();
   const seenIncluded = new Set<string>();
   let currentPage: JsonApiCollection | undefined = firstPage;
@@ -279,9 +348,10 @@ async function fetchAllPages(firstPage: JsonApiCollection, init: RequestInit): P
     );
   }
 
+  const payload = stablePayload(operation, merged);
   return {
-    content: [{ type: "text" as const, text: JSON.stringify(merged) }],
-    structuredContent: merged,
+    content: [{ type: "text" as const, text: JSON.stringify(payload) }],
+    structuredContent: payload,
   };
 }
 
@@ -337,9 +407,10 @@ async function executeOperation(
     }
 
     if (operation.output.mode === "no_content" || response.status === 204) {
+      const payload = stablePayload(operation, undefined);
       return {
-        content: [{ type: "text" as const, text: JSON.stringify({ ok: true }) }],
-        structuredContent: { ok: true },
+        content: [{ type: "text" as const, text: JSON.stringify(payload) }],
+        structuredContent: payload,
       };
     }
 
@@ -363,7 +434,7 @@ async function executeOperation(
       const next = nextPageLink(normalizedData);
       const total = totalCount(normalizedData);
       if (next) {
-        return await fetchAllPages(normalizedData, init);
+        return await fetchAllPages(operation, normalizedData, init);
       }
       if (typeof total === "number" && normalizedData.data.length < total) {
         return partialResultError(
@@ -373,14 +444,11 @@ async function executeOperation(
       }
     }
 
-    const payload = normalizedData;
+    const payload = stablePayload(operation, normalizedData);
 
     return {
       ...ok(payload),
-      structuredContent:
-        payload && typeof payload === "object" && !Array.isArray(payload)
-          ? (payload as Record<string, unknown>)
-          : { result: payload },
+      structuredContent: payload,
     };
   } catch (error) {
     return errorResult(networkError(error));

@@ -108,7 +108,8 @@ describe("createPublicServer", () => {
     const textResult = result as CallToolResult;
     expect(textResult.isError).toBeUndefined();
     expect(JSON.parse((textResult.content[0] as { text: string }).text)).toMatchObject({
-      data: { type: "fieldsmetadata" },
+      kind: "resource",
+      item: { type: "fieldsmetadata" },
     });
 
     const [url, init] = fetchSpy.calls[0]!.args as [string, RequestInit];
@@ -157,7 +158,8 @@ describe("createPublicServer", () => {
     const textResult = result as CallToolResult;
     expect(textResult.isError).toBeUndefined();
     expect(JSON.parse((textResult.content[0] as { text: string }).text)).toMatchObject({
-      data: [{ id: "PRJ", type: "projects" }],
+      kind: "collection",
+      items: [{ id: "PRJ", type: "projects" }],
     });
 
     await Promise.all([

@@ -26,6 +26,7 @@ export type GeneratedOperation = {
   };
   output: {
     mode: "json" | "no_content";
+    shape: "collection" | "resource" | "json" | "ok";
     summary: string;
     collection?: {
       autoPaginate: true;
