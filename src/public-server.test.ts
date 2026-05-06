@@ -58,13 +58,17 @@ describe("createPublicServer", () => {
     });
   }
 
-  test("exposes search and code tools and no resources", async () => {
+  test("exposes search, guidelines, and code tools and no resources", async () => {
     const { client, server, clientTransport, serverTransport } = await connectClient({
       resolveAccessToken: httpAccessToken,
     });
 
     const tools = await client.listTools();
-    expect(tools.tools.map((tool) => tool.name).sort()).toEqual(["code", "search"]);
+    expect(tools.tools.map((tool) => tool.name).sort()).toEqual([
+      "code",
+      "read_guidelines",
+      "search",
+    ]);
 
     let error: unknown;
     try {
@@ -75,7 +79,9 @@ describe("createPublicServer", () => {
     expect(error).toBeInstanceOf(McpError);
     expect((error as McpError).code).toBe(-32601);
 
-    expect(client.getInstructions()).toContain("This server exposes two tools: search and code.");
+    expect(client.getInstructions()).toContain(
+      "This server exposes three tools: search, read_guidelines, and code.",
+    );
 
     await Promise.all([
       client.close(),
@@ -237,6 +243,34 @@ describe("createPublicServer", () => {
           typeof entry.input_summary === "string" && typeof entry.output_summary === "string",
       ),
     ).toBe(true);
+
+    await Promise.all([
+      client.close(),
+      clientTransport.close(),
+      serverTransport.close(),
+      server.close(),
+    ]);
+  });
+
+  test("adds custom guidance pointer and exposes markdown via read_guidelines", async () => {
+    const readTextFileSpy = vi.spyOn(Deno, "readTextFile");
+    readTextFileSpy.mockResolvedValueOnce("# Team Requirements\n\nUse shall statements.");
+
+    const { client, server, clientTransport, serverTransport } = await connectClient({
+      resolveAccessToken: httpAccessToken,
+    });
+
+    expect(client.getInstructions()).toContain("# Custom Guidance");
+    expect(client.getInstructions()).toContain("call `read_guidelines`");
+
+    const result = await client.callTool({
+      name: "read_guidelines",
+      arguments: {},
+    });
+
+    expect(((result as CallToolResult).content[0] as { text: string }).text).toBe(
+      "# Team Requirements\n\nUse shall statements.",
+    );
 
     await Promise.all([
       client.close(),

@@ -229,6 +229,7 @@ export async function createPolarionCodeMcpServer(options: {
   name?: string;
   version?: string;
   instructions?: string;
+  customInstructions?: string;
 }) {
   const {
     server,
@@ -237,6 +238,7 @@ export async function createPolarionCodeMcpServer(options: {
     name = "polarion-mcp",
     version = "0.2.0",
     instructions,
+    customInstructions,
   } = options;
 
   const [clientTransport, serverTransport] = InMemoryTransport.createLinkedPair();
@@ -317,6 +319,23 @@ export async function createPolarionCodeMcpServer(options: {
         };
       }
     },
+  );
+
+  codemodeServer.registerTool(
+    "read_guidelines",
+    {
+      description:
+        "Read deployment-specific Polarion requirements guidance from CUSTOM_INSTRUCTIONS.md, when configured. Call this before reading or changing requirements if custom guidance is available.",
+      inputSchema: {},
+    },
+    () => ({
+      content: [
+        {
+          type: "text" as const,
+          text: customInstructions ?? "No custom guidance is configured.",
+        },
+      ],
+    }),
   );
 
   codemodeServer.registerTool(

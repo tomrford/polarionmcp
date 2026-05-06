@@ -1,4 +1,6 @@
-export const PUBLIC_SERVER_INSTRUCTIONS = `This server exposes two tools: search and code.
+export const PUBLIC_SERVER_INSTRUCTIONS = `This server allows you to interact with Polarion.
+
+It exposes a search tool, a code tool and optionally a set of custom instructions.
 
 Use search first when you need to discover the available Polarion functions, parameter shapes, or return shapes.
 
