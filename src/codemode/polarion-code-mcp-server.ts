@@ -321,22 +321,24 @@ export async function createPolarionCodeMcpServer(options: {
     },
   );
 
-  codemodeServer.registerTool(
-    "read_guidelines",
-    {
-      description:
-        "Read deployment-specific Polarion requirements guidance from CUSTOM_INSTRUCTIONS.md, when configured. Call this before reading or changing requirements if custom guidance is available.",
-      inputSchema: {},
-    },
-    () => ({
-      content: [
-        {
-          type: "text" as const,
-          text: customInstructions ?? "No custom guidance is configured.",
-        },
-      ],
-    }),
-  );
+  if (customInstructions) {
+    codemodeServer.registerTool(
+      "read_guidelines",
+      {
+        description:
+          "Read deployment-specific Polarion requirements guidance from CUSTOM_INSTRUCTIONS.md. Call this before reading or changing requirements.",
+        inputSchema: {},
+      },
+      () => ({
+        content: [
+          {
+            type: "text" as const,
+            text: customInstructions,
+          },
+        ],
+      }),
+    );
+  }
 
   codemodeServer.registerTool(
     "code",

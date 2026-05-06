@@ -58,17 +58,13 @@ describe("createPublicServer", () => {
     });
   }
 
-  test("exposes search, guidelines, and code tools and no resources", async () => {
+  test("exposes search and code tools and no resources without custom guidance", async () => {
     const { client, server, clientTransport, serverTransport } = await connectClient({
       resolveAccessToken: httpAccessToken,
     });
 
     const tools = await client.listTools();
-    expect(tools.tools.map((tool) => tool.name).sort()).toEqual([
-      "code",
-      "read_guidelines",
-      "search",
-    ]);
+    expect(tools.tools.map((tool) => tool.name).sort()).toEqual(["code", "search"]);
 
     let error: unknown;
     try {
@@ -79,9 +75,7 @@ describe("createPublicServer", () => {
     expect(error).toBeInstanceOf(McpError);
     expect((error as McpError).code).toBe(-32601);
 
-    expect(client.getInstructions()).toContain(
-      "This server exposes three tools: search, read_guidelines, and code.",
-    );
+    expect(client.getInstructions()).not.toContain("call `read_guidelines`");
 
     await Promise.all([
       client.close(),
@@ -262,6 +256,13 @@ describe("createPublicServer", () => {
 
     expect(client.getInstructions()).toContain("# Custom Guidance");
     expect(client.getInstructions()).toContain("call `read_guidelines`");
+
+    const tools = await client.listTools();
+    expect(tools.tools.map((tool) => tool.name).sort()).toEqual([
+      "code",
+      "read_guidelines",
+      "search",
+    ]);
 
     const result = await client.callTool({
       name: "read_guidelines",
