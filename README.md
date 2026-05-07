@@ -135,8 +135,8 @@ header. In stdio mode the server reads `POLARION_ACCESS_TOKEN` from the environm
 Build and run the container:
 
 ```bash
-docker build -t polarion-mcp .
-docker run --rm -p 8080:8080 --env-file .env polarion-mcp
+docker build -t polarionmcp .
+docker run --rm -p 8080:8080 --env-file .env polarionmcp
 ```
 
 Use `GET /healthz` or `GET /readyz` for container or load-balancer probes.
