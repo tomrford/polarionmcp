@@ -132,13 +132,13 @@ header. In stdio mode the server reads `POLARION_ACCESS_TOKEN` from the environm
 
 ## Deployment
 
-Build and run the container:
+Build and run the container with Docker Compose:
 
 ```bash
-docker build -t polarionmcp .
-docker run --rm -p 8080:8080 --env-file .env polarionmcp
+docker compose up -d --build
 ```
 
+Compose reads `POLARION_BASE_URL` and optional `PORT` from the repo-root `.env` file.
 Use `GET /healthz` or `GET /readyz` for container or load-balancer probes.
 
 ## Code Generation
