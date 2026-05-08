@@ -11,9 +11,13 @@ describe("generated tools", () => {
   beforeEach(() => {
     fetchSpy = vi.spyOn(globalThis, "fetch");
     fetchSpy.mockReset();
+    Deno.env.delete("REST_PAGE_SIZE");
+    Deno.env.delete("FETCH_CONCURRENCY_COUNT");
   });
 
   afterEach(() => {
+    Deno.env.delete("REST_PAGE_SIZE");
+    Deno.env.delete("FETCH_CONCURRENCY_COUNT");
     vi.restoreAllMocks();
   });
 
@@ -266,6 +270,7 @@ describe("generated tools", () => {
         links: {
           self: "https://example.invalid/projects",
         },
+        meta: { totalCount: 1 },
       }),
     );
 
@@ -313,7 +318,7 @@ describe("generated tools", () => {
     ]);
   });
 
-  test("walks Polarion pagination links and returns the full collection", async () => {
+  test("fetches collection pages by page number and returns the full collection", async () => {
     fetchSpy.mockResolvedValueOnce(
       jsonResponse({
         data: [
@@ -323,14 +328,24 @@ describe("generated tools", () => {
         links: {
           next: "https://example.invalid/projects?page[number]=2",
         },
-        meta: { totalCount: 3 },
+        meta: { totalCount: 5 },
       }),
     );
     fetchSpy.mockResolvedValueOnce(
       jsonResponse({
-        data: [{ id: "3", type: "projects" }],
+        data: [
+          { id: "3", type: "projects" },
+          { id: "4", type: "projects" },
+        ],
         links: {},
-        meta: { totalCount: 3 },
+        meta: { totalCount: 5 },
+      }),
+    );
+    fetchSpy.mockResolvedValueOnce(
+      jsonResponse({
+        data: [{ id: "5", type: "projects" }],
+        links: {},
+        meta: { totalCount: 5 },
       }),
     );
 
@@ -344,11 +359,14 @@ describe("generated tools", () => {
         { id: "1", type: "projects" },
         { id: "2", type: "projects" },
         { id: "3", type: "projects" },
+        { id: "4", type: "projects" },
+        { id: "5", type: "projects" },
       ],
-      meta: { totalCount: 3 },
+      meta: { totalCount: 5 },
     });
-    expect(fetchSpy.calls).toHaveLength(2);
-    expect(fetchSpy.calls[1]!.args[0]).toBe("https://example.invalid/projects?page[number]=2");
+    expect(fetchSpy.calls).toHaveLength(3);
+    expect(fetchSpy.calls[1]!.args[0]).toBe("https://example.invalid/projects?page%5Bnumber%5D=2");
+    expect(fetchSpy.calls[2]!.args[0]).toBe("https://example.invalid/projects?page%5Bnumber%5D=3");
 
     await Promise.all([
       client.close(),
@@ -358,14 +376,13 @@ describe("generated tools", () => {
     ]);
   });
 
-  test("rejects cross-origin pagination links before fetching follow-up pages", async () => {
+  test("uses REST_PAGE_SIZE on the first request", async () => {
+    Deno.env.set("REST_PAGE_SIZE", "250");
     fetchSpy.mockResolvedValueOnce(
       jsonResponse({
         data: [{ id: "1", type: "projects" }],
-        links: {
-          next: "https://evil.invalid/projects?page[number]=2",
-        },
-        meta: { totalCount: 2 },
+        links: {},
+        meta: { totalCount: 1 },
       }),
     );
 
@@ -373,13 +390,84 @@ describe("generated tools", () => {
 
     const result = await callToolWithToken(client, "getProjects", {});
 
-    expect((result as CallToolResult).isError).toBe(true);
     expect(textPayload(result as CallToolResult)).toMatchObject({
-      error: true,
-      status_code: 409,
-      message: "Polarion pagination returned a cross-origin next link",
+      kind: "collection",
+      items: [{ id: "1", type: "projects" }],
     });
     expect(fetchSpy.calls).toHaveLength(1);
+    expect(fetchSpy.calls[0]!.args[0]).toBe("https://example.invalid/projects?page%5Bsize%5D=250");
+
+    await Promise.all([
+      client.close(),
+      clientTransport.close(),
+      serverTransport.close(),
+      server.close(),
+    ]);
+  });
+
+  test("fetches follow-up pages in concurrency-sized batches", async () => {
+    Deno.env.set("FETCH_CONCURRENCY_COUNT", "2");
+    fetchSpy.mockResolvedValueOnce(
+      jsonResponse({
+        data: [
+          { id: "1", type: "projects" },
+          { id: "2", type: "projects" },
+        ],
+        links: {},
+        meta: { totalCount: 7 },
+      }),
+    );
+    fetchSpy.mockResolvedValueOnce(
+      jsonResponse({
+        data: [
+          { id: "3", type: "projects" },
+          { id: "4", type: "projects" },
+        ],
+        links: {},
+        meta: { totalCount: 7 },
+      }),
+    );
+    fetchSpy.mockResolvedValueOnce(
+      jsonResponse({
+        data: [
+          { id: "5", type: "projects" },
+          { id: "6", type: "projects" },
+        ],
+        links: {},
+        meta: { totalCount: 7 },
+      }),
+    );
+    fetchSpy.mockResolvedValueOnce(
+      jsonResponse({
+        data: [{ id: "7", type: "projects" }],
+        links: {},
+        meta: { totalCount: 7 },
+      }),
+    );
+
+    const { client, server, clientTransport, serverTransport } = await connectClient();
+
+    const result = await callToolWithToken(client, "getProjects", {});
+
+    expect(textPayload(result as CallToolResult)).toMatchObject({
+      kind: "collection",
+      items: [
+        { id: "1", type: "projects" },
+        { id: "2", type: "projects" },
+        { id: "3", type: "projects" },
+        { id: "4", type: "projects" },
+        { id: "5", type: "projects" },
+        { id: "6", type: "projects" },
+        { id: "7", type: "projects" },
+      ],
+      meta: { totalCount: 7 },
+    });
+    expect(fetchSpy.calls).toHaveLength(4);
+    expect(fetchSpy.calls.slice(1).map((call) => call.args[0])).toEqual([
+      "https://example.invalid/projects?page%5Bnumber%5D=2",
+      "https://example.invalid/projects?page%5Bnumber%5D=3",
+      "https://example.invalid/projects?page%5Bnumber%5D=4",
+    ]);
 
     await Promise.all([
       client.close(),
@@ -437,6 +525,13 @@ describe("generated tools", () => {
         meta: { totalCount: 3 },
       }),
     );
+    fetchSpy.mockResolvedValueOnce(
+      jsonResponse({
+        data: [],
+        links: {},
+        meta: { totalCount: 3 },
+      }),
+    );
 
     const { client, server, clientTransport, serverTransport } = await connectClient();
 
@@ -449,6 +544,34 @@ describe("generated tools", () => {
       error: true,
       status_code: 409,
       message: "Polarion returned a partial collection",
+    });
+
+    await Promise.all([
+      client.close(),
+      clientTransport.close(),
+      serverTransport.close(),
+      server.close(),
+    ]);
+  });
+
+  test("errors when auto-paginated collection omits totalCount", async () => {
+    fetchSpy.mockResolvedValueOnce(
+      jsonResponse({
+        data: [{ id: "1", type: "projects" }],
+        links: {},
+        meta: {},
+      }),
+    );
+
+    const { client, server, clientTransport, serverTransport } = await connectClient();
+
+    const result = await callToolWithToken(client, "getProjects", {});
+
+    expect((result as CallToolResult).isError).toBe(true);
+    expect(textPayload(result as CallToolResult)).toMatchObject({
+      error: true,
+      status_code: 409,
+      message: "Polarion pagination did not return totalCount",
     });
 
     await Promise.all([

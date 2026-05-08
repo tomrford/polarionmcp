@@ -11,7 +11,7 @@ Inside code, call functions through codemode.*.
 Prefer project-scoped work over all-project reads.
 
 Guidance:
-- generated list operations auto-follow Polarion pagination and return full collections
+- generated list operations fetch all Polarion pages and return full collections
 - use project scope, query filters, and fields to keep reads targeted
 - generated tools use exact OpenAPI operationId names such as getProjects, getWorkItems, and patchWorkItem
 - generated reads return stable top-level envelopes: collections use { kind: "collection", items, ... }, single resources use { kind: "resource", item, ... }, and 204 writes use { ok: true }

@@ -23,7 +23,12 @@ type ToolTextResult = {
   structuredContent: Record<string, unknown>;
 };
 type ToolResult = ToolErrorResult | ToolStructuredResult | ToolTextResult;
-type ResolvedNextPageUrl = { error: ToolErrorResult } | { url: string };
+type ResolvedPaginationConfig =
+  | { error: ToolErrorResult }
+  | {
+      concurrencyCount: number;
+      restPageSize?: number;
+    };
 type JsonApiCollection = {
   data: unknown[];
   included?: unknown[];
@@ -98,14 +103,38 @@ function isJsonApiResource(payload: unknown): payload is JsonApiResource {
   );
 }
 
-function nextPageLink(payload: { links?: Record<string, unknown> }) {
-  const next = payload.links?.next;
-  return typeof next === "string" && next.length > 0 ? next : undefined;
-}
-
 function totalCount(payload: { meta?: Record<string, unknown> }) {
   const total = payload.meta?.totalCount;
   return typeof total === "number" && Number.isFinite(total) ? total : undefined;
+}
+
+function parsePositiveIntegerEnv(name: string): { error: ToolErrorResult } | { value?: number } {
+  const raw = Deno.env.get(name);
+  if (typeof raw === "undefined" || raw === "") return {};
+
+  const value = Number(raw);
+  if (!Number.isInteger(value) || value < 1) {
+    return {
+      error: errorResult(
+        makeError(500, `Invalid ${name}`, `${name} must be a positive integer; received ${raw}.`),
+      ),
+    };
+  }
+
+  return { value };
+}
+
+function paginationConfig(): ResolvedPaginationConfig {
+  const restPageSize = parsePositiveIntegerEnv("REST_PAGE_SIZE");
+  if ("error" in restPageSize) return restPageSize;
+
+  const concurrencyCount = parsePositiveIntegerEnv("FETCH_CONCURRENCY_COUNT");
+  if ("error" in concurrencyCount) return concurrencyCount;
+
+  return {
+    concurrencyCount: concurrencyCount.value ?? 1,
+    ...(restPageSize.value ? { restPageSize: restPageSize.value } : {}),
+  };
 }
 
 function partialResultError(message: string, details: string) {
@@ -185,16 +214,19 @@ function isUnderBasePath(candidate: URL, base: URL) {
   return candidate.pathname === basePath || candidate.pathname.startsWith(`${basePath}/`);
 }
 
-function resolveNextPageUrl(nextLink: string): ResolvedNextPageUrl {
+function resolvePageUrl(
+  baseUrl: string,
+  pageNumber: number,
+): { error: ToolErrorResult } | { url: string } {
   const polarionUrl = new URL(getPolarionBaseUrl());
   let resolved: URL;
   try {
-    resolved = new URL(nextLink, polarionUrl);
+    resolved = new URL(baseUrl, polarionUrl);
   } catch {
     return {
       error: partialResultError(
-        "Polarion pagination returned an invalid next link",
-        `Could not resolve pagination link: ${nextLink}`,
+        "Polarion pagination could not resolve the page URL",
+        `Could not resolve pagination URL: ${baseUrl}`,
       ),
     };
   }
@@ -202,8 +234,8 @@ function resolveNextPageUrl(nextLink: string): ResolvedNextPageUrl {
   if (resolved.origin !== polarionUrl.origin) {
     return {
       error: partialResultError(
-        "Polarion pagination returned a cross-origin next link",
-        `Refusing to follow pagination link outside ${polarionUrl.origin}: ${resolved.toString()}`,
+        "Polarion pagination resolved a cross-origin page URL",
+        `Refusing to fetch pagination URL outside ${polarionUrl.origin}: ${resolved.toString()}`,
       ),
     };
   }
@@ -211,12 +243,13 @@ function resolveNextPageUrl(nextLink: string): ResolvedNextPageUrl {
   if (!isUnderBasePath(resolved, polarionUrl)) {
     return {
       error: partialResultError(
-        "Polarion pagination returned a next link outside the configured base path",
-        `Refusing to follow pagination link outside ${polarionUrl.pathname}: ${resolved.toString()}`,
+        "Polarion pagination resolved a page URL outside the configured base path",
+        `Refusing to fetch pagination URL outside ${polarionUrl.pathname}: ${resolved.toString()}`,
       ),
     };
   }
 
+  resolved.searchParams.set("page[number]", String(pageNumber));
   return { url: resolved.toString() };
 }
 
@@ -277,19 +310,35 @@ async function fetchJsonPage(
 async function fetchAllPages(
   operation: (typeof GENERATED_OPERATIONS)[number],
   firstPage: JsonApiCollection,
+  firstPageUrl: string,
   init: RequestInit,
+  concurrencyCount: number,
 ): Promise<ToolResult> {
-  const visited = new Set<string>();
   const seenIncluded = new Set<string>();
-  let currentPage: JsonApiCollection | undefined = firstPage;
-  const firstNext = nextPageLink(firstPage);
-  let currentUrl: string | undefined;
-  if (firstNext) {
-    const initialPageUrl = resolveNextPageUrl(firstNext);
-    if ("error" in initialPageUrl) return initialPageUrl.error;
-    currentUrl = initialPageUrl.url;
+  const total = totalCount(firstPage);
+  if (typeof total !== "number") {
+    return partialResultError(
+      "Polarion pagination did not return totalCount",
+      "Auto-paginated collections require meta.totalCount to plan page fetches.",
+    );
   }
-  let pageCount = 1;
+
+  const observedPageSize = firstPage.data.length;
+  if (total > 0 && observedPageSize === 0) {
+    return partialResultError(
+      "Polarion pagination returned an empty first page",
+      `Cannot plan pagination for ${total} total items from an empty first page.`,
+    );
+  }
+
+  const totalPages = observedPageSize === 0 ? 1 : Math.ceil(total / observedPageSize);
+  if (totalPages > 10_000) {
+    return partialResultError(
+      "Polarion pagination exceeded safety limit",
+      "More than 10000 pages are required to fetch the collection.",
+    );
+  }
+
   const merged: JsonApiCollection = {
     ...Object.fromEntries(
       Object.entries(firstPage).filter(
@@ -298,50 +347,39 @@ async function fetchAllPages(
     ),
     data: [],
   };
+  mergeCollectionPage(merged, firstPage, seenIncluded);
 
-  while (currentPage) {
-    mergeCollectionPage(merged, currentPage, seenIncluded);
-    if (!currentUrl) break;
+  for (let start = 2; start <= totalPages; start += concurrencyCount) {
+    const end = Math.min(totalPages, start + concurrencyCount - 1);
+    const requests: Array<
+      Promise<{ pageNumber: number; result: Awaited<ReturnType<typeof fetchJsonPage>> }>
+    > = [];
 
-    if (visited.has(currentUrl)) {
-      return partialResultError(
-        "Polarion pagination loop detected",
-        `Repeated next link while walking pages: ${currentUrl}`,
-      );
-    }
-    visited.add(currentUrl);
-    pageCount += 1;
-    if (pageCount > 10_000) {
-      return partialResultError(
-        "Polarion pagination exceeded safety limit",
-        "More than 10000 pages were returned while walking the collection.",
-      );
+    for (let pageNumber = start; pageNumber <= end; pageNumber += 1) {
+      const pageUrl = resolvePageUrl(firstPageUrl, pageNumber);
+      if ("error" in pageUrl) return pageUrl.error;
+      requests.push(fetchJsonPage(pageUrl.url, init).then((result) => ({ pageNumber, result })));
     }
 
-    const pageResult = await fetchJsonPage(currentUrl, init);
-    if ("error" in pageResult) return pageResult.error;
+    const pages = await Promise.all(requests);
+    pages.sort((a, b) => a.pageNumber - b.pageNumber);
 
-    const payload = pageResult.json;
-    if (!isJsonApiCollection(payload)) {
-      return partialResultError(
-        "Polarion pagination returned a non-collection payload",
-        `Expected JSON:API collection while following ${currentUrl}`,
-      );
-    }
+    for (const page of pages) {
+      if ("error" in page.result) return page.result.error;
 
-    currentPage = payload;
-    const next = nextPageLink(currentPage);
-    if (!next) {
-      currentUrl = undefined;
-      continue;
+      const payload = page.result.json;
+      if (!isJsonApiCollection(payload)) {
+        return partialResultError(
+          "Polarion pagination returned a non-collection payload",
+          `Expected JSON:API collection while fetching page ${page.pageNumber}`,
+        );
+      }
+
+      mergeCollectionPage(merged, payload, seenIncluded);
     }
-    const nextPageUrl = resolveNextPageUrl(next);
-    if ("error" in nextPageUrl) return nextPageUrl.error;
-    currentUrl = nextPageUrl.url;
   }
 
-  const total = totalCount(merged);
-  if (typeof total === "number" && merged.data.length !== total) {
+  if (merged.data.length !== total) {
     return partialResultError(
       "Polarion returned a partial collection",
       `Walked ${merged.data.length} items but meta.totalCount reports ${total}.`,
@@ -379,10 +417,22 @@ async function executeOperation(
       Object.entries(operation.wire.pathParamMap).map(([key, wireName]) => [wireName, args[key]]),
     );
     const queryString = toQueryString(buildQuery(args, operation) as any);
-    const url = `${getPolarionBaseUrl()}${interpolatePath(
+    const config = paginationConfig();
+    if ("error" in config) return config.error;
+
+    const baseOperationUrl = `${getPolarionBaseUrl()}${interpolatePath(
       operation.pathTemplate,
       pathParams,
     )}${queryString}`;
+    const operationUrl = new URL(baseOperationUrl);
+    if (
+      operation.method === "GET" &&
+      operation.output.collection?.autoPaginate &&
+      typeof config.restPageSize === "number"
+    ) {
+      operationUrl.searchParams.set("page[size]", String(config.restPageSize));
+    }
+    const url = operationUrl.toString();
 
     const headers: Record<string, string> = {
       Accept: "application/json",
@@ -431,12 +481,17 @@ async function executeOperation(
       operation.output.collection?.autoPaginate &&
       isJsonApiCollection(normalizedData)
     ) {
-      const next = nextPageLink(normalizedData);
       const total = totalCount(normalizedData);
-      if (next) {
-        return await fetchAllPages(operation, normalizedData, init);
+      if (typeof total !== "number") {
+        return partialResultError(
+          "Polarion pagination did not return totalCount",
+          "Auto-paginated collections require meta.totalCount to plan page fetches.",
+        );
       }
-      if (typeof total === "number" && normalizedData.data.length < total) {
+      if (normalizedData.data.length < total) {
+        return await fetchAllPages(operation, normalizedData, url, init, config.concurrencyCount);
+      }
+      if (normalizedData.data.length > total) {
         return partialResultError(
           "Polarion returned a partial collection",
           `Response contains ${normalizedData.data.length} items but meta.totalCount reports ${total}.`,

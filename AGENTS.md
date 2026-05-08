@@ -16,6 +16,7 @@ Default to using Deno in this repo.
 - HTTP mode expects caller `Authorization: Bearer <token>` headers
 - stdio mode reads `POLARION_ACCESS_TOKEN` from env
 - Required base config: `POLARION_BASE_URL`
+- Optional pagination config: `REST_PAGE_SIZE`, `FETCH_CONCURRENCY_COUNT`
 - Start tasks load `.env`
 - Keep auth host-side; sandboxed code paths should not read credentials directly
 

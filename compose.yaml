@@ -9,6 +9,8 @@ services:
     environment:
       POLARION_BASE_URL: ${POLARION_BASE_URL}
       PORT: ${PORT:-8080}
+      REST_PAGE_SIZE: ${REST_PAGE_SIZE:-}
+      FETCH_CONCURRENCY_COUNT: ${FETCH_CONCURRENCY_COUNT:-}
     healthcheck:
       test: ["CMD", "deno", "eval", "--allow-env", "--allow-net=127.0.0.1", "const r = await fetch('http://127.0.0.1:' + (Deno.env.get('PORT') ?? '8080') + '/healthz'); if (!r.ok) Deno.exit(1)"]
       interval: 30s

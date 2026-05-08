@@ -46,7 +46,7 @@ inventory.
 
 ### Design Notes
 
-- Generated list operations auto-follow Polarion pagination and return full collections.
+- Generated list operations fetch all Polarion pages and return full collections.
 - Request shapes are tuned for scripting: path params and query params sit at top level;
   request payload goes under `body`.
 - Generated reads return stable top-level envelopes: collections use
@@ -106,11 +106,13 @@ cp .env.example .env
 
 ### Environment
 
-| Variable                | Required   | Description                                                         |
-| ----------------------- | ---------- | ------------------------------------------------------------------- |
-| `POLARION_BASE_URL`     | yes        | Full base URL, e.g. `https://polarion.example.com/polarion/rest/v1` |
-| `POLARION_ACCESS_TOKEN` | stdio only | Bearer token for local stdio mode                                   |
-| `PORT`                  | no         | HTTP listen port (default `8080`)                                   |
+| Variable                  | Required   | Description                                                           |
+| ------------------------- | ---------- | --------------------------------------------------------------------- |
+| `POLARION_BASE_URL`       | yes        | Full base URL, e.g. `https://polarion.example.com/polarion/rest/v1`   |
+| `POLARION_ACCESS_TOKEN`   | stdio only | Bearer token for local stdio mode                                     |
+| `PORT`                    | no         | HTTP listen port (default `8080`)                                     |
+| `REST_PAGE_SIZE`          | no         | Page size for generated collection reads; Polarion default when unset |
+| `FETCH_CONCURRENCY_COUNT` | no         | Concurrent page fetches for generated collection reads (default `1`)  |
 
 ### Transports
 
@@ -138,7 +140,8 @@ Build and run the container with Docker Compose:
 docker compose up -d --build
 ```
 
-Compose reads `POLARION_BASE_URL` and optional `PORT` from the repo-root `.env` file.
+Compose reads `POLARION_BASE_URL`, `PORT`, `REST_PAGE_SIZE`, and
+`FETCH_CONCURRENCY_COUNT` from the repo-root `.env` file.
 Use `GET /healthz` or `GET /readyz` for container or load-balancer probes.
 
 ## Code Generation
