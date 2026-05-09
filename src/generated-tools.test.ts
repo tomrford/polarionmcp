@@ -554,7 +554,7 @@ describe("generated tools", () => {
     ]);
   });
 
-  test("errors when auto-paginated collection omits totalCount", async () => {
+  test("returns the first collection when auto-paginated collection omits totalCount", async () => {
     fetchSpy.mockResolvedValueOnce(
       jsonResponse({
         data: [{ id: "1", type: "projects" }],
@@ -567,12 +567,12 @@ describe("generated tools", () => {
 
     const result = await callToolWithToken(client, "getProjects", {});
 
-    expect((result as CallToolResult).isError).toBe(true);
     expect(textPayload(result as CallToolResult)).toMatchObject({
-      error: true,
-      status_code: 409,
-      message: "Polarion pagination did not return totalCount",
+      kind: "collection",
+      items: [{ id: "1", type: "projects" }],
+      meta: {},
     });
+    expect(fetchSpy.calls).toHaveLength(1);
 
     await Promise.all([
       client.close(),

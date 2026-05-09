@@ -482,20 +482,16 @@ async function executeOperation(
       isJsonApiCollection(normalizedData)
     ) {
       const total = totalCount(normalizedData);
-      if (typeof total !== "number") {
-        return partialResultError(
-          "Polarion pagination did not return totalCount",
-          "Auto-paginated collections require meta.totalCount to plan page fetches.",
-        );
-      }
-      if (normalizedData.data.length < total) {
-        return await fetchAllPages(operation, normalizedData, url, init, config.concurrencyCount);
-      }
-      if (normalizedData.data.length > total) {
-        return partialResultError(
-          "Polarion returned a partial collection",
-          `Response contains ${normalizedData.data.length} items but meta.totalCount reports ${total}.`,
-        );
+      if (typeof total === "number") {
+        if (normalizedData.data.length < total) {
+          return await fetchAllPages(operation, normalizedData, url, init, config.concurrencyCount);
+        }
+        if (normalizedData.data.length > total) {
+          return partialResultError(
+            "Polarion returned a partial collection",
+            `Response contains ${normalizedData.data.length} items but meta.totalCount reports ${total}.`,
+          );
+        }
       }
     }
 
