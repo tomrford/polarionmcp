@@ -94,6 +94,10 @@ Configure your MCP client or agent harness to connect to the server.
 }
 ```
 
+The HTTP endpoint is stateless and returns JSON-RPC responses directly. It does
+not issue or require `Mcp-Session-Id`; `GET` and `DELETE` requests to `/mcp`
+return `405 Method Not Allowed`.
+
 ## Running the Server
 
 ### Setup
@@ -129,8 +133,9 @@ deno task start:stdio
 ```
 
 HTTP mode serves the MCP endpoint at `/mcp` and unauthenticated health checks at
-`GET /healthz` and `GET /readyz`. Callers authenticate with an `Authorization: Bearer <token>`
-header. In stdio mode the server reads `POLARION_ACCESS_TOKEN` from the environment instead.
+`GET /healthz` and `GET /readyz`. Callers authenticate each MCP request with an
+`Authorization: Bearer <token>` header. In stdio mode the server reads
+`POLARION_ACCESS_TOKEN` from the environment instead.
 
 ## Deployment
 

@@ -12,7 +12,7 @@ Default to using Deno in this repo.
 
 - Start HTTP mode with `deno task start`
 - Start stdio mode with `deno task start:stdio`
-- HTTP mode serves `/mcp` plus unauthenticated `GET /healthz` and `GET /readyz`
+- HTTP mode serves stateless Streamable HTTP at `/mcp` with JSON responses, plus unauthenticated `GET /healthz` and `GET /readyz`
 - HTTP mode expects caller `Authorization: Bearer <token>` headers
 - stdio mode reads `POLARION_ACCESS_TOKEN` from env
 - Required base config: `POLARION_BASE_URL`

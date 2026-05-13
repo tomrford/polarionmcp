@@ -30,10 +30,11 @@ if (isStdio) {
   console.error("Polarion MCP running in stdio mode");
 } else {
   // Production HTTP mode: token comes from each client's Authorization header
-  type Transport = InstanceType<typeof WebStandardStreamableHTTPServerTransport>;
-  const sessions = new Map<string, Transport>();
-
   const port = httpPort();
+  const transport = new WebStandardStreamableHTTPServerTransport({
+    enableJsonResponse: true,
+  });
+  await server.connect(transport);
 
   Deno.serve({ port }, async (req) => {
     const url = new URL(req.url);
@@ -45,32 +46,7 @@ if (isStdio) {
       return new Response("Not found", { status: 404 });
     }
 
-    const sessionId = req.headers.get("mcp-session-id");
-    const existingTransport = sessionId ? sessions.get(sessionId) : undefined;
-
     if (req.method === "POST") {
-      let transport: Transport;
-
-      if (existingTransport) {
-        transport = existingTransport;
-      } else if (!sessionId) {
-        transport = new WebStandardStreamableHTTPServerTransport({
-          sessionIdGenerator: () => crypto.randomUUID(),
-          onsessioninitialized: (id) => {
-            sessions.set(id, transport);
-          },
-          onsessionclosed: (id) => {
-            sessions.delete(id);
-          },
-        });
-        transport.onclose = () => {
-          if (transport.sessionId) sessions.delete(transport.sessionId);
-        };
-        await server.connect(transport);
-      } else {
-        return new Response("Session not found", { status: 404 });
-      }
-
       const authHeader = req.headers.get("authorization");
       const token = authHeader?.match(/^Bearer\s+(.+)$/i)?.[1];
 
@@ -80,10 +56,7 @@ if (isStdio) {
     }
 
     if (req.method === "GET" || req.method === "DELETE") {
-      if (!existingTransport) {
-        return new Response("Session not found", { status: 404 });
-      }
-      return existingTransport.handleRequest(req);
+      return new Response("Method not allowed", { status: 405 });
     }
 
     return new Response("Method not allowed", { status: 405 });
