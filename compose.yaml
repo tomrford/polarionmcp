@@ -7,7 +7,7 @@ services:
     ports:
       - "8080:8080"
     environment:
-      POLARION_BASE_URL: ${POLARION_BASE_URL}
+      POLARION_BASE_URL: ${POLARION_BASE_URL:?POLARION_BASE_URL is required}
       PORT: ${PORT:-8080}
       REST_PAGE_SIZE: ${REST_PAGE_SIZE:-}
       FETCH_CONCURRENCY_COUNT: ${FETCH_CONCURRENCY_COUNT:-}

@@ -105,7 +105,7 @@ return `405 Method Not Allowed`.
 ```bash
 nix develop        # optional — sets up the Deno toolchain
 cp .env.example .env
-# fill in POLARION_BASE_URL (required) and POLARION_ACCESS_TOKEN (stdio only)
+# fill in local defaults, or set the same variables in your shell/container UI
 ```
 
 ### Environment
@@ -145,8 +145,8 @@ Build and run the container with Docker Compose:
 docker compose up -d --build
 ```
 
-Compose reads `POLARION_BASE_URL`, `PORT`, `REST_PAGE_SIZE`, and
-`FETCH_CONCURRENCY_COUNT` from the repo-root `.env` file.
+Provide `POLARION_BASE_URL` through the Compose environment. `PORT`,
+`REST_PAGE_SIZE`, and `FETCH_CONCURRENCY_COUNT` are optional.
 Use `GET /healthz` or `GET /readyz` for container or load-balancer probes.
 
 ## Code Generation
