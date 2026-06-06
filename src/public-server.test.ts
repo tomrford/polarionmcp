@@ -64,7 +64,11 @@ describe("createPublicServer", () => {
     });
 
     const tools = await client.listTools();
-    expect(tools.tools.map((tool) => tool.name).sort()).toEqual(["code", "search"]);
+    expect(tools.tools.map((tool) => tool.name).sort()).toEqual([
+      "code",
+      "read_attachment",
+      "search",
+    ]);
 
     let error: unknown;
     try {
@@ -260,6 +264,7 @@ describe("createPublicServer", () => {
     const tools = await client.listTools();
     expect(tools.tools.map((tool) => tool.name).sort()).toEqual([
       "code",
+      "read_attachment",
       "read_guidelines",
       "search",
     ]);
@@ -323,6 +328,127 @@ describe("createPublicServer", () => {
     const text = (result as CallToolResult).content[0] as { text: string };
     expect(text.text).toContain("--- TRUNCATED ---");
     expect(text.text).toContain("Your code already ran successfully.");
+
+    await Promise.all([
+      client.close(),
+      clientTransport.close(),
+      serverTransport.close(),
+      server.close(),
+    ]);
+  });
+
+  test("read_attachment returns image content from a Polarion content URL", async () => {
+    const pngBytes = new Uint8Array([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a, 0x00]);
+    fetchSpy.mockResolvedValueOnce(
+      new Response(pngBytes, {
+        headers: {
+          "content-type": "application/octet-stream",
+          "content-length": String(pngBytes.length),
+        },
+      }),
+    );
+
+    const { client, server, clientTransport, serverTransport } = await connectClient({
+      authToken: "bridge-token",
+      resolveAccessToken: httpAccessToken,
+    });
+
+    const result = (await client.callTool({
+      name: "read_attachment",
+      arguments: {
+        contentUrl: "/projects/PRJ/workitems/WI-1/attachments/A-1/content?revision=42",
+      },
+    })) as CallToolResult;
+
+    const [url, init] = fetchSpy.calls[0]!.args as [URL, RequestInit];
+    expect(url.toString()).toBe(
+      "https://example.invalid/projects/PRJ/workitems/WI-1/attachments/A-1/content?revision=42",
+    );
+    expect(init.headers).toEqual({
+      Accept: "application/octet-stream, image/*, text/*",
+      Authorization: "Bearer bridge-token",
+    });
+    expect(result.isError).toBeUndefined();
+    expect(result.content[0]).toEqual({
+      type: "image",
+      data: btoa(String.fromCharCode(...pngBytes)),
+      mimeType: "image/png",
+    });
+    expect(JSON.parse((result.content[1] as { text: string }).text)).toMatchObject({
+      kind: "attachment",
+      mimeType: "image/png",
+      byteLength: pngBytes.length,
+      revision: "42",
+    });
+
+    await Promise.all([
+      client.close(),
+      clientTransport.close(),
+      serverTransport.close(),
+      server.close(),
+    ]);
+  });
+
+  test("read_attachment builds content URL from attachment resource id", async () => {
+    fetchSpy.mockResolvedValueOnce(
+      new Response("plain text", {
+        headers: { "content-type": "application/octet-stream" },
+      }),
+    );
+
+    const { client, server, clientTransport, serverTransport } = await connectClient({
+      authToken: "bridge-token",
+      resolveAccessToken: httpAccessToken,
+    });
+
+    const result = (await client.callTool({
+      name: "read_attachment",
+      arguments: {
+        resourceType: "workitem_attachments",
+        resourceId: "PRJ/WI-1/A-1",
+        revision: "7",
+      },
+    })) as CallToolResult;
+
+    const [url] = fetchSpy.calls[0]!.args as [URL, RequestInit];
+    expect(url.toString()).toBe(
+      "https://example.invalid/projects/PRJ/workitems/WI-1/attachments/A-1/content?revision=7",
+    );
+    expect(result.isError).toBeUndefined();
+    expect((result.content[0] as { text: string }).text).toBe("plain text");
+    expect(result.structuredContent).toMatchObject({
+      kind: "attachment",
+      mimeType: "application/octet-stream",
+      byteLength: 10,
+      revision: "7",
+    });
+
+    await Promise.all([
+      client.close(),
+      clientTransport.close(),
+      serverTransport.close(),
+      server.close(),
+    ]);
+  });
+
+  test("read_attachment rejects cross-origin content URLs before fetching", async () => {
+    const { client, server, clientTransport, serverTransport } = await connectClient({
+      authToken: "bridge-token",
+      resolveAccessToken: httpAccessToken,
+    });
+
+    const result = (await client.callTool({
+      name: "read_attachment",
+      arguments: {
+        contentUrl: "https://attacker.invalid/projects/PRJ/workitems/WI-1/attachments/A-1/content",
+      },
+    })) as CallToolResult;
+
+    expect(result.isError).toBe(true);
+    expect(JSON.parse((result.content[0] as { text: string }).text)).toMatchObject({
+      message: "Rejected attachment URL",
+    });
+    expect(fetchSpy.calls).toHaveLength(0);
 
     await Promise.all([
       client.close(),

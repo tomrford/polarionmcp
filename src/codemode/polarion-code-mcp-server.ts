@@ -13,6 +13,7 @@ import type { RequestContextLike } from "../helpers.ts";
 import { PUBLIC_CODE_TOOL_DESCRIPTION } from "../instructions.ts";
 import { runWithPolarionAccessToken } from "../request-context.ts";
 import type { ResolveAccessToken } from "../public-server.ts";
+import { registerAttachmentTool } from "../attachments.ts";
 import { sanitizeToolName } from "./json-schema-types.ts";
 
 const CHARS_PER_TOKEN = 4;
@@ -339,6 +340,8 @@ export async function createPolarionCodeMcpServer(options: {
       }),
     );
   }
+
+  registerAttachmentTool(codemodeServer, { resolveAccessToken });
 
   codemodeServer.registerTool(
     "code",

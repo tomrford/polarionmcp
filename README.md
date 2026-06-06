@@ -15,16 +15,21 @@ Background on the code-mode pattern:
 
 ## How It Works
 
-The server exposes two MCP tools:
+The server exposes three MCP tools:
 
 - **`search`** — fuzzy lookup over the callable Polarion operation catalog. Use it to
   discover function names, parameter shapes, and return types.
 - **`code`** — execute JavaScript against the internal `codemode.*` surface.
+- **`read_attachment`** — read a specific Polarion attachment found by `code`.
+  It accepts the attachment `links.content` URL, or `resourceType` plus the full
+  JSON:API attachment `id`, and returns only supported image or UTF-8 text content.
 
 A typical agent flow:
 
 1. Call `search` to find the right operation and its signature.
 2. Call `code` with a script that uses `codemode.<operationId>(...)`.
+3. Call `read_attachment` when the script returns attachment metadata whose content
+   should be inspected.
 
 ```js
 (async () => {
@@ -54,6 +59,8 @@ inventory.
   `{ kind: "resource", item, ... }`, and `204` writes normalize to
   `{ ok: true }`.
 - Only the final `code` result returned to the MCP client may be truncated.
+- Attachment content routes stay outside `codemode`; `read_attachment` validates
+  Polarion attachment content URLs and returns only PNG, JPEG, GIF, WebP, or UTF-8 text.
 - Auth stays host-side — the sandboxed code path never receives credentials.
 
 ## Client Configuration
