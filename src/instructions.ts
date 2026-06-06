@@ -19,6 +19,7 @@ Guidance:
 - use project scope, query filters, and fields to keep reads targeted
 - generated tools use exact OpenAPI operationId names such as getProjects, getWorkItems, and patchWorkItem
 - generated reads return stable top-level envelopes: collections use { kind: "collection", items, ... }, single resources use { kind: "resource", item, ... }, and 204 writes use { ok: true }
+- read_attachment transcodes PNG/JPEG attachments to lossless WebP; if an image is still too large for the inline result budget, it returns metadata without an image block
 - read_attachment returns only supported image content or UTF-8 text; binary attachment routes are not exposed through codemode
 - write operations usually take a top-level body object mirroring the JSON API request payload
 - if the final code result is truncated, your script still ran; rewrite the return value to send a smaller filtered or aggregated result

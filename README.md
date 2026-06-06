@@ -22,7 +22,7 @@ The server exposes three MCP tools:
 - **`code`** — execute JavaScript against the internal `codemode.*` surface.
 - **`read_attachment`** — read a specific Polarion attachment found by `code`.
   It accepts the attachment `links.content` URL, or `resourceType` plus the full
-  JSON:API attachment `id`, and returns only supported image or UTF-8 text content.
+  JSON:API attachment `id`, and returns supported image or UTF-8 text content.
 
 A typical agent flow:
 
@@ -60,7 +60,9 @@ inventory.
   `{ ok: true }`.
 - Only the final `code` result returned to the MCP client may be truncated.
 - Attachment content routes stay outside `codemode`; `read_attachment` validates
-  Polarion attachment content URLs and returns only PNG, JPEG, GIF, WebP, or UTF-8 text.
+  Polarion attachment content URLs, transcodes PNG and JPEG attachments to lossless
+  WebP, and returns inline images only when the serialized MCP result fits the
+  configured inline budget.
 - Auth stays host-side — the sandboxed code path never receives credentials.
 
 ## Client Configuration
@@ -117,13 +119,14 @@ cp .env.example .env
 
 ### Environment
 
-| Variable                  | Required   | Description                                                           |
-| ------------------------- | ---------- | --------------------------------------------------------------------- |
-| `POLARION_BASE_URL`       | yes        | Full base URL, e.g. `https://polarion.example.com/polarion/rest/v1`   |
-| `POLARION_ACCESS_TOKEN`   | stdio only | Bearer token for local stdio mode                                     |
-| `PORT`                    | no         | HTTP listen port (default `8080`)                                     |
-| `REST_PAGE_SIZE`          | no         | Page size for generated collection reads; Polarion default when unset |
-| `FETCH_CONCURRENCY_COUNT` | no         | Concurrent page fetches for generated collection reads (default `1`)  |
+| Variable                                  | Required   | Description                                                           |
+| ----------------------------------------- | ---------- | --------------------------------------------------------------------- |
+| `POLARION_BASE_URL`                       | yes        | Full base URL, e.g. `https://polarion.example.com/polarion/rest/v1`   |
+| `POLARION_ACCESS_TOKEN`                   | stdio only | Bearer token for local stdio mode                                     |
+| `PORT`                                    | no         | HTTP listen port (default `8080`)                                     |
+| `REST_PAGE_SIZE`                          | no         | Page size for generated collection reads; Polarion default when unset |
+| `FETCH_CONCURRENCY_COUNT`                 | no         | Concurrent page fetches for generated collection reads (default `1`)  |
+| `READ_ATTACHMENT_INLINE_RESULT_MAX_BYTES` | no         | Serialized inline image result budget (default `1000000`)             |
 
 ### Transports
 

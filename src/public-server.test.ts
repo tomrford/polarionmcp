@@ -11,11 +11,13 @@ describe("createPublicServer", () => {
     fetchSpy = vi.spyOn(globalThis, "fetch");
     fetchSpy.mockReset();
     Deno.env.delete("POLARION_ACCESS_TOKEN");
+    Deno.env.delete("READ_ATTACHMENT_INLINE_RESULT_MAX_BYTES");
   });
 
   afterEach(() => {
     vi.restoreAllMocks();
     Deno.env.delete("POLARION_ACCESS_TOKEN");
+    Deno.env.delete("READ_ATTACHMENT_INLINE_RESULT_MAX_BYTES");
   });
 
   async function connectClient(options: {
@@ -56,6 +58,15 @@ describe("createPublicServer", () => {
       status,
       headers: { "content-type": "application/json" },
     });
+  }
+
+  function base64Bytes(data: string) {
+    return Uint8Array.from(atob(data), (char) => char.charCodeAt(0));
+  }
+
+  function isWebp(bytes: Uint8Array) {
+    const head = String.fromCharCode(...bytes.slice(0, 12));
+    return head.startsWith("RIFF") && head.slice(8, 12) === "WEBP";
   }
 
   test("exposes search and code tools and no resources without custom guidance", async () => {
@@ -337,8 +348,10 @@ describe("createPublicServer", () => {
     ]);
   });
 
-  test("read_attachment returns image content from a Polarion content URL", async () => {
-    const pngBytes = new Uint8Array([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a, 0x00]);
+  test("read_attachment returns lossless WebP image content from a Polarion content URL", async () => {
+    const pngBytes = base64Bytes(
+      "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAIAAACQd1PeAAAADElEQVR4nGP4z8AAAAMBAQDJ/pLvAAAAAElFTkSuQmCC",
+    );
     fetchSpy.mockResolvedValueOnce(
       new Response(pngBytes, {
         headers: {
@@ -369,17 +382,70 @@ describe("createPublicServer", () => {
       Authorization: "Bearer bridge-token",
     });
     expect(result.isError).toBeUndefined();
-    expect(result.content[0]).toEqual({
+    expect(result.content[0]).toMatchObject({
       type: "image",
-      data: btoa(String.fromCharCode(...pngBytes)),
-      mimeType: "image/png",
+      mimeType: "image/webp",
     });
-    expect(JSON.parse((result.content[1] as { text: string }).text)).toMatchObject({
+    expect(isWebp(base64Bytes((result.content[0] as { data: string }).data))).toBe(true);
+    const metadata = JSON.parse((result.content[1] as { text: string }).text);
+    expect(metadata).toMatchObject({
       kind: "attachment",
-      mimeType: "image/png",
-      byteLength: pngBytes.length,
+      mimeType: "image/webp",
+      conversion: "lossless-webp",
+      originalMimeType: "image/png",
+      originalByteLength: pngBytes.length,
       revision: "42",
     });
+    expect(metadata.byteLength).toBeLessThan(pngBytes.length);
+
+    await Promise.all([
+      client.close(),
+      clientTransport.close(),
+      serverTransport.close(),
+      server.close(),
+    ]);
+  });
+
+  test("read_attachment returns metadata when converted image exceeds inline result budget", async () => {
+    const pngBytes = base64Bytes(
+      "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAIAAACQd1PeAAAADElEQVR4nGP4z8AAAAMBAQDJ/pLvAAAAAElFTkSuQmCC",
+    );
+    fetchSpy.mockResolvedValueOnce(
+      new Response(pngBytes, {
+        headers: {
+          "content-type": "application/octet-stream",
+          "content-length": String(pngBytes.length),
+        },
+      }),
+    );
+
+    const { client, server, clientTransport, serverTransport } = await connectClient({
+      authToken: "bridge-token",
+      resolveAccessToken: httpAccessToken,
+    });
+
+    const result = (await client.callTool({
+      name: "read_attachment",
+      arguments: {
+        contentUrl: "/projects/PRJ/workitems/WI-1/attachments/A-1/content",
+        maxInlineResultBytes: 1,
+      },
+    })) as CallToolResult;
+
+    expect(result.isError).toBeUndefined();
+    expect(result.content).toHaveLength(1);
+    expect(result.content[0]).toMatchObject({ type: "text" });
+    const metadata = JSON.parse((result.content[0] as { text: string }).text);
+    expect(metadata).toMatchObject({
+      kind: "attachment",
+      inline: false,
+      maxInlineResultBytes: 1,
+      mimeType: "image/webp",
+      conversion: "lossless-webp",
+      originalMimeType: "image/png",
+      originalByteLength: pngBytes.length,
+    });
+    expect(metadata.inlineResultByteLength).toBeGreaterThan(1);
 
     await Promise.all([
       client.close(),
