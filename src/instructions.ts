@@ -1,12 +1,16 @@
 export const PUBLIC_SERVER_INSTRUCTIONS = `This server allows you to interact with Polarion.
 
-It exposes a search tool, a code tool and optionally a set of custom instructions.
+It exposes search, code, read_attachment and optionally a set of custom instructions.
 
 Use search first when you need to discover the available Polarion functions, parameter shapes, or return shapes.
 
 Then use code to write an async JavaScript arrow function that returns the final result.
 
 Inside code, call functions through codemode.*.
+
+Use read_attachment only after code has returned exact Polarion attachment metadata. Pass the
+attachment links.content value as contentUrl when available; otherwise pass resourceType and the
+full JSON:API resourceId.
 
 Prefer project-scoped work over all-project reads.
 
@@ -15,6 +19,8 @@ Guidance:
 - use project scope, query filters, and fields to keep reads targeted
 - generated tools use exact OpenAPI operationId names such as getProjects, getWorkItems, and patchWorkItem
 - generated reads return stable top-level envelopes: collections use { kind: "collection", items, ... }, single resources use { kind: "resource", item, ... }, and 204 writes use { ok: true }
+- read_attachment transcodes PNG/JPEG attachments to lossless WebP; if an image is still too large for the inline result budget, it returns metadata without an image block
+- read_attachment returns only supported image content or UTF-8 text; binary attachment routes are not exposed through codemode
 - write operations usually take a top-level body object mirroring the JSON API request payload
 - if the final code result is truncated, your script still ran; rewrite the return value to send a smaller filtered or aggregated result
 - use metadata and workflow action routes before unfamiliar updates
@@ -31,6 +37,7 @@ Before writing code, use the top-level search tool if you need to discover funct
 
 Write an async arrow function in JavaScript that returns the result.
 Inside code, call Polarion functions through codemode.*.
+If you need attachment bytes, return attachment metadata from code and call read_attachment separately.
 If the returned code result is truncated, the script already ran successfully; return a smaller filtered or aggregated value and rerun.
 
 Example:
