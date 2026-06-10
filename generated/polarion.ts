@@ -11,10 +11,7 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        /**
-         * Returns fields for the resource type and its target type in the Global context.
-         * @description Metadata support is limited to the following resource types: **Work Items**, **Documents**, **Test Runs**, and **Plans**.
-         */
+        /** Returns fields for the resource type and its target type in the Global context. */
         get: operations["getGlobalFieldsMetadata"];
         put?: never;
         post?: never;
@@ -184,10 +181,7 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        /**
-         * Returns fields for the resource type and its target type in the Project context.
-         * @description Metadata support is limited to the following resource types: **Work Items**, **Documents**, **Test Runs**, and **Plans**.
-         */
+        /** Returns fields for the resource type and its target type in the Project context. */
         get: operations["getProjectFieldsMetadata"];
         put?: never;
         post?: never;
@@ -246,6 +240,23 @@ export interface paths {
         put?: never;
         /** Closes the specified Collection. */
         post: operations["closeCollection"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/projects/{projectId}/collections/{collectionId}/actions/getFieldsMetadata": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Returns fields for the specified resource. */
+        get: operations["getFieldsMetadataForCollection"];
+        put?: never;
+        post?: never;
         delete?: never;
         options?: never;
         head?: never;
@@ -446,6 +457,23 @@ export interface paths {
         patch: operations["patchPlan"];
         trace?: never;
     };
+    "/projects/{projectId}/plans/{planId}/actions/getFieldsMetadata": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Returns fields for the specified resource. */
+        get: operations["getFieldsMetadataForPlan"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/projects/{projectId}/plans/{planId}/relationships/{relationshipId}": {
         parameters: {
             query?: never;
@@ -530,6 +558,23 @@ export interface paths {
         put?: never;
         /** Creates a copy of the Document. */
         post: operations["copyDocument"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/projects/{projectId}/spaces/{spaceId}/documents/{documentName}/actions/getFieldsMetadata": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Returns fields for the specified resource. */
+        get: operations["getFieldsMetadataForDocument"];
+        put?: never;
+        post?: never;
         delete?: never;
         options?: never;
         head?: never;
@@ -686,7 +731,8 @@ export interface paths {
         put?: never;
         /** Creates a list of Document Parts. */
         post: operations["postDocumentParts"];
-        delete?: never;
+        /** Deletes a list of Document Parts. */
+        delete: operations["deleteDocumentParts"];
         options?: never;
         head?: never;
         patch?: never;
@@ -720,6 +766,23 @@ export interface paths {
         put?: never;
         /** Moves a Work Item Document Part. */
         post: operations["moveDocumentParts"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/projects/{projectId}/spaces/{spaceId}/documents/{documentName}/parts/actions/overwrite": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Overwrites multiple Work Item Document Parts. */
+        post: operations["overwriteDocumentParts"];
         delete?: never;
         options?: never;
         head?: never;
@@ -927,6 +990,23 @@ export interface paths {
         patch: operations["patchTestRun"];
         trace?: never;
     };
+    "/projects/{projectId}/testruns/{testRunId}/actions/getFieldsMetadata": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Returns fields for the specified resource. */
+        get: operations["getFieldsMetadataForTestRun"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/projects/{projectId}/testruns/{testRunId}/actions/getWorkflowActions": {
         parameters: {
             query?: never;
@@ -1128,6 +1208,23 @@ export interface paths {
         patch: operations["patchTestRecord"];
         trace?: never;
     };
+    "/projects/{projectId}/testruns/{testRunId}/testrecords/{testCaseProjectId}/{testCaseId}/{iteration}/actions/getFieldsMetadata": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Returns fields for the specified resource. */
+        get: operations["getFieldsMetadataForTestRecord"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/projects/{projectId}/testruns/{testRunId}/testrecords/{testCaseProjectId}/{testCaseId}/{iteration}/attachments": {
         parameters: {
             query?: never;
@@ -1309,6 +1406,23 @@ export interface paths {
         head?: never;
         /** Updates the specified Work Item. */
         patch: operations["patchWorkItem"];
+        trace?: never;
+    };
+    "/projects/{projectId}/workitems/{workItemId}/actions/getFieldsMetadata": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Returns fields for the specified resource. */
+        get: operations["getFieldsMetadataForWorkItem"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
         trace?: never;
     };
     "/projects/{projectId}/workitems/{workItemId}/actions/getWorkflowActions": {
@@ -1807,6 +1921,23 @@ export interface paths {
         post?: never;
         /** Deletes the specified Work Record. */
         delete: operations["deleteWorkRecord"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/projects/{projectId}/workitems/actions/moveToDocument": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Moves multiple Work Items to the Document. */
+        post: operations["moveWorkItemsToDocument"];
+        delete?: never;
         options?: never;
         head?: never;
         patch?: never;
@@ -3334,6 +3465,14 @@ export interface components {
                 };
             };
         };
+        document_partsListDeleteRequest: {
+            data?: {
+                /** @enum {string} */
+                type?: "document_parts";
+                /** @example MyProjectId/MySpaceId/MyDocumentId/workitem_MyWorkItemId */
+                id?: string;
+            }[];
+        };
         document_partsListGetResponse: {
             data?: {
                 /** @enum {string} */
@@ -3343,23 +3482,49 @@ export interface components {
                 /** @example 1234 */
                 revision?: string;
                 attributes?: {
-                    /** @example <div id="polarion_wiki macro name=module-workitem;params=id=workitem_MyWorkItemId"></div> */
+                    /**
+                     * @description Editable only for normal and table document parts.
+                     * @example <div id="polarion_wiki macro name=module-workitem;params=id=workitem_MyWorkItemId"></div>
+                     */
                     content?: string;
+                    /** @description Whether the work item is external to the document. Applicable to: workitem parts. */
                     external?: boolean;
+                    /**
+                     * @description Applicable to: heading parts.
+                     * @example Heading Title
+                     */
+                    headingText?: string;
                     /** @example workitem_MyWorkItemId */
                     id?: string;
+                    /** @description Whether the page break switches to landscape orientation. Applicable to: pagebreak parts. */
+                    landscape?: boolean;
                     /**
                      * Format: int32
+                     * @description Rendering layout index for the part. Applicable to: workitem parts.
                      * @example 0
                      */
                     layout?: number;
                     /**
                      * Format: int32
+                     * @description Outline level/depth of the part in the document hierarchy. Applicable to: heading, workitem parts.
                      * @example 0
                      */
                     level?: number;
-                    /** @example workitem */
+                    /**
+                     * @description Sequence identifier for table of figures entry. Applicable to: tof parts.
+                     * @example Table
+                     */
+                    sequence?: string;
+                    /**
+                     * @description Possible values: heading, normal, pagebreak, table, toc, tof, wikiblock, workitem. Required for creation.
+                     * @example workitem
+                     */
                     type?: string;
+                    /**
+                     * @description Wiki markup content for the block. Applicable to: wikiblock parts.
+                     * @example #documentPanel(true "approved")
+                     */
+                    wikiText?: string;
                 };
                 relationships?: {
                     nextPart?: {
@@ -3461,17 +3626,44 @@ export interface components {
                 type?: "document_parts";
                 attributes?: {
                     /**
+                     * @description Editable only for normal and table document parts.
+                     * @example <div id="polarion_wiki macro name=module-workitem;params=id=workitem_MyWorkItemId"></div>
+                     */
+                    content?: string;
+                    /**
+                     * @description Applicable to: heading parts.
+                     * @example Heading Title
+                     */
+                    headingText?: string;
+                    /** @description Whether the page break switches to landscape orientation. Applicable to: pagebreak parts. */
+                    landscape?: boolean;
+                    /**
                      * Format: int32
+                     * @description Rendering layout index for the part. Applicable to: workitem parts.
                      * @example 0
                      */
                     layout?: number;
                     /**
                      * Format: int32
+                     * @description Outline level/depth of the part in the document hierarchy. Applicable to: heading, workitem parts.
                      * @example 0
                      */
                     level?: number;
-                    /** @example workitem */
+                    /**
+                     * @description Sequence identifier for table of figures entry. Applicable to: tof parts.
+                     * @example Table
+                     */
+                    sequence?: string;
+                    /**
+                     * @description Possible values: heading, normal, pagebreak, table, toc, tof, wikiblock, workitem. Required for creation.
+                     * @example workitem
+                     */
                     type?: string;
+                    /**
+                     * @description Wiki markup content for the block. Applicable to: wikiblock parts.
+                     * @example #documentPanel(true "approved")
+                     */
+                    wikiText?: string;
                 };
                 relationships?: {
                     nextPart?: {
@@ -3524,23 +3716,49 @@ export interface components {
                 /** @example 1234 */
                 revision?: string;
                 attributes?: {
-                    /** @example <div id="polarion_wiki macro name=module-workitem;params=id=workitem_MyWorkItemId"></div> */
+                    /**
+                     * @description Editable only for normal and table document parts.
+                     * @example <div id="polarion_wiki macro name=module-workitem;params=id=workitem_MyWorkItemId"></div>
+                     */
                     content?: string;
+                    /** @description Whether the work item is external to the document. Applicable to: workitem parts. */
                     external?: boolean;
+                    /**
+                     * @description Applicable to: heading parts.
+                     * @example Heading Title
+                     */
+                    headingText?: string;
                     /** @example workitem_MyWorkItemId */
                     id?: string;
+                    /** @description Whether the page break switches to landscape orientation. Applicable to: pagebreak parts. */
+                    landscape?: boolean;
                     /**
                      * Format: int32
+                     * @description Rendering layout index for the part. Applicable to: workitem parts.
                      * @example 0
                      */
                     layout?: number;
                     /**
                      * Format: int32
+                     * @description Outline level/depth of the part in the document hierarchy. Applicable to: heading, workitem parts.
                      * @example 0
                      */
                     level?: number;
-                    /** @example workitem */
+                    /**
+                     * @description Sequence identifier for table of figures entry. Applicable to: tof parts.
+                     * @example Table
+                     */
+                    sequence?: string;
+                    /**
+                     * @description Possible values: heading, normal, pagebreak, table, toc, tof, wikiblock, workitem. Required for creation.
+                     * @example workitem
+                     */
                     type?: string;
+                    /**
+                     * @description Wiki markup content for the block. Applicable to: wikiblock parts.
+                     * @example #documentPanel(true "approved")
+                     */
+                    wikiText?: string;
                 };
                 relationships?: {
                     nextPart?: {
@@ -4326,6 +4544,22 @@ export interface components {
                         id?: string;
                         /** @example true */
                         limited?: boolean;
+                        linkRules?: {
+                            /**
+                             * @example [
+                             *       "requirement"
+                             *     ]
+                             */
+                            fromTypes?: string[];
+                            /** @example false */
+                            sameType?: boolean;
+                            /**
+                             * @example [
+                             *       "requirement"
+                             *     ]
+                             */
+                            toTypes?: string[];
+                        }[];
                         /** @example 30 */
                         minValue?: number;
                         /** @example Open */
@@ -4434,6 +4668,22 @@ export interface components {
                         id?: string;
                         /** @example true */
                         limited?: boolean;
+                        linkRules?: {
+                            /**
+                             * @example [
+                             *       "requirement"
+                             *     ]
+                             */
+                            fromTypes?: string[];
+                            /** @example false */
+                            sameType?: boolean;
+                            /**
+                             * @example [
+                             *       "requirement"
+                             *     ]
+                             */
+                            toTypes?: string[];
+                        }[];
                         /** @example 30 */
                         minValue?: number;
                         /** @example Open */
@@ -4496,6 +4746,22 @@ export interface components {
                         id?: string;
                         /** @example true */
                         limited?: boolean;
+                        linkRules?: {
+                            /**
+                             * @example [
+                             *       "requirement"
+                             *     ]
+                             */
+                            fromTypes?: string[];
+                            /** @example false */
+                            sameType?: boolean;
+                            /**
+                             * @example [
+                             *       "requirement"
+                             *     ]
+                             */
+                            toTypes?: string[];
+                        }[];
                         /** @example 30 */
                         minValue?: number;
                         /** @example Open */
@@ -4590,6 +4856,22 @@ export interface components {
                         id?: string;
                         /** @example true */
                         limited?: boolean;
+                        linkRules?: {
+                            /**
+                             * @example [
+                             *       "requirement"
+                             *     ]
+                             */
+                            fromTypes?: string[];
+                            /** @example false */
+                            sameType?: boolean;
+                            /**
+                             * @example [
+                             *       "requirement"
+                             *     ]
+                             */
+                            toTypes?: string[];
+                        }[];
                         /** @example 30 */
                         minValue?: number;
                         /** @example Open */
@@ -4628,6 +4910,22 @@ export interface components {
                 iconURL?: string;
                 /** @example true */
                 limited?: boolean;
+                linkRules?: {
+                    /**
+                     * @example [
+                     *       "requirement"
+                     *     ]
+                     */
+                    fromTypes?: string[];
+                    /** @example false */
+                    sameType?: boolean;
+                    /**
+                     * @example [
+                     *       "requirement"
+                     *     ]
+                     */
+                    toTypes?: string[];
+                }[];
                 /** @example 30 */
                 minValue?: number;
                 /** @example Open */
@@ -5123,6 +5421,53 @@ export interface components {
                 self?: string;
             };
         };
+        /** @description A message in the LLM completion generation request or response. */
+        GenerateCompletionMessage: {
+            /** @description Content of the message. */
+            content: string;
+            /**
+             * @description Role of the message sender, e.g., 'user' or 'assistant.'
+             * @example user
+             */
+            role: string;
+        };
+        /** @description Generate completion parameters. */
+        generateCompletionRequestBody: {
+            /** @description Prompt messages. */
+            messages: components["schemas"]["GenerateCompletionMessage"][];
+            /** @description Name of the LLM to use. If not specified, the default model will be used, if available. */
+            model?: string;
+            responseFormat?: components["schemas"]["GenerateCompletionResponseFormat"];
+        };
+        /** @description Response body for LLM completion generation. */
+        generateCompletionResponseBody: {
+            data?: components["schemas"]["GenerateCompletionResult"];
+        };
+        /** @description Response format for LLM completion generation. */
+        GenerateCompletionResponseFormat: {
+            /**
+             * @description The JSON schema to use when type is 'jsonSchema'.
+             * @example {
+             *       "properties": {
+             *         "result": {
+             *           "type": "string"
+             *         }
+             *       },
+             *       "type": "object"
+             *     }
+             */
+            schema?: Record<string, never>;
+            /**
+             * @description Type of the response format. Defaults to 'text'.
+             * @example jsonSchema
+             * @enum {string}
+             */
+            type: "text" | "json" | "jsonSchema";
+        };
+        /** @description The result of a completion generation request. */
+        GenerateCompletionResult: {
+            message: components["schemas"]["GenerateCompletionMessage"];
+        };
         globalrolesSingleGetResponse: {
             data?: {
                 /** @enum {string} */
@@ -5361,6 +5706,46 @@ export interface components {
             /** @example false */
             retest?: boolean;
         };
+        /**
+         * @description Parameters for Word document import
+         * @example {
+         *       "configurationId": "Default.xml",
+         *       "documentName": "REQ-001",
+         *       "documentType": "generic",
+         *       "title": "System Requirements"
+         *     }
+         */
+        importWordDocumentParameters: {
+            /**
+             * @description Optional configuration ID referencing a preexisting import configuration template. If not provided, default import behavior will be used.
+             * @example Default.xml
+             */
+            configurationId?: string;
+            /**
+             * @description Unique document name/ID for the imported document.
+             * @example REQ-001
+             */
+            documentName: string;
+            /**
+             * @description Document type for the imported document (e.g., 'generic').
+             * @example generic
+             */
+            documentType: string;
+            /**
+             * @description Title for the imported document.
+             * @example System Requirements
+             */
+            title: string;
+        };
+        /** @description Request body for importing a Word document */
+        importWordDocumentRequestBody: {
+            /**
+             * Format: binary
+             * @description Word document file (.docx) to import.
+             */
+            file: string;
+            parameters: components["schemas"]["importWordDocumentParameters"];
+        };
         jobsListGetResponse: {
             data?: {
                 /** @enum {string} */
@@ -5418,7 +5803,7 @@ export interface components {
                      *       "https://example.com/polarion/download/filename2"
                      *     ]
                      */
-                    downloads?: unknown[];
+                    downloads?: string[];
                     /** @example server-host-name/application-path/polarion/job-report?jobId=MyJobId */
                     log?: string;
                     /** @example server-host-name/application-path/jobs/MyJobId */
@@ -5539,7 +5924,7 @@ export interface components {
                      *       "https://example.com/polarion/download/filename2"
                      *     ]
                      */
-                    downloads?: unknown[];
+                    downloads?: string[];
                     /** @example server-host-name/application-path/polarion/job-report?jobId=MyJobId */
                     log?: string;
                     /** @example server-host-name/application-path/jobs/MyJobId */
@@ -5644,7 +6029,7 @@ export interface components {
                      *       "https://example.com/polarion/download/filename2"
                      *     ]
                      */
-                    downloads?: unknown[];
+                    downloads?: string[];
                     /** @example server-host-name/application-path/polarion/job-report?jobId=MyJobId */
                     log?: string;
                     /** @example server-host-name/application-path/jobs/MyJobId */
@@ -5868,6 +6253,32 @@ export interface components {
             links?: {
                 /** @example server-host-name/application-path/license/assignments/MyUserId */
                 self?: string;
+            };
+        };
+        license_assignmentsSinglePatchRequest: {
+            data?: {
+                /** @enum {string} */
+                type?: "license_assignments";
+                /** @example MyUserId */
+                id?: string;
+                relationships?: {
+                    addOnSlots?: {
+                        data?: {
+                            /** @example LicenseType/ModelType/GroupId */
+                            id?: string;
+                            /** @enum {string} */
+                            type?: "license_slots";
+                        }[];
+                    };
+                    baseSlot?: {
+                        data?: {
+                            /** @example LicenseType/ModelType/GroupId */
+                            id?: string;
+                            /** @enum {string} */
+                            type?: "license_slots";
+                        };
+                    };
+                };
             };
         };
         license_slotsListDeleteRequest: {
@@ -6199,7 +6610,7 @@ export interface components {
                     label?: string;
                     /** @example http://open-services.net/ns/cm#relatedChangeRequest */
                     role?: string;
-                    /** @example Uri */
+                    /** @example URI */
                     uri?: string;
                 };
                 links?: Record<string, never>;
@@ -6258,7 +6669,7 @@ export interface components {
                     label?: string;
                     /** @example http://open-services.net/ns/cm#relatedChangeRequest */
                     role?: string;
-                    /** @example Uri */
+                    /** @example URI */
                     uri?: string;
                 };
             }[];
@@ -6514,6 +6925,63 @@ export interface components {
                 };
             };
         };
+        llmsListGetResponse: {
+            data?: {
+                /** @enum {string} */
+                type?: "llms";
+                /** @example myLlm */
+                id?: string;
+                attributes?: {
+                    /** @example myLlm */
+                    name?: string;
+                };
+                links?: Record<string, never>;
+                meta?: {
+                    errors?: {
+                        /**
+                         * @description Human-readable explanation specific to this occurrence of the problem.
+                         * @example Unexpected token, BEGIN_ARRAY expected, but was : BEGIN_OBJECT (at $.data)
+                         */
+                        detail?: string;
+                        source?: {
+                            /**
+                             * @description String indicating which URI query parameter caused the error.
+                             * @example revision
+                             */
+                            parameter?: string;
+                            /**
+                             * @description JSON Pointer to the associated entity in the request document.
+                             * @example $.data
+                             */
+                            pointer?: string;
+                            /** @description Resource causing the error. */
+                            resource?: {
+                                /** @example MyProjectId/id */
+                                id?: string;
+                                /** @example type */
+                                type?: string;
+                            };
+                        };
+                        /**
+                         * @description HTTP status code applicable to this problem.
+                         * @example 400
+                         */
+                        status?: string;
+                        /**
+                         * @description Short, human-readable summary of the problem.
+                         * @example Bad Request
+                         */
+                        title?: string;
+                    }[];
+                };
+            }[];
+            /** @description Related entities might be returned, see <a href="https://docs.sw.siemens.com/en-US/doc/230235217/PL20250606201928474.polarion_help_sc.xid2134849/xid2134871" target="_blank">REST API User Guide</a>. */
+            included?: Record<string, never>[];
+            meta?: {
+                /** Format: int32 */
+                totalCount?: number;
+            };
+        };
         mergeDocumentRequestBody: {
             /**
              * @description Specifies whether the Baseline should be created.
@@ -6623,6 +7091,40 @@ export interface components {
              */
             location?: string;
         };
+        moveWorkItemsToDocumentRequestBody: {
+            /** @example MyProjectId/MySpaceId/MyDocumentId */
+            targetDocument?: string;
+            /**
+             * @example [
+             *       {
+             *         "previousPart": "MyProjectId/MySpaceId/MyDocumentId/workitem_MyWorkItemId",
+             *         "workItemIds": [
+             *           "MyProjectId/WI-123",
+             *           "MyProjectId/WI-124"
+             *         ]
+             *       },
+             *       {
+             *         "nextPart": "MyProjectId/MySpaceId/MyDocumentId/workitem_MyWorkItemId",
+             *         "workItemIds": [
+             *           "MyProjectId/WI-125"
+             *         ]
+             *       }
+             *     ]
+             */
+            workItemGroups?: {
+                /** @example MyProjectId/MySpaceId/MyDocumentId/workitem_MyWorkItemId */
+                nextPart?: string;
+                /** @example MyProjectId/MySpaceId/MyDocumentId/workitem_MyWorkItemId */
+                previousPart?: string;
+                /**
+                 * @example [
+                 *       "MyProjectId/WI-123",
+                 *       "MyProjectId/WI-124"
+                 *     ]
+                 */
+                workItemIds?: string[];
+            }[];
+        };
         moveWorkItemToDocumentRequestBody: {
             /** @example MyProjectId/MySpaceId/MyDocumentId/workitem_MyWorkItemId */
             nextPart?: string;
@@ -6630,6 +7132,27 @@ export interface components {
             previousPart?: string;
             /** @example MyProjectId/MySpaceId/MyDocumentId */
             targetDocument?: string;
+        };
+        overwriteDocumentPartsRequestBody: {
+            /** @description The list of Document Part IDs to overwrite. */
+            partIds: string[];
+        };
+        overwriteDocumentPartsResponseBody: {
+            data?: {
+                /** @description Array of Part ID mappings showing old and new IDs. */
+                overwrittenParts?: {
+                    /**
+                     * @description New Part ID after overwrite operation.
+                     * @example MyProjectId/MySpaceId/MyDocumentId/workitem_MyWorkItemId
+                     */
+                    newPartId?: string;
+                    /**
+                     * @description Original Part ID before overwrite operation.
+                     * @example MyProjectId/MySpaceId/MyDocumentId/workitem_MyWorkItemId
+                     */
+                    oldPartId?: string;
+                }[];
+            };
         };
         page_attachmentsListGetResponse: {
             data?: {
@@ -8633,10 +9156,10 @@ export interface components {
             };
         };
         RelationshipDataBody: {
-            /** @example MyProjectId/MyResourceId */
+            /** @example MyResourceId */
             id?: string;
             /** @enum {string} */
-            type?: "collections" | "categories" | "documents" | "document_attachments" | "document_comments" | "document_parts" | "enumerations" | "globalroles" | "icons" | "jobs" | "linkedworkitems" | "externallylinkedworkitems" | "linkedoslcresources" | "pages" | "page_attachments" | "page_comments" | "plans" | "projectroles" | "projectgroups" | "projects" | "projecttemplates" | "spaces" | "testparameters" | "testparameter_definitions" | "testrecords" | "teststep_results" | "testruns" | "testrun_attachments" | "teststepresult_attachments" | "testrun_comments" | "usergroups" | "users" | "workitems" | "workitem_attachments" | "workitem_approvals" | "workitem_comments" | "featureselections" | "teststeps" | "workrecords" | "revisions" | "testrecord_attachments" | "license_slots" | "license_types" | "license" | "metadata" | "license_assignments" | "customfields";
+            type?: "collections" | "categories" | "documents" | "document_attachments" | "document_comments" | "document_parts" | "enumerations" | "globalroles" | "icons" | "jobs" | "linkedworkitems" | "externallylinkedworkitems" | "linkedoslcresources" | "llms" | "pages" | "page_attachments" | "page_comments" | "plans" | "projectroles" | "projectgroups" | "projects" | "projecttemplates" | "spaces" | "testparameters" | "testparameter_definitions" | "testrecords" | "teststep_results" | "testruns" | "testrun_attachments" | "teststepresult_attachments" | "testrun_comments" | "usergroups" | "users" | "workitems" | "workitem_attachments" | "workitem_approvals" | "workitem_comments" | "featureselections" | "teststeps" | "workrecords" | "revisions" | "testrecord_attachments" | "license_slots" | "license_types" | "license" | "metadata" | "license_assignments" | "customfields";
         };
         RelationshipDataListRequest: {
             data?: components["schemas"]["RelationshipDataBody"][];
@@ -8655,8 +9178,8 @@ export interface components {
          * @example {
          *       "data": [
          *         {
-         *           "type": "MyResourceType",
-         *           "id": "MyProjectId/MyResourceId"
+         *           "type": "workitems",
+         *           "id": "MyProjectId/WI-123"
          *         }
          *       ]
          *     }
@@ -8665,8 +9188,8 @@ export interface components {
         relationshipsListDeleteRequest: {
             data?: {
                 /** @enum {string} */
-                type?: "collections" | "categories" | "documents" | "document_attachments" | "document_comments" | "document_parts" | "enumerations" | "globalroles" | "icons" | "jobs" | "linkedworkitems" | "externallylinkedworkitems" | "linkedoslcresources" | "pages" | "page_attachments" | "page_comments" | "plans" | "projectroles" | "projectgroups" | "projects" | "projecttemplates" | "spaces" | "testparameters" | "testparameter_definitions" | "testrecords" | "teststep_results" | "testruns" | "testrun_attachments" | "teststepresult_attachments" | "testrun_comments" | "usergroups" | "users" | "workitems" | "workitem_attachments" | "workitem_approvals" | "workitem_comments" | "featureselections" | "teststeps" | "workrecords" | "revisions" | "testrecord_attachments" | "license_slots" | "license_types" | "license" | "metadata" | "license_assignments" | "customfields";
-                /** @example MyProjectId/MyResourceId */
+                type?: "collections" | "categories" | "documents" | "document_attachments" | "document_comments" | "document_parts" | "enumerations" | "globalroles" | "icons" | "jobs" | "linkedworkitems" | "externallylinkedworkitems" | "linkedoslcresources" | "llms" | "pages" | "page_attachments" | "page_comments" | "plans" | "projectroles" | "projectgroups" | "projects" | "projecttemplates" | "spaces" | "testparameters" | "testparameter_definitions" | "testrecords" | "teststep_results" | "testruns" | "testrun_attachments" | "teststepresult_attachments" | "testrun_comments" | "usergroups" | "users" | "workitems" | "workitem_attachments" | "workitem_approvals" | "workitem_comments" | "featureselections" | "teststeps" | "workrecords" | "revisions" | "testrecord_attachments" | "license_slots" | "license_types" | "license" | "metadata" | "license_assignments" | "customfields";
+                /** @example MyResourceId */
                 id?: string;
             }[];
         };
@@ -8675,8 +9198,8 @@ export interface components {
          * @example {
          *       "data": [
          *         {
-         *           "type": "MyResourceType",
-         *           "id": "MyProjectId/MyResourceId"
+         *           "type": "workitems",
+         *           "id": "MyProjectId/WI-123"
          *         }
          *       ]
          *     }
@@ -8687,8 +9210,8 @@ export interface components {
          * @example {
          *       "data": [
          *         {
-         *           "type": "MyResourceType",
-         *           "id": "MyProjectId/MyResourceId",
+         *           "type": "workitems",
+         *           "id": "MyProjectId/WI-123",
          *           "revision": "1234"
          *         }
          *       ]
@@ -9004,6 +9527,11 @@ export interface components {
              * @example @all
              */
             linkedworkitems?: string;
+            /**
+             * @description Requested fields
+             * @example @all
+             */
+            llms?: string;
             /**
              * @description Requested fields
              * @example @all
@@ -14701,7 +15229,7 @@ export interface operations {
     getGlobalFieldsMetadata: {
         parameters: {
             query: {
-                /** @description The Resource Type. Accepted values: workitems, documents, testruns and plans. */
+                /** @description The Resource Type. */
                 resourceType: string;
                 /** @description The Type of the object. Use '~' without quotes to represent no target Type. */
                 targetType?: string;
@@ -14771,7 +15299,16 @@ export interface operations {
                 content?: never;
             };
             /** @description Error responses have the following structure: */
-            "4XX-5XX": {
+            "4XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["errors"];
+                };
+            };
+            /** @description Error responses have the following structure: */
+            "5XX": {
                 headers: {
                     [name: string]: unknown;
                 };
@@ -14859,7 +15396,16 @@ export interface operations {
                 content?: never;
             };
             /** @description Error responses have the following structure: */
-            "4XX-5XX": {
+            "4XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["errors"];
+                };
+            };
+            /** @description Error responses have the following structure: */
+            "5XX": {
                 headers: {
                     [name: string]: unknown;
                 };
@@ -14944,7 +15490,16 @@ export interface operations {
                 content?: never;
             };
             /** @description Error responses have the following structure: */
-            "4XX-5XX": {
+            "4XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["errors"];
+                };
+            };
+            /** @description Error responses have the following structure: */
+            "5XX": {
                 headers: {
                     [name: string]: unknown;
                 };
@@ -15034,7 +15589,16 @@ export interface operations {
                 content?: never;
             };
             /** @description Error responses have the following structure: */
-            "4XX-5XX": {
+            "4XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["errors"];
+                };
+            };
+            /** @description Error responses have the following structure: */
+            "5XX": {
                 headers: {
                     [name: string]: unknown;
                 };
@@ -15123,7 +15687,16 @@ export interface operations {
                 content?: never;
             };
             /** @description Error responses have the following structure: */
-            "4XX-5XX": {
+            "4XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["errors"];
+                };
+            };
+            /** @description Error responses have the following structure: */
+            "5XX": {
                 headers: {
                     [name: string]: unknown;
                 };
@@ -15209,7 +15782,16 @@ export interface operations {
                 content?: never;
             };
             /** @description Error responses have the following structure: */
-            "4XX-5XX": {
+            "4XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["errors"];
+                };
+            };
+            /** @description Error responses have the following structure: */
+            "5XX": {
                 headers: {
                     [name: string]: unknown;
                 };
@@ -15292,7 +15874,16 @@ export interface operations {
                 content?: never;
             };
             /** @description Error responses have the following structure: */
-            "4XX-5XX": {
+            "4XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["errors"];
+                };
+            };
+            /** @description Error responses have the following structure: */
+            "5XX": {
                 headers: {
                     [name: string]: unknown;
                 };
@@ -15375,7 +15966,16 @@ export interface operations {
                 content?: never;
             };
             /** @description Error responses have the following structure: */
-            "4XX-5XX": {
+            "4XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["errors"];
+                };
+            };
+            /** @description Error responses have the following structure: */
+            "5XX": {
                 headers: {
                     [name: string]: unknown;
                 };
@@ -15468,7 +16068,16 @@ export interface operations {
                 content?: never;
             };
             /** @description Error responses have the following structure: */
-            "4XX-5XX": {
+            "4XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["errors"];
+                };
+            };
+            /** @description Error responses have the following structure: */
+            "5XX": {
                 headers: {
                     [name: string]: unknown;
                 };
@@ -15556,7 +16165,16 @@ export interface operations {
                 content?: never;
             };
             /** @description Error responses have the following structure: */
-            "4XX-5XX": {
+            "4XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["errors"];
+                };
+            };
+            /** @description Error responses have the following structure: */
+            "5XX": {
                 headers: {
                     [name: string]: unknown;
                 };
@@ -15569,7 +16187,7 @@ export interface operations {
     getProjectFieldsMetadata: {
         parameters: {
             query: {
-                /** @description The Resource Type. Accepted values: workitems, documents, testruns and plans. */
+                /** @description The Resource Type. */
                 resourceType: string;
                 /** @description The Type of the object. Use '~' without quotes to represent no target Type. */
                 targetType?: string;
@@ -15642,7 +16260,16 @@ export interface operations {
                 content?: never;
             };
             /** @description Error responses have the following structure: */
-            "4XX-5XX": {
+            "4XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["errors"];
+                };
+            };
+            /** @description Error responses have the following structure: */
+            "5XX": {
                 headers: {
                     [name: string]: unknown;
                 };
@@ -15738,7 +16365,16 @@ export interface operations {
                 content?: never;
             };
             /** @description Error responses have the following structure: */
-            "4XX-5XX": {
+            "4XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["errors"];
+                };
+            };
+            /** @description Error responses have the following structure: */
+            "5XX": {
                 headers: {
                     [name: string]: unknown;
                 };
@@ -15845,7 +16481,16 @@ export interface operations {
                 content?: never;
             };
             /** @description Error responses have the following structure: */
-            "4XX-5XX": {
+            "4XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["errors"];
+                };
+            };
+            /** @description Error responses have the following structure: */
+            "5XX": {
                 headers: {
                     [name: string]: unknown;
                 };
@@ -15943,7 +16588,16 @@ export interface operations {
                 content?: never;
             };
             /** @description Error responses have the following structure: */
-            "4XX-5XX": {
+            "4XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["errors"];
+                };
+            };
+            /** @description Error responses have the following structure: */
+            "5XX": {
                 headers: {
                     [name: string]: unknown;
                 };
@@ -16033,7 +16687,16 @@ export interface operations {
                 content?: never;
             };
             /** @description Error responses have the following structure: */
-            "4XX-5XX": {
+            "4XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["errors"];
+                };
+            };
+            /** @description Error responses have the following structure: */
+            "5XX": {
                 headers: {
                     [name: string]: unknown;
                 };
@@ -16114,7 +16777,16 @@ export interface operations {
                 content?: never;
             };
             /** @description Error responses have the following structure: */
-            "4XX-5XX": {
+            "4XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["errors"];
+                };
+            };
+            /** @description Error responses have the following structure: */
+            "5XX": {
                 headers: {
                     [name: string]: unknown;
                 };
@@ -16214,7 +16886,16 @@ export interface operations {
                 content?: never;
             };
             /** @description Error responses have the following structure: */
-            "4XX-5XX": {
+            "4XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["errors"];
+                };
+            };
+            /** @description Error responses have the following structure: */
+            "5XX": {
                 headers: {
                     [name: string]: unknown;
                 };
@@ -16309,7 +16990,108 @@ export interface operations {
                 content?: never;
             };
             /** @description Error responses have the following structure: */
-            "4XX-5XX": {
+            "4XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["errors"];
+                };
+            };
+            /** @description Error responses have the following structure: */
+            "5XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["errors"];
+                };
+            };
+        };
+    };
+    getFieldsMetadataForCollection: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description The Project ID. */
+                projectId: string;
+                /** @description The Collection ID. */
+                collectionId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["fieldsMetadataActionResponseBody"];
+                };
+            };
+            /** @description Bad Request */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Unauthorized */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Forbidden */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Not Found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Not Acceptable */
+            406: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Internal Server Error */
+            500: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Service Unavailable */
+            503: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Error responses have the following structure: */
+            "4XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["errors"];
+                };
+            };
+            /** @description Error responses have the following structure: */
+            "5XX": {
                 headers: {
                     [name: string]: unknown;
                 };
@@ -16404,7 +17186,16 @@ export interface operations {
                 content?: never;
             };
             /** @description Error responses have the following structure: */
-            "4XX-5XX": {
+            "4XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["errors"];
+                };
+            };
+            /** @description Error responses have the following structure: */
+            "5XX": {
                 headers: {
                     [name: string]: unknown;
                 };
@@ -16516,7 +17307,16 @@ export interface operations {
                 content?: never;
             };
             /** @description Error responses have the following structure: */
-            "4XX-5XX": {
+            "4XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["errors"];
+                };
+            };
+            /** @description Error responses have the following structure: */
+            "5XX": {
                 headers: {
                     [name: string]: unknown;
                 };
@@ -16612,7 +17412,16 @@ export interface operations {
                 content?: never;
             };
             /** @description Error responses have the following structure: */
-            "4XX-5XX": {
+            "4XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["errors"];
+                };
+            };
+            /** @description Error responses have the following structure: */
+            "5XX": {
                 headers: {
                     [name: string]: unknown;
                 };
@@ -16721,7 +17530,16 @@ export interface operations {
                 content?: never;
             };
             /** @description Error responses have the following structure: */
-            "4XX-5XX": {
+            "4XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["errors"];
+                };
+            };
+            /** @description Error responses have the following structure: */
+            "5XX": {
                 headers: {
                     [name: string]: unknown;
                 };
@@ -16830,7 +17648,16 @@ export interface operations {
                 content?: never;
             };
             /** @description Error responses have the following structure: */
-            "4XX-5XX": {
+            "4XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["errors"];
+                };
+            };
+            /** @description Error responses have the following structure: */
+            "5XX": {
                 headers: {
                     [name: string]: unknown;
                 };
@@ -16932,7 +17759,16 @@ export interface operations {
                 content?: never;
             };
             /** @description Error responses have the following structure: */
-            "4XX-5XX": {
+            "4XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["errors"];
+                };
+            };
+            /** @description Error responses have the following structure: */
+            "5XX": {
                 headers: {
                     [name: string]: unknown;
                 };
@@ -17022,7 +17858,16 @@ export interface operations {
                 content?: never;
             };
             /** @description Error responses have the following structure: */
-            "4XX-5XX": {
+            "4XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["errors"];
+                };
+            };
+            /** @description Error responses have the following structure: */
+            "5XX": {
                 headers: {
                     [name: string]: unknown;
                 };
@@ -17118,7 +17963,16 @@ export interface operations {
                 content?: never;
             };
             /** @description Error responses have the following structure: */
-            "4XX-5XX": {
+            "4XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["errors"];
+                };
+            };
+            /** @description Error responses have the following structure: */
+            "5XX": {
                 headers: {
                     [name: string]: unknown;
                 };
@@ -17208,7 +18062,16 @@ export interface operations {
                 content?: never;
             };
             /** @description Error responses have the following structure: */
-            "4XX-5XX": {
+            "4XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["errors"];
+                };
+            };
+            /** @description Error responses have the following structure: */
+            "5XX": {
                 headers: {
                     [name: string]: unknown;
                 };
@@ -17296,7 +18159,16 @@ export interface operations {
                 content?: never;
             };
             /** @description Error responses have the following structure: */
-            "4XX-5XX": {
+            "4XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["errors"];
+                };
+            };
+            /** @description Error responses have the following structure: */
+            "5XX": {
                 headers: {
                     [name: string]: unknown;
                 };
@@ -17388,7 +18260,16 @@ export interface operations {
                 content?: never;
             };
             /** @description Error responses have the following structure: */
-            "4XX-5XX": {
+            "4XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["errors"];
+                };
+            };
+            /** @description Error responses have the following structure: */
+            "5XX": {
                 headers: {
                     [name: string]: unknown;
                 };
@@ -17484,7 +18365,16 @@ export interface operations {
                 content?: never;
             };
             /** @description Error responses have the following structure: */
-            "4XX-5XX": {
+            "4XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["errors"];
+                };
+            };
+            /** @description Error responses have the following structure: */
+            "5XX": {
                 headers: {
                     [name: string]: unknown;
                 };
@@ -17582,7 +18472,16 @@ export interface operations {
                 content?: never;
             };
             /** @description Error responses have the following structure: */
-            "4XX-5XX": {
+            "4XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["errors"];
+                };
+            };
+            /** @description Error responses have the following structure: */
+            "5XX": {
                 headers: {
                     [name: string]: unknown;
                 };
@@ -17689,7 +18588,16 @@ export interface operations {
                 content?: never;
             };
             /** @description Error responses have the following structure: */
-            "4XX-5XX": {
+            "4XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["errors"];
+                };
+            };
+            /** @description Error responses have the following structure: */
+            "5XX": {
                 headers: {
                     [name: string]: unknown;
                 };
@@ -17787,7 +18695,16 @@ export interface operations {
                 content?: never;
             };
             /** @description Error responses have the following structure: */
-            "4XX-5XX": {
+            "4XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["errors"];
+                };
+            };
+            /** @description Error responses have the following structure: */
+            "5XX": {
                 headers: {
                     [name: string]: unknown;
                 };
@@ -17877,7 +18794,16 @@ export interface operations {
                 content?: never;
             };
             /** @description Error responses have the following structure: */
-            "4XX-5XX": {
+            "4XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["errors"];
+                };
+            };
+            /** @description Error responses have the following structure: */
+            "5XX": {
                 headers: {
                     [name: string]: unknown;
                 };
@@ -17958,7 +18884,16 @@ export interface operations {
                 content?: never;
             };
             /** @description Error responses have the following structure: */
-            "4XX-5XX": {
+            "4XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["errors"];
+                };
+            };
+            /** @description Error responses have the following structure: */
+            "5XX": {
                 headers: {
                     [name: string]: unknown;
                 };
@@ -18058,7 +18993,108 @@ export interface operations {
                 content?: never;
             };
             /** @description Error responses have the following structure: */
-            "4XX-5XX": {
+            "4XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["errors"];
+                };
+            };
+            /** @description Error responses have the following structure: */
+            "5XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["errors"];
+                };
+            };
+        };
+    };
+    getFieldsMetadataForPlan: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description The Project ID. */
+                projectId: string;
+                /** @description The Plan ID. */
+                planId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["fieldsMetadataActionResponseBody"];
+                };
+            };
+            /** @description Bad Request */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Unauthorized */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Forbidden */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Not Found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Not Acceptable */
+            406: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Internal Server Error */
+            500: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Service Unavailable */
+            503: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Error responses have the following structure: */
+            "4XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["errors"];
+                };
+            };
+            /** @description Error responses have the following structure: */
+            "5XX": {
                 headers: {
                     [name: string]: unknown;
                 };
@@ -18154,7 +19190,16 @@ export interface operations {
                 content?: never;
             };
             /** @description Error responses have the following structure: */
-            "4XX-5XX": {
+            "4XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["errors"];
+                };
+            };
+            /** @description Error responses have the following structure: */
+            "5XX": {
                 headers: {
                     [name: string]: unknown;
                 };
@@ -18263,7 +19308,16 @@ export interface operations {
                 content?: never;
             };
             /** @description Error responses have the following structure: */
-            "4XX-5XX": {
+            "4XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["errors"];
+                };
+            };
+            /** @description Error responses have the following structure: */
+            "5XX": {
                 headers: {
                     [name: string]: unknown;
                 };
@@ -18372,7 +19426,16 @@ export interface operations {
                 content?: never;
             };
             /** @description Error responses have the following structure: */
-            "4XX-5XX": {
+            "4XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["errors"];
+                };
+            };
+            /** @description Error responses have the following structure: */
+            "5XX": {
                 headers: {
                     [name: string]: unknown;
                 };
@@ -18474,7 +19537,16 @@ export interface operations {
                 content?: never;
             };
             /** @description Error responses have the following structure: */
-            "4XX-5XX": {
+            "4XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["errors"];
+                };
+            };
+            /** @description Error responses have the following structure: */
+            "5XX": {
                 headers: {
                     [name: string]: unknown;
                 };
@@ -18570,7 +19642,16 @@ export interface operations {
                 content?: never;
             };
             /** @description Error responses have the following structure: */
-            "4XX-5XX": {
+            "4XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["errors"];
+                };
+            };
+            /** @description Error responses have the following structure: */
+            "5XX": {
                 headers: {
                     [name: string]: unknown;
                 };
@@ -18679,7 +19760,16 @@ export interface operations {
                 content?: never;
             };
             /** @description Error responses have the following structure: */
-            "4XX-5XX": {
+            "4XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["errors"];
+                };
+            };
+            /** @description Error responses have the following structure: */
+            "5XX": {
                 headers: {
                     [name: string]: unknown;
                 };
@@ -18771,7 +19861,16 @@ export interface operations {
                 content?: never;
             };
             /** @description Error responses have the following structure: */
-            "4XX-5XX": {
+            "4XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["errors"];
+                };
+            };
+            /** @description Error responses have the following structure: */
+            "5XX": {
                 headers: {
                     [name: string]: unknown;
                 };
@@ -18876,7 +19975,16 @@ export interface operations {
                 content?: never;
             };
             /** @description Error responses have the following structure: */
-            "4XX-5XX": {
+            "4XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["errors"];
+                };
+            };
+            /** @description Error responses have the following structure: */
+            "5XX": {
                 headers: {
                     [name: string]: unknown;
                 };
@@ -18990,7 +20098,16 @@ export interface operations {
                 content?: never;
             };
             /** @description Error responses have the following structure: */
-            "4XX-5XX": {
+            "4XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["errors"];
+                };
+            };
+            /** @description Error responses have the following structure: */
+            "5XX": {
                 headers: {
                     [name: string]: unknown;
                 };
@@ -19104,7 +20221,110 @@ export interface operations {
                 content?: never;
             };
             /** @description Error responses have the following structure: */
-            "4XX-5XX": {
+            "4XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["errors"];
+                };
+            };
+            /** @description Error responses have the following structure: */
+            "5XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["errors"];
+                };
+            };
+        };
+    };
+    getFieldsMetadataForDocument: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description The Project ID. */
+                projectId: string;
+                /** @description The Space ID. (Use '_default' without quotes to address the default Space.) */
+                spaceId: string;
+                /** @description The Branch Document Name. */
+                documentName: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["fieldsMetadataActionResponseBody"];
+                };
+            };
+            /** @description Bad Request */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Unauthorized */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Forbidden */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Not Found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Not Acceptable */
+            406: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Internal Server Error */
+            500: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Service Unavailable */
+            503: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Error responses have the following structure: */
+            "4XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["errors"];
+                };
+            };
+            /** @description Error responses have the following structure: */
+            "5XX": {
                 headers: {
                     [name: string]: unknown;
                 };
@@ -19215,7 +20435,16 @@ export interface operations {
                 content?: never;
             };
             /** @description Error responses have the following structure: */
-            "4XX-5XX": {
+            "4XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["errors"];
+                };
+            };
+            /** @description Error responses have the following structure: */
+            "5XX": {
                 headers: {
                     [name: string]: unknown;
                 };
@@ -19326,7 +20555,16 @@ export interface operations {
                 content?: never;
             };
             /** @description Error responses have the following structure: */
-            "4XX-5XX": {
+            "4XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["errors"];
+                };
+            };
+            /** @description Error responses have the following structure: */
+            "5XX": {
                 headers: {
                     [name: string]: unknown;
                 };
@@ -19422,7 +20660,16 @@ export interface operations {
                 content?: never;
             };
             /** @description Error responses have the following structure: */
-            "4XX-5XX": {
+            "4XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["errors"];
+                };
+            };
+            /** @description Error responses have the following structure: */
+            "5XX": {
                 headers: {
                     [name: string]: unknown;
                 };
@@ -19516,7 +20763,16 @@ export interface operations {
                 content?: never;
             };
             /** @description Error responses have the following structure: */
-            "4XX-5XX": {
+            "4XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["errors"];
+                };
+            };
+            /** @description Error responses have the following structure: */
+            "5XX": {
                 headers: {
                     [name: string]: unknown;
                 };
@@ -19612,7 +20868,16 @@ export interface operations {
                 content?: never;
             };
             /** @description Error responses have the following structure: */
-            "4XX-5XX": {
+            "4XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["errors"];
+                };
+            };
+            /** @description Error responses have the following structure: */
+            "5XX": {
                 headers: {
                     [name: string]: unknown;
                 };
@@ -19723,7 +20988,16 @@ export interface operations {
                 content?: never;
             };
             /** @description Error responses have the following structure: */
-            "4XX-5XX": {
+            "4XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["errors"];
+                };
+            };
+            /** @description Error responses have the following structure: */
+            "5XX": {
                 headers: {
                     [name: string]: unknown;
                 };
@@ -19817,7 +21091,16 @@ export interface operations {
                 content?: never;
             };
             /** @description Error responses have the following structure: */
-            "4XX-5XX": {
+            "4XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["errors"];
+                };
+            };
+            /** @description Error responses have the following structure: */
+            "5XX": {
                 headers: {
                     [name: string]: unknown;
                 };
@@ -19921,7 +21204,16 @@ export interface operations {
                 content?: never;
             };
             /** @description Error responses have the following structure: */
-            "4XX-5XX": {
+            "4XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["errors"];
+                };
+            };
+            /** @description Error responses have the following structure: */
+            "5XX": {
                 headers: {
                     [name: string]: unknown;
                 };
@@ -20013,7 +21305,16 @@ export interface operations {
                 content?: never;
             };
             /** @description Error responses have the following structure: */
-            "4XX-5XX": {
+            "4XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["errors"];
+                };
+            };
+            /** @description Error responses have the following structure: */
+            "5XX": {
                 headers: {
                     [name: string]: unknown;
                 };
@@ -20107,7 +21408,16 @@ export interface operations {
                 content?: never;
             };
             /** @description Error responses have the following structure: */
-            "4XX-5XX": {
+            "4XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["errors"];
+                };
+            };
+            /** @description Error responses have the following structure: */
+            "5XX": {
                 headers: {
                     [name: string]: unknown;
                 };
@@ -20203,7 +21513,16 @@ export interface operations {
                 content?: never;
             };
             /** @description Error responses have the following structure: */
-            "4XX-5XX": {
+            "4XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["errors"];
+                };
+            };
+            /** @description Error responses have the following structure: */
+            "5XX": {
                 headers: {
                     [name: string]: unknown;
                 };
@@ -20314,7 +21633,127 @@ export interface operations {
                 content?: never;
             };
             /** @description Error responses have the following structure: */
-            "4XX-5XX": {
+            "4XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["errors"];
+                };
+            };
+            /** @description Error responses have the following structure: */
+            "5XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["errors"];
+                };
+            };
+        };
+    };
+    deleteDocumentParts: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description The Project ID. */
+                projectId: string;
+                /** @description The Space ID. (Use '_default' without quotes to address the default Space.) */
+                spaceId: string;
+                /** @description The Document name. */
+                documentName: string;
+            };
+            cookie?: never;
+        };
+        /** @description The list of Document Part IDs to delete. */
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["document_partsListDeleteRequest"];
+            };
+        };
+        responses: {
+            /** @description No Content */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Bad Request */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Unauthorized */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Forbidden */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Not Found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Conflict */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Request Entity Too Large */
+            413: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Unsupported Media Type */
+            415: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Internal Server Error */
+            500: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Service Unavailable */
+            503: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Error responses have the following structure: */
+            "4XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["errors"];
+                };
+            };
+            /** @description Error responses have the following structure: */
+            "5XX": {
                 headers: {
                     [name: string]: unknown;
                 };
@@ -20408,7 +21847,16 @@ export interface operations {
                 content?: never;
             };
             /** @description Error responses have the following structure: */
-            "4XX-5XX": {
+            "4XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["errors"];
+                };
+            };
+            /** @description Error responses have the following structure: */
+            "5XX": {
                 headers: {
                     [name: string]: unknown;
                 };
@@ -20512,7 +21960,136 @@ export interface operations {
                 content?: never;
             };
             /** @description Error responses have the following structure: */
-            "4XX-5XX": {
+            "4XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["errors"];
+                };
+            };
+            /** @description Error responses have the following structure: */
+            "5XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["errors"];
+                };
+            };
+        };
+    };
+    overwriteDocumentParts: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description The Project ID. */
+                projectId: string;
+                /** @description The Space ID. (Use '_default' without quotes to address the default Space.) */
+                spaceId: string;
+                /** @description The Document name. */
+                documentName: string;
+            };
+            cookie?: never;
+        };
+        /** @description Parameters for overwriting multiple Work Item Document Parts. */
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["overwriteDocumentPartsRequestBody"];
+            };
+        };
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["overwriteDocumentPartsResponseBody"];
+                };
+            };
+            /** @description Bad Request */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Unauthorized */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Forbidden */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Not Found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Not Acceptable */
+            406: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Conflict */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Request Entity Too Large */
+            413: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Unsupported Media Type */
+            415: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Internal Server Error */
+            500: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Service Unavailable */
+            503: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Error responses have the following structure: */
+            "4XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["errors"];
+                };
+            };
+            /** @description Error responses have the following structure: */
+            "5XX": {
                 headers: {
                     [name: string]: unknown;
                 };
@@ -20608,7 +22185,16 @@ export interface operations {
                 content?: never;
             };
             /** @description Error responses have the following structure: */
-            "4XX-5XX": {
+            "4XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["errors"];
+                };
+            };
+            /** @description Error responses have the following structure: */
+            "5XX": {
                 headers: {
                     [name: string]: unknown;
                 };
@@ -20717,7 +22303,16 @@ export interface operations {
                 content?: never;
             };
             /** @description Error responses have the following structure: */
-            "4XX-5XX": {
+            "4XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["errors"];
+                };
+            };
+            /** @description Error responses have the following structure: */
+            "5XX": {
                 headers: {
                     [name: string]: unknown;
                 };
@@ -20809,7 +22404,16 @@ export interface operations {
                 content?: never;
             };
             /** @description Error responses have the following structure: */
-            "4XX-5XX": {
+            "4XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["errors"];
+                };
+            };
+            /** @description Error responses have the following structure: */
+            "5XX": {
                 headers: {
                     [name: string]: unknown;
                 };
@@ -20892,7 +22496,16 @@ export interface operations {
                 content?: never;
             };
             /** @description Error responses have the following structure: */
-            "4XX-5XX": {
+            "4XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["errors"];
+                };
+            };
+            /** @description Error responses have the following structure: */
+            "5XX": {
                 headers: {
                     [name: string]: unknown;
                 };
@@ -20994,7 +22607,16 @@ export interface operations {
                 content?: never;
             };
             /** @description Error responses have the following structure: */
-            "4XX-5XX": {
+            "4XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["errors"];
+                };
+            };
+            /** @description Error responses have the following structure: */
+            "5XX": {
                 headers: {
                     [name: string]: unknown;
                 };
@@ -21090,7 +22712,16 @@ export interface operations {
                 content?: never;
             };
             /** @description Error responses have the following structure: */
-            "4XX-5XX": {
+            "4XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["errors"];
+                };
+            };
+            /** @description Error responses have the following structure: */
+            "5XX": {
                 headers: {
                     [name: string]: unknown;
                 };
@@ -21184,7 +22815,16 @@ export interface operations {
                 content?: never;
             };
             /** @description Error responses have the following structure: */
-            "4XX-5XX": {
+            "4XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["errors"];
+                };
+            };
+            /** @description Error responses have the following structure: */
+            "5XX": {
                 headers: {
                     [name: string]: unknown;
                 };
@@ -21269,7 +22909,16 @@ export interface operations {
                 content?: never;
             };
             /** @description Error responses have the following structure: */
-            "4XX-5XX": {
+            "4XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["errors"];
+                };
+            };
+            /** @description Error responses have the following structure: */
+            "5XX": {
                 headers: {
                     [name: string]: unknown;
                 };
@@ -21365,7 +23014,16 @@ export interface operations {
                 content?: never;
             };
             /** @description Error responses have the following structure: */
-            "4XX-5XX": {
+            "4XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["errors"];
+                };
+            };
+            /** @description Error responses have the following structure: */
+            "5XX": {
                 headers: {
                     [name: string]: unknown;
                 };
@@ -21476,7 +23134,16 @@ export interface operations {
                 content?: never;
             };
             /** @description Error responses have the following structure: */
-            "4XX-5XX": {
+            "4XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["errors"];
+                };
+            };
+            /** @description Error responses have the following structure: */
+            "5XX": {
                 headers: {
                     [name: string]: unknown;
                 };
@@ -21570,7 +23237,16 @@ export interface operations {
                 content?: never;
             };
             /** @description Error responses have the following structure: */
-            "4XX-5XX": {
+            "4XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["errors"];
+                };
+            };
+            /** @description Error responses have the following structure: */
+            "5XX": {
                 headers: {
                     [name: string]: unknown;
                 };
@@ -21674,7 +23350,16 @@ export interface operations {
                 content?: never;
             };
             /** @description Error responses have the following structure: */
-            "4XX-5XX": {
+            "4XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["errors"];
+                };
+            };
+            /** @description Error responses have the following structure: */
+            "5XX": {
                 headers: {
                     [name: string]: unknown;
                 };
@@ -21772,7 +23457,16 @@ export interface operations {
                 content?: never;
             };
             /** @description Error responses have the following structure: */
-            "4XX-5XX": {
+            "4XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["errors"];
+                };
+            };
+            /** @description Error responses have the following structure: */
+            "5XX": {
                 headers: {
                     [name: string]: unknown;
                 };
@@ -21883,7 +23577,16 @@ export interface operations {
                 content?: never;
             };
             /** @description Error responses have the following structure: */
-            "4XX-5XX": {
+            "4XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["errors"];
+                };
+            };
+            /** @description Error responses have the following structure: */
+            "5XX": {
                 headers: {
                     [name: string]: unknown;
                 };
@@ -21994,7 +23697,16 @@ export interface operations {
                 content?: never;
             };
             /** @description Error responses have the following structure: */
-            "4XX-5XX": {
+            "4XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["errors"];
+                };
+            };
+            /** @description Error responses have the following structure: */
+            "5XX": {
                 headers: {
                     [name: string]: unknown;
                 };
@@ -22098,7 +23810,16 @@ export interface operations {
                 content?: never;
             };
             /** @description Error responses have the following structure: */
-            "4XX-5XX": {
+            "4XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["errors"];
+                };
+            };
+            /** @description Error responses have the following structure: */
+            "5XX": {
                 headers: {
                     [name: string]: unknown;
                 };
@@ -22188,7 +23909,16 @@ export interface operations {
                 content?: never;
             };
             /** @description Error responses have the following structure: */
-            "4XX-5XX": {
+            "4XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["errors"];
+                };
+            };
+            /** @description Error responses have the following structure: */
+            "5XX": {
                 headers: {
                     [name: string]: unknown;
                 };
@@ -22276,7 +24006,16 @@ export interface operations {
                 content?: never;
             };
             /** @description Error responses have the following structure: */
-            "4XX-5XX": {
+            "4XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["errors"];
+                };
+            };
+            /** @description Error responses have the following structure: */
+            "5XX": {
                 headers: {
                     [name: string]: unknown;
                 };
@@ -22374,7 +24113,16 @@ export interface operations {
                 content?: never;
             };
             /** @description Error responses have the following structure: */
-            "4XX-5XX": {
+            "4XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["errors"];
+                };
+            };
+            /** @description Error responses have the following structure: */
+            "5XX": {
                 headers: {
                     [name: string]: unknown;
                 };
@@ -22481,7 +24229,16 @@ export interface operations {
                 content?: never;
             };
             /** @description Error responses have the following structure: */
-            "4XX-5XX": {
+            "4XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["errors"];
+                };
+            };
+            /** @description Error responses have the following structure: */
+            "5XX": {
                 headers: {
                     [name: string]: unknown;
                 };
@@ -22579,7 +24336,16 @@ export interface operations {
                 content?: never;
             };
             /** @description Error responses have the following structure: */
-            "4XX-5XX": {
+            "4XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["errors"];
+                };
+            };
+            /** @description Error responses have the following structure: */
+            "5XX": {
                 headers: {
                     [name: string]: unknown;
                 };
@@ -22677,7 +24443,16 @@ export interface operations {
                 content?: never;
             };
             /** @description Error responses have the following structure: */
-            "4XX-5XX": {
+            "4XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["errors"];
+                };
+            };
+            /** @description Error responses have the following structure: */
+            "5XX": {
                 headers: {
                     [name: string]: unknown;
                 };
@@ -22767,7 +24542,16 @@ export interface operations {
                 content?: never;
             };
             /** @description Error responses have the following structure: */
-            "4XX-5XX": {
+            "4XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["errors"];
+                };
+            };
+            /** @description Error responses have the following structure: */
+            "5XX": {
                 headers: {
                     [name: string]: unknown;
                 };
@@ -22848,7 +24632,16 @@ export interface operations {
                 content?: never;
             };
             /** @description Error responses have the following structure: */
-            "4XX-5XX": {
+            "4XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["errors"];
+                };
+            };
+            /** @description Error responses have the following structure: */
+            "5XX": {
                 headers: {
                     [name: string]: unknown;
                 };
@@ -22948,7 +24741,108 @@ export interface operations {
                 content?: never;
             };
             /** @description Error responses have the following structure: */
-            "4XX-5XX": {
+            "4XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["errors"];
+                };
+            };
+            /** @description Error responses have the following structure: */
+            "5XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["errors"];
+                };
+            };
+        };
+    };
+    getFieldsMetadataForTestRun: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description The Project ID. */
+                projectId: string;
+                /** @description The Test Run ID. */
+                testRunId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["fieldsMetadataActionResponseBody"];
+                };
+            };
+            /** @description Bad Request */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Unauthorized */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Forbidden */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Not Found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Not Acceptable */
+            406: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Internal Server Error */
+            500: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Service Unavailable */
+            503: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Error responses have the following structure: */
+            "4XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["errors"];
+                };
+            };
+            /** @description Error responses have the following structure: */
+            "5XX": {
                 headers: {
                     [name: string]: unknown;
                 };
@@ -23038,7 +24932,16 @@ export interface operations {
                 content?: never;
             };
             /** @description Error responses have the following structure: */
-            "4XX-5XX": {
+            "4XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["errors"];
+                };
+            };
+            /** @description Error responses have the following structure: */
+            "5XX": {
                 headers: {
                     [name: string]: unknown;
                 };
@@ -23130,7 +25033,16 @@ export interface operations {
                 content?: never;
             };
             /** @description Error responses have the following structure: */
-            "4XX-5XX": {
+            "4XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["errors"];
+                };
+            };
+            /** @description Error responses have the following structure: */
+            "5XX": {
                 headers: {
                     [name: string]: unknown;
                 };
@@ -23230,7 +25142,16 @@ export interface operations {
                 content?: never;
             };
             /** @description Error responses have the following structure: */
-            "4XX-5XX": {
+            "4XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["errors"];
+                };
+            };
+            /** @description Error responses have the following structure: */
+            "5XX": {
                 headers: {
                     [name: string]: unknown;
                 };
@@ -23322,7 +25243,16 @@ export interface operations {
                 content?: never;
             };
             /** @description Error responses have the following structure: */
-            "4XX-5XX": {
+            "4XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["errors"];
+                };
+            };
+            /** @description Error responses have the following structure: */
+            "5XX": {
                 headers: {
                     [name: string]: unknown;
                 };
@@ -23405,7 +25335,16 @@ export interface operations {
                 content?: never;
             };
             /** @description Error responses have the following structure: */
-            "4XX-5XX": {
+            "4XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["errors"];
+                };
+            };
+            /** @description Error responses have the following structure: */
+            "5XX": {
                 headers: {
                     [name: string]: unknown;
                 };
@@ -23499,7 +25438,16 @@ export interface operations {
                 content?: never;
             };
             /** @description Error responses have the following structure: */
-            "4XX-5XX": {
+            "4XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["errors"];
+                };
+            };
+            /** @description Error responses have the following structure: */
+            "5XX": {
                 headers: {
                     [name: string]: unknown;
                 };
@@ -23608,7 +25556,16 @@ export interface operations {
                 content?: never;
             };
             /** @description Error responses have the following structure: */
-            "4XX-5XX": {
+            "4XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["errors"];
+                };
+            };
+            /** @description Error responses have the following structure: */
+            "5XX": {
                 headers: {
                     [name: string]: unknown;
                 };
@@ -23708,7 +25665,16 @@ export interface operations {
                 content?: never;
             };
             /** @description Error responses have the following structure: */
-            "4XX-5XX": {
+            "4XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["errors"];
+                };
+            };
+            /** @description Error responses have the following structure: */
+            "5XX": {
                 headers: {
                     [name: string]: unknown;
                 };
@@ -23800,7 +25766,16 @@ export interface operations {
                 content?: never;
             };
             /** @description Error responses have the following structure: */
-            "4XX-5XX": {
+            "4XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["errors"];
+                };
+            };
+            /** @description Error responses have the following structure: */
+            "5XX": {
                 headers: {
                     [name: string]: unknown;
                 };
@@ -23902,7 +25877,16 @@ export interface operations {
                 content?: never;
             };
             /** @description Error responses have the following structure: */
-            "4XX-5XX": {
+            "4XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["errors"];
+                };
+            };
+            /** @description Error responses have the following structure: */
+            "5XX": {
                 headers: {
                     [name: string]: unknown;
                 };
@@ -23996,7 +25980,16 @@ export interface operations {
                 content?: never;
             };
             /** @description Error responses have the following structure: */
-            "4XX-5XX": {
+            "4XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["errors"];
+                };
+            };
+            /** @description Error responses have the following structure: */
+            "5XX": {
                 headers: {
                     [name: string]: unknown;
                 };
@@ -24105,7 +26098,16 @@ export interface operations {
                 content?: never;
             };
             /** @description Error responses have the following structure: */
-            "4XX-5XX": {
+            "4XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["errors"];
+                };
+            };
+            /** @description Error responses have the following structure: */
+            "5XX": {
                 headers: {
                     [name: string]: unknown;
                 };
@@ -24197,7 +26199,16 @@ export interface operations {
                 content?: never;
             };
             /** @description Error responses have the following structure: */
-            "4XX-5XX": {
+            "4XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["errors"];
+                };
+            };
+            /** @description Error responses have the following structure: */
+            "5XX": {
                 headers: {
                     [name: string]: unknown;
                 };
@@ -24280,7 +26291,16 @@ export interface operations {
                 content?: never;
             };
             /** @description Error responses have the following structure: */
-            "4XX-5XX": {
+            "4XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["errors"];
+                };
+            };
+            /** @description Error responses have the following structure: */
+            "5XX": {
                 headers: {
                     [name: string]: unknown;
                 };
@@ -24374,7 +26394,16 @@ export interface operations {
                 content?: never;
             };
             /** @description Error responses have the following structure: */
-            "4XX-5XX": {
+            "4XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["errors"];
+                };
+            };
+            /** @description Error responses have the following structure: */
+            "5XX": {
                 headers: {
                     [name: string]: unknown;
                 };
@@ -24483,7 +26512,16 @@ export interface operations {
                 content?: never;
             };
             /** @description Error responses have the following structure: */
-            "4XX-5XX": {
+            "4XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["errors"];
+                };
+            };
+            /** @description Error responses have the following structure: */
+            "5XX": {
                 headers: {
                     [name: string]: unknown;
                 };
@@ -24583,7 +26621,16 @@ export interface operations {
                 content?: never;
             };
             /** @description Error responses have the following structure: */
-            "4XX-5XX": {
+            "4XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["errors"];
+                };
+            };
+            /** @description Error responses have the following structure: */
+            "5XX": {
                 headers: {
                     [name: string]: unknown;
                 };
@@ -24675,7 +26722,16 @@ export interface operations {
                 content?: never;
             };
             /** @description Error responses have the following structure: */
-            "4XX-5XX": {
+            "4XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["errors"];
+                };
+            };
+            /** @description Error responses have the following structure: */
+            "5XX": {
                 headers: {
                     [name: string]: unknown;
                 };
@@ -24758,7 +26814,16 @@ export interface operations {
                 content?: never;
             };
             /** @description Error responses have the following structure: */
-            "4XX-5XX": {
+            "4XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["errors"];
+                };
+            };
+            /** @description Error responses have the following structure: */
+            "5XX": {
                 headers: {
                     [name: string]: unknown;
                 };
@@ -24858,7 +26923,16 @@ export interface operations {
                 content?: never;
             };
             /** @description Error responses have the following structure: */
-            "4XX-5XX": {
+            "4XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["errors"];
+                };
+            };
+            /** @description Error responses have the following structure: */
+            "5XX": {
                 headers: {
                     [name: string]: unknown;
                 };
@@ -24967,7 +27041,16 @@ export interface operations {
                 content?: never;
             };
             /** @description Error responses have the following structure: */
-            "4XX-5XX": {
+            "4XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["errors"];
+                };
+            };
+            /** @description Error responses have the following structure: */
+            "5XX": {
                 headers: {
                     [name: string]: unknown;
                 };
@@ -25067,7 +27150,16 @@ export interface operations {
                 content?: never;
             };
             /** @description Error responses have the following structure: */
-            "4XX-5XX": {
+            "4XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["errors"];
+                };
+            };
+            /** @description Error responses have the following structure: */
+            "5XX": {
                 headers: {
                     [name: string]: unknown;
                 };
@@ -25163,7 +27255,16 @@ export interface operations {
                 content?: never;
             };
             /** @description Error responses have the following structure: */
-            "4XX-5XX": {
+            "4XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["errors"];
+                };
+            };
+            /** @description Error responses have the following structure: */
+            "5XX": {
                 headers: {
                     [name: string]: unknown;
                 };
@@ -25250,7 +27351,16 @@ export interface operations {
                 content?: never;
             };
             /** @description Error responses have the following structure: */
-            "4XX-5XX": {
+            "4XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["errors"];
+                };
+            };
+            /** @description Error responses have the following structure: */
+            "5XX": {
                 headers: {
                     [name: string]: unknown;
                 };
@@ -25356,7 +27466,114 @@ export interface operations {
                 content?: never;
             };
             /** @description Error responses have the following structure: */
-            "4XX-5XX": {
+            "4XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["errors"];
+                };
+            };
+            /** @description Error responses have the following structure: */
+            "5XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["errors"];
+                };
+            };
+        };
+    };
+    getFieldsMetadataForTestRecord: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description The Project ID. */
+                projectId: string;
+                /** @description The Test Run ID. */
+                testRunId: string;
+                /** @description The Testcase Project ID. */
+                testCaseProjectId: string;
+                /** @description The Testcase ID. */
+                testCaseId: string;
+                /** @description The Iteration Number. */
+                iteration: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["fieldsMetadataActionResponseBody"];
+                };
+            };
+            /** @description Bad Request */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Unauthorized */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Forbidden */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Not Found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Not Acceptable */
+            406: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Internal Server Error */
+            500: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Service Unavailable */
+            503: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Error responses have the following structure: */
+            "4XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["errors"];
+                };
+            };
+            /** @description Error responses have the following structure: */
+            "5XX": {
                 headers: {
                     [name: string]: unknown;
                 };
@@ -25456,7 +27673,16 @@ export interface operations {
                 content?: never;
             };
             /** @description Error responses have the following structure: */
-            "4XX-5XX": {
+            "4XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["errors"];
+                };
+            };
+            /** @description Error responses have the following structure: */
+            "5XX": {
                 headers: {
                     [name: string]: unknown;
                 };
@@ -25562,7 +27788,16 @@ export interface operations {
                 content?: never;
             };
             /** @description Error responses have the following structure: */
-            "4XX-5XX": {
+            "4XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["errors"];
+                };
+            };
+            /** @description Error responses have the following structure: */
+            "5XX": {
                 headers: {
                     [name: string]: unknown;
                 };
@@ -25660,7 +27895,16 @@ export interface operations {
                 content?: never;
             };
             /** @description Error responses have the following structure: */
-            "4XX-5XX": {
+            "4XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["errors"];
+                };
+            };
+            /** @description Error responses have the following structure: */
+            "5XX": {
                 headers: {
                     [name: string]: unknown;
                 };
@@ -25749,7 +27993,16 @@ export interface operations {
                 content?: never;
             };
             /** @description Error responses have the following structure: */
-            "4XX-5XX": {
+            "4XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["errors"];
+                };
+            };
+            /** @description Error responses have the following structure: */
+            "5XX": {
                 headers: {
                     [name: string]: unknown;
                 };
@@ -25849,7 +28102,16 @@ export interface operations {
                 content?: never;
             };
             /** @description Error responses have the following structure: */
-            "4XX-5XX": {
+            "4XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["errors"];
+                };
+            };
+            /** @description Error responses have the following structure: */
+            "5XX": {
                 headers: {
                     [name: string]: unknown;
                 };
@@ -25964,7 +28226,16 @@ export interface operations {
                 content?: never;
             };
             /** @description Error responses have the following structure: */
-            "4XX-5XX": {
+            "4XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["errors"];
+                };
+            };
+            /** @description Error responses have the following structure: */
+            "5XX": {
                 headers: {
                     [name: string]: unknown;
                 };
@@ -26062,7 +28333,16 @@ export interface operations {
                 content?: never;
             };
             /** @description Error responses have the following structure: */
-            "4XX-5XX": {
+            "4XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["errors"];
+                };
+            };
+            /** @description Error responses have the following structure: */
+            "5XX": {
                 headers: {
                     [name: string]: unknown;
                 };
@@ -26151,7 +28431,16 @@ export interface operations {
                 content?: never;
             };
             /** @description Error responses have the following structure: */
-            "4XX-5XX": {
+            "4XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["errors"];
+                };
+            };
+            /** @description Error responses have the following structure: */
+            "5XX": {
                 headers: {
                     [name: string]: unknown;
                 };
@@ -26251,7 +28540,16 @@ export interface operations {
                 content?: never;
             };
             /** @description Error responses have the following structure: */
-            "4XX-5XX": {
+            "4XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["errors"];
+                };
+            };
+            /** @description Error responses have the following structure: */
+            "5XX": {
                 headers: {
                     [name: string]: unknown;
                 };
@@ -26366,7 +28664,16 @@ export interface operations {
                 content?: never;
             };
             /** @description Error responses have the following structure: */
-            "4XX-5XX": {
+            "4XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["errors"];
+                };
+            };
+            /** @description Error responses have the following structure: */
+            "5XX": {
                 headers: {
                     [name: string]: unknown;
                 };
@@ -26472,7 +28779,16 @@ export interface operations {
                 content?: never;
             };
             /** @description Error responses have the following structure: */
-            "4XX-5XX": {
+            "4XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["errors"];
+                };
+            };
+            /** @description Error responses have the following structure: */
+            "5XX": {
                 headers: {
                     [name: string]: unknown;
                 };
@@ -26570,7 +28886,16 @@ export interface operations {
                 content?: never;
             };
             /** @description Error responses have the following structure: */
-            "4XX-5XX": {
+            "4XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["errors"];
+                };
+            };
+            /** @description Error responses have the following structure: */
+            "5XX": {
                 headers: {
                     [name: string]: unknown;
                 };
@@ -26678,7 +29003,16 @@ export interface operations {
                 content?: never;
             };
             /** @description Error responses have the following structure: */
-            "4XX-5XX": {
+            "4XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["errors"];
+                };
+            };
+            /** @description Error responses have the following structure: */
+            "5XX": {
                 headers: {
                     [name: string]: unknown;
                 };
@@ -26780,7 +29114,16 @@ export interface operations {
                 content?: never;
             };
             /** @description Error responses have the following structure: */
-            "4XX-5XX": {
+            "4XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["errors"];
+                };
+            };
+            /** @description Error responses have the following structure: */
+            "5XX": {
                 headers: {
                     [name: string]: unknown;
                 };
@@ -26888,7 +29231,16 @@ export interface operations {
                 content?: never;
             };
             /** @description Error responses have the following structure: */
-            "4XX-5XX": {
+            "4XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["errors"];
+                };
+            };
+            /** @description Error responses have the following structure: */
+            "5XX": {
                 headers: {
                     [name: string]: unknown;
                 };
@@ -26988,7 +29340,16 @@ export interface operations {
                 content?: never;
             };
             /** @description Error responses have the following structure: */
-            "4XX-5XX": {
+            "4XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["errors"];
+                };
+            };
+            /** @description Error responses have the following structure: */
+            "5XX": {
                 headers: {
                     [name: string]: unknown;
                 };
@@ -27079,7 +29440,16 @@ export interface operations {
                 content?: never;
             };
             /** @description Error responses have the following structure: */
-            "4XX-5XX": {
+            "4XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["errors"];
+                };
+            };
+            /** @description Error responses have the following structure: */
+            "5XX": {
                 headers: {
                     [name: string]: unknown;
                 };
@@ -27175,7 +29545,16 @@ export interface operations {
                 content?: never;
             };
             /** @description Error responses have the following structure: */
-            "4XX-5XX": {
+            "4XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["errors"];
+                };
+            };
+            /** @description Error responses have the following structure: */
+            "5XX": {
                 headers: {
                     [name: string]: unknown;
                 };
@@ -27282,7 +29661,16 @@ export interface operations {
                 content?: never;
             };
             /** @description Error responses have the following structure: */
-            "4XX-5XX": {
+            "4XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["errors"];
+                };
+            };
+            /** @description Error responses have the following structure: */
+            "5XX": {
                 headers: {
                     [name: string]: unknown;
                 };
@@ -27380,7 +29768,16 @@ export interface operations {
                 content?: never;
             };
             /** @description Error responses have the following structure: */
-            "4XX-5XX": {
+            "4XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["errors"];
+                };
+            };
+            /** @description Error responses have the following structure: */
+            "5XX": {
                 headers: {
                     [name: string]: unknown;
                 };
@@ -27483,7 +29880,16 @@ export interface operations {
                 content?: never;
             };
             /** @description Error responses have the following structure: */
-            "4XX-5XX": {
+            "4XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["errors"];
+                };
+            };
+            /** @description Error responses have the following structure: */
+            "5XX": {
                 headers: {
                     [name: string]: unknown;
                 };
@@ -27573,7 +29979,16 @@ export interface operations {
                 content?: never;
             };
             /** @description Error responses have the following structure: */
-            "4XX-5XX": {
+            "4XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["errors"];
+                };
+            };
+            /** @description Error responses have the following structure: */
+            "5XX": {
                 headers: {
                     [name: string]: unknown;
                 };
@@ -27678,7 +30093,108 @@ export interface operations {
                 content?: never;
             };
             /** @description Error responses have the following structure: */
-            "4XX-5XX": {
+            "4XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["errors"];
+                };
+            };
+            /** @description Error responses have the following structure: */
+            "5XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["errors"];
+                };
+            };
+        };
+    };
+    getFieldsMetadataForWorkItem: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description The Project ID. */
+                projectId: string;
+                /** @description The Work Item ID. */
+                workItemId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["fieldsMetadataActionResponseBody"];
+                };
+            };
+            /** @description Bad Request */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Unauthorized */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Forbidden */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Not Found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Not Acceptable */
+            406: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Internal Server Error */
+            500: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Service Unavailable */
+            503: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Error responses have the following structure: */
+            "4XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["errors"];
+                };
+            };
+            /** @description Error responses have the following structure: */
+            "5XX": {
                 headers: {
                     [name: string]: unknown;
                 };
@@ -27768,7 +30284,16 @@ export interface operations {
                 content?: never;
             };
             /** @description Error responses have the following structure: */
-            "4XX-5XX": {
+            "4XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["errors"];
+                };
+            };
+            /** @description Error responses have the following structure: */
+            "5XX": {
                 headers: {
                     [name: string]: unknown;
                 };
@@ -27842,7 +30367,16 @@ export interface operations {
                 content?: never;
             };
             /** @description Error responses have the following structure: */
-            "4XX-5XX": {
+            "4XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["errors"];
+                };
+            };
+            /** @description Error responses have the following structure: */
+            "5XX": {
                 headers: {
                     [name: string]: unknown;
                 };
@@ -27942,7 +30476,16 @@ export interface operations {
                 content?: never;
             };
             /** @description Error responses have the following structure: */
-            "4XX-5XX": {
+            "4XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["errors"];
+                };
+            };
+            /** @description Error responses have the following structure: */
+            "5XX": {
                 headers: {
                     [name: string]: unknown;
                 };
@@ -28036,7 +30579,16 @@ export interface operations {
                 content?: never;
             };
             /** @description Error responses have the following structure: */
-            "4XX-5XX": {
+            "4XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["errors"];
+                };
+            };
+            /** @description Error responses have the following structure: */
+            "5XX": {
                 headers: {
                     [name: string]: unknown;
                 };
@@ -28145,7 +30697,16 @@ export interface operations {
                 content?: never;
             };
             /** @description Error responses have the following structure: */
-            "4XX-5XX": {
+            "4XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["errors"];
+                };
+            };
+            /** @description Error responses have the following structure: */
+            "5XX": {
                 headers: {
                     [name: string]: unknown;
                 };
@@ -28245,7 +30806,16 @@ export interface operations {
                 content?: never;
             };
             /** @description Error responses have the following structure: */
-            "4XX-5XX": {
+            "4XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["errors"];
+                };
+            };
+            /** @description Error responses have the following structure: */
+            "5XX": {
                 headers: {
                     [name: string]: unknown;
                 };
@@ -28345,7 +30915,16 @@ export interface operations {
                 content?: never;
             };
             /** @description Error responses have the following structure: */
-            "4XX-5XX": {
+            "4XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["errors"];
+                };
+            };
+            /** @description Error responses have the following structure: */
+            "5XX": {
                 headers: {
                     [name: string]: unknown;
                 };
@@ -28437,7 +31016,16 @@ export interface operations {
                 content?: never;
             };
             /** @description Error responses have the following structure: */
-            "4XX-5XX": {
+            "4XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["errors"];
+                };
+            };
+            /** @description Error responses have the following structure: */
+            "5XX": {
                 headers: {
                     [name: string]: unknown;
                 };
@@ -28520,7 +31108,16 @@ export interface operations {
                 content?: never;
             };
             /** @description Error responses have the following structure: */
-            "4XX-5XX": {
+            "4XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["errors"];
+                };
+            };
+            /** @description Error responses have the following structure: */
+            "5XX": {
                 headers: {
                     [name: string]: unknown;
                 };
@@ -28622,7 +31219,16 @@ export interface operations {
                 content?: never;
             };
             /** @description Error responses have the following structure: */
-            "4XX-5XX": {
+            "4XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["errors"];
+                };
+            };
+            /** @description Error responses have the following structure: */
+            "5XX": {
                 headers: {
                     [name: string]: unknown;
                 };
@@ -28714,7 +31320,16 @@ export interface operations {
                 content?: never;
             };
             /** @description Error responses have the following structure: */
-            "4XX-5XX": {
+            "4XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["errors"];
+                };
+            };
+            /** @description Error responses have the following structure: */
+            "5XX": {
                 headers: {
                     [name: string]: unknown;
                 };
@@ -28806,7 +31421,16 @@ export interface operations {
                 content?: never;
             };
             /** @description Error responses have the following structure: */
-            "4XX-5XX": {
+            "4XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["errors"];
+                };
+            };
+            /** @description Error responses have the following structure: */
+            "5XX": {
                 headers: {
                     [name: string]: unknown;
                 };
@@ -28889,7 +31513,16 @@ export interface operations {
                 content?: never;
             };
             /** @description Error responses have the following structure: */
-            "4XX-5XX": {
+            "4XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["errors"];
+                };
+            };
+            /** @description Error responses have the following structure: */
+            "5XX": {
                 headers: {
                     [name: string]: unknown;
                 };
@@ -28983,7 +31616,16 @@ export interface operations {
                 content?: never;
             };
             /** @description Error responses have the following structure: */
-            "4XX-5XX": {
+            "4XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["errors"];
+                };
+            };
+            /** @description Error responses have the following structure: */
+            "5XX": {
                 headers: {
                     [name: string]: unknown;
                 };
@@ -29092,7 +31734,16 @@ export interface operations {
                 content?: never;
             };
             /** @description Error responses have the following structure: */
-            "4XX-5XX": {
+            "4XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["errors"];
+                };
+            };
+            /** @description Error responses have the following structure: */
+            "5XX": {
                 headers: {
                     [name: string]: unknown;
                 };
@@ -29186,7 +31837,16 @@ export interface operations {
                 content?: never;
             };
             /** @description Error responses have the following structure: */
-            "4XX-5XX": {
+            "4XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["errors"];
+                };
+            };
+            /** @description Error responses have the following structure: */
+            "5XX": {
                 headers: {
                     [name: string]: unknown;
                 };
@@ -29295,7 +31955,16 @@ export interface operations {
                 content?: never;
             };
             /** @description Error responses have the following structure: */
-            "4XX-5XX": {
+            "4XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["errors"];
+                };
+            };
+            /** @description Error responses have the following structure: */
+            "5XX": {
                 headers: {
                     [name: string]: unknown;
                 };
@@ -29387,7 +32056,16 @@ export interface operations {
                 content?: never;
             };
             /** @description Error responses have the following structure: */
-            "4XX-5XX": {
+            "4XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["errors"];
+                };
+            };
+            /** @description Error responses have the following structure: */
+            "5XX": {
                 headers: {
                     [name: string]: unknown;
                 };
@@ -29489,7 +32167,16 @@ export interface operations {
                 content?: never;
             };
             /** @description Error responses have the following structure: */
-            "4XX-5XX": {
+            "4XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["errors"];
+                };
+            };
+            /** @description Error responses have the following structure: */
+            "5XX": {
                 headers: {
                     [name: string]: unknown;
                 };
@@ -29583,7 +32270,16 @@ export interface operations {
                 content?: never;
             };
             /** @description Error responses have the following structure: */
-            "4XX-5XX": {
+            "4XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["errors"];
+                };
+            };
+            /** @description Error responses have the following structure: */
+            "5XX": {
                 headers: {
                     [name: string]: unknown;
                 };
@@ -29692,7 +32388,16 @@ export interface operations {
                 content?: never;
             };
             /** @description Error responses have the following structure: */
-            "4XX-5XX": {
+            "4XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["errors"];
+                };
+            };
+            /** @description Error responses have the following structure: */
+            "5XX": {
                 headers: {
                     [name: string]: unknown;
                 };
@@ -29792,7 +32497,16 @@ export interface operations {
                 content?: never;
             };
             /** @description Error responses have the following structure: */
-            "4XX-5XX": {
+            "4XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["errors"];
+                };
+            };
+            /** @description Error responses have the following structure: */
+            "5XX": {
                 headers: {
                     [name: string]: unknown;
                 };
@@ -29890,7 +32604,16 @@ export interface operations {
                 content?: never;
             };
             /** @description Error responses have the following structure: */
-            "4XX-5XX": {
+            "4XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["errors"];
+                };
+            };
+            /** @description Error responses have the following structure: */
+            "5XX": {
                 headers: {
                     [name: string]: unknown;
                 };
@@ -29979,7 +32702,16 @@ export interface operations {
                 content?: never;
             };
             /** @description Error responses have the following structure: */
-            "4XX-5XX": {
+            "4XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["errors"];
+                };
+            };
+            /** @description Error responses have the following structure: */
+            "5XX": {
                 headers: {
                     [name: string]: unknown;
                 };
@@ -30073,7 +32805,16 @@ export interface operations {
                 content?: never;
             };
             /** @description Error responses have the following structure: */
-            "4XX-5XX": {
+            "4XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["errors"];
+                };
+            };
+            /** @description Error responses have the following structure: */
+            "5XX": {
                 headers: {
                     [name: string]: unknown;
                 };
@@ -30169,7 +32910,16 @@ export interface operations {
                 content?: never;
             };
             /** @description Error responses have the following structure: */
-            "4XX-5XX": {
+            "4XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["errors"];
+                };
+            };
+            /** @description Error responses have the following structure: */
+            "5XX": {
                 headers: {
                     [name: string]: unknown;
                 };
@@ -30259,7 +33009,16 @@ export interface operations {
                 content?: never;
             };
             /** @description Error responses have the following structure: */
-            "4XX-5XX": {
+            "4XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["errors"];
+                };
+            };
+            /** @description Error responses have the following structure: */
+            "5XX": {
                 headers: {
                     [name: string]: unknown;
                 };
@@ -30351,7 +33110,16 @@ export interface operations {
                 content?: never;
             };
             /** @description Error responses have the following structure: */
-            "4XX-5XX": {
+            "4XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["errors"];
+                };
+            };
+            /** @description Error responses have the following structure: */
+            "5XX": {
                 headers: {
                     [name: string]: unknown;
                 };
@@ -30449,7 +33217,16 @@ export interface operations {
                 content?: never;
             };
             /** @description Error responses have the following structure: */
-            "4XX-5XX": {
+            "4XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["errors"];
+                };
+            };
+            /** @description Error responses have the following structure: */
+            "5XX": {
                 headers: {
                     [name: string]: unknown;
                 };
@@ -30558,7 +33335,16 @@ export interface operations {
                 content?: never;
             };
             /** @description Error responses have the following structure: */
-            "4XX-5XX": {
+            "4XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["errors"];
+                };
+            };
+            /** @description Error responses have the following structure: */
+            "5XX": {
                 headers: {
                     [name: string]: unknown;
                 };
@@ -30658,7 +33444,16 @@ export interface operations {
                 content?: never;
             };
             /** @description Error responses have the following structure: */
-            "4XX-5XX": {
+            "4XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["errors"];
+                };
+            };
+            /** @description Error responses have the following structure: */
+            "5XX": {
                 headers: {
                     [name: string]: unknown;
                 };
@@ -30752,7 +33547,16 @@ export interface operations {
                 content?: never;
             };
             /** @description Error responses have the following structure: */
-            "4XX-5XX": {
+            "4XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["errors"];
+                };
+            };
+            /** @description Error responses have the following structure: */
+            "5XX": {
                 headers: {
                     [name: string]: unknown;
                 };
@@ -30861,7 +33665,16 @@ export interface operations {
                 content?: never;
             };
             /** @description Error responses have the following structure: */
-            "4XX-5XX": {
+            "4XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["errors"];
+                };
+            };
+            /** @description Error responses have the following structure: */
+            "5XX": {
                 headers: {
                     [name: string]: unknown;
                 };
@@ -30961,7 +33774,16 @@ export interface operations {
                 content?: never;
             };
             /** @description Error responses have the following structure: */
-            "4XX-5XX": {
+            "4XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["errors"];
+                };
+            };
+            /** @description Error responses have the following structure: */
+            "5XX": {
                 headers: {
                     [name: string]: unknown;
                 };
@@ -31057,7 +33879,16 @@ export interface operations {
                 content?: never;
             };
             /** @description Error responses have the following structure: */
-            "4XX-5XX": {
+            "4XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["errors"];
+                };
+            };
+            /** @description Error responses have the following structure: */
+            "5XX": {
                 headers: {
                     [name: string]: unknown;
                 };
@@ -31144,7 +33975,16 @@ export interface operations {
                 content?: never;
             };
             /** @description Error responses have the following structure: */
-            "4XX-5XX": {
+            "4XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["errors"];
+                };
+            };
+            /** @description Error responses have the following structure: */
+            "5XX": {
                 headers: {
                     [name: string]: unknown;
                 };
@@ -31250,7 +34090,16 @@ export interface operations {
                 content?: never;
             };
             /** @description Error responses have the following structure: */
-            "4XX-5XX": {
+            "4XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["errors"];
+                };
+            };
+            /** @description Error responses have the following structure: */
+            "5XX": {
                 headers: {
                     [name: string]: unknown;
                 };
@@ -31346,7 +34195,16 @@ export interface operations {
                 content?: never;
             };
             /** @description Error responses have the following structure: */
-            "4XX-5XX": {
+            "4XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["errors"];
+                };
+            };
+            /** @description Error responses have the following structure: */
+            "5XX": {
                 headers: {
                     [name: string]: unknown;
                 };
@@ -31448,7 +34306,16 @@ export interface operations {
                 content?: never;
             };
             /** @description Error responses have the following structure: */
-            "4XX-5XX": {
+            "4XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["errors"];
+                };
+            };
+            /** @description Error responses have the following structure: */
+            "5XX": {
                 headers: {
                     [name: string]: unknown;
                 };
@@ -31557,7 +34424,16 @@ export interface operations {
                 content?: never;
             };
             /** @description Error responses have the following structure: */
-            "4XX-5XX": {
+            "4XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["errors"];
+                };
+            };
+            /** @description Error responses have the following structure: */
+            "5XX": {
                 headers: {
                     [name: string]: unknown;
                 };
@@ -31659,7 +34535,16 @@ export interface operations {
                 content?: never;
             };
             /** @description Error responses have the following structure: */
-            "4XX-5XX": {
+            "4XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["errors"];
+                };
+            };
+            /** @description Error responses have the following structure: */
+            "5XX": {
                 headers: {
                     [name: string]: unknown;
                 };
@@ -31753,7 +34638,16 @@ export interface operations {
                 content?: never;
             };
             /** @description Error responses have the following structure: */
-            "4XX-5XX": {
+            "4XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["errors"];
+                };
+            };
+            /** @description Error responses have the following structure: */
+            "5XX": {
                 headers: {
                     [name: string]: unknown;
                 };
@@ -31845,7 +34739,16 @@ export interface operations {
                 content?: never;
             };
             /** @description Error responses have the following structure: */
-            "4XX-5XX": {
+            "4XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["errors"];
+                };
+            };
+            /** @description Error responses have the following structure: */
+            "5XX": {
                 headers: {
                     [name: string]: unknown;
                 };
@@ -31939,7 +34842,16 @@ export interface operations {
                 content?: never;
             };
             /** @description Error responses have the following structure: */
-            "4XX-5XX": {
+            "4XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["errors"];
+                };
+            };
+            /** @description Error responses have the following structure: */
+            "5XX": {
                 headers: {
                     [name: string]: unknown;
                 };
@@ -32048,7 +34960,16 @@ export interface operations {
                 content?: never;
             };
             /** @description Error responses have the following structure: */
-            "4XX-5XX": {
+            "4XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["errors"];
+                };
+            };
+            /** @description Error responses have the following structure: */
+            "5XX": {
                 headers: {
                     [name: string]: unknown;
                 };
@@ -32148,7 +35069,16 @@ export interface operations {
                 content?: never;
             };
             /** @description Error responses have the following structure: */
-            "4XX-5XX": {
+            "4XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["errors"];
+                };
+            };
+            /** @description Error responses have the following structure: */
+            "5XX": {
                 headers: {
                     [name: string]: unknown;
                 };
@@ -32248,7 +35178,16 @@ export interface operations {
                 content?: never;
             };
             /** @description Error responses have the following structure: */
-            "4XX-5XX": {
+            "4XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["errors"];
+                };
+            };
+            /** @description Error responses have the following structure: */
+            "5XX": {
                 headers: {
                     [name: string]: unknown;
                 };
@@ -32340,7 +35279,16 @@ export interface operations {
                 content?: never;
             };
             /** @description Error responses have the following structure: */
-            "4XX-5XX": {
+            "4XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["errors"];
+                };
+            };
+            /** @description Error responses have the following structure: */
+            "5XX": {
                 headers: {
                     [name: string]: unknown;
                 };
@@ -32423,7 +35371,16 @@ export interface operations {
                 content?: never;
             };
             /** @description Error responses have the following structure: */
-            "4XX-5XX": {
+            "4XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["errors"];
+                };
+            };
+            /** @description Error responses have the following structure: */
+            "5XX": {
                 headers: {
                     [name: string]: unknown;
                 };
@@ -32525,7 +35482,16 @@ export interface operations {
                 content?: never;
             };
             /** @description Error responses have the following structure: */
-            "4XX-5XX": {
+            "4XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["errors"];
+                };
+            };
+            /** @description Error responses have the following structure: */
+            "5XX": {
                 headers: {
                     [name: string]: unknown;
                 };
@@ -32619,7 +35585,16 @@ export interface operations {
                 content?: never;
             };
             /** @description Error responses have the following structure: */
-            "4XX-5XX": {
+            "4XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["errors"];
+                };
+            };
+            /** @description Error responses have the following structure: */
+            "5XX": {
                 headers: {
                     [name: string]: unknown;
                 };
@@ -32728,7 +35703,16 @@ export interface operations {
                 content?: never;
             };
             /** @description Error responses have the following structure: */
-            "4XX-5XX": {
+            "4XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["errors"];
+                };
+            };
+            /** @description Error responses have the following structure: */
+            "5XX": {
                 headers: {
                     [name: string]: unknown;
                 };
@@ -32828,7 +35812,16 @@ export interface operations {
                 content?: never;
             };
             /** @description Error responses have the following structure: */
-            "4XX-5XX": {
+            "4XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["errors"];
+                };
+            };
+            /** @description Error responses have the following structure: */
+            "5XX": {
                 headers: {
                     [name: string]: unknown;
                 };
@@ -32920,7 +35913,16 @@ export interface operations {
                 content?: never;
             };
             /** @description Error responses have the following structure: */
-            "4XX-5XX": {
+            "4XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["errors"];
+                };
+            };
+            /** @description Error responses have the following structure: */
+            "5XX": {
                 headers: {
                     [name: string]: unknown;
                 };
@@ -33003,7 +36005,123 @@ export interface operations {
                 content?: never;
             };
             /** @description Error responses have the following structure: */
-            "4XX-5XX": {
+            "4XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["errors"];
+                };
+            };
+            /** @description Error responses have the following structure: */
+            "5XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["errors"];
+                };
+            };
+        };
+    };
+    moveWorkItemsToDocument: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description The Project ID. */
+                projectId: string;
+            };
+            cookie?: never;
+        };
+        /** @description Moving Work Items to Document parameters. */
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["moveWorkItemsToDocumentRequestBody"];
+            };
+        };
+        responses: {
+            /** @description No Content */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Bad Request */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Unauthorized */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Forbidden */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Not Found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Conflict */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Request Entity Too Large */
+            413: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Unsupported Media Type */
+            415: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Internal Server Error */
+            500: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Service Unavailable */
+            503: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Error responses have the following structure: */
+            "4XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["errors"];
+                };
+            };
+            /** @description Error responses have the following structure: */
+            "5XX": {
                 headers: {
                     [name: string]: unknown;
                 };
@@ -33093,7 +36211,16 @@ export interface operations {
                 content?: never;
             };
             /** @description Error responses have the following structure: */
-            "4XX-5XX": {
+            "4XX": {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["errors"];
+                };
+            };
+            /** @description Error responses have the following structure: */
+            "5XX": {
                 headers: {
                     [name: string]: unknown;
                 };

@@ -7,7 +7,7 @@ export const GENERATED_OPERATIONS = [
     "name": "getGlobalFieldsMetadata",
     "method": "GET",
     "pathTemplate": "/actions/getFieldsMetadata",
-    "description": "Metadata support is limited to the following resource types: **Work Items**, **Documents**, **Test Runs**, and **Plans**.",
+    "description": "Returns fields for the resource type and its target type in the Global context.",
     "resourceGroup": "metadata",
     "annotations": {
       "readOnlyHint": true,
@@ -24,7 +24,7 @@ export const GENERATED_OPERATIONS = [
         "properties": {
           "resourceType": {
             "type": "string",
-            "description": "The Resource Type. Accepted values: workitems, documents, testruns and plans."
+            "description": "The Resource Type."
           },
           "targetType": {
             "type": "string",
@@ -163,6 +163,10 @@ export const GENERATED_OPERATIONS = [
                 "description": "Requested fields"
               },
               "linkedworkitems": {
+                "type": "string",
+                "description": "Requested fields"
+              },
+              "llms": {
                 "type": "string",
                 "description": "Requested fields"
               },
@@ -406,6 +410,10 @@ export const GENERATED_OPERATIONS = [
                 "description": "Requested fields"
               },
               "linkedworkitems": {
+                "type": "string",
+                "description": "Requested fields"
+              },
+              "llms": {
                 "type": "string",
                 "description": "Requested fields"
               },
@@ -655,6 +663,10 @@ export const GENERATED_OPERATIONS = [
                 "type": "string",
                 "description": "Requested fields"
               },
+              "llms": {
+                "type": "string",
+                "description": "Requested fields"
+              },
               "metadata": {
                 "type": "string",
                 "description": "Requested fields"
@@ -898,6 +910,10 @@ export const GENERATED_OPERATIONS = [
                 "description": "Requested fields"
               },
               "linkedworkitems": {
+                "type": "string",
+                "description": "Requested fields"
+              },
+              "llms": {
                 "type": "string",
                 "description": "Requested fields"
               },
@@ -1146,6 +1162,10 @@ export const GENERATED_OPERATIONS = [
                 "description": "Requested fields"
               },
               "linkedworkitems": {
+                "type": "string",
+                "description": "Requested fields"
+              },
+              "llms": {
                 "type": "string",
                 "description": "Requested fields"
               },
@@ -1437,6 +1457,10 @@ export const GENERATED_OPERATIONS = [
                 "type": "string",
                 "description": "Requested fields"
               },
+              "llms": {
+                "type": "string",
+                "description": "Requested fields"
+              },
               "metadata": {
                 "type": "string",
                 "description": "Requested fields"
@@ -1667,6 +1691,10 @@ export const GENERATED_OPERATIONS = [
                 "description": "Requested fields"
               },
               "linkedworkitems": {
+                "type": "string",
+                "description": "Requested fields"
+              },
+              "llms": {
                 "type": "string",
                 "description": "Requested fields"
               },
@@ -1930,6 +1958,10 @@ export const GENERATED_OPERATIONS = [
                 "type": "string",
                 "description": "Requested fields"
               },
+              "llms": {
+                "type": "string",
+                "description": "Requested fields"
+              },
               "metadata": {
                 "type": "string",
                 "description": "Requested fields"
@@ -2084,7 +2116,7 @@ export const GENERATED_OPERATIONS = [
     "name": "getProjectFieldsMetadata",
     "method": "GET",
     "pathTemplate": "/projects/{projectId}/actions/getFieldsMetadata",
-    "description": "Metadata support is limited to the following resource types: **Work Items**, **Documents**, **Test Runs**, and **Plans**.",
+    "description": "Returns fields for the resource type and its target type in the Project context.",
     "resourceGroup": "metadata",
     "annotations": {
       "readOnlyHint": true,
@@ -2106,7 +2138,7 @@ export const GENERATED_OPERATIONS = [
           },
           "resourceType": {
             "type": "string",
-            "description": "The Resource Type. Accepted values: workitems, documents, testruns and plans."
+            "description": "The Resource Type."
           },
           "targetType": {
             "type": "string",
@@ -2245,6 +2277,10 @@ export const GENERATED_OPERATIONS = [
                 "description": "Requested fields"
               },
               "linkedworkitems": {
+                "type": "string",
+                "description": "Requested fields"
+              },
+              "llms": {
                 "type": "string",
                 "description": "Requested fields"
               },
@@ -2636,6 +2672,10 @@ export const GENERATED_OPERATIONS = [
                 "type": "string",
                 "description": "Requested fields"
               },
+              "llms": {
+                "type": "string",
+                "description": "Requested fields"
+              },
               "metadata": {
                 "type": "string",
                 "description": "Requested fields"
@@ -2972,6 +3012,64 @@ export const GENERATED_OPERATIONS = [
     }
   },
   {
+    "name": "getFieldsMetadataForCollection",
+    "method": "GET",
+    "pathTemplate": "/projects/{projectId}/collections/{collectionId}/actions/getFieldsMetadata",
+    "description": "Returns fields for the specified resource.",
+    "resourceGroup": "metadata",
+    "annotations": {
+      "readOnlyHint": true,
+      "destructiveHint": false,
+      "idempotentHint": true,
+      "openWorldHint": true
+    },
+    "input": {
+      "required": [
+        "projectId",
+        "collectionId"
+      ],
+      "schema": {
+        "type": "object",
+        "properties": {
+          "projectId": {
+            "type": "string",
+            "description": "The Project ID."
+          },
+          "collectionId": {
+            "type": "string",
+            "description": "The Collection ID."
+          }
+        },
+        "required": [
+          "projectId",
+          "collectionId"
+        ],
+        "additionalProperties": false
+      },
+      "pathParams": [
+        "projectId",
+        "collectionId"
+      ],
+      "queryParams": [],
+      "hasBody": false
+    },
+    "wire": {
+      "pathParamMap": {
+        "projectId": "projectId",
+        "collectionId": "collectionId"
+      },
+      "queryParamMap": {}
+    },
+    "output": {
+      "mode": "json",
+      "shape": "resource",
+      "summary": "resource: fieldsMetadataActionResponseBody (data/links)"
+    },
+    "meta": {
+      "inputSummary": "required: projectId, collectionId"
+    }
+  },
+  {
     "name": "reopenCollection",
     "method": "POST",
     "pathTemplate": "/projects/{projectId}/collections/{collectionId}/actions/reopen",
@@ -3212,6 +3310,10 @@ export const GENERATED_OPERATIONS = [
                 "description": "Requested fields"
               },
               "linkedworkitems": {
+                "type": "string",
+                "description": "Requested fields"
+              },
+              "llms": {
                 "type": "string",
                 "description": "Requested fields"
               },
@@ -3708,6 +3810,10 @@ export const GENERATED_OPERATIONS = [
                 "type": "string",
                 "description": "Requested fields"
               },
+              "llms": {
+                "type": "string",
+                "description": "Requested fields"
+              },
               "metadata": {
                 "type": "string",
                 "description": "Requested fields"
@@ -3957,6 +4063,10 @@ export const GENERATED_OPERATIONS = [
                 "description": "Requested fields"
               },
               "linkedworkitems": {
+                "type": "string",
+                "description": "Requested fields"
+              },
+              "llms": {
                 "type": "string",
                 "description": "Requested fields"
               },
@@ -4296,6 +4406,10 @@ export const GENERATED_OPERATIONS = [
                 "type": "string",
                 "description": "Requested fields"
               },
+              "llms": {
+                "type": "string",
+                "description": "Requested fields"
+              },
               "metadata": {
                 "type": "string",
                 "description": "Requested fields"
@@ -4554,6 +4668,10 @@ export const GENERATED_OPERATIONS = [
                 "type": "string",
                 "description": "Requested fields"
               },
+              "llms": {
+                "type": "string",
+                "description": "Requested fields"
+              },
               "metadata": {
                 "type": "string",
                 "description": "Requested fields"
@@ -4806,6 +4924,10 @@ export const GENERATED_OPERATIONS = [
                 "description": "Requested fields"
               },
               "linkedworkitems": {
+                "type": "string",
+                "description": "Requested fields"
+              },
+              "llms": {
                 "type": "string",
                 "description": "Requested fields"
               },
@@ -5073,6 +5195,10 @@ export const GENERATED_OPERATIONS = [
                 "description": "Requested fields"
               },
               "linkedworkitems": {
+                "type": "string",
+                "description": "Requested fields"
+              },
+              "llms": {
                 "type": "string",
                 "description": "Requested fields"
               },
@@ -5470,6 +5596,10 @@ export const GENERATED_OPERATIONS = [
                 "type": "string",
                 "description": "Requested fields"
               },
+              "llms": {
+                "type": "string",
+                "description": "Requested fields"
+              },
               "metadata": {
                 "type": "string",
                 "description": "Requested fields"
@@ -5748,6 +5878,64 @@ export const GENERATED_OPERATIONS = [
     }
   },
   {
+    "name": "getFieldsMetadataForPlan",
+    "method": "GET",
+    "pathTemplate": "/projects/{projectId}/plans/{planId}/actions/getFieldsMetadata",
+    "description": "Returns fields for the specified resource.",
+    "resourceGroup": "plans",
+    "annotations": {
+      "readOnlyHint": true,
+      "destructiveHint": false,
+      "idempotentHint": true,
+      "openWorldHint": true
+    },
+    "input": {
+      "required": [
+        "projectId",
+        "planId"
+      ],
+      "schema": {
+        "type": "object",
+        "properties": {
+          "projectId": {
+            "type": "string",
+            "description": "The Project ID."
+          },
+          "planId": {
+            "type": "string",
+            "description": "The Plan ID."
+          }
+        },
+        "required": [
+          "projectId",
+          "planId"
+        ],
+        "additionalProperties": false
+      },
+      "pathParams": [
+        "projectId",
+        "planId"
+      ],
+      "queryParams": [],
+      "hasBody": false
+    },
+    "wire": {
+      "pathParamMap": {
+        "projectId": "projectId",
+        "planId": "planId"
+      },
+      "queryParamMap": {}
+    },
+    "output": {
+      "mode": "json",
+      "shape": "resource",
+      "summary": "resource: fieldsMetadataActionResponseBody (data/links)"
+    },
+    "meta": {
+      "inputSummary": "required: projectId, planId"
+    }
+  },
+  {
     "name": "getPlanRelationship",
     "method": "GET",
     "pathTemplate": "/projects/{projectId}/plans/{planId}/relationships/{relationshipId}",
@@ -5856,6 +6044,10 @@ export const GENERATED_OPERATIONS = [
                 "description": "Requested fields"
               },
               "linkedworkitems": {
+                "type": "string",
+                "description": "Requested fields"
+              },
+              "llms": {
                 "type": "string",
                 "description": "Requested fields"
               },
@@ -6347,6 +6539,10 @@ export const GENERATED_OPERATIONS = [
                 "type": "string",
                 "description": "Requested fields"
               },
+              "llms": {
+                "type": "string",
+                "description": "Requested fields"
+              },
               "metadata": {
                 "type": "string",
                 "description": "Requested fields"
@@ -6684,6 +6880,10 @@ export const GENERATED_OPERATIONS = [
                 "description": "Requested fields"
               },
               "linkedworkitems": {
+                "type": "string",
+                "description": "Requested fields"
+              },
+              "llms": {
                 "type": "string",
                 "description": "Requested fields"
               },
@@ -7090,6 +7290,72 @@ export const GENERATED_OPERATIONS = [
     }
   },
   {
+    "name": "getFieldsMetadataForDocument",
+    "method": "GET",
+    "pathTemplate": "/projects/{projectId}/spaces/{spaceId}/documents/{documentName}/actions/getFieldsMetadata",
+    "description": "Returns fields for the specified resource.",
+    "resourceGroup": "documents",
+    "annotations": {
+      "readOnlyHint": true,
+      "destructiveHint": false,
+      "idempotentHint": true,
+      "openWorldHint": true
+    },
+    "input": {
+      "required": [
+        "projectId",
+        "spaceId",
+        "documentName"
+      ],
+      "schema": {
+        "type": "object",
+        "properties": {
+          "projectId": {
+            "type": "string",
+            "description": "The Project ID."
+          },
+          "spaceId": {
+            "type": "string",
+            "description": "The Space ID. (Use '_default' without quotes to address the default Space.)"
+          },
+          "documentName": {
+            "type": "string",
+            "description": "The Branch Document Name."
+          }
+        },
+        "required": [
+          "projectId",
+          "spaceId",
+          "documentName"
+        ],
+        "additionalProperties": false
+      },
+      "pathParams": [
+        "projectId",
+        "spaceId",
+        "documentName"
+      ],
+      "queryParams": [],
+      "hasBody": false
+    },
+    "wire": {
+      "pathParamMap": {
+        "projectId": "projectId",
+        "spaceId": "spaceId",
+        "documentName": "documentName"
+      },
+      "queryParamMap": {}
+    },
+    "output": {
+      "mode": "json",
+      "shape": "resource",
+      "summary": "resource: fieldsMetadataActionResponseBody (data/links)"
+    },
+    "meta": {
+      "inputSummary": "required: projectId, spaceId, documentName"
+    }
+  },
+  {
     "name": "mergeDocumentFromMaster",
     "method": "POST",
     "pathTemplate": "/projects/{projectId}/spaces/{spaceId}/documents/{documentName}/actions/mergeFromMaster",
@@ -7342,6 +7608,10 @@ export const GENERATED_OPERATIONS = [
                 "description": "Requested fields"
               },
               "linkedworkitems": {
+                "type": "string",
+                "description": "Requested fields"
+              },
+              "llms": {
                 "type": "string",
                 "description": "Requested fields"
               },
@@ -7621,6 +7891,10 @@ export const GENERATED_OPERATIONS = [
                 "type": "string",
                 "description": "Requested fields"
               },
+              "llms": {
+                "type": "string",
+                "description": "Requested fields"
+              },
               "metadata": {
                 "type": "string",
                 "description": "Requested fields"
@@ -7889,6 +8163,10 @@ export const GENERATED_OPERATIONS = [
                 "description": "Requested fields"
               },
               "linkedworkitems": {
+                "type": "string",
+                "description": "Requested fields"
+              },
+              "llms": {
                 "type": "string",
                 "description": "Requested fields"
               },
@@ -8239,6 +8517,10 @@ export const GENERATED_OPERATIONS = [
                 "description": "Requested fields"
               },
               "linkedworkitems": {
+                "type": "string",
+                "description": "Requested fields"
+              },
+              "llms": {
                 "type": "string",
                 "description": "Requested fields"
               },
@@ -8757,6 +9039,10 @@ export const GENERATED_OPERATIONS = [
                 "type": "string",
                 "description": "Requested fields"
               },
+              "llms": {
+                "type": "string",
+                "description": "Requested fields"
+              },
               "metadata": {
                 "type": "string",
                 "description": "Requested fields"
@@ -8991,6 +9277,80 @@ export const GENERATED_OPERATIONS = [
     }
   },
   {
+    "name": "deleteDocumentParts",
+    "method": "DELETE",
+    "pathTemplate": "/projects/{projectId}/spaces/{spaceId}/documents/{documentName}/parts",
+    "description": "Deletes a list of Document Parts.",
+    "resourceGroup": "documents",
+    "annotations": {
+      "readOnlyHint": false,
+      "destructiveHint": true,
+      "idempotentHint": false,
+      "openWorldHint": true
+    },
+    "input": {
+      "required": [
+        "projectId",
+        "spaceId",
+        "documentName",
+        "body"
+      ],
+      "schema": {
+        "type": "object",
+        "properties": {
+          "projectId": {
+            "type": "string",
+            "description": "The Project ID."
+          },
+          "spaceId": {
+            "type": "string",
+            "description": "The Space ID. (Use '_default' without quotes to address the default Space.)"
+          },
+          "documentName": {
+            "type": "string",
+            "description": "The Document name."
+          },
+          "body": {
+            "type": "object",
+            "additionalProperties": true,
+            "description": "The list of Document Part IDs to delete."
+          }
+        },
+        "required": [
+          "projectId",
+          "spaceId",
+          "documentName",
+          "body"
+        ],
+        "additionalProperties": false
+      },
+      "pathParams": [
+        "projectId",
+        "spaceId",
+        "documentName"
+      ],
+      "queryParams": [],
+      "hasBody": true
+    },
+    "wire": {
+      "pathParamMap": {
+        "projectId": "projectId",
+        "spaceId": "spaceId",
+        "documentName": "documentName"
+      },
+      "queryParamMap": {},
+      "bodyContentType": "application/json"
+    },
+    "output": {
+      "mode": "no_content",
+      "shape": "ok",
+      "summary": "ok: { ok: true }"
+    },
+    "meta": {
+      "inputSummary": "required: projectId, spaceId, documentName, body"
+    }
+  },
+  {
     "name": "getDocumentPart",
     "method": "GET",
     "pathTemplate": "/projects/{projectId}/spaces/{spaceId}/documents/{documentName}/parts/{partId}",
@@ -9104,6 +9464,10 @@ export const GENERATED_OPERATIONS = [
                 "description": "Requested fields"
               },
               "linkedworkitems": {
+                "type": "string",
+                "description": "Requested fields"
+              },
+              "llms": {
                 "type": "string",
                 "description": "Requested fields"
               },
@@ -9349,6 +9713,80 @@ export const GENERATED_OPERATIONS = [
     }
   },
   {
+    "name": "overwriteDocumentParts",
+    "method": "POST",
+    "pathTemplate": "/projects/{projectId}/spaces/{spaceId}/documents/{documentName}/parts/actions/overwrite",
+    "description": "Overwrites multiple Work Item Document Parts.",
+    "resourceGroup": "documents",
+    "annotations": {
+      "readOnlyHint": false,
+      "destructiveHint": true,
+      "idempotentHint": false,
+      "openWorldHint": true
+    },
+    "input": {
+      "required": [
+        "projectId",
+        "spaceId",
+        "documentName",
+        "body"
+      ],
+      "schema": {
+        "type": "object",
+        "properties": {
+          "projectId": {
+            "type": "string",
+            "description": "The Project ID."
+          },
+          "spaceId": {
+            "type": "string",
+            "description": "The Space ID. (Use '_default' without quotes to address the default Space.)"
+          },
+          "documentName": {
+            "type": "string",
+            "description": "The Document name."
+          },
+          "body": {
+            "type": "object",
+            "additionalProperties": true,
+            "description": "Parameters for overwriting multiple Work Item Document Parts."
+          }
+        },
+        "required": [
+          "projectId",
+          "spaceId",
+          "documentName",
+          "body"
+        ],
+        "additionalProperties": false
+      },
+      "pathParams": [
+        "projectId",
+        "spaceId",
+        "documentName"
+      ],
+      "queryParams": [],
+      "hasBody": true
+    },
+    "wire": {
+      "pathParamMap": {
+        "projectId": "projectId",
+        "spaceId": "spaceId",
+        "documentName": "documentName"
+      },
+      "queryParamMap": {},
+      "bodyContentType": "application/json"
+    },
+    "output": {
+      "mode": "json",
+      "shape": "resource",
+      "summary": "resource: overwriteDocumentPartsResponseBody (data)"
+    },
+    "meta": {
+      "inputSummary": "required: projectId, spaceId, documentName, body"
+    }
+  },
+  {
     "name": "getSpacePages",
     "method": "GET",
     "pathTemplate": "/projects/{projectId}/spaces/{spaceId}/pages",
@@ -9452,6 +9890,10 @@ export const GENERATED_OPERATIONS = [
                 "description": "Requested fields"
               },
               "linkedworkitems": {
+                "type": "string",
+                "description": "Requested fields"
+              },
+              "llms": {
                 "type": "string",
                 "description": "Requested fields"
               },
@@ -9792,6 +10234,10 @@ export const GENERATED_OPERATIONS = [
                 "description": "Requested fields"
               },
               "linkedworkitems": {
+                "type": "string",
+                "description": "Requested fields"
+              },
+              "llms": {
                 "type": "string",
                 "description": "Requested fields"
               },
@@ -10203,6 +10649,10 @@ export const GENERATED_OPERATIONS = [
                 "type": "string",
                 "description": "Requested fields"
               },
+              "llms": {
+                "type": "string",
+                "description": "Requested fields"
+              },
               "metadata": {
                 "type": "string",
                 "description": "Requested fields"
@@ -10476,6 +10926,10 @@ export const GENERATED_OPERATIONS = [
                 "description": "Requested fields"
               },
               "linkedworkitems": {
+                "type": "string",
+                "description": "Requested fields"
+              },
+              "llms": {
                 "type": "string",
                 "description": "Requested fields"
               },
@@ -10821,6 +11275,10 @@ export const GENERATED_OPERATIONS = [
                 "description": "Requested fields"
               },
               "linkedworkitems": {
+                "type": "string",
+                "description": "Requested fields"
+              },
+              "llms": {
                 "type": "string",
                 "description": "Requested fields"
               },
@@ -11171,6 +11629,10 @@ export const GENERATED_OPERATIONS = [
                 "description": "Requested fields"
               },
               "linkedworkitems": {
+                "type": "string",
+                "description": "Requested fields"
+              },
+              "llms": {
                 "type": "string",
                 "description": "Requested fields"
               },
@@ -11529,6 +11991,10 @@ export const GENERATED_OPERATIONS = [
                 "description": "Requested fields"
               },
               "linkedworkitems": {
+                "type": "string",
+                "description": "Requested fields"
+              },
+              "llms": {
                 "type": "string",
                 "description": "Requested fields"
               },
@@ -12042,6 +12508,10 @@ export const GENERATED_OPERATIONS = [
                 "type": "string",
                 "description": "Requested fields"
               },
+              "llms": {
+                "type": "string",
+                "description": "Requested fields"
+              },
               "metadata": {
                 "type": "string",
                 "description": "Requested fields"
@@ -12296,6 +12766,10 @@ export const GENERATED_OPERATIONS = [
                 "type": "string",
                 "description": "Requested fields"
               },
+              "llms": {
+                "type": "string",
+                "description": "Requested fields"
+              },
               "metadata": {
                 "type": "string",
                 "description": "Requested fields"
@@ -12542,6 +13016,10 @@ export const GENERATED_OPERATIONS = [
                 "description": "Requested fields"
               },
               "linkedworkitems": {
+                "type": "string",
+                "description": "Requested fields"
+              },
+              "llms": {
                 "type": "string",
                 "description": "Requested fields"
               },
@@ -12997,6 +13475,10 @@ export const GENERATED_OPERATIONS = [
                 "type": "string",
                 "description": "Requested fields"
               },
+              "llms": {
+                "type": "string",
+                "description": "Requested fields"
+              },
               "metadata": {
                 "type": "string",
                 "description": "Requested fields"
@@ -13275,6 +13757,64 @@ export const GENERATED_OPERATIONS = [
     }
   },
   {
+    "name": "getFieldsMetadataForTestRun",
+    "method": "GET",
+    "pathTemplate": "/projects/{projectId}/testruns/{testRunId}/actions/getFieldsMetadata",
+    "description": "Returns fields for the specified resource.",
+    "resourceGroup": "testruns",
+    "annotations": {
+      "readOnlyHint": true,
+      "destructiveHint": false,
+      "idempotentHint": true,
+      "openWorldHint": true
+    },
+    "input": {
+      "required": [
+        "projectId",
+        "testRunId"
+      ],
+      "schema": {
+        "type": "object",
+        "properties": {
+          "projectId": {
+            "type": "string",
+            "description": "The Project ID."
+          },
+          "testRunId": {
+            "type": "string",
+            "description": "The Test Run ID."
+          }
+        },
+        "required": [
+          "projectId",
+          "testRunId"
+        ],
+        "additionalProperties": false
+      },
+      "pathParams": [
+        "projectId",
+        "testRunId"
+      ],
+      "queryParams": [],
+      "hasBody": false
+    },
+    "wire": {
+      "pathParamMap": {
+        "projectId": "projectId",
+        "testRunId": "testRunId"
+      },
+      "queryParamMap": {}
+    },
+    "output": {
+      "mode": "json",
+      "shape": "resource",
+      "summary": "resource: fieldsMetadataActionResponseBody (data/links)"
+    },
+    "meta": {
+      "inputSummary": "required: projectId, testRunId"
+    }
+  },
+  {
     "name": "getWorkflowActionsForTestRun",
     "method": "GET",
     "pathTemplate": "/projects/{projectId}/testruns/{testRunId}/actions/getWorkflowActions",
@@ -13445,6 +13985,10 @@ export const GENERATED_OPERATIONS = [
                 "description": "Requested fields"
               },
               "linkedworkitems": {
+                "type": "string",
+                "description": "Requested fields"
+              },
+              "llms": {
                 "type": "string",
                 "description": "Requested fields"
               },
@@ -13782,6 +14326,10 @@ export const GENERATED_OPERATIONS = [
                 "type": "string",
                 "description": "Requested fields"
               },
+              "llms": {
+                "type": "string",
+                "description": "Requested fields"
+              },
               "metadata": {
                 "type": "string",
                 "description": "Requested fields"
@@ -14108,6 +14656,10 @@ export const GENERATED_OPERATIONS = [
                 "description": "Requested fields"
               },
               "linkedworkitems": {
+                "type": "string",
+                "description": "Requested fields"
+              },
+              "llms": {
                 "type": "string",
                 "description": "Requested fields"
               },
@@ -14511,6 +15063,10 @@ export const GENERATED_OPERATIONS = [
                 "type": "string",
                 "description": "Requested fields"
               },
+              "llms": {
+                "type": "string",
+                "description": "Requested fields"
+              },
               "metadata": {
                 "type": "string",
                 "description": "Requested fields"
@@ -14848,6 +15404,10 @@ export const GENERATED_OPERATIONS = [
                 "type": "string",
                 "description": "Requested fields"
               },
+              "llms": {
+                "type": "string",
+                "description": "Requested fields"
+              },
               "metadata": {
                 "type": "string",
                 "description": "Requested fields"
@@ -15182,6 +15742,10 @@ export const GENERATED_OPERATIONS = [
                 "type": "string",
                 "description": "Requested fields"
               },
+              "llms": {
+                "type": "string",
+                "description": "Requested fields"
+              },
               "metadata": {
                 "type": "string",
                 "description": "Requested fields"
@@ -15508,6 +16072,10 @@ export const GENERATED_OPERATIONS = [
                 "description": "Requested fields"
               },
               "linkedworkitems": {
+                "type": "string",
+                "description": "Requested fields"
+              },
+              "llms": {
                 "type": "string",
                 "description": "Requested fields"
               },
@@ -15911,6 +16479,10 @@ export const GENERATED_OPERATIONS = [
                 "type": "string",
                 "description": "Requested fields"
               },
+              "llms": {
+                "type": "string",
+                "description": "Requested fields"
+              },
               "metadata": {
                 "type": "string",
                 "description": "Requested fields"
@@ -16237,6 +16809,10 @@ export const GENERATED_OPERATIONS = [
                 "description": "Requested fields"
               },
               "linkedworkitems": {
+                "type": "string",
+                "description": "Requested fields"
+              },
+              "llms": {
                 "type": "string",
                 "description": "Requested fields"
               },
@@ -16668,6 +17244,10 @@ export const GENERATED_OPERATIONS = [
                 "type": "string",
                 "description": "Requested fields"
               },
+              "llms": {
+                "type": "string",
+                "description": "Requested fields"
+              },
               "metadata": {
                 "type": "string",
                 "description": "Requested fields"
@@ -17003,6 +17583,88 @@ export const GENERATED_OPERATIONS = [
     }
   },
   {
+    "name": "getFieldsMetadataForTestRecord",
+    "method": "GET",
+    "pathTemplate": "/projects/{projectId}/testruns/{testRunId}/testrecords/{testCaseProjectId}/{testCaseId}/{iteration}/actions/getFieldsMetadata",
+    "description": "Returns fields for the specified resource.",
+    "resourceGroup": "testruns",
+    "annotations": {
+      "readOnlyHint": true,
+      "destructiveHint": false,
+      "idempotentHint": true,
+      "openWorldHint": true
+    },
+    "input": {
+      "required": [
+        "projectId",
+        "testRunId",
+        "testCaseProjectId",
+        "testCaseId",
+        "iteration"
+      ],
+      "schema": {
+        "type": "object",
+        "properties": {
+          "projectId": {
+            "type": "string",
+            "description": "The Project ID."
+          },
+          "testRunId": {
+            "type": "string",
+            "description": "The Test Run ID."
+          },
+          "testCaseProjectId": {
+            "type": "string",
+            "description": "The Testcase Project ID."
+          },
+          "testCaseId": {
+            "type": "string",
+            "description": "The Testcase ID."
+          },
+          "iteration": {
+            "type": "string",
+            "description": "The Iteration Number."
+          }
+        },
+        "required": [
+          "projectId",
+          "testRunId",
+          "testCaseProjectId",
+          "testCaseId",
+          "iteration"
+        ],
+        "additionalProperties": false
+      },
+      "pathParams": [
+        "projectId",
+        "testRunId",
+        "testCaseProjectId",
+        "testCaseId",
+        "iteration"
+      ],
+      "queryParams": [],
+      "hasBody": false
+    },
+    "wire": {
+      "pathParamMap": {
+        "projectId": "projectId",
+        "testRunId": "testRunId",
+        "testCaseProjectId": "testCaseProjectId",
+        "testCaseId": "testCaseId",
+        "iteration": "iteration"
+      },
+      "queryParamMap": {}
+    },
+    "output": {
+      "mode": "json",
+      "shape": "resource",
+      "summary": "resource: fieldsMetadataActionResponseBody (data/links)"
+    },
+    "meta": {
+      "inputSummary": "required: projectId, testRunId, testCaseProjectId, testCaseId, iteration"
+    }
+  },
+  {
     "name": "getTestRecordAttachments",
     "method": "GET",
     "pathTemplate": "/projects/{projectId}/testruns/{testRunId}/testrecords/{testCaseProjectId}/{testCaseId}/{iteration}/attachments",
@@ -17121,6 +17783,10 @@ export const GENERATED_OPERATIONS = [
                 "description": "Requested fields"
               },
               "linkedworkitems": {
+                "type": "string",
+                "description": "Requested fields"
+              },
+              "llms": {
                 "type": "string",
                 "description": "Requested fields"
               },
@@ -17506,6 +18172,10 @@ export const GENERATED_OPERATIONS = [
                 "type": "string",
                 "description": "Requested fields"
               },
+              "llms": {
+                "type": "string",
+                "description": "Requested fields"
+              },
               "metadata": {
                 "type": "string",
                 "description": "Requested fields"
@@ -17880,6 +18550,10 @@ export const GENERATED_OPERATIONS = [
                 "description": "Requested fields"
               },
               "linkedworkitems": {
+                "type": "string",
+                "description": "Requested fields"
+              },
+              "llms": {
                 "type": "string",
                 "description": "Requested fields"
               },
@@ -18265,6 +18939,10 @@ export const GENERATED_OPERATIONS = [
                 "type": "string",
                 "description": "Requested fields"
               },
+              "llms": {
+                "type": "string",
+                "description": "Requested fields"
+              },
               "metadata": {
                 "type": "string",
                 "description": "Requested fields"
@@ -18639,6 +19317,10 @@ export const GENERATED_OPERATIONS = [
                 "description": "Requested fields"
               },
               "linkedworkitems": {
+                "type": "string",
+                "description": "Requested fields"
+              },
+              "llms": {
                 "type": "string",
                 "description": "Requested fields"
               },
@@ -19114,6 +19796,10 @@ export const GENERATED_OPERATIONS = [
                 "type": "string",
                 "description": "Requested fields"
               },
+              "llms": {
+                "type": "string",
+                "description": "Requested fields"
+              },
               "metadata": {
                 "type": "string",
                 "description": "Requested fields"
@@ -19501,6 +20187,10 @@ export const GENERATED_OPERATIONS = [
                 "description": "Requested fields"
               },
               "linkedworkitems": {
+                "type": "string",
+                "description": "Requested fields"
+              },
+              "llms": {
                 "type": "string",
                 "description": "Requested fields"
               },
@@ -19902,6 +20592,10 @@ export const GENERATED_OPERATIONS = [
                 "type": "string",
                 "description": "Requested fields"
               },
+              "llms": {
+                "type": "string",
+                "description": "Requested fields"
+              },
               "metadata": {
                 "type": "string",
                 "description": "Requested fields"
@@ -20267,6 +20961,10 @@ export const GENERATED_OPERATIONS = [
                 "description": "Requested fields"
               },
               "linkedworkitems": {
+                "type": "string",
+                "description": "Requested fields"
+              },
+              "llms": {
                 "type": "string",
                 "description": "Requested fields"
               },
@@ -20730,6 +21428,10 @@ export const GENERATED_OPERATIONS = [
                 "type": "string",
                 "description": "Requested fields"
               },
+              "llms": {
+                "type": "string",
+                "description": "Requested fields"
+              },
               "metadata": {
                 "type": "string",
                 "description": "Requested fields"
@@ -20961,6 +21663,64 @@ export const GENERATED_OPERATIONS = [
     },
     "meta": {
       "inputSummary": "required: projectId, workItemId, body; optional: workflowAction, changeTypeTo"
+    }
+  },
+  {
+    "name": "getFieldsMetadataForWorkItem",
+    "method": "GET",
+    "pathTemplate": "/projects/{projectId}/workitems/{workItemId}/actions/getFieldsMetadata",
+    "description": "Returns fields for the specified resource.",
+    "resourceGroup": "workitems",
+    "annotations": {
+      "readOnlyHint": true,
+      "destructiveHint": false,
+      "idempotentHint": true,
+      "openWorldHint": true
+    },
+    "input": {
+      "required": [
+        "projectId",
+        "workItemId"
+      ],
+      "schema": {
+        "type": "object",
+        "properties": {
+          "projectId": {
+            "type": "string",
+            "description": "The Project ID."
+          },
+          "workItemId": {
+            "type": "string",
+            "description": "The Work Item ID."
+          }
+        },
+        "required": [
+          "projectId",
+          "workItemId"
+        ],
+        "additionalProperties": false
+      },
+      "pathParams": [
+        "projectId",
+        "workItemId"
+      ],
+      "queryParams": [],
+      "hasBody": false
+    },
+    "wire": {
+      "pathParamMap": {
+        "projectId": "projectId",
+        "workItemId": "workItemId"
+      },
+      "queryParamMap": {}
+    },
+    "output": {
+      "mode": "json",
+      "shape": "resource",
+      "summary": "resource: fieldsMetadataActionResponseBody (data/links)"
+    },
+    "meta": {
+      "inputSummary": "required: projectId, workItemId"
     }
   },
   {
@@ -21260,6 +22020,10 @@ export const GENERATED_OPERATIONS = [
                 "description": "Requested fields"
               },
               "linkedworkitems": {
+                "type": "string",
+                "description": "Requested fields"
+              },
+              "llms": {
                 "type": "string",
                 "description": "Requested fields"
               },
@@ -21729,6 +22493,10 @@ export const GENERATED_OPERATIONS = [
                 "type": "string",
                 "description": "Requested fields"
               },
+              "llms": {
+                "type": "string",
+                "description": "Requested fields"
+              },
               "metadata": {
                 "type": "string",
                 "description": "Requested fields"
@@ -22130,6 +22898,10 @@ export const GENERATED_OPERATIONS = [
                 "type": "string",
                 "description": "Requested fields"
               },
+              "llms": {
+                "type": "string",
+                "description": "Requested fields"
+              },
               "metadata": {
                 "type": "string",
                 "description": "Requested fields"
@@ -22395,6 +23167,10 @@ export const GENERATED_OPERATIONS = [
                 "description": "Requested fields"
               },
               "linkedworkitems": {
+                "type": "string",
+                "description": "Requested fields"
+              },
+              "llms": {
                 "type": "string",
                 "description": "Requested fields"
               },
@@ -22727,6 +23503,10 @@ export const GENERATED_OPERATIONS = [
                 "type": "string",
                 "description": "Requested fields"
               },
+              "llms": {
+                "type": "string",
+                "description": "Requested fields"
+              },
               "metadata": {
                 "type": "string",
                 "description": "Requested fields"
@@ -23053,6 +23833,10 @@ export const GENERATED_OPERATIONS = [
                 "description": "Requested fields"
               },
               "linkedworkitems": {
+                "type": "string",
+                "description": "Requested fields"
+              },
+              "llms": {
                 "type": "string",
                 "description": "Requested fields"
               },
@@ -23390,6 +24174,10 @@ export const GENERATED_OPERATIONS = [
                 "type": "string",
                 "description": "Requested fields"
               },
+              "llms": {
+                "type": "string",
+                "description": "Requested fields"
+              },
               "metadata": {
                 "type": "string",
                 "description": "Requested fields"
@@ -23724,6 +24512,10 @@ export const GENERATED_OPERATIONS = [
                 "description": "Requested fields"
               },
               "linkedworkitems": {
+                "type": "string",
+                "description": "Requested fields"
+              },
+              "llms": {
                 "type": "string",
                 "description": "Requested fields"
               },
@@ -24142,6 +24934,10 @@ export const GENERATED_OPERATIONS = [
                 "type": "string",
                 "description": "Requested fields"
               },
+              "llms": {
+                "type": "string",
+                "description": "Requested fields"
+              },
               "metadata": {
                 "type": "string",
                 "description": "Requested fields"
@@ -24504,6 +25300,10 @@ export const GENERATED_OPERATIONS = [
                 "type": "string",
                 "description": "Requested fields"
               },
+              "llms": {
+                "type": "string",
+                "description": "Requested fields"
+              },
               "metadata": {
                 "type": "string",
                 "description": "Requested fields"
@@ -24779,6 +25579,10 @@ export const GENERATED_OPERATIONS = [
                 "description": "Requested fields"
               },
               "linkedworkitems": {
+                "type": "string",
+                "description": "Requested fields"
+              },
+              "llms": {
                 "type": "string",
                 "description": "Requested fields"
               },
@@ -25197,6 +26001,10 @@ export const GENERATED_OPERATIONS = [
                 "type": "string",
                 "description": "Requested fields"
               },
+              "llms": {
+                "type": "string",
+                "description": "Requested fields"
+              },
               "metadata": {
                 "type": "string",
                 "description": "Requested fields"
@@ -25601,6 +26409,10 @@ export const GENERATED_OPERATIONS = [
                 "description": "Requested fields"
               },
               "linkedworkitems": {
+                "type": "string",
+                "description": "Requested fields"
+              },
+              "llms": {
                 "type": "string",
                 "description": "Requested fields"
               },
@@ -26011,6 +26823,10 @@ export const GENERATED_OPERATIONS = [
                 "description": "Requested fields"
               },
               "linkedworkitems": {
+                "type": "string",
+                "description": "Requested fields"
+              },
+              "llms": {
                 "type": "string",
                 "description": "Requested fields"
               },
@@ -26457,6 +27273,10 @@ export const GENERATED_OPERATIONS = [
                 "description": "Requested fields"
               },
               "linkedworkitems": {
+                "type": "string",
+                "description": "Requested fields"
+              },
+              "llms": {
                 "type": "string",
                 "description": "Requested fields"
               },
@@ -26948,6 +27768,10 @@ export const GENERATED_OPERATIONS = [
                 "type": "string",
                 "description": "Requested fields"
               },
+              "llms": {
+                "type": "string",
+                "description": "Requested fields"
+              },
               "metadata": {
                 "type": "string",
                 "description": "Requested fields"
@@ -27216,6 +28040,10 @@ export const GENERATED_OPERATIONS = [
                 "type": "string",
                 "description": "Requested fields"
               },
+              "llms": {
+                "type": "string",
+                "description": "Requested fields"
+              },
               "metadata": {
                 "type": "string",
                 "description": "Requested fields"
@@ -27476,6 +28304,10 @@ export const GENERATED_OPERATIONS = [
                 "description": "Requested fields"
               },
               "linkedworkitems": {
+                "type": "string",
+                "description": "Requested fields"
+              },
+              "llms": {
                 "type": "string",
                 "description": "Requested fields"
               },
@@ -27945,6 +28777,10 @@ export const GENERATED_OPERATIONS = [
                 "type": "string",
                 "description": "Requested fields"
               },
+              "llms": {
+                "type": "string",
+                "description": "Requested fields"
+              },
               "metadata": {
                 "type": "string",
                 "description": "Requested fields"
@@ -28348,6 +29184,10 @@ export const GENERATED_OPERATIONS = [
                 "type": "string",
                 "description": "Requested fields"
               },
+              "llms": {
+                "type": "string",
+                "description": "Requested fields"
+              },
               "metadata": {
                 "type": "string",
                 "description": "Requested fields"
@@ -28748,6 +29588,10 @@ export const GENERATED_OPERATIONS = [
                 "type": "string",
                 "description": "Requested fields"
               },
+              "llms": {
+                "type": "string",
+                "description": "Requested fields"
+              },
               "metadata": {
                 "type": "string",
                 "description": "Requested fields"
@@ -28968,6 +29812,64 @@ export const GENERATED_OPERATIONS = [
     },
     "meta": {
       "inputSummary": "required: projectId, workItemId, workRecordId"
+    }
+  },
+  {
+    "name": "moveWorkItemsToDocument",
+    "method": "POST",
+    "pathTemplate": "/projects/{projectId}/workitems/actions/moveToDocument",
+    "description": "Moves multiple Work Items to the Document.",
+    "resourceGroup": "workitems",
+    "annotations": {
+      "readOnlyHint": false,
+      "destructiveHint": true,
+      "idempotentHint": false,
+      "openWorldHint": true
+    },
+    "input": {
+      "required": [
+        "projectId",
+        "body"
+      ],
+      "schema": {
+        "type": "object",
+        "properties": {
+          "projectId": {
+            "type": "string",
+            "description": "The Project ID."
+          },
+          "body": {
+            "type": "object",
+            "additionalProperties": true,
+            "description": "Moving Work Items to Document parameters."
+          }
+        },
+        "required": [
+          "projectId",
+          "body"
+        ],
+        "additionalProperties": false
+      },
+      "pathParams": [
+        "projectId"
+      ],
+      "queryParams": [],
+      "hasBody": true
+    },
+    "wire": {
+      "pathParamMap": {
+        "projectId": "projectId"
+      },
+      "queryParamMap": {},
+      "bodyContentType": "application/json"
+    },
+    "output": {
+      "mode": "no_content",
+      "shape": "ok",
+      "summary": "ok: { ok: true }"
+    },
+    "meta": {
+      "inputSummary": "required: projectId, body"
     }
   },
   {
