@@ -3265,6 +3265,29 @@
         },
         "type": "object"
       },
+      "document_partsListDeleteRequest": {
+        "properties": {
+          "data": {
+            "items": {
+              "properties": {
+                "type": {
+                  "enum": [
+                    "document_parts"
+                  ],
+                  "type": "string"
+                },
+                "id": {
+                  "example": "MyProjectId/MySpaceId/MyDocumentId/workitem_MyWorkItemId",
+                  "type": "string"
+                }
+              },
+              "type": "object"
+            },
+            "type": "array"
+          }
+        },
+        "type": "object"
+      },
       "document_partsListGetResponse": {
         "properties": {
           "data": {
@@ -3287,28 +3310,52 @@
                 "attributes": {
                   "properties": {
                     "content": {
+                      "description": "Editable only for normal and table document parts.",
                       "example": "<div id=\"polarion_wiki macro name=module-workitem;params=id=workitem_MyWorkItemId\"></div>",
                       "type": "string"
                     },
                     "external": {
+                      "description": "Whether the work item is external to the document. Applicable to: workitem parts.",
                       "type": "boolean"
+                    },
+                    "headingText": {
+                      "description": "Applicable to: heading parts.",
+                      "example": "Heading Title",
+                      "type": "string"
                     },
                     "id": {
                       "example": "workitem_MyWorkItemId",
                       "type": "string"
                     },
+                    "landscape": {
+                      "description": "Whether the page break switches to landscape orientation. Applicable to: pagebreak parts.",
+                      "type": "boolean"
+                    },
                     "layout": {
+                      "description": "Rendering layout index for the part. Applicable to: workitem parts.",
                       "example": 0,
                       "format": "int32",
                       "type": "integer"
                     },
                     "level": {
+                      "description": "Outline level/depth of the part in the document hierarchy. Applicable to: heading, workitem parts.",
                       "example": 0,
                       "format": "int32",
                       "type": "integer"
                     },
+                    "sequence": {
+                      "description": "Sequence identifier for table of figures entry. Applicable to: tof parts.",
+                      "example": "Table",
+                      "type": "string"
+                    },
                     "type": {
+                      "description": "Possible values: heading, normal, pagebreak, table, toc, tof, wikiblock, workitem. Required for creation.",
                       "example": "workitem",
+                      "type": "string"
+                    },
+                    "wikiText": {
+                      "description": "Wiki markup content for the block. Applicable to: wikiblock parts.",
+                      "example": "#documentPanel(true \"approved\")",
                       "type": "string"
                     }
                   },
@@ -3519,18 +3566,45 @@
                 },
                 "attributes": {
                   "properties": {
+                    "content": {
+                      "description": "Editable only for normal and table document parts.",
+                      "example": "<div id=\"polarion_wiki macro name=module-workitem;params=id=workitem_MyWorkItemId\"></div>",
+                      "type": "string"
+                    },
+                    "headingText": {
+                      "description": "Applicable to: heading parts.",
+                      "example": "Heading Title",
+                      "type": "string"
+                    },
+                    "landscape": {
+                      "description": "Whether the page break switches to landscape orientation. Applicable to: pagebreak parts.",
+                      "type": "boolean"
+                    },
                     "layout": {
+                      "description": "Rendering layout index for the part. Applicable to: workitem parts.",
                       "example": 0,
                       "format": "int32",
                       "type": "integer"
                     },
                     "level": {
+                      "description": "Outline level/depth of the part in the document hierarchy. Applicable to: heading, workitem parts.",
                       "example": 0,
                       "format": "int32",
                       "type": "integer"
                     },
+                    "sequence": {
+                      "description": "Sequence identifier for table of figures entry. Applicable to: tof parts.",
+                      "example": "Table",
+                      "type": "string"
+                    },
                     "type": {
+                      "description": "Possible values: heading, normal, pagebreak, table, toc, tof, wikiblock, workitem. Required for creation.",
                       "example": "workitem",
+                      "type": "string"
+                    },
+                    "wikiText": {
+                      "description": "Wiki markup content for the block. Applicable to: wikiblock parts.",
+                      "example": "#documentPanel(true \"approved\")",
                       "type": "string"
                     }
                   },
@@ -3666,28 +3740,52 @@
               "attributes": {
                 "properties": {
                   "content": {
+                    "description": "Editable only for normal and table document parts.",
                     "example": "<div id=\"polarion_wiki macro name=module-workitem;params=id=workitem_MyWorkItemId\"></div>",
                     "type": "string"
                   },
                   "external": {
+                    "description": "Whether the work item is external to the document. Applicable to: workitem parts.",
                     "type": "boolean"
+                  },
+                  "headingText": {
+                    "description": "Applicable to: heading parts.",
+                    "example": "Heading Title",
+                    "type": "string"
                   },
                   "id": {
                     "example": "workitem_MyWorkItemId",
                     "type": "string"
                   },
+                  "landscape": {
+                    "description": "Whether the page break switches to landscape orientation. Applicable to: pagebreak parts.",
+                    "type": "boolean"
+                  },
                   "layout": {
+                    "description": "Rendering layout index for the part. Applicable to: workitem parts.",
                     "example": 0,
                     "format": "int32",
                     "type": "integer"
                   },
                   "level": {
+                    "description": "Outline level/depth of the part in the document hierarchy. Applicable to: heading, workitem parts.",
                     "example": 0,
                     "format": "int32",
                     "type": "integer"
                   },
+                  "sequence": {
+                    "description": "Sequence identifier for table of figures entry. Applicable to: tof parts.",
+                    "example": "Table",
+                    "type": "string"
+                  },
                   "type": {
+                    "description": "Possible values: heading, normal, pagebreak, table, toc, tof, wikiblock, workitem. Required for creation.",
                     "example": "workitem",
+                    "type": "string"
+                  },
+                  "wikiText": {
+                    "description": "Wiki markup content for the block. Applicable to: wikiblock parts.",
+                    "example": "#documentPanel(true \"approved\")",
                     "type": "string"
                   }
                 },
@@ -5481,6 +5579,36 @@
                             "example": true,
                             "type": "boolean"
                           },
+                          "linkRules": {
+                            "items": {
+                              "properties": {
+                                "fromTypes": {
+                                  "example": [
+                                    "requirement"
+                                  ],
+                                  "items": {
+                                    "type": "string"
+                                  },
+                                  "type": "array"
+                                },
+                                "sameType": {
+                                  "example": false,
+                                  "type": "boolean"
+                                },
+                                "toTypes": {
+                                  "example": [
+                                    "requirement"
+                                  ],
+                                  "items": {
+                                    "type": "string"
+                                  },
+                                  "type": "array"
+                                }
+                              },
+                              "type": "object"
+                            },
+                            "type": "array"
+                          },
                           "minValue": {
                             "example": 30,
                             "type": "number"
@@ -5696,6 +5824,36 @@
                             "example": true,
                             "type": "boolean"
                           },
+                          "linkRules": {
+                            "items": {
+                              "properties": {
+                                "fromTypes": {
+                                  "example": [
+                                    "requirement"
+                                  ],
+                                  "items": {
+                                    "type": "string"
+                                  },
+                                  "type": "array"
+                                },
+                                "sameType": {
+                                  "example": false,
+                                  "type": "boolean"
+                                },
+                                "toTypes": {
+                                  "example": [
+                                    "requirement"
+                                  ],
+                                  "items": {
+                                    "type": "string"
+                                  },
+                                  "type": "array"
+                                }
+                              },
+                              "type": "object"
+                            },
+                            "type": "array"
+                          },
                           "minValue": {
                             "example": 30,
                             "type": "number"
@@ -5838,6 +5996,36 @@
                         "limited": {
                           "example": true,
                           "type": "boolean"
+                        },
+                        "linkRules": {
+                          "items": {
+                            "properties": {
+                              "fromTypes": {
+                                "example": [
+                                  "requirement"
+                                ],
+                                "items": {
+                                  "type": "string"
+                                },
+                                "type": "array"
+                              },
+                              "sameType": {
+                                "example": false,
+                                "type": "boolean"
+                              },
+                              "toTypes": {
+                                "example": [
+                                  "requirement"
+                                ],
+                                "items": {
+                                  "type": "string"
+                                },
+                                "type": "array"
+                              }
+                            },
+                            "type": "object"
+                          },
+                          "type": "array"
                         },
                         "minValue": {
                           "example": 30,
@@ -6022,6 +6210,36 @@
                           "example": true,
                           "type": "boolean"
                         },
+                        "linkRules": {
+                          "items": {
+                            "properties": {
+                              "fromTypes": {
+                                "example": [
+                                  "requirement"
+                                ],
+                                "items": {
+                                  "type": "string"
+                                },
+                                "type": "array"
+                              },
+                              "sameType": {
+                                "example": false,
+                                "type": "boolean"
+                              },
+                              "toTypes": {
+                                "example": [
+                                  "requirement"
+                                ],
+                                "items": {
+                                  "type": "string"
+                                },
+                                "type": "array"
+                              }
+                            },
+                            "type": "object"
+                          },
+                          "type": "array"
+                        },
                         "minValue": {
                           "example": 30,
                           "type": "number"
@@ -6104,6 +6322,36 @@
                 "limited": {
                   "example": true,
                   "type": "boolean"
+                },
+                "linkRules": {
+                  "items": {
+                    "properties": {
+                      "fromTypes": {
+                        "example": [
+                          "requirement"
+                        ],
+                        "items": {
+                          "type": "string"
+                        },
+                        "type": "array"
+                      },
+                      "sameType": {
+                        "example": false,
+                        "type": "boolean"
+                      },
+                      "toTypes": {
+                        "example": [
+                          "requirement"
+                        ],
+                        "items": {
+                          "type": "string"
+                        },
+                        "type": "array"
+                      }
+                    },
+                    "type": "object"
+                  },
+                  "type": "array"
                 },
                 "minValue": {
                   "example": 30,
@@ -7141,6 +7389,100 @@
         },
         "type": "object"
       },
+      "GenerateCompletionMessage": {
+        "description": "A message in the LLM completion generation request or response.",
+        "properties": {
+          "content": {
+            "description": "Content of the message.",
+            "type": "string"
+          },
+          "role": {
+            "description": "Role of the message sender, e.g., 'user' or 'assistant.'",
+            "example": "user",
+            "type": "string"
+          }
+        },
+        "required": [
+          "content",
+          "role"
+        ],
+        "type": "object"
+      },
+      "generateCompletionRequestBody": {
+        "description": "Generate completion parameters.",
+        "properties": {
+          "messages": {
+            "description": "Prompt messages.",
+            "items": {
+              "$ref": "#/components/schemas/GenerateCompletionMessage"
+            },
+            "type": "array"
+          },
+          "model": {
+            "description": "Name of the LLM to use. If not specified, the default model will be used, if available.",
+            "type": "string"
+          },
+          "responseFormat": {
+            "$ref": "#/components/schemas/GenerateCompletionResponseFormat"
+          }
+        },
+        "required": [
+          "messages"
+        ],
+        "type": "object"
+      },
+      "generateCompletionResponseBody": {
+        "description": "Response body for LLM completion generation.",
+        "properties": {
+          "data": {
+            "$ref": "#/components/schemas/GenerateCompletionResult"
+          }
+        },
+        "type": "object"
+      },
+      "GenerateCompletionResponseFormat": {
+        "description": "Response format for LLM completion generation.",
+        "properties": {
+          "schema": {
+            "description": "The JSON schema to use when type is 'jsonSchema'.",
+            "example": {
+              "properties": {
+                "result": {
+                  "type": "string"
+                }
+              },
+              "type": "object"
+            },
+            "type": "object"
+          },
+          "type": {
+            "description": "Type of the response format. Defaults to 'text'.",
+            "enum": [
+              "text",
+              "json",
+              "jsonSchema"
+            ],
+            "example": "jsonSchema",
+            "type": "string"
+          }
+        },
+        "required": [
+          "type"
+        ],
+        "type": "object"
+      },
+      "GenerateCompletionResult": {
+        "description": "The result of a completion generation request.",
+        "properties": {
+          "message": {
+            "$ref": "#/components/schemas/GenerateCompletionMessage"
+          }
+        },
+        "required": [
+          "message"
+        ],
+        "type": "object"
+      },
       "globalrolesSingleGetResponse": {
         "properties": {
           "data": {
@@ -7618,6 +7960,61 @@
         },
         "type": "object"
       },
+      "importWordDocumentParameters": {
+        "description": "Parameters for Word document import",
+        "example": {
+          "configurationId": "Default.xml",
+          "documentName": "REQ-001",
+          "documentType": "generic",
+          "title": "System Requirements"
+        },
+        "properties": {
+          "configurationId": {
+            "description": "Optional configuration ID referencing a preexisting import configuration template. If not provided, default import behavior will be used.",
+            "example": "Default.xml",
+            "type": "string"
+          },
+          "documentName": {
+            "description": "Unique document name/ID for the imported document.",
+            "example": "REQ-001",
+            "type": "string"
+          },
+          "documentType": {
+            "description": "Document type for the imported document (e.g., 'generic').",
+            "example": "generic",
+            "type": "string"
+          },
+          "title": {
+            "description": "Title for the imported document.",
+            "example": "System Requirements",
+            "type": "string"
+          }
+        },
+        "required": [
+          "documentName",
+          "documentType",
+          "title"
+        ],
+        "type": "object"
+      },
+      "importWordDocumentRequestBody": {
+        "description": "Request body for importing a Word document",
+        "properties": {
+          "file": {
+            "description": "Word document file (.docx) to import.",
+            "format": "binary",
+            "type": "string"
+          },
+          "parameters": {
+            "$ref": "#/components/schemas/importWordDocumentParameters"
+          }
+        },
+        "required": [
+          "file",
+          "parameters"
+        ],
+        "type": "object"
+      },
       "jobsListGetResponse": {
         "properties": {
           "data": {
@@ -7752,6 +8149,9 @@
                         "https://example.com/polarion/download/filename1",
                         "https://example.com/polarion/download/filename2"
                       ],
+                      "items": {
+                        "type": "string"
+                      },
                       "type": "array"
                     },
                     "log": {
@@ -8004,6 +8404,9 @@
                       "https://example.com/polarion/download/filename1",
                       "https://example.com/polarion/download/filename2"
                     ],
+                    "items": {
+                      "type": "string"
+                    },
                     "type": "array"
                   },
                   "log": {
@@ -8220,6 +8623,9 @@
                       "https://example.com/polarion/download/filename1",
                       "https://example.com/polarion/download/filename2"
                     ],
+                    "items": {
+                      "type": "string"
+                    },
                     "type": "array"
                   },
                   "log": {
@@ -8715,6 +9121,74 @@
               "self": {
                 "example": "server-host-name/application-path/license/assignments/MyUserId",
                 "type": "string"
+              }
+            },
+            "type": "object"
+          }
+        },
+        "type": "object"
+      },
+      "license_assignmentsSinglePatchRequest": {
+        "properties": {
+          "data": {
+            "properties": {
+              "type": {
+                "enum": [
+                  "license_assignments"
+                ],
+                "type": "string"
+              },
+              "id": {
+                "example": "MyUserId",
+                "type": "string"
+              },
+              "relationships": {
+                "properties": {
+                  "addOnSlots": {
+                    "properties": {
+                      "data": {
+                        "items": {
+                          "properties": {
+                            "id": {
+                              "example": "LicenseType/ModelType/GroupId",
+                              "type": "string"
+                            },
+                            "type": {
+                              "enum": [
+                                "license_slots"
+                              ],
+                              "type": "string"
+                            }
+                          },
+                          "type": "object"
+                        },
+                        "type": "array"
+                      }
+                    },
+                    "type": "object"
+                  },
+                  "baseSlot": {
+                    "properties": {
+                      "data": {
+                        "properties": {
+                          "id": {
+                            "example": "LicenseType/ModelType/GroupId",
+                            "type": "string"
+                          },
+                          "type": {
+                            "enum": [
+                              "license_slots"
+                            ],
+                            "type": "string"
+                          }
+                        },
+                        "type": "object"
+                      }
+                    },
+                    "type": "object"
+                  }
+                },
+                "type": "object"
               }
             },
             "type": "object"
@@ -9430,7 +9904,7 @@
                       "type": "string"
                     },
                     "uri": {
-                      "example": "Uri",
+                      "example": "URI",
                       "type": "string"
                     }
                   },
@@ -9542,7 +10016,7 @@
                       "type": "string"
                     },
                     "uri": {
-                      "example": "Uri",
+                      "example": "URI",
                       "type": "string"
                     }
                   },
@@ -10107,6 +10581,114 @@
         },
         "type": "object"
       },
+      "llmsListGetResponse": {
+        "properties": {
+          "data": {
+            "items": {
+              "properties": {
+                "type": {
+                  "enum": [
+                    "llms"
+                  ],
+                  "type": "string"
+                },
+                "id": {
+                  "example": "myLlm",
+                  "type": "string"
+                },
+                "attributes": {
+                  "properties": {
+                    "name": {
+                      "example": "myLlm",
+                      "type": "string"
+                    }
+                  },
+                  "type": "object"
+                },
+                "links": {
+                  "type": "object"
+                },
+                "meta": {
+                  "properties": {
+                    "errors": {
+                      "items": {
+                        "properties": {
+                          "detail": {
+                            "description": "Human-readable explanation specific to this occurrence of the problem.",
+                            "example": "Unexpected token, BEGIN_ARRAY expected, but was : BEGIN_OBJECT (at $.data)",
+                            "type": "string"
+                          },
+                          "source": {
+                            "properties": {
+                              "parameter": {
+                                "description": "String indicating which URI query parameter caused the error.",
+                                "example": "revision",
+                                "type": "string"
+                              },
+                              "pointer": {
+                                "description": "JSON Pointer to the associated entity in the request document.",
+                                "example": "$.data",
+                                "type": "string"
+                              },
+                              "resource": {
+                                "description": "Resource causing the error.",
+                                "properties": {
+                                  "id": {
+                                    "example": "MyProjectId/id",
+                                    "type": "string"
+                                  },
+                                  "type": {
+                                    "example": "type",
+                                    "type": "string"
+                                  }
+                                },
+                                "type": "object"
+                              }
+                            },
+                            "type": "object"
+                          },
+                          "status": {
+                            "description": "HTTP status code applicable to this problem.",
+                            "example": "400",
+                            "type": "string"
+                          },
+                          "title": {
+                            "description": "Short, human-readable summary of the problem.",
+                            "example": "Bad Request",
+                            "type": "string"
+                          }
+                        },
+                        "type": "object"
+                      },
+                      "type": "array"
+                    }
+                  },
+                  "type": "object"
+                }
+              },
+              "type": "object"
+            },
+            "type": "array"
+          },
+          "included": {
+            "description": "Related entities might be returned, see <a href=\"https://docs.sw.siemens.com/en-US/doc/230235217/PL20250606201928474.polarion_help_sc.xid2134849/xid2134871\" target=\"_blank\">REST API User Guide</a>.",
+            "items": {
+              "type": "object"
+            },
+            "type": "array"
+          },
+          "meta": {
+            "properties": {
+              "totalCount": {
+                "format": "int32",
+                "type": "integer"
+              }
+            },
+            "type": "object"
+          }
+        },
+        "type": "object"
+      },
       "mergeDocumentRequestBody": {
         "properties": {
           "createBaseline": {
@@ -10306,6 +10888,57 @@
         },
         "type": "object"
       },
+      "moveWorkItemsToDocumentRequestBody": {
+        "properties": {
+          "targetDocument": {
+            "example": "MyProjectId/MySpaceId/MyDocumentId",
+            "type": "string"
+          },
+          "workItemGroups": {
+            "example": [
+              {
+                "previousPart": "MyProjectId/MySpaceId/MyDocumentId/workitem_MyWorkItemId",
+                "workItemIds": [
+                  "MyProjectId/WI-123",
+                  "MyProjectId/WI-124"
+                ]
+              },
+              {
+                "nextPart": "MyProjectId/MySpaceId/MyDocumentId/workitem_MyWorkItemId",
+                "workItemIds": [
+                  "MyProjectId/WI-125"
+                ]
+              }
+            ],
+            "items": {
+              "properties": {
+                "nextPart": {
+                  "example": "MyProjectId/MySpaceId/MyDocumentId/workitem_MyWorkItemId",
+                  "type": "string"
+                },
+                "previousPart": {
+                  "example": "MyProjectId/MySpaceId/MyDocumentId/workitem_MyWorkItemId",
+                  "type": "string"
+                },
+                "workItemIds": {
+                  "example": [
+                    "MyProjectId/WI-123",
+                    "MyProjectId/WI-124"
+                  ],
+                  "items": {
+                    "description": "The Work Item's path in the following format: ProjectId/workItemId",
+                    "type": "string"
+                  },
+                  "type": "array"
+                }
+              },
+              "type": "object"
+            },
+            "type": "array"
+          }
+        },
+        "type": "object"
+      },
       "moveWorkItemToDocumentRequestBody": {
         "properties": {
           "nextPart": {
@@ -10319,6 +10952,51 @@
           "targetDocument": {
             "example": "MyProjectId/MySpaceId/MyDocumentId",
             "type": "string"
+          }
+        },
+        "type": "object"
+      },
+      "overwriteDocumentPartsRequestBody": {
+        "properties": {
+          "partIds": {
+            "description": "The list of Document Part IDs to overwrite.",
+            "items": {
+              "example": "MyProjectId/MySpaceId/MyDocumentId/workitem_MyWorkItemId",
+              "type": "string"
+            },
+            "type": "array"
+          }
+        },
+        "required": [
+          "partIds"
+        ],
+        "type": "object"
+      },
+      "overwriteDocumentPartsResponseBody": {
+        "properties": {
+          "data": {
+            "properties": {
+              "overwrittenParts": {
+                "description": "Array of Part ID mappings showing old and new IDs.",
+                "items": {
+                  "properties": {
+                    "newPartId": {
+                      "description": "New Part ID after overwrite operation.",
+                      "example": "MyProjectId/MySpaceId/MyDocumentId/workitem_MyWorkItemId",
+                      "type": "string"
+                    },
+                    "oldPartId": {
+                      "description": "Original Part ID before overwrite operation.",
+                      "example": "MyProjectId/MySpaceId/MyDocumentId/workitem_MyWorkItemId",
+                      "type": "string"
+                    }
+                  },
+                  "type": "object"
+                },
+                "type": "array"
+              }
+            },
+            "type": "object"
           }
         },
         "type": "object"
@@ -14563,7 +15241,7 @@
       "RelationshipDataBody": {
         "properties": {
           "id": {
-            "example": "MyProjectId/MyResourceId",
+            "example": "MyResourceId",
             "type": "string"
           },
           "type": {
@@ -14581,6 +15259,7 @@
               "linkedworkitems",
               "externallylinkedworkitems",
               "linkedoslcresources",
+              "llms",
               "pages",
               "page_attachments",
               "page_comments",
@@ -14664,8 +15343,8 @@
         "example": {
           "data": [
             {
-              "type": "MyResourceType",
-              "id": "MyProjectId/MyResourceId"
+              "type": "workitems",
+              "id": "MyProjectId/WI-123"
             }
           ]
         },
@@ -14699,6 +15378,7 @@
                     "linkedworkitems",
                     "externallylinkedworkitems",
                     "linkedoslcresources",
+                    "llms",
                     "pages",
                     "page_attachments",
                     "page_comments",
@@ -14737,7 +15417,7 @@
                   "type": "string"
                 },
                 "id": {
-                  "example": "MyProjectId/MyResourceId",
+                  "example": "MyResourceId",
                   "type": "string"
                 }
               },
@@ -14753,8 +15433,8 @@
         "example": {
           "data": [
             {
-              "type": "MyResourceType",
-              "id": "MyProjectId/MyResourceId"
+              "type": "workitems",
+              "id": "MyProjectId/WI-123"
             }
           ]
         },
@@ -14773,8 +15453,8 @@
         "example": {
           "data": [
             {
-              "type": "MyResourceType",
-              "id": "MyProjectId/MyResourceId",
+              "type": "workitems",
+              "id": "MyProjectId/WI-123",
               "revision": "1234"
             }
           ]
@@ -15295,6 +15975,11 @@
             "type": "string"
           },
           "linkedworkitems": {
+            "description": "Requested fields",
+            "example": "@all",
+            "type": "string"
+          },
+          "llms": {
             "description": "Requested fields",
             "example": "@all",
             "type": "string"
@@ -27715,13 +28400,12 @@
   "paths": {
     "/actions/getFieldsMetadata": {
       "get": {
-        "description": "Metadata support is limited to the following resource types: **Work Items**, **Documents**, **Test Runs**, and **Plans**.",
         "operationId": "getGlobalFieldsMetadata",
         "parameters": [
           {
             "name": "resourceType",
             "in": "query",
-            "description": "The Resource Type. Accepted values: workitems, documents, testruns and plans.",
+            "description": "The Resource Type.",
             "required": true,
             "schema": {
               "type": "string"
@@ -27768,7 +28452,17 @@
           "503": {
             "description": "Service Unavailable"
           },
-          "4XX-5XX": {
+          "4XX": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/errors"
+                }
+              }
+            },
+            "description": "Error responses have the following structure:"
+          },
+          "5XX": {
             "content": {
               "application/json": {
                 "schema": {
@@ -27857,7 +28551,17 @@
           "503": {
             "description": "Service Unavailable"
           },
-          "4XX-5XX": {
+          "4XX": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/errors"
+                }
+              }
+            },
+            "description": "Error responses have the following structure:"
+          },
+          "5XX": {
             "content": {
               "application/json": {
                 "schema": {
@@ -27938,7 +28642,17 @@
           "503": {
             "description": "Service Unavailable"
           },
-          "4XX-5XX": {
+          "4XX": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/errors"
+                }
+              }
+            },
+            "description": "Error responses have the following structure:"
+          },
+          "5XX": {
             "content": {
               "application/json": {
                 "schema": {
@@ -28036,7 +28750,17 @@
           "503": {
             "description": "Service Unavailable"
           },
-          "4XX-5XX": {
+          "4XX": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/errors"
+                }
+              }
+            },
+            "description": "Error responses have the following structure:"
+          },
+          "5XX": {
             "content": {
               "application/json": {
                 "schema": {
@@ -28133,7 +28857,17 @@
           "503": {
             "description": "Service Unavailable"
           },
-          "4XX-5XX": {
+          "4XX": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/errors"
+                }
+              }
+            },
+            "description": "Error responses have the following structure:"
+          },
+          "5XX": {
             "content": {
               "application/json": {
                 "schema": {
@@ -28213,7 +28947,17 @@
           "503": {
             "description": "Service Unavailable"
           },
-          "4XX-5XX": {
+          "4XX": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/errors"
+                }
+              }
+            },
+            "description": "Error responses have the following structure:"
+          },
+          "5XX": {
             "content": {
               "application/json": {
                 "schema": {
@@ -28276,7 +29020,17 @@
           "503": {
             "description": "Service Unavailable"
           },
-          "4XX-5XX": {
+          "4XX": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/errors"
+                }
+              }
+            },
+            "description": "Error responses have the following structure:"
+          },
+          "5XX": {
             "content": {
               "application/json": {
                 "schema": {
@@ -28347,7 +29101,17 @@
           "503": {
             "description": "Service Unavailable"
           },
-          "4XX-5XX": {
+          "4XX": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/errors"
+                }
+              }
+            },
+            "description": "Error responses have the following structure:"
+          },
+          "5XX": {
             "content": {
               "application/json": {
                 "schema": {
@@ -28460,7 +29224,17 @@
           "503": {
             "description": "Service Unavailable"
           },
-          "4XX-5XX": {
+          "4XX": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/errors"
+                }
+              }
+            },
+            "description": "Error responses have the following structure:"
+          },
+          "5XX": {
             "content": {
               "application/json": {
                 "schema": {
@@ -28548,7 +29322,17 @@
           "503": {
             "description": "Service Unavailable"
           },
-          "4XX-5XX": {
+          "4XX": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/errors"
+                }
+              }
+            },
+            "description": "Error responses have the following structure:"
+          },
+          "5XX": {
             "content": {
               "application/json": {
                 "schema": {
@@ -28567,7 +29351,6 @@
     },
     "/projects/{projectId}/actions/getFieldsMetadata": {
       "get": {
-        "description": "Metadata support is limited to the following resource types: **Work Items**, **Documents**, **Test Runs**, and **Plans**.",
         "operationId": "getProjectFieldsMetadata",
         "parameters": [
           {
@@ -28582,7 +29365,7 @@
           {
             "name": "resourceType",
             "in": "query",
-            "description": "The Resource Type. Accepted values: workitems, documents, testruns and plans.",
+            "description": "The Resource Type.",
             "required": true,
             "schema": {
               "type": "string"
@@ -28629,7 +29412,17 @@
           "503": {
             "description": "Service Unavailable"
           },
-          "4XX-5XX": {
+          "4XX": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/errors"
+                }
+              }
+            },
+            "description": "Error responses have the following structure:"
+          },
+          "5XX": {
             "content": {
               "application/json": {
                 "schema": {
@@ -28751,7 +29544,17 @@
           "503": {
             "description": "Service Unavailable"
           },
-          "4XX-5XX": {
+          "4XX": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/errors"
+                }
+              }
+            },
+            "description": "Error responses have the following structure:"
+          },
+          "5XX": {
             "content": {
               "application/json": {
                 "schema": {
@@ -28832,7 +29635,17 @@
           "503": {
             "description": "Service Unavailable"
           },
-          "4XX-5XX": {
+          "4XX": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/errors"
+                }
+              }
+            },
+            "description": "Error responses have the following structure:"
+          },
+          "5XX": {
             "content": {
               "application/json": {
                 "schema": {
@@ -28903,7 +29716,17 @@
           "503": {
             "description": "Service Unavailable"
           },
-          "4XX-5XX": {
+          "4XX": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/errors"
+                }
+              }
+            },
+            "description": "Error responses have the following structure:"
+          },
+          "5XX": {
             "content": {
               "application/json": {
                 "schema": {
@@ -29000,7 +29823,17 @@
           "503": {
             "description": "Service Unavailable"
           },
-          "4XX-5XX": {
+          "4XX": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/errors"
+                }
+              }
+            },
+            "description": "Error responses have the following structure:"
+          },
+          "5XX": {
             "content": {
               "application/json": {
                 "schema": {
@@ -29080,7 +29913,17 @@
           "503": {
             "description": "Service Unavailable"
           },
-          "4XX-5XX": {
+          "4XX": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/errors"
+                }
+              }
+            },
+            "description": "Error responses have the following structure:"
+          },
+          "5XX": {
             "content": {
               "application/json": {
                 "schema": {
@@ -29143,7 +29986,17 @@
           "503": {
             "description": "Service Unavailable"
           },
-          "4XX-5XX": {
+          "4XX": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/errors"
+                }
+              }
+            },
+            "description": "Error responses have the following structure:"
+          },
+          "5XX": {
             "content": {
               "application/json": {
                 "schema": {
@@ -29214,7 +30067,17 @@
           "503": {
             "description": "Service Unavailable"
           },
-          "4XX-5XX": {
+          "4XX": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/errors"
+                }
+              }
+            },
+            "description": "Error responses have the following structure:"
+          },
+          "5XX": {
             "content": {
               "application/json": {
                 "schema": {
@@ -29226,6 +30089,88 @@
           }
         },
         "summary": "Closes the specified Collection.",
+        "tags": [
+          "Collections"
+        ]
+      }
+    },
+    "/projects/{projectId}/collections/{collectionId}/actions/getFieldsMetadata": {
+      "get": {
+        "operationId": "getFieldsMetadataForCollection",
+        "parameters": [
+          {
+            "name": "projectId",
+            "in": "path",
+            "description": "The Project ID.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "collectionId",
+            "in": "path",
+            "description": "The Collection ID.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/fieldsMetadataActionResponseBody"
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "406": {
+            "description": "Not Acceptable"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          },
+          "503": {
+            "description": "Service Unavailable"
+          },
+          "4XX": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/errors"
+                }
+              }
+            },
+            "description": "Error responses have the following structure:"
+          },
+          "5XX": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/errors"
+                }
+              }
+            },
+            "description": "Error responses have the following structure:"
+          }
+        },
+        "summary": "Returns fields for the specified resource.",
         "tags": [
           "Collections"
         ]
@@ -29285,7 +30230,17 @@
           "503": {
             "description": "Service Unavailable"
           },
-          "4XX-5XX": {
+          "4XX": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/errors"
+                }
+              }
+            },
+            "description": "Error responses have the following structure:"
+          },
+          "5XX": {
             "content": {
               "application/json": {
                 "schema": {
@@ -29385,7 +30340,17 @@
           "503": {
             "description": "Service Unavailable"
           },
-          "4XX-5XX": {
+          "4XX": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/errors"
+                }
+              }
+            },
+            "description": "Error responses have the following structure:"
+          },
+          "5XX": {
             "content": {
               "application/json": {
                 "schema": {
@@ -29509,7 +30474,17 @@
           "503": {
             "description": "Service Unavailable"
           },
-          "4XX-5XX": {
+          "4XX": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/errors"
+                }
+              }
+            },
+            "description": "Error responses have the following structure:"
+          },
+          "5XX": {
             "content": {
               "application/json": {
                 "schema": {
@@ -29601,7 +30576,17 @@
           "503": {
             "description": "Service Unavailable"
           },
-          "4XX-5XX": {
+          "4XX": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/errors"
+                }
+              }
+            },
+            "description": "Error responses have the following structure:"
+          },
+          "5XX": {
             "content": {
               "application/json": {
                 "schema": {
@@ -29690,7 +30675,17 @@
           "503": {
             "description": "Service Unavailable"
           },
-          "4XX-5XX": {
+          "4XX": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/errors"
+                }
+              }
+            },
+            "description": "Error responses have the following structure:"
+          },
+          "5XX": {
             "content": {
               "application/json": {
                 "schema": {
@@ -29782,7 +30777,17 @@
           "503": {
             "description": "Service Unavailable"
           },
-          "4XX-5XX": {
+          "4XX": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/errors"
+                }
+              }
+            },
+            "description": "Error responses have the following structure:"
+          },
+          "5XX": {
             "content": {
               "application/json": {
                 "schema": {
@@ -29880,7 +30885,17 @@
           "503": {
             "description": "Service Unavailable"
           },
-          "4XX-5XX": {
+          "4XX": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/errors"
+                }
+              }
+            },
+            "description": "Error responses have the following structure:"
+          },
+          "5XX": {
             "content": {
               "application/json": {
                 "schema": {
@@ -30002,7 +31017,17 @@
           "503": {
             "description": "Service Unavailable"
           },
-          "4XX-5XX": {
+          "4XX": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/errors"
+                }
+              }
+            },
+            "description": "Error responses have the following structure:"
+          },
+          "5XX": {
             "content": {
               "application/json": {
                 "schema": {
@@ -30100,7 +31125,17 @@
           "503": {
             "description": "Service Unavailable"
           },
-          "4XX-5XX": {
+          "4XX": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/errors"
+                }
+              }
+            },
+            "description": "Error responses have the following structure:"
+          },
+          "5XX": {
             "content": {
               "application/json": {
                 "schema": {
@@ -30190,7 +31225,17 @@
           "503": {
             "description": "Service Unavailable"
           },
-          "4XX-5XX": {
+          "4XX": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/errors"
+                }
+              }
+            },
+            "description": "Error responses have the following structure:"
+          },
+          "5XX": {
             "content": {
               "application/json": {
                 "schema": {
@@ -30297,7 +31342,17 @@
           "503": {
             "description": "Service Unavailable"
           },
-          "4XX-5XX": {
+          "4XX": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/errors"
+                }
+              }
+            },
+            "description": "Error responses have the following structure:"
+          },
+          "5XX": {
             "content": {
               "application/json": {
                 "schema": {
@@ -30419,7 +31474,17 @@
           "503": {
             "description": "Service Unavailable"
           },
-          "4XX-5XX": {
+          "4XX": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/errors"
+                }
+              }
+            },
+            "description": "Error responses have the following structure:"
+          },
+          "5XX": {
             "content": {
               "application/json": {
                 "schema": {
@@ -30549,7 +31614,17 @@
           "503": {
             "description": "Service Unavailable"
           },
-          "4XX-5XX": {
+          "4XX": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/errors"
+                }
+              }
+            },
+            "description": "Error responses have the following structure:"
+          },
+          "5XX": {
             "content": {
               "application/json": {
                 "schema": {
@@ -30630,7 +31705,17 @@
           "503": {
             "description": "Service Unavailable"
           },
-          "4XX-5XX": {
+          "4XX": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/errors"
+                }
+              }
+            },
+            "description": "Error responses have the following structure:"
+          },
+          "5XX": {
             "content": {
               "application/json": {
                 "schema": {
@@ -30701,7 +31786,17 @@
           "503": {
             "description": "Service Unavailable"
           },
-          "4XX-5XX": {
+          "4XX": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/errors"
+                }
+              }
+            },
+            "description": "Error responses have the following structure:"
+          },
+          "5XX": {
             "content": {
               "application/json": {
                 "schema": {
@@ -30798,7 +31893,17 @@
           "503": {
             "description": "Service Unavailable"
           },
-          "4XX-5XX": {
+          "4XX": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/errors"
+                }
+              }
+            },
+            "description": "Error responses have the following structure:"
+          },
+          "5XX": {
             "content": {
               "application/json": {
                 "schema": {
@@ -30878,7 +31983,17 @@
           "503": {
             "description": "Service Unavailable"
           },
-          "4XX-5XX": {
+          "4XX": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/errors"
+                }
+              }
+            },
+            "description": "Error responses have the following structure:"
+          },
+          "5XX": {
             "content": {
               "application/json": {
                 "schema": {
@@ -30941,7 +32056,17 @@
           "503": {
             "description": "Service Unavailable"
           },
-          "4XX-5XX": {
+          "4XX": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/errors"
+                }
+              }
+            },
+            "description": "Error responses have the following structure:"
+          },
+          "5XX": {
             "content": {
               "application/json": {
                 "schema": {
@@ -30953,6 +32078,88 @@
           }
         },
         "summary": "Deletes the specified Plan.",
+        "tags": [
+          "Plans"
+        ]
+      }
+    },
+    "/projects/{projectId}/plans/{planId}/actions/getFieldsMetadata": {
+      "get": {
+        "operationId": "getFieldsMetadataForPlan",
+        "parameters": [
+          {
+            "name": "projectId",
+            "in": "path",
+            "description": "The Project ID.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "planId",
+            "in": "path",
+            "description": "The Plan ID.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/fieldsMetadataActionResponseBody"
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "406": {
+            "description": "Not Acceptable"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          },
+          "503": {
+            "description": "Service Unavailable"
+          },
+          "4XX": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/errors"
+                }
+              }
+            },
+            "description": "Error responses have the following structure:"
+          },
+          "5XX": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/errors"
+                }
+              }
+            },
+            "description": "Error responses have the following structure:"
+          }
+        },
+        "summary": "Returns fields for the specified resource.",
         "tags": [
           "Plans"
         ]
@@ -31065,7 +32272,17 @@
           "503": {
             "description": "Service Unavailable"
           },
-          "4XX-5XX": {
+          "4XX": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/errors"
+                }
+              }
+            },
+            "description": "Error responses have the following structure:"
+          },
+          "5XX": {
             "content": {
               "application/json": {
                 "schema": {
@@ -31157,7 +32374,17 @@
           "503": {
             "description": "Service Unavailable"
           },
-          "4XX-5XX": {
+          "4XX": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/errors"
+                }
+              }
+            },
+            "description": "Error responses have the following structure:"
+          },
+          "5XX": {
             "content": {
               "application/json": {
                 "schema": {
@@ -31246,7 +32473,17 @@
           "503": {
             "description": "Service Unavailable"
           },
-          "4XX-5XX": {
+          "4XX": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/errors"
+                }
+              }
+            },
+            "description": "Error responses have the following structure:"
+          },
+          "5XX": {
             "content": {
               "application/json": {
                 "schema": {
@@ -31338,7 +32575,17 @@
           "503": {
             "description": "Service Unavailable"
           },
-          "4XX-5XX": {
+          "4XX": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/errors"
+                }
+              }
+            },
+            "description": "Error responses have the following structure:"
+          },
+          "5XX": {
             "content": {
               "application/json": {
                 "schema": {
@@ -31461,7 +32708,17 @@
           "503": {
             "description": "Service Unavailable"
           },
-          "4XX-5XX": {
+          "4XX": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/errors"
+                }
+              }
+            },
+            "description": "Error responses have the following structure:"
+          },
+          "5XX": {
             "content": {
               "application/json": {
                 "schema": {
@@ -31551,7 +32808,17 @@
           "503": {
             "description": "Service Unavailable"
           },
-          "4XX-5XX": {
+          "4XX": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/errors"
+                }
+              }
+            },
+            "description": "Error responses have the following structure:"
+          },
+          "5XX": {
             "content": {
               "application/json": {
                 "schema": {
@@ -31657,7 +32924,17 @@
           "503": {
             "description": "Service Unavailable"
           },
-          "4XX-5XX": {
+          "4XX": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/errors"
+                }
+              }
+            },
+            "description": "Error responses have the following structure:"
+          },
+          "5XX": {
             "content": {
               "application/json": {
                 "schema": {
@@ -31754,7 +33031,17 @@
           "503": {
             "description": "Service Unavailable"
           },
-          "4XX-5XX": {
+          "4XX": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/errors"
+                }
+              }
+            },
+            "description": "Error responses have the following structure:"
+          },
+          "5XX": {
             "content": {
               "application/json": {
                 "schema": {
@@ -31863,7 +33150,17 @@
           "503": {
             "description": "Service Unavailable"
           },
-          "4XX-5XX": {
+          "4XX": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/errors"
+                }
+              }
+            },
+            "description": "Error responses have the following structure:"
+          },
+          "5XX": {
             "content": {
               "application/json": {
                 "schema": {
@@ -31972,7 +33269,17 @@
           "503": {
             "description": "Service Unavailable"
           },
-          "4XX-5XX": {
+          "4XX": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/errors"
+                }
+              }
+            },
+            "description": "Error responses have the following structure:"
+          },
+          "5XX": {
             "content": {
               "application/json": {
                 "schema": {
@@ -31984,6 +33291,97 @@
           }
         },
         "summary": "Creates a copy of the Document.",
+        "tags": [
+          "Documents"
+        ]
+      }
+    },
+    "/projects/{projectId}/spaces/{spaceId}/documents/{documentName}/actions/getFieldsMetadata": {
+      "get": {
+        "operationId": "getFieldsMetadataForDocument",
+        "parameters": [
+          {
+            "name": "projectId",
+            "in": "path",
+            "description": "The Project ID.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "spaceId",
+            "in": "path",
+            "description": "The Space ID. (Use '_default' without quotes to address the default Space.)",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "documentName",
+            "in": "path",
+            "description": "The Branch Document Name.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/fieldsMetadataActionResponseBody"
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "406": {
+            "description": "Not Acceptable"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          },
+          "503": {
+            "description": "Service Unavailable"
+          },
+          "4XX": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/errors"
+                }
+              }
+            },
+            "description": "Error responses have the following structure:"
+          },
+          "5XX": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/errors"
+                }
+              }
+            },
+            "description": "Error responses have the following structure:"
+          }
+        },
+        "summary": "Returns fields for the specified resource.",
         "tags": [
           "Documents"
         ]
@@ -32072,7 +33470,17 @@
           "503": {
             "description": "Service Unavailable"
           },
-          "4XX-5XX": {
+          "4XX": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/errors"
+                }
+              }
+            },
+            "description": "Error responses have the following structure:"
+          },
+          "5XX": {
             "content": {
               "application/json": {
                 "schema": {
@@ -32172,7 +33580,17 @@
           "503": {
             "description": "Service Unavailable"
           },
-          "4XX-5XX": {
+          "4XX": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/errors"
+                }
+              }
+            },
+            "description": "Error responses have the following structure:"
+          },
+          "5XX": {
             "content": {
               "application/json": {
                 "schema": {
@@ -32296,7 +33714,17 @@
           "503": {
             "description": "Service Unavailable"
           },
-          "4XX-5XX": {
+          "4XX": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/errors"
+                }
+              }
+            },
+            "description": "Error responses have the following structure:"
+          },
+          "5XX": {
             "content": {
               "application/json": {
                 "schema": {
@@ -32411,7 +33839,17 @@
           "503": {
             "description": "Service Unavailable"
           },
-          "4XX-5XX": {
+          "4XX": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/errors"
+                }
+              }
+            },
+            "description": "Error responses have the following structure:"
+          },
+          "5XX": {
             "content": {
               "application/json": {
                 "schema": {
@@ -32535,7 +33973,17 @@
           "503": {
             "description": "Service Unavailable"
           },
-          "4XX-5XX": {
+          "4XX": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/errors"
+                }
+              }
+            },
+            "description": "Error responses have the following structure:"
+          },
+          "5XX": {
             "content": {
               "application/json": {
                 "schema": {
@@ -32634,7 +34082,17 @@
           "503": {
             "description": "Service Unavailable"
           },
-          "4XX-5XX": {
+          "4XX": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/errors"
+                }
+              }
+            },
+            "description": "Error responses have the following structure:"
+          },
+          "5XX": {
             "content": {
               "application/json": {
                 "schema": {
@@ -32749,7 +34207,17 @@
           "503": {
             "description": "Service Unavailable"
           },
-          "4XX-5XX": {
+          "4XX": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/errors"
+                }
+              }
+            },
+            "description": "Error responses have the following structure:"
+          },
+          "5XX": {
             "content": {
               "application/json": {
                 "schema": {
@@ -32847,7 +34315,17 @@
           "503": {
             "description": "Service Unavailable"
           },
-          "4XX-5XX": {
+          "4XX": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/errors"
+                }
+              }
+            },
+            "description": "Error responses have the following structure:"
+          },
+          "5XX": {
             "content": {
               "application/json": {
                 "schema": {
@@ -32955,7 +34433,17 @@
           "503": {
             "description": "Service Unavailable"
           },
-          "4XX-5XX": {
+          "4XX": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/errors"
+                }
+              }
+            },
+            "description": "Error responses have the following structure:"
+          },
+          "5XX": {
             "content": {
               "application/json": {
                 "schema": {
@@ -33071,7 +34559,17 @@
           "503": {
             "description": "Service Unavailable"
           },
-          "4XX-5XX": {
+          "4XX": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/errors"
+                }
+              }
+            },
+            "description": "Error responses have the following structure:"
+          },
+          "5XX": {
             "content": {
               "application/json": {
                 "schema": {
@@ -33195,7 +34693,17 @@
           "503": {
             "description": "Service Unavailable"
           },
-          "4XX-5XX": {
+          "4XX": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/errors"
+                }
+              }
+            },
+            "description": "Error responses have the following structure:"
+          },
+          "5XX": {
             "content": {
               "application/json": {
                 "schema": {
@@ -33294,7 +34802,17 @@
           "503": {
             "description": "Service Unavailable"
           },
-          "4XX-5XX": {
+          "4XX": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/errors"
+                }
+              }
+            },
+            "description": "Error responses have the following structure:"
+          },
+          "5XX": {
             "content": {
               "application/json": {
                 "schema": {
@@ -33306,6 +34824,105 @@
           }
         },
         "summary": "Creates a list of Document Parts.",
+        "tags": [
+          "Document Parts"
+        ]
+      },
+      "delete": {
+        "operationId": "deleteDocumentParts",
+        "parameters": [
+          {
+            "name": "projectId",
+            "in": "path",
+            "description": "The Project ID.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "spaceId",
+            "in": "path",
+            "description": "The Space ID. (Use '_default' without quotes to address the default Space.)",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "documentName",
+            "in": "path",
+            "description": "The Document name.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/document_partsListDeleteRequest"
+              }
+            }
+          },
+          "description": "The list of Document Part IDs to delete.",
+          "required": true
+        },
+        "responses": {
+          "204": {
+            "description": "No Content"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "409": {
+            "description": "Conflict"
+          },
+          "413": {
+            "description": "Request Entity Too Large"
+          },
+          "415": {
+            "description": "Unsupported Media Type"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          },
+          "503": {
+            "description": "Service Unavailable"
+          },
+          "4XX": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/errors"
+                }
+              }
+            },
+            "description": "Error responses have the following structure:"
+          },
+          "5XX": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/errors"
+                }
+              }
+            },
+            "description": "Error responses have the following structure:"
+          }
+        },
+        "summary": "Deletes a list of Document Parts.",
         "tags": [
           "Document Parts"
         ]
@@ -33409,7 +35026,17 @@
           "503": {
             "description": "Service Unavailable"
           },
-          "4XX-5XX": {
+          "4XX": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/errors"
+                }
+              }
+            },
+            "description": "Error responses have the following structure:"
+          },
+          "5XX": {
             "content": {
               "application/json": {
                 "schema": {
@@ -33509,7 +35136,17 @@
           "503": {
             "description": "Service Unavailable"
           },
-          "4XX-5XX": {
+          "4XX": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/errors"
+                }
+              }
+            },
+            "description": "Error responses have the following structure:"
+          },
+          "5XX": {
             "content": {
               "application/json": {
                 "schema": {
@@ -33521,6 +35158,117 @@
           }
         },
         "summary": "Moves a Work Item Document Part.",
+        "tags": [
+          "Document Parts"
+        ]
+      }
+    },
+    "/projects/{projectId}/spaces/{spaceId}/documents/{documentName}/parts/actions/overwrite": {
+      "post": {
+        "operationId": "overwriteDocumentParts",
+        "parameters": [
+          {
+            "name": "projectId",
+            "in": "path",
+            "description": "The Project ID.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "spaceId",
+            "in": "path",
+            "description": "The Space ID. (Use '_default' without quotes to address the default Space.)",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "documentName",
+            "in": "path",
+            "description": "The Document name.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/overwriteDocumentPartsRequestBody"
+              }
+            }
+          },
+          "description": "Parameters for overwriting multiple Work Item Document Parts.",
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/overwriteDocumentPartsResponseBody"
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "406": {
+            "description": "Not Acceptable"
+          },
+          "409": {
+            "description": "Conflict"
+          },
+          "413": {
+            "description": "Request Entity Too Large"
+          },
+          "415": {
+            "description": "Unsupported Media Type"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          },
+          "503": {
+            "description": "Service Unavailable"
+          },
+          "4XX": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/errors"
+                }
+              }
+            },
+            "description": "Error responses have the following structure:"
+          },
+          "5XX": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/errors"
+                }
+              }
+            },
+            "description": "Error responses have the following structure:"
+          }
+        },
+        "summary": "Overwrites multiple Work Item Document Parts.",
         "tags": [
           "Document Parts"
         ]
@@ -33632,7 +35380,17 @@
           "503": {
             "description": "Service Unavailable"
           },
-          "4XX-5XX": {
+          "4XX": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/errors"
+                }
+              }
+            },
+            "description": "Error responses have the following structure:"
+          },
+          "5XX": {
             "content": {
               "application/json": {
                 "schema": {
@@ -33722,7 +35480,17 @@
           "503": {
             "description": "Service Unavailable"
           },
-          "4XX-5XX": {
+          "4XX": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/errors"
+                }
+              }
+            },
+            "description": "Error responses have the following structure:"
+          },
+          "5XX": {
             "content": {
               "application/json": {
                 "schema": {
@@ -33828,7 +35596,17 @@
           "503": {
             "description": "Service Unavailable"
           },
-          "4XX-5XX": {
+          "4XX": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/errors"
+                }
+              }
+            },
+            "description": "Error responses have the following structure:"
+          },
+          "5XX": {
             "content": {
               "application/json": {
                 "schema": {
@@ -33917,7 +35695,17 @@
           "503": {
             "description": "Service Unavailable"
           },
-          "4XX-5XX": {
+          "4XX": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/errors"
+                }
+              }
+            },
+            "description": "Error responses have the following structure:"
+          },
+          "5XX": {
             "content": {
               "application/json": {
                 "schema": {
@@ -33989,7 +35777,17 @@
           "503": {
             "description": "Service Unavailable"
           },
-          "4XX-5XX": {
+          "4XX": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/errors"
+                }
+              }
+            },
+            "description": "Error responses have the following structure:"
+          },
+          "5XX": {
             "content": {
               "application/json": {
                 "schema": {
@@ -34113,7 +35911,17 @@
           "503": {
             "description": "Service Unavailable"
           },
-          "4XX-5XX": {
+          "4XX": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/errors"
+                }
+              }
+            },
+            "description": "Error responses have the following structure:"
+          },
+          "5XX": {
             "content": {
               "application/json": {
                 "schema": {
@@ -34228,7 +36036,17 @@
           "503": {
             "description": "Service Unavailable"
           },
-          "4XX-5XX": {
+          "4XX": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/errors"
+                }
+              }
+            },
+            "description": "Error responses have the following structure:"
+          },
+          "5XX": {
             "content": {
               "application/json": {
                 "schema": {
@@ -34309,7 +36127,17 @@
           "503": {
             "description": "Service Unavailable"
           },
-          "4XX-5XX": {
+          "4XX": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/errors"
+                }
+              }
+            },
+            "description": "Error responses have the following structure:"
+          },
+          "5XX": {
             "content": {
               "application/json": {
                 "schema": {
@@ -34433,7 +36261,17 @@
           "503": {
             "description": "Service Unavailable"
           },
-          "4XX-5XX": {
+          "4XX": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/errors"
+                }
+              }
+            },
+            "description": "Error responses have the following structure:"
+          },
+          "5XX": {
             "content": {
               "application/json": {
                 "schema": {
@@ -34532,7 +36370,17 @@
           "503": {
             "description": "Service Unavailable"
           },
-          "4XX-5XX": {
+          "4XX": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/errors"
+                }
+              }
+            },
+            "description": "Error responses have the following structure:"
+          },
+          "5XX": {
             "content": {
               "application/json": {
                 "schema": {
@@ -34647,7 +36495,17 @@
           "503": {
             "description": "Service Unavailable"
           },
-          "4XX-5XX": {
+          "4XX": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/errors"
+                }
+              }
+            },
+            "description": "Error responses have the following structure:"
+          },
+          "5XX": {
             "content": {
               "application/json": {
                 "schema": {
@@ -34745,7 +36603,17 @@
           "503": {
             "description": "Service Unavailable"
           },
-          "4XX-5XX": {
+          "4XX": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/errors"
+                }
+              }
+            },
+            "description": "Error responses have the following structure:"
+          },
+          "5XX": {
             "content": {
               "application/json": {
                 "schema": {
@@ -34878,7 +36746,17 @@
           "503": {
             "description": "Service Unavailable"
           },
-          "4XX-5XX": {
+          "4XX": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/errors"
+                }
+              }
+            },
+            "description": "Error responses have the following structure:"
+          },
+          "5XX": {
             "content": {
               "application/json": {
                 "schema": {
@@ -34979,7 +36857,17 @@
           "503": {
             "description": "Service Unavailable"
           },
-          "4XX-5XX": {
+          "4XX": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/errors"
+                }
+              }
+            },
+            "description": "Error responses have the following structure:"
+          },
+          "5XX": {
             "content": {
               "application/json": {
                 "schema": {
@@ -35077,7 +36965,17 @@
           "503": {
             "description": "Service Unavailable"
           },
-          "4XX-5XX": {
+          "4XX": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/errors"
+                }
+              }
+            },
+            "description": "Error responses have the following structure:"
+          },
+          "5XX": {
             "content": {
               "application/json": {
                 "schema": {
@@ -35178,7 +37076,17 @@
           "503": {
             "description": "Service Unavailable"
           },
-          "4XX-5XX": {
+          "4XX": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/errors"
+                }
+              }
+            },
+            "description": "Error responses have the following structure:"
+          },
+          "5XX": {
             "content": {
               "application/json": {
                 "schema": {
@@ -35276,7 +37184,17 @@
           "503": {
             "description": "Service Unavailable"
           },
-          "4XX-5XX": {
+          "4XX": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/errors"
+                }
+              }
+            },
+            "description": "Error responses have the following structure:"
+          },
+          "5XX": {
             "content": {
               "application/json": {
                 "schema": {
@@ -35365,7 +37283,17 @@
           "503": {
             "description": "Service Unavailable"
           },
-          "4XX-5XX": {
+          "4XX": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/errors"
+                }
+              }
+            },
+            "description": "Error responses have the following structure:"
+          },
+          "5XX": {
             "content": {
               "application/json": {
                 "schema": {
@@ -35495,7 +37423,17 @@
           "503": {
             "description": "Service Unavailable"
           },
-          "4XX-5XX": {
+          "4XX": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/errors"
+                }
+              }
+            },
+            "description": "Error responses have the following structure:"
+          },
+          "5XX": {
             "content": {
               "application/json": {
                 "schema": {
@@ -35576,7 +37514,17 @@
           "503": {
             "description": "Service Unavailable"
           },
-          "4XX-5XX": {
+          "4XX": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/errors"
+                }
+              }
+            },
+            "description": "Error responses have the following structure:"
+          },
+          "5XX": {
             "content": {
               "application/json": {
                 "schema": {
@@ -35647,7 +37595,17 @@
           "503": {
             "description": "Service Unavailable"
           },
-          "4XX-5XX": {
+          "4XX": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/errors"
+                }
+              }
+            },
+            "description": "Error responses have the following structure:"
+          },
+          "5XX": {
             "content": {
               "application/json": {
                 "schema": {
@@ -35718,7 +37676,17 @@
           "503": {
             "description": "Service Unavailable"
           },
-          "4XX-5XX": {
+          "4XX": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/errors"
+                }
+              }
+            },
+            "description": "Error responses have the following structure:"
+          },
+          "5XX": {
             "content": {
               "application/json": {
                 "schema": {
@@ -35815,7 +37783,17 @@
           "503": {
             "description": "Service Unavailable"
           },
-          "4XX-5XX": {
+          "4XX": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/errors"
+                }
+              }
+            },
+            "description": "Error responses have the following structure:"
+          },
+          "5XX": {
             "content": {
               "application/json": {
                 "schema": {
@@ -35895,7 +37873,17 @@
           "503": {
             "description": "Service Unavailable"
           },
-          "4XX-5XX": {
+          "4XX": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/errors"
+                }
+              }
+            },
+            "description": "Error responses have the following structure:"
+          },
+          "5XX": {
             "content": {
               "application/json": {
                 "schema": {
@@ -35958,7 +37946,17 @@
           "503": {
             "description": "Service Unavailable"
           },
-          "4XX-5XX": {
+          "4XX": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/errors"
+                }
+              }
+            },
+            "description": "Error responses have the following structure:"
+          },
+          "5XX": {
             "content": {
               "application/json": {
                 "schema": {
@@ -35970,6 +37968,88 @@
           }
         },
         "summary": "Deletes the specified Test Run.",
+        "tags": [
+          "Test Runs"
+        ]
+      }
+    },
+    "/projects/{projectId}/testruns/{testRunId}/actions/getFieldsMetadata": {
+      "get": {
+        "operationId": "getFieldsMetadataForTestRun",
+        "parameters": [
+          {
+            "name": "projectId",
+            "in": "path",
+            "description": "The Project ID.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "testRunId",
+            "in": "path",
+            "description": "The Test Run ID.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/fieldsMetadataActionResponseBody"
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "406": {
+            "description": "Not Acceptable"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          },
+          "503": {
+            "description": "Service Unavailable"
+          },
+          "4XX": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/errors"
+                }
+              }
+            },
+            "description": "Error responses have the following structure:"
+          },
+          "5XX": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/errors"
+                }
+              }
+            },
+            "description": "Error responses have the following structure:"
+          }
+        },
+        "summary": "Returns fields for the specified resource.",
         "tags": [
           "Test Runs"
         ]
@@ -36056,7 +38136,17 @@
           "503": {
             "description": "Service Unavailable"
           },
-          "4XX-5XX": {
+          "4XX": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/errors"
+                }
+              }
+            },
+            "description": "Error responses have the following structure:"
+          },
+          "5XX": {
             "content": {
               "application/json": {
                 "schema": {
@@ -36169,7 +38259,17 @@
           "503": {
             "description": "Service Unavailable"
           },
-          "4XX-5XX": {
+          "4XX": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/errors"
+                }
+              }
+            },
+            "description": "Error responses have the following structure:"
+          },
+          "5XX": {
             "content": {
               "application/json": {
                 "schema": {
@@ -36249,7 +38349,17 @@
           "503": {
             "description": "Service Unavailable"
           },
-          "4XX-5XX": {
+          "4XX": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/errors"
+                }
+              }
+            },
+            "description": "Error responses have the following structure:"
+          },
+          "5XX": {
             "content": {
               "application/json": {
                 "schema": {
@@ -36355,7 +38465,17 @@
           "503": {
             "description": "Service Unavailable"
           },
-          "4XX-5XX": {
+          "4XX": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/errors"
+                }
+              }
+            },
+            "description": "Error responses have the following structure:"
+          },
+          "5XX": {
             "content": {
               "application/json": {
                 "schema": {
@@ -36427,7 +38547,17 @@
           "503": {
             "description": "Service Unavailable"
           },
-          "4XX-5XX": {
+          "4XX": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/errors"
+                }
+              }
+            },
+            "description": "Error responses have the following structure:"
+          },
+          "5XX": {
             "content": {
               "application/json": {
                 "schema": {
@@ -36542,7 +38672,17 @@
           "503": {
             "description": "Service Unavailable"
           },
-          "4XX-5XX": {
+          "4XX": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/errors"
+                }
+              }
+            },
+            "description": "Error responses have the following structure:"
+          },
+          "5XX": {
             "content": {
               "application/json": {
                 "schema": {
@@ -36632,7 +38772,17 @@
           "503": {
             "description": "Service Unavailable"
           },
-          "4XX-5XX": {
+          "4XX": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/errors"
+                }
+              }
+            },
+            "description": "Error responses have the following structure:"
+          },
+          "5XX": {
             "content": {
               "application/json": {
                 "schema": {
@@ -36712,7 +38862,17 @@
           "503": {
             "description": "Service Unavailable"
           },
-          "4XX-5XX": {
+          "4XX": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/errors"
+                }
+              }
+            },
+            "description": "Error responses have the following structure:"
+          },
+          "5XX": {
             "content": {
               "application/json": {
                 "schema": {
@@ -36818,7 +38978,17 @@
           "503": {
             "description": "Service Unavailable"
           },
-          "4XX-5XX": {
+          "4XX": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/errors"
+                }
+              }
+            },
+            "description": "Error responses have the following structure:"
+          },
+          "5XX": {
             "content": {
               "application/json": {
                 "schema": {
@@ -36907,7 +39077,17 @@
           "503": {
             "description": "Service Unavailable"
           },
-          "4XX-5XX": {
+          "4XX": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/errors"
+                }
+              }
+            },
+            "description": "Error responses have the following structure:"
+          },
+          "5XX": {
             "content": {
               "application/json": {
                 "schema": {
@@ -37022,7 +39202,17 @@
           "503": {
             "description": "Service Unavailable"
           },
-          "4XX-5XX": {
+          "4XX": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/errors"
+                }
+              }
+            },
+            "description": "Error responses have the following structure:"
+          },
+          "5XX": {
             "content": {
               "application/json": {
                 "schema": {
@@ -37112,7 +39302,17 @@
           "503": {
             "description": "Service Unavailable"
           },
-          "4XX-5XX": {
+          "4XX": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/errors"
+                }
+              }
+            },
+            "description": "Error responses have the following structure:"
+          },
+          "5XX": {
             "content": {
               "application/json": {
                 "schema": {
@@ -37218,7 +39418,17 @@
           "503": {
             "description": "Service Unavailable"
           },
-          "4XX-5XX": {
+          "4XX": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/errors"
+                }
+              }
+            },
+            "description": "Error responses have the following structure:"
+          },
+          "5XX": {
             "content": {
               "application/json": {
                 "schema": {
@@ -37290,7 +39500,17 @@
           "503": {
             "description": "Service Unavailable"
           },
-          "4XX-5XX": {
+          "4XX": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/errors"
+                }
+              }
+            },
+            "description": "Error responses have the following structure:"
+          },
+          "5XX": {
             "content": {
               "application/json": {
                 "schema": {
@@ -37405,7 +39625,17 @@
           "503": {
             "description": "Service Unavailable"
           },
-          "4XX-5XX": {
+          "4XX": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/errors"
+                }
+              }
+            },
+            "description": "Error responses have the following structure:"
+          },
+          "5XX": {
             "content": {
               "application/json": {
                 "schema": {
@@ -37495,7 +39725,17 @@
           "503": {
             "description": "Service Unavailable"
           },
-          "4XX-5XX": {
+          "4XX": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/errors"
+                }
+              }
+            },
+            "description": "Error responses have the following structure:"
+          },
+          "5XX": {
             "content": {
               "application/json": {
                 "schema": {
@@ -37575,7 +39815,17 @@
           "503": {
             "description": "Service Unavailable"
           },
-          "4XX-5XX": {
+          "4XX": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/errors"
+                }
+              }
+            },
+            "description": "Error responses have the following structure:"
+          },
+          "5XX": {
             "content": {
               "application/json": {
                 "schema": {
@@ -37681,7 +39931,17 @@
           "503": {
             "description": "Service Unavailable"
           },
-          "4XX-5XX": {
+          "4XX": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/errors"
+                }
+              }
+            },
+            "description": "Error responses have the following structure:"
+          },
+          "5XX": {
             "content": {
               "application/json": {
                 "schema": {
@@ -37753,7 +40013,17 @@
           "503": {
             "description": "Service Unavailable"
           },
-          "4XX-5XX": {
+          "4XX": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/errors"
+                }
+              }
+            },
+            "description": "Error responses have the following structure:"
+          },
+          "5XX": {
             "content": {
               "application/json": {
                 "schema": {
@@ -37892,7 +40162,17 @@
           "503": {
             "description": "Service Unavailable"
           },
-          "4XX-5XX": {
+          "4XX": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/errors"
+                }
+              }
+            },
+            "description": "Error responses have the following structure:"
+          },
+          "5XX": {
             "content": {
               "application/json": {
                 "schema": {
@@ -37982,7 +40262,17 @@
           "503": {
             "description": "Service Unavailable"
           },
-          "4XX-5XX": {
+          "4XX": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/errors"
+                }
+              }
+            },
+            "description": "Error responses have the following structure:"
+          },
+          "5XX": {
             "content": {
               "application/json": {
                 "schema": {
@@ -38062,7 +40352,17 @@
           "503": {
             "description": "Service Unavailable"
           },
-          "4XX-5XX": {
+          "4XX": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/errors"
+                }
+              }
+            },
+            "description": "Error responses have the following structure:"
+          },
+          "5XX": {
             "content": {
               "application/json": {
                 "schema": {
@@ -38186,7 +40486,17 @@
           "503": {
             "description": "Service Unavailable"
           },
-          "4XX-5XX": {
+          "4XX": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/errors"
+                }
+              }
+            },
+            "description": "Error responses have the following structure:"
+          },
+          "5XX": {
             "content": {
               "application/json": {
                 "schema": {
@@ -38293,7 +40603,17 @@
           "503": {
             "description": "Service Unavailable"
           },
-          "4XX-5XX": {
+          "4XX": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/errors"
+                }
+              }
+            },
+            "description": "Error responses have the following structure:"
+          },
+          "5XX": {
             "content": {
               "application/json": {
                 "schema": {
@@ -38383,7 +40703,17 @@
           "503": {
             "description": "Service Unavailable"
           },
-          "4XX-5XX": {
+          "4XX": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/errors"
+                }
+              }
+            },
+            "description": "Error responses have the following structure:"
+          },
+          "5XX": {
             "content": {
               "application/json": {
                 "schema": {
@@ -38395,6 +40725,115 @@
           }
         },
         "summary": "Deletes the specified Test Record.",
+        "tags": [
+          "Test Records"
+        ]
+      }
+    },
+    "/projects/{projectId}/testruns/{testRunId}/testrecords/{testCaseProjectId}/{testCaseId}/{iteration}/actions/getFieldsMetadata": {
+      "get": {
+        "operationId": "getFieldsMetadataForTestRecord",
+        "parameters": [
+          {
+            "name": "projectId",
+            "in": "path",
+            "description": "The Project ID.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "testRunId",
+            "in": "path",
+            "description": "The Test Run ID.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "testCaseProjectId",
+            "in": "path",
+            "description": "The Testcase Project ID.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "testCaseId",
+            "in": "path",
+            "description": "The Testcase ID.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "iteration",
+            "in": "path",
+            "description": "The Iteration Number.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/fieldsMetadataActionResponseBody"
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "406": {
+            "description": "Not Acceptable"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          },
+          "503": {
+            "description": "Service Unavailable"
+          },
+          "4XX": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/errors"
+                }
+              }
+            },
+            "description": "Error responses have the following structure:"
+          },
+          "5XX": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/errors"
+                }
+              }
+            },
+            "description": "Error responses have the following structure:"
+          }
+        },
+        "summary": "Returns fields for the specified resource.",
         "tags": [
           "Test Records"
         ]
@@ -38525,7 +40964,17 @@
           "503": {
             "description": "Service Unavailable"
           },
-          "4XX-5XX": {
+          "4XX": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/errors"
+                }
+              }
+            },
+            "description": "Error responses have the following structure:"
+          },
+          "5XX": {
             "content": {
               "application/json": {
                 "schema": {
@@ -38632,7 +41081,17 @@
           "503": {
             "description": "Service Unavailable"
           },
-          "4XX-5XX": {
+          "4XX": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/errors"
+                }
+              }
+            },
+            "description": "Error responses have the following structure:"
+          },
+          "5XX": {
             "content": {
               "application/json": {
                 "schema": {
@@ -38765,7 +41224,17 @@
           "503": {
             "description": "Service Unavailable"
           },
-          "4XX-5XX": {
+          "4XX": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/errors"
+                }
+              }
+            },
+            "description": "Error responses have the following structure:"
+          },
+          "5XX": {
             "content": {
               "application/json": {
                 "schema": {
@@ -38864,7 +41333,17 @@
           "503": {
             "description": "Service Unavailable"
           },
-          "4XX-5XX": {
+          "4XX": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/errors"
+                }
+              }
+            },
+            "description": "Error responses have the following structure:"
+          },
+          "5XX": {
             "content": {
               "application/json": {
                 "schema": {
@@ -39006,7 +41485,17 @@
           "503": {
             "description": "Service Unavailable"
           },
-          "4XX-5XX": {
+          "4XX": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/errors"
+                }
+              }
+            },
+            "description": "Error responses have the following structure:"
+          },
+          "5XX": {
             "content": {
               "application/json": {
                 "schema": {
@@ -39123,7 +41612,17 @@
           "503": {
             "description": "Service Unavailable"
           },
-          "4XX-5XX": {
+          "4XX": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/errors"
+                }
+              }
+            },
+            "description": "Error responses have the following structure:"
+          },
+          "5XX": {
             "content": {
               "application/json": {
                 "schema": {
@@ -39256,7 +41755,17 @@
           "503": {
             "description": "Service Unavailable"
           },
-          "4XX-5XX": {
+          "4XX": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/errors"
+                }
+              }
+            },
+            "description": "Error responses have the following structure:"
+          },
+          "5XX": {
             "content": {
               "application/json": {
                 "schema": {
@@ -39355,7 +41864,17 @@
           "503": {
             "description": "Service Unavailable"
           },
-          "4XX-5XX": {
+          "4XX": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/errors"
+                }
+              }
+            },
+            "description": "Error responses have the following structure:"
+          },
+          "5XX": {
             "content": {
               "application/json": {
                 "schema": {
@@ -39497,7 +42016,17 @@
           "503": {
             "description": "Service Unavailable"
           },
-          "4XX-5XX": {
+          "4XX": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/errors"
+                }
+              }
+            },
+            "description": "Error responses have the following structure:"
+          },
+          "5XX": {
             "content": {
               "application/json": {
                 "schema": {
@@ -39614,7 +42143,17 @@
           "503": {
             "description": "Service Unavailable"
           },
-          "4XX-5XX": {
+          "4XX": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/errors"
+                }
+              }
+            },
+            "description": "Error responses have the following structure:"
+          },
+          "5XX": {
             "content": {
               "application/json": {
                 "schema": {
@@ -39721,7 +42260,17 @@
           "503": {
             "description": "Service Unavailable"
           },
-          "4XX-5XX": {
+          "4XX": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/errors"
+                }
+              }
+            },
+            "description": "Error responses have the following structure:"
+          },
+          "5XX": {
             "content": {
               "application/json": {
                 "schema": {
@@ -39854,7 +42403,17 @@
           "503": {
             "description": "Service Unavailable"
           },
-          "4XX-5XX": {
+          "4XX": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/errors"
+                }
+              }
+            },
+            "description": "Error responses have the following structure:"
+          },
+          "5XX": {
             "content": {
               "application/json": {
                 "schema": {
@@ -39970,7 +42529,17 @@
           "503": {
             "description": "Service Unavailable"
           },
-          "4XX-5XX": {
+          "4XX": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/errors"
+                }
+              }
+            },
+            "description": "Error responses have the following structure:"
+          },
+          "5XX": {
             "content": {
               "application/json": {
                 "schema": {
@@ -40121,7 +42690,17 @@
           "503": {
             "description": "Service Unavailable"
           },
-          "4XX-5XX": {
+          "4XX": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/errors"
+                }
+              }
+            },
+            "description": "Error responses have the following structure:"
+          },
+          "5XX": {
             "content": {
               "application/json": {
                 "schema": {
@@ -40237,7 +42816,17 @@
           "503": {
             "description": "Service Unavailable"
           },
-          "4XX-5XX": {
+          "4XX": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/errors"
+                }
+              }
+            },
+            "description": "Error responses have the following structure:"
+          },
+          "5XX": {
             "content": {
               "application/json": {
                 "schema": {
@@ -40379,7 +42968,17 @@
           "503": {
             "description": "Service Unavailable"
           },
-          "4XX-5XX": {
+          "4XX": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/errors"
+                }
+              }
+            },
+            "description": "Error responses have the following structure:"
+          },
+          "5XX": {
             "content": {
               "application/json": {
                 "schema": {
@@ -40487,7 +43086,17 @@
           "503": {
             "description": "Service Unavailable"
           },
-          "4XX-5XX": {
+          "4XX": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/errors"
+                }
+              }
+            },
+            "description": "Error responses have the following structure:"
+          },
+          "5XX": {
             "content": {
               "application/json": {
                 "schema": {
@@ -40609,7 +43218,17 @@
           "503": {
             "description": "Service Unavailable"
           },
-          "4XX-5XX": {
+          "4XX": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/errors"
+                }
+              }
+            },
+            "description": "Error responses have the following structure:"
+          },
+          "5XX": {
             "content": {
               "application/json": {
                 "schema": {
@@ -40690,7 +43309,17 @@
           "503": {
             "description": "Service Unavailable"
           },
-          "4XX-5XX": {
+          "4XX": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/errors"
+                }
+              }
+            },
+            "description": "Error responses have the following structure:"
+          },
+          "5XX": {
             "content": {
               "application/json": {
                 "schema": {
@@ -40777,7 +43406,17 @@
           "503": {
             "description": "Service Unavailable"
           },
-          "4XX-5XX": {
+          "4XX": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/errors"
+                }
+              }
+            },
+            "description": "Error responses have the following structure:"
+          },
+          "5XX": {
             "content": {
               "application/json": {
                 "schema": {
@@ -40848,7 +43487,17 @@
           "503": {
             "description": "Service Unavailable"
           },
-          "4XX-5XX": {
+          "4XX": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/errors"
+                }
+              }
+            },
+            "description": "Error responses have the following structure:"
+          },
+          "5XX": {
             "content": {
               "application/json": {
                 "schema": {
@@ -40945,7 +43594,17 @@
           "503": {
             "description": "Service Unavailable"
           },
-          "4XX-5XX": {
+          "4XX": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/errors"
+                }
+              }
+            },
+            "description": "Error responses have the following structure:"
+          },
+          "5XX": {
             "content": {
               "application/json": {
                 "schema": {
@@ -41041,7 +43700,17 @@
           "503": {
             "description": "Service Unavailable"
           },
-          "4XX-5XX": {
+          "4XX": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/errors"
+                }
+              }
+            },
+            "description": "Error responses have the following structure:"
+          },
+          "5XX": {
             "content": {
               "application/json": {
                 "schema": {
@@ -41053,6 +43722,88 @@
           }
         },
         "summary": "Updates the specified Work Item.",
+        "tags": [
+          "Work Items"
+        ]
+      }
+    },
+    "/projects/{projectId}/workitems/{workItemId}/actions/getFieldsMetadata": {
+      "get": {
+        "operationId": "getFieldsMetadataForWorkItem",
+        "parameters": [
+          {
+            "name": "projectId",
+            "in": "path",
+            "description": "The Project ID.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "workItemId",
+            "in": "path",
+            "description": "The Work Item ID.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/fieldsMetadataActionResponseBody"
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "406": {
+            "description": "Not Acceptable"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          },
+          "503": {
+            "description": "Service Unavailable"
+          },
+          "4XX": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/errors"
+                }
+              }
+            },
+            "description": "Error responses have the following structure:"
+          },
+          "5XX": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/errors"
+                }
+              }
+            },
+            "description": "Error responses have the following structure:"
+          }
+        },
+        "summary": "Returns fields for the specified resource.",
         "tags": [
           "Work Items"
         ]
@@ -41139,7 +43890,17 @@
           "503": {
             "description": "Service Unavailable"
           },
-          "4XX-5XX": {
+          "4XX": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/errors"
+                }
+              }
+            },
+            "description": "Error responses have the following structure:"
+          },
+          "5XX": {
             "content": {
               "application/json": {
                 "schema": {
@@ -41201,7 +43962,17 @@
           "503": {
             "description": "Service Unavailable"
           },
-          "4XX-5XX": {
+          "4XX": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/errors"
+                }
+              }
+            },
+            "description": "Error responses have the following structure:"
+          },
+          "5XX": {
             "content": {
               "application/json": {
                 "schema": {
@@ -41283,7 +44054,17 @@
           "503": {
             "description": "Service Unavailable"
           },
-          "4XX-5XX": {
+          "4XX": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/errors"
+                }
+              }
+            },
+            "description": "Error responses have the following structure:"
+          },
+          "5XX": {
             "content": {
               "application/json": {
                 "schema": {
@@ -41398,7 +44179,17 @@
           "503": {
             "description": "Service Unavailable"
           },
-          "4XX-5XX": {
+          "4XX": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/errors"
+                }
+              }
+            },
+            "description": "Error responses have the following structure:"
+          },
+          "5XX": {
             "content": {
               "application/json": {
                 "schema": {
@@ -41488,7 +44279,17 @@
           "503": {
             "description": "Service Unavailable"
           },
-          "4XX-5XX": {
+          "4XX": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/errors"
+                }
+              }
+            },
+            "description": "Error responses have the following structure:"
+          },
+          "5XX": {
             "content": {
               "application/json": {
                 "schema": {
@@ -41568,7 +44369,17 @@
           "503": {
             "description": "Service Unavailable"
           },
-          "4XX-5XX": {
+          "4XX": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/errors"
+                }
+              }
+            },
+            "description": "Error responses have the following structure:"
+          },
+          "5XX": {
             "content": {
               "application/json": {
                 "schema": {
@@ -41648,7 +44459,17 @@
           "503": {
             "description": "Service Unavailable"
           },
-          "4XX-5XX": {
+          "4XX": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/errors"
+                }
+              }
+            },
+            "description": "Error responses have the following structure:"
+          },
+          "5XX": {
             "content": {
               "application/json": {
                 "schema": {
@@ -41754,7 +44575,17 @@
           "503": {
             "description": "Service Unavailable"
           },
-          "4XX-5XX": {
+          "4XX": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/errors"
+                }
+              }
+            },
+            "description": "Error responses have the following structure:"
+          },
+          "5XX": {
             "content": {
               "application/json": {
                 "schema": {
@@ -41843,7 +44674,17 @@
           "503": {
             "description": "Service Unavailable"
           },
-          "4XX-5XX": {
+          "4XX": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/errors"
+                }
+              }
+            },
+            "description": "Error responses have the following structure:"
+          },
+          "5XX": {
             "content": {
               "application/json": {
                 "schema": {
@@ -41915,7 +44756,17 @@
           "503": {
             "description": "Service Unavailable"
           },
-          "4XX-5XX": {
+          "4XX": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/errors"
+                }
+              }
+            },
+            "description": "Error responses have the following structure:"
+          },
+          "5XX": {
             "content": {
               "application/json": {
                 "schema": {
@@ -42028,7 +44879,17 @@
           "503": {
             "description": "Service Unavailable"
           },
-          "4XX-5XX": {
+          "4XX": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/errors"
+                }
+              }
+            },
+            "description": "Error responses have the following structure:"
+          },
+          "5XX": {
             "content": {
               "application/json": {
                 "schema": {
@@ -42134,7 +44995,17 @@
           "503": {
             "description": "Service Unavailable"
           },
-          "4XX-5XX": {
+          "4XX": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/errors"
+                }
+              }
+            },
+            "description": "Error responses have the following structure:"
+          },
+          "5XX": {
             "content": {
               "application/json": {
                 "schema": {
@@ -42206,7 +45077,17 @@
           "503": {
             "description": "Service Unavailable"
           },
-          "4XX-5XX": {
+          "4XX": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/errors"
+                }
+              }
+            },
+            "description": "Error responses have the following structure:"
+          },
+          "5XX": {
             "content": {
               "application/json": {
                 "schema": {
@@ -42322,7 +45203,17 @@
           "503": {
             "description": "Service Unavailable"
           },
-          "4XX-5XX": {
+          "4XX": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/errors"
+                }
+              }
+            },
+            "description": "Error responses have the following structure:"
+          },
+          "5XX": {
             "content": {
               "application/json": {
                 "schema": {
@@ -42413,7 +45304,17 @@
           "503": {
             "description": "Service Unavailable"
           },
-          "4XX-5XX": {
+          "4XX": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/errors"
+                }
+              }
+            },
+            "description": "Error responses have the following structure:"
+          },
+          "5XX": {
             "content": {
               "application/json": {
                 "schema": {
@@ -42528,7 +45429,17 @@
           "503": {
             "description": "Service Unavailable"
           },
-          "4XX-5XX": {
+          "4XX": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/errors"
+                }
+              }
+            },
+            "description": "Error responses have the following structure:"
+          },
+          "5XX": {
             "content": {
               "application/json": {
                 "schema": {
@@ -42618,7 +45529,17 @@
           "503": {
             "description": "Service Unavailable"
           },
-          "4XX-5XX": {
+          "4XX": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/errors"
+                }
+              }
+            },
+            "description": "Error responses have the following structure:"
+          },
+          "5XX": {
             "content": {
               "application/json": {
                 "schema": {
@@ -42724,7 +45645,17 @@
           "503": {
             "description": "Service Unavailable"
           },
-          "4XX-5XX": {
+          "4XX": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/errors"
+                }
+              }
+            },
+            "description": "Error responses have the following structure:"
+          },
+          "5XX": {
             "content": {
               "application/json": {
                 "schema": {
@@ -42813,7 +45744,17 @@
           "503": {
             "description": "Service Unavailable"
           },
-          "4XX-5XX": {
+          "4XX": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/errors"
+                }
+              }
+            },
+            "description": "Error responses have the following structure:"
+          },
+          "5XX": {
             "content": {
               "application/json": {
                 "schema": {
@@ -42929,7 +45870,17 @@
           "503": {
             "description": "Service Unavailable"
           },
-          "4XX-5XX": {
+          "4XX": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/errors"
+                }
+              }
+            },
+            "description": "Error responses have the following structure:"
+          },
+          "5XX": {
             "content": {
               "application/json": {
                 "schema": {
@@ -43019,7 +45970,17 @@
           "503": {
             "description": "Service Unavailable"
           },
-          "4XX-5XX": {
+          "4XX": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/errors"
+                }
+              }
+            },
+            "description": "Error responses have the following structure:"
+          },
+          "5XX": {
             "content": {
               "application/json": {
                 "schema": {
@@ -43099,7 +46060,17 @@
           "503": {
             "description": "Service Unavailable"
           },
-          "4XX-5XX": {
+          "4XX": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/errors"
+                }
+              }
+            },
+            "description": "Error responses have the following structure:"
+          },
+          "5XX": {
             "content": {
               "application/json": {
                 "schema": {
@@ -43233,7 +46204,17 @@
           "503": {
             "description": "Service Unavailable"
           },
-          "4XX-5XX": {
+          "4XX": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/errors"
+                }
+              }
+            },
+            "description": "Error responses have the following structure:"
+          },
+          "5XX": {
             "content": {
               "application/json": {
                 "schema": {
@@ -43332,7 +46313,17 @@
           "503": {
             "description": "Service Unavailable"
           },
-          "4XX-5XX": {
+          "4XX": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/errors"
+                }
+              }
+            },
+            "description": "Error responses have the following structure:"
+          },
+          "5XX": {
             "content": {
               "application/json": {
                 "schema": {
@@ -43447,7 +46438,17 @@
           "503": {
             "description": "Service Unavailable"
           },
-          "4XX-5XX": {
+          "4XX": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/errors"
+                }
+              }
+            },
+            "description": "Error responses have the following structure:"
+          },
+          "5XX": {
             "content": {
               "application/json": {
                 "schema": {
@@ -43571,7 +46572,17 @@
           "503": {
             "description": "Service Unavailable"
           },
-          "4XX-5XX": {
+          "4XX": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/errors"
+                }
+              }
+            },
+            "description": "Error responses have the following structure:"
+          },
+          "5XX": {
             "content": {
               "application/json": {
                 "schema": {
@@ -43670,7 +46681,17 @@
           "503": {
             "description": "Service Unavailable"
           },
-          "4XX-5XX": {
+          "4XX": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/errors"
+                }
+              }
+            },
+            "description": "Error responses have the following structure:"
+          },
+          "5XX": {
             "content": {
               "application/json": {
                 "schema": {
@@ -43777,7 +46798,17 @@
           "503": {
             "description": "Service Unavailable"
           },
-          "4XX-5XX": {
+          "4XX": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/errors"
+                }
+              }
+            },
+            "description": "Error responses have the following structure:"
+          },
+          "5XX": {
             "content": {
               "application/json": {
                 "schema": {
@@ -43908,7 +46939,17 @@
           "503": {
             "description": "Service Unavailable"
           },
-          "4XX-5XX": {
+          "4XX": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/errors"
+                }
+              }
+            },
+            "description": "Error responses have the following structure:"
+          },
+          "5XX": {
             "content": {
               "application/json": {
                 "schema": {
@@ -43998,7 +47039,17 @@
           "503": {
             "description": "Service Unavailable"
           },
-          "4XX-5XX": {
+          "4XX": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/errors"
+                }
+              }
+            },
+            "description": "Error responses have the following structure:"
+          },
+          "5XX": {
             "content": {
               "application/json": {
                 "schema": {
@@ -44078,7 +47129,17 @@
           "503": {
             "description": "Service Unavailable"
           },
-          "4XX-5XX": {
+          "4XX": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/errors"
+                }
+              }
+            },
+            "description": "Error responses have the following structure:"
+          },
+          "5XX": {
             "content": {
               "application/json": {
                 "schema": {
@@ -44194,7 +47255,17 @@
           "503": {
             "description": "Service Unavailable"
           },
-          "4XX-5XX": {
+          "4XX": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/errors"
+                }
+              }
+            },
+            "description": "Error responses have the following structure:"
+          },
+          "5XX": {
             "content": {
               "application/json": {
                 "schema": {
@@ -44285,7 +47356,17 @@
           "503": {
             "description": "Service Unavailable"
           },
-          "4XX-5XX": {
+          "4XX": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/errors"
+                }
+              }
+            },
+            "description": "Error responses have the following structure:"
+          },
+          "5XX": {
             "content": {
               "application/json": {
                 "schema": {
@@ -44366,7 +47447,17 @@
           "503": {
             "description": "Service Unavailable"
           },
-          "4XX-5XX": {
+          "4XX": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/errors"
+                }
+              }
+            },
+            "description": "Error responses have the following structure:"
+          },
+          "5XX": {
             "content": {
               "application/json": {
                 "schema": {
@@ -44491,7 +47582,17 @@
           "503": {
             "description": "Service Unavailable"
           },
-          "4XX-5XX": {
+          "4XX": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/errors"
+                }
+              }
+            },
+            "description": "Error responses have the following structure:"
+          },
+          "5XX": {
             "content": {
               "application/json": {
                 "schema": {
@@ -44599,7 +47700,17 @@
           "503": {
             "description": "Service Unavailable"
           },
-          "4XX-5XX": {
+          "4XX": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/errors"
+                }
+              }
+            },
+            "description": "Error responses have the following structure:"
+          },
+          "5XX": {
             "content": {
               "application/json": {
                 "schema": {
@@ -44690,7 +47801,17 @@
           "503": {
             "description": "Service Unavailable"
           },
-          "4XX-5XX": {
+          "4XX": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/errors"
+                }
+              }
+            },
+            "description": "Error responses have the following structure:"
+          },
+          "5XX": {
             "content": {
               "application/json": {
                 "schema": {
@@ -44814,7 +47935,17 @@
           "503": {
             "description": "Service Unavailable"
           },
-          "4XX-5XX": {
+          "4XX": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/errors"
+                }
+              }
+            },
+            "description": "Error responses have the following structure:"
+          },
+          "5XX": {
             "content": {
               "application/json": {
                 "schema": {
@@ -44903,7 +48034,17 @@
           "503": {
             "description": "Service Unavailable"
           },
-          "4XX-5XX": {
+          "4XX": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/errors"
+                }
+              }
+            },
+            "description": "Error responses have the following structure:"
+          },
+          "5XX": {
             "content": {
               "application/json": {
                 "schema": {
@@ -44992,7 +48133,17 @@
           "503": {
             "description": "Service Unavailable"
           },
-          "4XX-5XX": {
+          "4XX": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/errors"
+                }
+              }
+            },
+            "description": "Error responses have the following structure:"
+          },
+          "5XX": {
             "content": {
               "application/json": {
                 "schema": {
@@ -45084,7 +48235,17 @@
           "503": {
             "description": "Service Unavailable"
           },
-          "4XX-5XX": {
+          "4XX": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/errors"
+                }
+              }
+            },
+            "description": "Error responses have the following structure:"
+          },
+          "5XX": {
             "content": {
               "application/json": {
                 "schema": {
@@ -45199,7 +48360,17 @@
           "503": {
             "description": "Service Unavailable"
           },
-          "4XX-5XX": {
+          "4XX": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/errors"
+                }
+              }
+            },
+            "description": "Error responses have the following structure:"
+          },
+          "5XX": {
             "content": {
               "application/json": {
                 "schema": {
@@ -45305,7 +48476,17 @@
           "503": {
             "description": "Service Unavailable"
           },
-          "4XX-5XX": {
+          "4XX": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/errors"
+                }
+              }
+            },
+            "description": "Error responses have the following structure:"
+          },
+          "5XX": {
             "content": {
               "application/json": {
                 "schema": {
@@ -45420,7 +48601,17 @@
           "503": {
             "description": "Service Unavailable"
           },
-          "4XX-5XX": {
+          "4XX": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/errors"
+                }
+              }
+            },
+            "description": "Error responses have the following structure:"
+          },
+          "5XX": {
             "content": {
               "application/json": {
                 "schema": {
@@ -45510,7 +48701,17 @@
           "503": {
             "description": "Service Unavailable"
           },
-          "4XX-5XX": {
+          "4XX": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/errors"
+                }
+              }
+            },
+            "description": "Error responses have the following structure:"
+          },
+          "5XX": {
             "content": {
               "application/json": {
                 "schema": {
@@ -45590,7 +48791,17 @@
           "503": {
             "description": "Service Unavailable"
           },
-          "4XX-5XX": {
+          "4XX": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/errors"
+                }
+              }
+            },
+            "description": "Error responses have the following structure:"
+          },
+          "5XX": {
             "content": {
               "application/json": {
                 "schema": {
@@ -45670,7 +48881,17 @@
           "503": {
             "description": "Service Unavailable"
           },
-          "4XX-5XX": {
+          "4XX": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/errors"
+                }
+              }
+            },
+            "description": "Error responses have the following structure:"
+          },
+          "5XX": {
             "content": {
               "application/json": {
                 "schema": {
@@ -45776,7 +48997,17 @@
           "503": {
             "description": "Service Unavailable"
           },
-          "4XX-5XX": {
+          "4XX": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/errors"
+                }
+              }
+            },
+            "description": "Error responses have the following structure:"
+          },
+          "5XX": {
             "content": {
               "application/json": {
                 "schema": {
@@ -45865,7 +49096,17 @@
           "503": {
             "description": "Service Unavailable"
           },
-          "4XX-5XX": {
+          "4XX": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/errors"
+                }
+              }
+            },
+            "description": "Error responses have the following structure:"
+          },
+          "5XX": {
             "content": {
               "application/json": {
                 "schema": {
@@ -45937,7 +49178,17 @@
           "503": {
             "description": "Service Unavailable"
           },
-          "4XX-5XX": {
+          "4XX": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/errors"
+                }
+              }
+            },
+            "description": "Error responses have the following structure:"
+          },
+          "5XX": {
             "content": {
               "application/json": {
                 "schema": {
@@ -46052,7 +49303,17 @@
           "503": {
             "description": "Service Unavailable"
           },
-          "4XX-5XX": {
+          "4XX": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/errors"
+                }
+              }
+            },
+            "description": "Error responses have the following structure:"
+          },
+          "5XX": {
             "content": {
               "application/json": {
                 "schema": {
@@ -46142,7 +49403,17 @@
           "503": {
             "description": "Service Unavailable"
           },
-          "4XX-5XX": {
+          "4XX": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/errors"
+                }
+              }
+            },
+            "description": "Error responses have the following structure:"
+          },
+          "5XX": {
             "content": {
               "application/json": {
                 "schema": {
@@ -46222,7 +49493,17 @@
           "503": {
             "description": "Service Unavailable"
           },
-          "4XX-5XX": {
+          "4XX": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/errors"
+                }
+              }
+            },
+            "description": "Error responses have the following structure:"
+          },
+          "5XX": {
             "content": {
               "application/json": {
                 "schema": {
@@ -46328,7 +49609,17 @@
           "503": {
             "description": "Service Unavailable"
           },
-          "4XX-5XX": {
+          "4XX": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/errors"
+                }
+              }
+            },
+            "description": "Error responses have the following structure:"
+          },
+          "5XX": {
             "content": {
               "application/json": {
                 "schema": {
@@ -46400,7 +49691,17 @@
           "503": {
             "description": "Service Unavailable"
           },
-          "4XX-5XX": {
+          "4XX": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/errors"
+                }
+              }
+            },
+            "description": "Error responses have the following structure:"
+          },
+          "5XX": {
             "content": {
               "application/json": {
                 "schema": {
@@ -46414,6 +49715,89 @@
         "summary": "Deletes the specified Work Record.",
         "tags": [
           "Work Item Work Records"
+        ]
+      }
+    },
+    "/projects/{projectId}/workitems/actions/moveToDocument": {
+      "post": {
+        "operationId": "moveWorkItemsToDocument",
+        "parameters": [
+          {
+            "name": "projectId",
+            "in": "path",
+            "description": "The Project ID.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/moveWorkItemsToDocumentRequestBody"
+              }
+            }
+          },
+          "description": "Moving Work Items to Document parameters.",
+          "required": true
+        },
+        "responses": {
+          "204": {
+            "description": "No Content"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "409": {
+            "description": "Conflict"
+          },
+          "413": {
+            "description": "Request Entity Too Large"
+          },
+          "415": {
+            "description": "Unsupported Media Type"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          },
+          "503": {
+            "description": "Service Unavailable"
+          },
+          "4XX": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/errors"
+                }
+              }
+            },
+            "description": "Error responses have the following structure:"
+          },
+          "5XX": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/errors"
+                }
+              }
+            },
+            "description": "Error responses have the following structure:"
+          }
+        },
+        "summary": "Moves multiple Work Items to the Document.",
+        "tags": [
+          "Work Items"
         ]
       }
     },
@@ -46498,7 +49882,17 @@
           "503": {
             "description": "Service Unavailable"
           },
-          "4XX-5XX": {
+          "4XX": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/errors"
+                }
+              }
+            },
+            "description": "Error responses have the following structure:"
+          },
+          "5XX": {
             "content": {
               "application/json": {
                 "schema": {
