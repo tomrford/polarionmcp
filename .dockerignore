@@ -1,6 +1,5 @@
 .git
 .DS_Store
-.direnv/
 .env
 .env.*
 !.env.example
@@ -9,8 +8,6 @@
 AGENTS.md
 coverage/
 docs/
-flake.lock
-flake.nix
 friction.md
 logs/
 node_modules/
