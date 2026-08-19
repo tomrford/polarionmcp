@@ -3,7 +3,7 @@
 Research only. No implementation. Date: 19 August 2026.
 Repo verified on `main` at `986a6fc`.
 
-**Recommendation: (C) wait / hybrid.** Worker Loader is usable FOSS on local workerd. Moving polarionmcp’s whole MCP host onto workerd-in-Docker would improve the `code()` sandbox and would not simplify today’s architecture. Stay on Deno HTTP until a dedicated spike proves MCP, Polarion auth, and attachments in one workerd process.
+**Recommendation (updated after Tom’s follow-up): (B) is feasible** if the V8 isolate is the goal and the Deno surface can be dropped. Original call was **(C)** because of Deno/stdio/`cwebp`/codegen friction that Tom has now discarded. Worker Loader is usable FOSS on local workerd. See the follow-up section at the end.
 
 ## What main is today
 
@@ -23,7 +23,7 @@ There is no `wrangler.toml` or workerd config on main. Cloudflare appears as `@c
 
 HTTP is stateless Streamable HTTP with `WebStandardStreamableHTTPServerTransport` and `enableJsonResponse: true`. Unauthenticated `GET /healthz` and `GET /readyz` sit beside `/mcp`. Deploy is `compose.yaml` around the Deno image.
 
-Draft PR #4 (`?codemode=false`) muxes two public MCP surfaces on one endpoint. That is the wrong product shape and is ignored as a target.
+Draft PR #4 (`?codemode=false`) muxes two public tool lists on one `/mcp` endpoint. That matches Cloudflare’s production API MCP (`cloudflare/mcp`), not `@cloudflare/codemode`. Tom later asked to keep that query-param opt-out. See the follow-up.
 
 ## 1. FOSS Dynamic Workers
 
@@ -217,9 +217,35 @@ Sandbox `codemode.getProjects(...)` is RPC back into the parent, which then call
 
 You *can* move Polarion tools into a static service-binding Worker. That is an extra split, not what the package does, and it does not buy a better sandbox.
 
-`codemode=false` as “go straight to the tools” also does not need a second Worker. Serve the existing Polarion `McpServer` without wrapping it. The official example does that as a **second HTTP path** (`/mcp` raw tools, `/codemode` wrapped). That is two public MCP servers. Draft PR #4 did the same split on one `/mcp` with `?codemode=false`. Both are feasible. Both are the public-surface shape previously rejected. The V8 sandbox does not require that opt-out.
+Default product on workerd: one public server (`search`, `code`, `read_attachment`); Polarion tools stay private inside the parent on the default path; each `code()` gets a throwaway isolate. The `?codemode=false` opt-out is a second **tool list** on the same `/mcp` route, not a second Worker. See the next section.
 
-Default product on workerd: one public server (`search`, `code`, `read_attachment`); tools MCP stays private inside the parent; each `code()` gets a throwaway isolate.
+### `?codemode=false` lives in `cloudflare/mcp`, not `@cloudflare/codemode`
+
+Tom is right. Cloudflare’s production API MCP (`https://mcp.cloudflare.com/mcp`) switches on the **query string**, not on two routes. That switch is first-party app code. `@cloudflare/codemode` does not implement it. The official Worker does not even depend on that package (`cloudflare/mcp` `package.json` has `@modelcontextprotocol/server` 2.0.0, wrangler, hono, zod — no `@cloudflare/codemode`).
+
+The decision is one line in [`src/mcp-handler.ts`](https://github.com/cloudflare/mcp/blob/main/src/mcp-handler.ts):
+
+```ts
+const codemode = new URL(requestInfo.url).searchParams.get('codemode') !== 'false'
+return createServer(props, codemode)
+```
+
+[`src/server.ts`](https://github.com/cloudflare/mcp/blob/main/src/server.ts) then builds **one** `McpServer` per request:
+
+- `codemode === true` (default): `docs`, `search`, `execute`
+- `codemode === false`: `registerNonCodemodeTools()` — the ~2,500 OpenAPI operations as native tools, plus `docs`
+
+Same path `/mcp`. Same Worker. Fresh stateless server per HTTP request via `createMcpHandler`. Their README states the intent: disable Code Mode when the client already has code mode, or when composing with another code-mode server, so you do not nest sandboxes.
+
+They do not spin a tools Worker. Non-code-mode is lazy protocol handlers over a precomputed `non-codemode-tools.json` artifact, because registering thousands of Zod tools per request is too expensive. Code-mode `execute` is also hand-written: `env.LOADER.get(...)` plus a `GlobalOutbound` `WorkerEntrypoint` that injects the API token and restricts fetch to the Cloudflare API host. That is closer to `openApiMcpServer`’s host-`request()` idea than to `codeMcpServer()`.
+
+A nearby Cloudflare product uses a **different** query dialect. MCP server portals document `?codemode=search_and_execute` (opt in) and `?codemode=off` (opt out). The public API MCP uses only `?codemode=false`. There is not yet one frozen standard.
+
+The agents example `examples/codemode-mcp` still uses `/mcp` vs `/codemode`. That is the SDK demo. Production `mcp.cloudflare.com` is the query-param server.
+
+Draft PR #4 already matches the production API MCP: `POST /mcp?codemode=false` and exact string `false`. On workerd the same pattern is: read the query in the parent `fetch` / `createMcpHandler` factory, then either wrap with Code Mode or serve the Polarion tools MCP. Keep `read_attachment` on both lists if you still want images without a sandbox.
+
+This is compatible with one workerd process and one `/mcp` URL. It is still two **public tool surfaces**, chosen by the client. That is the composition hook Cloudflare documented, not a second Worker.
 
 ### WASM WebP
 
