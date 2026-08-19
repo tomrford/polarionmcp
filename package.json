@@ -6,7 +6,7 @@
   "packageManager": "pnpm@10.15.0",
   "scripts": {
     "dev": "wrangler dev --ip 0.0.0.0 --port 8080",
-    "start": "workerd serve config.capnp --socket-addr http=*:8080",
+    "start": "workerd serve config.capnp --experimental --socket-addr http=*:8080",
     "generate": "tsx scripts/generate.ts",
     "lint": "oxlint src/ scripts/ tests/",
     "lint:fix": "oxlint --fix src/ scripts/ tests/",
@@ -27,7 +27,7 @@
     "zod": "^4.3.5"
   },
   "devDependencies": {
-    "@cloudflare/vitest-pool-workers": "^0.16.18",
+    "@cloudflare/vitest-pool-workers": "^0.22.0",
     "@modelcontextprotocol/client": "2.0.0",
     "@types/node": "^24.3.0",
     "openapi-typescript": "^7.10.1",

@@ -13,7 +13,7 @@ export function createAuthenticatedHandler() {
       if (!requestInfo) throw new Error("The Polarion MCP server requires an HTTP request");
       return createServer(isCodeMode(new URL(requestInfo.url)));
     },
-    { maxSubscriptions: 0 },
+    { maxSubscriptions: 0, responseMode: "json" },
   );
 }
 

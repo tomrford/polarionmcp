@@ -13,7 +13,7 @@ const mainWorker :Workerd.Worker = (
   modules = [
     (name = "index.js", esModule = embed "dist/index.js"),
   ],
-  compatibilityDate = "2026-08-15",
+  compatibilityDate = "2026-07-02",
   compatibilityFlags = ["nodejs_compat"],
   bindings = [
     (name = "POLARION_BASE_URL", fromEnvironment = "POLARION_BASE_URL"),

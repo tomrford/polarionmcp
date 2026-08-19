@@ -48,7 +48,7 @@ function formatError(error: unknown) {
 async function runCode(code: string, token: string): Promise<unknown> {
   const names = generatedOperationNames();
   const worker = env.LOADER.load({
-    compatibilityDate: "2026-08-15",
+    compatibilityDate: "2026-07-02",
     mainModule: "worker.js",
     globalOutbound: null,
     env: {
