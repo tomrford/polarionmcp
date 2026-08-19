@@ -1,5 +1,9 @@
 import type { McpServer } from "@modelcontextprotocol/server";
 import { z } from "zod";
+import jpegWasm from "@jsquash/jpeg/codec/dec/mozjpeg_dec.wasm";
+import pngWasm from "@jsquash/png/codec/pkg/squoosh_png_bg.wasm";
+import webpWasm from "@jsquash/webp/codec/enc/webp_enc.wasm";
+import webpSimdWasm from "@jsquash/webp/codec/enc/webp_enc_simd.wasm";
 import {
   ATTACHMENT_RESOURCE_TYPES,
   type AttachmentReferenceArgs,
@@ -149,19 +153,44 @@ function serializedByteLength(value: unknown) {
   return new TextEncoder().encode(JSON.stringify(value)).length;
 }
 
+let codecsReady: Promise<void> | undefined;
+
+type WasmInit = (module?: WebAssembly.Module) => Promise<unknown>;
+
+async function initImageCodecs() {
+  const [{ init: initPng }, { init: initJpeg }, { init: initWebp }, { simd }] = await Promise.all([
+    import("@jsquash/png/decode"),
+    import("@jsquash/jpeg/decode"),
+    import("@jsquash/webp/encode"),
+    import("wasm-feature-detect"),
+  ]);
+  await Promise.all([
+    initPng(pngWasm),
+    (initJpeg as WasmInit)(jpegWasm),
+    (initWebp as WasmInit)((await simd()) ? webpSimdWasm : webpWasm),
+  ]);
+}
+
 async function transcodeLosslessWebp(
   bytes: Uint8Array,
   mimeType: string,
 ): Promise<{ bytes: Uint8Array } | { error: ToolErrorResult }> {
   try {
+    codecsReady ??= initImageCodecs();
+    await codecsReady;
     const source = Uint8Array.from(bytes).buffer;
     const imageData =
       mimeType === "image/png"
-        ? await (await import("@jsquash/png")).decode(source)
-        : await (await import("@jsquash/jpeg")).decode(source);
-    const encoded = await (await import("@jsquash/webp")).encode(imageData, { lossless: 1 });
+        ? await (await import("@jsquash/png/decode")).default(source)
+        : await (await import("@jsquash/jpeg/decode")).default(source);
+    const encoded = await (
+      await import("@jsquash/webp/encode")
+    ).default(imageData, {
+      lossless: 1,
+    });
     return { bytes: new Uint8Array(encoded) };
   } catch (error) {
+    codecsReady = undefined;
     const details = error instanceof Error ? error.message : String(error);
     return {
       error: errorResult(makeError(500, "Image conversion failed", details)),

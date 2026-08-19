@@ -4,13 +4,16 @@ RUN corepack enable
 COPY package.json pnpm-lock.yaml ./
 RUN pnpm install --frozen-lockfile
 COPY . .
-RUN pnpm exec wrangler types && pnpm exec wrangler deploy --dry-run --outdir=dist
+RUN pnpm build \
+  && native="$(find node_modules -path '*/@cloudflare/workerd-linux-*/bin/workerd' -type f | head -n1)" \
+  && test -n "$native" \
+  && install -D -m 0755 "$native" /opt/workerd/workerd
 
 FROM debian:bookworm-slim
 RUN apt-get update \
   && apt-get install -y --no-install-recommends ca-certificates wget \
   && rm -rf /var/lib/apt/lists/*
-COPY --from=build /app/node_modules/workerd/bin/workerd /usr/local/bin/workerd
+COPY --from=build /opt/workerd/workerd /usr/local/bin/workerd
 COPY --from=build /app/dist /app/dist
 COPY --from=build /app/config.capnp /app/config.capnp
 WORKDIR /app

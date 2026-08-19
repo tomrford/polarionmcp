@@ -6,7 +6,8 @@ const MODERN_MCP_VERSION = "2026-07-28";
 type McpResponse = {
   result?: {
     tools?: Array<{ name: string }>;
-    content?: Array<{ text: string }>;
+    content?: Array<{ type?: string; text?: string; data?: string; mimeType?: string }>;
+    isError?: boolean;
   };
 };
 
@@ -117,6 +118,63 @@ describe("MCP public surface", () => {
       expect(payload).toMatchObject({
         kind: "collection",
         items: [{ id: "PRJ", type: "projects" }],
+      });
+    } finally {
+      fetchSpy.mockRestore();
+    }
+  });
+
+  test("code reports non-Error throws", async () => {
+    const { body } = await mcp("/mcp", "tools/call", {
+      name: "code",
+      arguments: { code: "async () => { throw 'string-boom'; }" },
+    });
+    expect(body.result?.isError).toBe(true);
+    expect(body.result?.content?.[0]?.text).toContain("string-boom");
+  });
+
+  test("code runs an arrow function after a leading comment", async () => {
+    const { body } = await mcp("/mcp", "tools/call", {
+      name: "code",
+      arguments: { code: "// query projects\nasync () => ({ ok: true })" },
+    });
+    expect(body.result?.isError).not.toBe(true);
+    expect(JSON.parse(body.result?.content?.[0]?.text ?? "{}")).toEqual({ ok: true });
+  });
+
+  test("read_attachment transcodes PNG to lossless WebP", async () => {
+    const png = Uint8Array.from([
+      0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a, 0x00, 0x00, 0x00, 0x0d, 0x49, 0x48, 0x44,
+      0x52, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00, 0x01, 0x08, 0x02, 0x00, 0x00, 0x00, 0x90,
+      0x77, 0x53, 0xde, 0x00, 0x00, 0x00, 0x0c, 0x49, 0x44, 0x41, 0x54, 0x08, 0xd7, 0x63, 0xf8,
+      0xcf, 0xc0, 0x00, 0x00, 0x00, 0x03, 0x00, 0x01, 0x00, 0x05, 0xfe, 0xd4, 0x59, 0x00, 0x00,
+      0x00, 0x00, 0x49, 0x45, 0x4e, 0x44, 0xae, 0x42, 0x60, 0x82,
+    ]);
+    const fetchSpy = vi.spyOn(globalThis, "fetch");
+    fetchSpy.mockImplementation((input) => {
+      const url = String(input);
+      if (url.includes("/attachments/A-1/content")) {
+        return Promise.resolve(new Response(png, { headers: { "content-type": "image/png" } }));
+      }
+      return Promise.resolve(new Response("not found", { status: 404 }));
+    });
+
+    try {
+      const { body } = await mcp("/mcp", "tools/call", {
+        name: "read_attachment",
+        arguments: {
+          contentUrl: "/projects/PRJ/workitems/WI-1/attachments/A-1/content",
+        },
+      });
+      const image = body.result?.content?.find((part) => part.type === "image");
+      const text = body.result?.content?.find((part) => part.type === "text")?.text ?? "{}";
+      expect(image?.mimeType).toBe("image/webp");
+      expect(image?.data).toMatch(/^[A-Za-z0-9+/]+=*$/);
+      expect(JSON.parse(text)).toMatchObject({
+        kind: "attachment",
+        mimeType: "image/webp",
+        conversion: "lossless-webp",
+        originalMimeType: "image/png",
       });
     } finally {
       fetchSpy.mockRestore();

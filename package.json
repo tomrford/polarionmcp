@@ -6,7 +6,7 @@
   "packageManager": "pnpm@10.15.0",
   "scripts": {
     "dev": "wrangler dev --ip 0.0.0.0 --port 8080",
-    "start": "workerd serve config.capnp --experimental --socket-addr http=*:8080",
+    "start": "pnpm build && workerd serve config.capnp --experimental --socket-addr http=*:8080",
     "generate": "tsx scripts/generate.ts",
     "lint": "oxlint src/ scripts/ tests/",
     "lint:fix": "oxlint --fix src/ scripts/ tests/",
@@ -17,13 +17,14 @@
     "check": "wrangler types && tsc --noEmit",
     "test": "vitest run",
     "test:watch": "vitest",
-    "build": "wrangler deploy --dry-run --outdir=dist"
+    "build": "wrangler deploy --dry-run --outdir=dist && tsx scripts/write-workerd-config.ts"
   },
   "dependencies": {
     "@jsquash/jpeg": "^1.6.0",
     "@jsquash/png": "^3.1.1",
     "@jsquash/webp": "^1.5.0",
     "@modelcontextprotocol/server": "2.0.0",
+    "wasm-feature-detect": "1.9.0",
     "zod": "^4.3.5"
   },
   "devDependencies": {
@@ -40,6 +41,9 @@
     "wrangler": "^4.124.0"
   },
   "pnpm": {
-    "onlyBuiltDependencies": ["esbuild", "workerd"]
+    "onlyBuiltDependencies": [
+      "esbuild",
+      "workerd"
+    ]
   }
 }

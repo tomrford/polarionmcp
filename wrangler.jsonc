@@ -21,5 +21,8 @@
     {
       "binding": "LOADER"
     }
+  ],
+  "rules": [
+    { "type": "CompiledWasm", "globs": ["**/*.wasm"], "fallthrough": true }
   ]
 }

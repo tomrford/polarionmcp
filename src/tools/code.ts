@@ -26,19 +26,60 @@ export class PolarionDispatcher extends WorkerEntrypoint<Env, { token: string }>
   }
 }
 
+export const CODE_EVAL_TIMEOUT_MS = 30_000;
+
 function stripCodeFences(code: string): string {
   const match = code.match(/^```(?:js|javascript|typescript|ts|tsx|jsx)?\s*\n([\s\S]*?)```\s*$/);
   return match ? match[1] : code;
 }
 
-function normalizeCode(code: string): string {
+function stripLeadingCommentsAndWhitespace(source: string): string {
+  let index = 0;
+  while (index < source.length) {
+    const char = source[index];
+    if (char === " " || char === "\t" || char === "\n" || char === "\r") {
+      index += 1;
+      continue;
+    }
+    if (source.startsWith("//", index)) {
+      const end = source.indexOf("\n", index);
+      index = end === -1 ? source.length : end + 1;
+      continue;
+    }
+    if (source.startsWith("/*", index)) {
+      const end = source.indexOf("*/", index + 2);
+      index = end === -1 ? source.length : end + 2;
+      continue;
+    }
+    break;
+  }
+  return source.slice(index);
+}
+
+function isArrowFunction(source: string): boolean {
+  return /^(async\s*)?\([^)]*\)\s*=>/.test(source);
+}
+
+export function normalizeCode(code: string): string {
   const trimmed = stripCodeFences(code.trim());
   if (!trimmed.trim()) return "async () => {}";
   const source = trimmed.trim();
-  if (/^(async\s*)?\([^)]*\)\s*=>/.test(source) || /^async\s+\(\)\s*=>/.test(source)) {
-    return source;
-  }
+  if (isArrowFunction(stripLeadingCommentsAndWhitespace(source))) return source;
   return `async () => {\n${source}\n}`;
+}
+
+export async function withTimeout<T>(promise: Promise<T>, ms: number, message: string): Promise<T> {
+  let timer: ReturnType<typeof setTimeout> | undefined;
+  try {
+    return await Promise.race([
+      promise,
+      new Promise<never>((_, reject) => {
+        timer = setTimeout(() => reject(new Error(message)), ms);
+      }),
+    ]);
+  } finally {
+    if (timer !== undefined) clearTimeout(timer);
+  }
 }
 
 function formatError(error: unknown) {
@@ -51,6 +92,7 @@ async function runCode(code: string, token: string): Promise<unknown> {
     compatibilityDate: "2026-07-02",
     mainModule: "worker.js",
     globalOutbound: null,
+    limits: { cpuMs: CODE_EVAL_TIMEOUT_MS },
     env: {
       polarion: exports.PolarionDispatcher({ props: { token } }),
     },
@@ -59,6 +101,10 @@ async function runCode(code: string, token: string): Promise<unknown> {
 import { WorkerEntrypoint } from "cloudflare:workers";
 
 const toolNames = ${JSON.stringify(names)};
+
+function formatChildError(err) {
+  return err instanceof Error ? err.message : String(err);
+}
 
 export default class CodeExecutor extends WorkerEntrypoint {
   async evaluate() {
@@ -73,7 +119,11 @@ export default class CodeExecutor extends WorkerEntrypoint {
       const result = await (${normalizeCode(code)})();
       return { result, err: undefined };
     } catch (err) {
-      return { result: undefined, err: err.message, stack: err.stack };
+      return {
+        result: undefined,
+        err: formatChildError(err),
+        stack: err instanceof Error ? err.stack : undefined,
+      };
     }
   }
 }
@@ -82,7 +132,11 @@ export default class CodeExecutor extends WorkerEntrypoint {
   });
 
   const entrypoint = worker.getEntrypoint() as unknown as CodeExecutorEntrypoint;
-  const response = await entrypoint.evaluate();
+  const response = await withTimeout(
+    entrypoint.evaluate(),
+    CODE_EVAL_TIMEOUT_MS,
+    `Code execution timed out after ${CODE_EVAL_TIMEOUT_MS}ms`,
+  );
   if (response.err) throw new Error(response.err);
   return response.result;
 }
