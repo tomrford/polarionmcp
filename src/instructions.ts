@@ -1,3 +1,22 @@
+const SHARED_OPERATIONAL_GUIDANCE = `- generated list operations fetch all Polarion pages and return full collections
+- use project scope, query filters, and fields to keep reads targeted
+- generated tools use exact OpenAPI operationId names such as getProjects, getWorkItems, and patchWorkItem
+- generated reads return stable top-level envelopes: collections use { kind: "collection", items, ... }, single resources use { kind: "resource", item, ... }, and 204 writes use { ok: true }
+- read_attachment transcodes PNG/JPEG attachments to lossless WebP; if an image is still too large for the inline result budget, it returns metadata without an image block
+- read_attachment returns only supported image content or UTF-8 text
+- write operations usually take a top-level body object mirroring the JSON API request payload
+- use metadata and workflow action routes before unfamiliar updates`;
+
+const POLARION_QUERY_SYNTAX = `Polarion query syntax:
+- field:value and field:val*
+- AND, OR, NOT, parentheses
+- common fields: type, status, id, title, priority, severity, created, updated
+- examples: type:requirement AND status:open, id:PRJ*, severity:must_have`;
+
+const ATTACHMENT_USAGE = `Use read_attachment only after a Polarion read has returned exact attachment metadata. Pass the
+attachment links.content value as contentUrl when available; otherwise pass resourceType and the
+full JSON:API resourceId.`;
+
 export const PUBLIC_SERVER_INSTRUCTIONS = `This server allows you to interact with Polarion.
 
 It exposes search, code, read_attachment and optionally a set of custom instructions.
@@ -8,28 +27,30 @@ Then use code to write an async JavaScript arrow function that returns the final
 
 Inside code, call functions through codemode.*.
 
-Use read_attachment only after code has returned exact Polarion attachment metadata. Pass the
-attachment links.content value as contentUrl when available; otherwise pass resourceType and the
-full JSON:API resourceId.
+${ATTACHMENT_USAGE}
 
 Prefer project-scoped work over all-project reads.
 
 Guidance:
-- generated list operations fetch all Polarion pages and return full collections
-- use project scope, query filters, and fields to keep reads targeted
-- generated tools use exact OpenAPI operationId names such as getProjects, getWorkItems, and patchWorkItem
-- generated reads return stable top-level envelopes: collections use { kind: "collection", items, ... }, single resources use { kind: "resource", item, ... }, and 204 writes use { ok: true }
-- read_attachment transcodes PNG/JPEG attachments to lossless WebP; if an image is still too large for the inline result budget, it returns metadata without an image block
-- read_attachment returns only supported image content or UTF-8 text; binary attachment routes are not exposed through codemode
-- write operations usually take a top-level body object mirroring the JSON API request payload
+${SHARED_OPERATIONAL_GUIDANCE}
 - if the final code result is truncated, your script still ran; rewrite the return value to send a smaller filtered or aggregated result
-- use metadata and workflow action routes before unfamiliar updates
 
-Polarion query syntax:
-- field:value and field:val*
-- AND, OR, NOT, parentheses
-- common fields: type, status, id, title, priority, severity, created, updated
-- examples: type:requirement AND status:open, id:PRJ*, severity:must_have`;
+${POLARION_QUERY_SYNTAX}`;
+
+export const DIRECT_SERVER_INSTRUCTIONS = `This server allows you to interact with Polarion.
+
+It exposes Polarion REST operations as MCP tools, plus read_attachment and optionally a set of custom instructions.
+
+Call Polarion tools by their OpenAPI operationId names such as getProjects, getWorkItems, and patchWorkItem.
+
+${ATTACHMENT_USAGE}
+
+Prefer project-scoped work over all-project reads.
+
+Guidance:
+${SHARED_OPERATIONAL_GUIDANCE}
+
+${POLARION_QUERY_SYNTAX}`;
 
 export const PUBLIC_CODE_TOOL_DESCRIPTION = `Execute JavaScript code against the Polarion tool surface.
 

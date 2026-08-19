@@ -1,10 +1,22 @@
-import { getPolarionAccessToken } from "./request-context.ts";
+import { getPolarionAccessToken, runWithPolarionAccessToken } from "./request-context.ts";
 
 export interface RequestContextLike {
   authInfo?: { token?: string };
   requestInfo?: {
     headers?: Record<string, string | string[] | undefined>;
   };
+}
+
+export type ResolveAccessToken = (extra: RequestContextLike) => string | undefined;
+
+export async function runWithResolvedAccessToken<T>(
+  extra: RequestContextLike,
+  resolveAccessToken: ResolveAccessToken,
+  fn: () => Promise<T>,
+): Promise<T> {
+  const token = resolveAccessToken(extra);
+  if (!token) throw new Error("No Polarion access token available");
+  return await runWithPolarionAccessToken(token, fn);
 }
 
 /** Render the bridged Polarion token into an Authorization header for downstream fetches. */

@@ -107,6 +107,39 @@ The HTTP endpoint is stateless and returns JSON-RPC responses directly. It does
 not issue or require `Mcp-Session-Id`; `GET` and `DELETE` requests to `/mcp`
 return `405 Method Not Allowed`.
 
+### Disable Code Mode
+
+If the MCP client or harness already wraps tools in its own code-mode runtime,
+append `?codemode=false` so this server advertises the generated Polarion
+operations as ordinary tools instead of nesting `search` and `code`:
+
+```json
+{
+  "mcpServers": {
+    "polarion": {
+      "type": "streamable-http",
+      "url": "http://localhost:8080/mcp?codemode=false",
+      "headers": {
+        "Authorization": "Bearer your-token"
+      }
+    }
+  }
+}
+```
+
+For stdio, pass `--codemode=false` or set `CODEMODE=false`. Only the exact
+string `false` turns Code Mode off.
+
+```bash
+deno task start:stdio -- --codemode=false
+```
+
+When Code Mode is off, the server registers each allowlisted Polarion
+`operationId` as its own tool, plus `read_attachment` and optional
+`read_guidelines`. That catalog is much larger than the default `search` +
+`code` pair. Use the opt-out only when an outer harness already provides code
+execution.
+
 ## Running the Server
 
 ### Setup
@@ -127,6 +160,7 @@ cp .env.example .env
 | `REST_PAGE_SIZE`                          | no         | Page size for generated collection reads; Polarion default when unset |
 | `FETCH_CONCURRENCY_COUNT`                 | no         | Concurrent page fetches for generated collection reads (default `1`)  |
 | `READ_ATTACHMENT_INLINE_RESULT_MAX_BYTES` | no         | Serialized inline image result budget (default `1000000`)             |
+| `CODEMODE`                                | stdio only | Set to `false` to expose generated Polarion tools instead of `search`/`code` |
 
 ### Transports
 

@@ -3,8 +3,9 @@ Default to using Deno in this repo.
 ## Repo Shape
 
 - MCP server for Polarion ALM
-- Public surface: top-level `search` and `code`
+- Public surface defaults to top-level `search` and `code`
 - `code` executes JavaScript against generated `codemode.*` operations
+- HTTP `?codemode=false` and stdio `--codemode=false` / `CODEMODE=false` expose generated operations as native MCP tools instead
 - Generated operation names match Polarion OpenAPI `operationId`
 - Allowed API surface is defined by the checked-in allowlist; see `docs/allowlist.md`
 

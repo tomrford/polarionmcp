@@ -9,10 +9,13 @@ import type {
 } from "@modelcontextprotocol/sdk/types.js";
 import type { Executor } from "npm:@cloudflare/codemode";
 import { z } from "zod";
-import type { RequestContextLike } from "../helpers.ts";
+import {
+  runWithResolvedAccessToken,
+  type RequestContextLike,
+  type ResolveAccessToken,
+} from "../helpers.ts";
 import { PUBLIC_CODE_TOOL_DESCRIPTION } from "../instructions.ts";
-import { runWithPolarionAccessToken } from "../request-context.ts";
-import type { ResolveAccessToken } from "../public-server.ts";
+import { registerGuidelinesTool } from "../custom-instructions.ts";
 import { registerAttachmentTool } from "../attachments.ts";
 import { sanitizeToolName } from "./json-schema-types.ts";
 
@@ -54,16 +57,6 @@ function unwrapMcpResult(result: CallToolResult | CompatibilityCallToolResult): 
     }
   }
   return result;
-}
-
-async function runWithResolvedAccessToken<T>(
-  extra: RequestContextLike,
-  resolveAccessToken: ResolveAccessToken,
-  fn: () => Promise<T>,
-): Promise<T> {
-  const token = resolveAccessToken(extra);
-  if (!token) throw new Error("No Polarion access token available");
-  return await runWithPolarionAccessToken(token, fn);
 }
 
 type ToolCatalogEntry = {
@@ -323,22 +316,7 @@ export async function createPolarionCodeMcpServer(options: {
   );
 
   if (customInstructions) {
-    codemodeServer.registerTool(
-      "read_guidelines",
-      {
-        description:
-          "Read deployment-specific Polarion requirements guidance from CUSTOM_INSTRUCTIONS.md. Call this before reading or changing requirements.",
-        inputSchema: {},
-      },
-      () => ({
-        content: [
-          {
-            type: "text" as const,
-            text: customInstructions,
-          },
-        ],
-      }),
-    );
+    registerGuidelinesTool(codemodeServer, customInstructions);
   }
 
   registerAttachmentTool(codemodeServer, { resolveAccessToken });

@@ -7,7 +7,12 @@ import {
   resolveAttachmentContentUrl,
 } from "./attachment-routes.ts";
 import { httpError, makeError, networkError } from "./errors.ts";
-import { authHeaders, errorResult, type RequestContextLike } from "./helpers.ts";
+import {
+  authHeaders,
+  errorResult,
+  type RequestContextLike,
+  type ResolveAccessToken,
+} from "./helpers.ts";
 import { withToolLogging } from "./logging.ts";
 import { runWithPolarionAccessToken } from "./request-context.ts";
 
@@ -29,7 +34,6 @@ const SUPPORTED_TEXT_MIME_TYPES = new Set([
 ]);
 
 type ReadMode = (typeof READ_MODES)[number];
-type ResolveAccessToken = (extra: RequestContextLike) => string | undefined;
 type ToolErrorResult = ReturnType<typeof errorResult>;
 type AttachmentToolResult = CallToolResult | ToolErrorResult;
 type InlineResultMax = { value: number } | { error: ToolErrorResult };
@@ -430,7 +434,7 @@ export function registerAttachmentTool(
     "read_attachment",
     {
       description:
-        "Read a Polarion attachment after code has found its attachment metadata. Accepts links.content as contentUrl, or resourceType plus JSON:API resourceId. Returns only supported image or UTF-8 text content.",
+        "Read a Polarion attachment after a Polarion read has returned its attachment metadata. Accepts links.content as contentUrl, or resourceType plus JSON:API resourceId. Returns only supported image or UTF-8 text content.",
       inputSchema: {
         contentUrl: z
           .string()

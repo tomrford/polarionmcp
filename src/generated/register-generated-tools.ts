@@ -5,9 +5,11 @@ import {
   interpolatePath,
   ok,
   type RequestContextLike,
+  type ResolveAccessToken,
   toQueryString,
 } from "../helpers.ts";
 import { httpError, makeError, networkError } from "../errors.ts";
+import { runWithPolarionAccessToken } from "../request-context.ts";
 import { withToolLogging } from "../logging.ts";
 import { getPolarionBaseUrl } from "../client.ts";
 import { GENERATED_OPERATIONS } from "./operations.ts";
@@ -506,7 +508,10 @@ async function executeOperation(
   }
 }
 
-export function registerGeneratedTools(server: McpServer) {
+export function registerGeneratedTools(
+  server: McpServer,
+  options?: { resolveAccessToken?: ResolveAccessToken },
+) {
   for (const operation of GENERATED_OPERATIONS) {
     server.registerTool(
       operation.name,
@@ -523,12 +528,19 @@ export function registerGeneratedTools(server: McpServer) {
       },
       withToolLogging(
         operation.name,
-        async (args, extra) =>
-          await executeOperation(
-            operation,
-            args as Record<string, unknown>,
-            extra as RequestContextLike,
-          ),
+        async (args, extra) => {
+          const invoke = () =>
+            executeOperation(
+              operation,
+              args as Record<string, unknown>,
+              extra as RequestContextLike,
+            );
+          if (!options?.resolveAccessToken) return await invoke();
+          return await runWithPolarionAccessToken(
+            options.resolveAccessToken(extra as RequestContextLike),
+            invoke,
+          );
+        },
         () => ({
           operation_id: operation.name,
           resource_group: operation.resourceGroup,

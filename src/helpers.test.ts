@@ -5,9 +5,10 @@ import {
   fieldsParam,
   interpolatePath,
   ok,
+  runWithResolvedAccessToken,
   toQueryString,
 } from "./helpers.ts";
-import { runWithPolarionAccessToken } from "./request-context.ts";
+import { getPolarionAccessToken, runWithPolarionAccessToken } from "./request-context.ts";
 
 describe("errorResult", () => {
   test("wraps payload as JSON text with isError", () => {
@@ -66,6 +67,24 @@ describe("authHeaders", () => {
 
   test("throws when no token is available", () => {
     expect(() => authHeaders({})).toThrow("No Polarion access token available");
+  });
+});
+
+describe("runWithResolvedAccessToken", () => {
+  test("runs the callback with the resolved token", async () => {
+    const seen = await runWithResolvedAccessToken(
+      { authInfo: { token: "resolved-token" } },
+      (extra) => extra.authInfo?.token,
+      async () => getPolarionAccessToken(),
+    );
+
+    expect(seen).toBe("resolved-token");
+  });
+
+  test("throws when the resolver has no token", async () => {
+    await expect(
+      runWithResolvedAccessToken({}, () => undefined, async () => "ok"),
+    ).rejects.toThrow("No Polarion access token available");
   });
 });
 

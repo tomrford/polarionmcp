@@ -24,10 +24,12 @@ describe("createPublicServer", () => {
     authToken?: string;
     executor?: Parameters<typeof createPublicServer>[0]["executor"];
     resolveAccessToken: Parameters<typeof createPublicServer>[0]["resolveAccessToken"];
+    codeMode?: boolean;
   }) {
     const server = await createPublicServer({
       executor: options.executor,
       resolveAccessToken: options.resolveAccessToken,
+      codeMode: options.codeMode,
     });
     const client = new Client({
       name: "test-client",
@@ -514,6 +516,171 @@ describe("createPublicServer", () => {
     expect(JSON.parse((result.content[0] as { text: string }).text)).toMatchObject({
       message: "Rejected attachment URL",
     });
+    expect(fetchSpy.calls).toHaveLength(0);
+
+    await Promise.all([
+      client.close(),
+      clientTransport.close(),
+      serverTransport.close(),
+      server.close(),
+    ]);
+  });
+
+  test("direct mode exposes generated Polarion tools without search or code", async () => {
+    const { client, server, clientTransport, serverTransport } = await connectClient({
+      resolveAccessToken: httpAccessToken,
+      codeMode: false,
+    });
+
+    const tools = await client.listTools();
+    const toolNames = tools.tools.map((tool) => tool.name);
+
+    expect(toolNames).toContain("getProjects");
+    expect(toolNames).toContain("getWorkItems");
+    expect(toolNames).toContain("patchWorkItem");
+    expect(toolNames).toContain("read_attachment");
+    expect(toolNames).not.toContain("search");
+    expect(toolNames).not.toContain("code");
+    expect(client.getInstructions()).toContain("Call Polarion tools by their OpenAPI operationId");
+    expect(client.getInstructions()).not.toContain("Inside code, call functions through codemode");
+
+    await Promise.all([
+      client.close(),
+      clientTransport.close(),
+      serverTransport.close(),
+      server.close(),
+    ]);
+  });
+
+  test("direct mode bridges request auth into generated tool calls", async () => {
+    fetchSpy.mockResolvedValueOnce(
+      jsonResponse({
+        data: [{ id: "PRJ", type: "projects", attributes: { name: "Project" } }],
+        meta: { totalCount: 1 },
+        links: {},
+      }),
+    );
+
+    const { client, server, clientTransport, serverTransport } = await connectClient({
+      authToken: "bridge-token",
+      resolveAccessToken: httpAccessToken,
+      codeMode: false,
+    });
+
+    const result = await client.callTool({
+      name: "getProjects",
+      arguments: {},
+    });
+
+    const [url, init] = fetchSpy.calls[0]!.args as [string, RequestInit];
+    expect(url).toBe("https://example.invalid/projects");
+    expect(init.headers).toEqual({
+      Accept: "application/json",
+      Authorization: "Bearer bridge-token",
+    });
+
+    const textResult = result as CallToolResult;
+    expect(textResult.isError).toBeUndefined();
+    expect(JSON.parse((textResult.content[0] as { text: string }).text)).toMatchObject({
+      kind: "collection",
+      items: [{ id: "PRJ", type: "projects" }],
+    });
+
+    await Promise.all([
+      client.close(),
+      clientTransport.close(),
+      serverTransport.close(),
+      server.close(),
+    ]);
+  });
+
+  test("direct mode uses stdio env auth when request auth is absent", async () => {
+    Deno.env.set("POLARION_ACCESS_TOKEN", "env-token");
+    fetchSpy.mockResolvedValueOnce(
+      jsonResponse({
+        data: [{ id: "PRJ", type: "projects", attributes: { name: "Project" } }],
+        meta: { totalCount: 1 },
+        links: {},
+      }),
+    );
+
+    const { client, server, clientTransport, serverTransport } = await connectClient({
+      resolveAccessToken: stdioAccessToken,
+      codeMode: false,
+    });
+
+    const result = await client.callTool({
+      name: "getProjects",
+      arguments: {},
+    });
+
+    const [url, init] = fetchSpy.calls[0]!.args as [string, RequestInit];
+    expect(url).toBe("https://example.invalid/projects");
+    expect(init.headers).toEqual({
+      Accept: "application/json",
+      Authorization: "Bearer env-token",
+    });
+
+    const textResult = result as CallToolResult;
+    expect(textResult.isError).toBeUndefined();
+
+    await Promise.all([
+      client.close(),
+      clientTransport.close(),
+      serverTransport.close(),
+      server.close(),
+    ]);
+  });
+
+  test("direct mode keeps custom guidance and read_guidelines", async () => {
+    const readTextFileSpy = vi.spyOn(Deno, "readTextFile");
+    readTextFileSpy.mockResolvedValueOnce("# Team Requirements\n\nUse shall statements.");
+
+    const { client, server, clientTransport, serverTransport } = await connectClient({
+      resolveAccessToken: httpAccessToken,
+      codeMode: false,
+    });
+
+    expect(client.getInstructions()).toContain("# Custom Guidance");
+    expect(client.getInstructions()).toContain("call `read_guidelines`");
+
+    const tools = await client.listTools();
+    expect(tools.tools.map((tool) => tool.name)).toContain("read_guidelines");
+    expect(tools.tools.map((tool) => tool.name)).not.toContain("search");
+
+    const result = await client.callTool({
+      name: "read_guidelines",
+      arguments: {},
+    });
+
+    expect(((result as CallToolResult).content[0] as { text: string }).text).toBe(
+      "# Team Requirements\n\nUse shall statements.",
+    );
+
+    await Promise.all([
+      client.close(),
+      clientTransport.close(),
+      serverTransport.close(),
+      server.close(),
+    ]);
+  });
+
+  test("direct mode rejects missing bridge auth in HTTP mode", async () => {
+    const { client, server, clientTransport, serverTransport } = await connectClient({
+      resolveAccessToken: httpAccessToken,
+      codeMode: false,
+    });
+
+    const result = await client.callTool({
+      name: "getProjects",
+      arguments: {},
+    });
+
+    const textResult = result as CallToolResult;
+    expect(textResult.isError).toBe(true);
+    expect((textResult.content[0] as { text: string }).text).toContain(
+      "No Polarion access token available",
+    );
     expect(fetchSpy.calls).toHaveLength(0);
 
     await Promise.all([
