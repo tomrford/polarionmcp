@@ -15,9 +15,8 @@
       in {
         devShells.default = pkgs.mkShell {
           packages = with pkgs; [
-            deno
-            libwebp
-            nodejs_24
+            nodejs_22
+            pnpm
           ];
         };
       }

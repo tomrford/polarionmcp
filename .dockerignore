@@ -5,9 +5,9 @@
 .env.*
 !.env.example
 .mcp.json
+.wrangler
 AGENTS.md
 coverage/
-dist/
 docs/
 flake.lock
 flake.nix
@@ -17,4 +17,4 @@ node_modules/
 out/
 polarionrest.json
 scripts/
-src/**/*.test.ts
+tests/

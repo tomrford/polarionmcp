@@ -1,5 +1,5 @@
-import { getPolarionBaseUrl } from "./client.ts";
-import { type ErrorResponse, makeError } from "./errors.ts";
+import { getPolarionBaseUrl } from "./config";
+import { type ErrorResponse, makeError } from "./errors";
 
 export const ATTACHMENT_RESOURCE_TYPES = [
   "document_attachments",

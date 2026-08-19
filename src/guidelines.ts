@@ -1,6 +1,6 @@
-export const PUBLIC_SERVER_INSTRUCTIONS = `This server allows you to interact with Polarion.
+export const DEFAULT_GUIDELINES = `This server allows you to interact with Polarion.
 
-It exposes search, code, read_attachment and optionally a set of custom instructions.
+It exposes search, code, and read_attachment by default. Clients that already sandbox tools can opt out of Code Mode with ?codemode=false on /mcp. That switch lists curated Polarion operationId tools plus read_attachment. It does not expose raw OpenAPI.
 
 Use search first when you need to discover the available Polarion functions, parameter shapes, or return shapes.
 
@@ -31,7 +31,7 @@ Polarion query syntax:
 - common fields: type, status, id, title, priority, severity, created, updated
 - examples: type:requirement AND status:open, id:PRJ*, severity:must_have`;
 
-export const PUBLIC_CODE_TOOL_DESCRIPTION = `Execute JavaScript code against the Polarion tool surface.
+export const CODE_TOOL_DESCRIPTION = `Execute JavaScript code against the Polarion tool surface.
 
 Before writing code, use the top-level search tool if you need to discover function names or parameter shapes.
 

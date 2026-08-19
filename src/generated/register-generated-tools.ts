@@ -1,17 +1,10 @@
-import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
-import {
-  authHeaders,
-  errorResult,
-  interpolatePath,
-  ok,
-  type RequestContextLike,
-  toQueryString,
-} from "../helpers.ts";
-import { httpError, makeError, networkError } from "../errors.ts";
-import { withToolLogging } from "../logging.ts";
-import { getPolarionBaseUrl } from "../client.ts";
-import { GENERATED_OPERATIONS } from "./operations.ts";
-import { jsonSchemaToZod } from "./schema-to-zod.ts";
+import type { McpServer } from "@modelcontextprotocol/server";
+import { type PolarionConfig, polarionConfig } from "../config";
+import { httpError, makeError, networkError } from "../errors";
+import { authHeaders, errorResult, interpolatePath, ok, toQueryString } from "../helpers";
+import { withToolLogging } from "../logging";
+import { GENERATED_OPERATIONS } from "./operations";
+import { jsonSchemaToZod } from "./schema-to-zod";
 
 type ToolErrorResult = ReturnType<typeof errorResult>;
 type ToolStructuredResult = {
@@ -23,12 +16,6 @@ type ToolTextResult = {
   structuredContent: Record<string, unknown>;
 };
 type ToolResult = ToolErrorResult | ToolStructuredResult | ToolTextResult;
-type ResolvedPaginationConfig =
-  | { error: ToolErrorResult }
-  | {
-      concurrencyCount: number;
-      restPageSize?: number;
-    };
 type JsonApiCollection = {
   data: unknown[];
   included?: unknown[];
@@ -36,7 +23,6 @@ type JsonApiCollection = {
   meta?: Record<string, unknown>;
   [key: string]: unknown;
 };
-
 type JsonApiResource = {
   data: Record<string, unknown>;
   included?: unknown[];
@@ -59,15 +45,12 @@ function isPlainTextValueWrapper(value: unknown): value is { type: string; value
 
 function normalizeResponseValue(value: unknown, parentKey?: string): unknown {
   if (isPlainTextValueWrapper(value)) return value.value;
-  if (Array.isArray(value)) {
-    return value.map((item) => normalizeResponseValue(item));
-  }
+  if (Array.isArray(value)) return value.map((item) => normalizeResponseValue(item));
   if (!value || typeof value !== "object") return value;
 
   const normalized = Object.fromEntries(
     Object.entries(value as Record<string, unknown>).flatMap(([key, entryValue]) => {
       if (parentKey === "links" && key === "self") return [];
-
       const nextValue = normalizeResponseValue(entryValue, key);
       if (
         key === "links" &&
@@ -78,7 +61,6 @@ function normalizeResponseValue(value: unknown, parentKey?: string): unknown {
       ) {
         return [];
       }
-
       return [[key, nextValue] as const];
     }),
   );
@@ -106,35 +88,6 @@ function isJsonApiResource(payload: unknown): payload is JsonApiResource {
 function totalCount(payload: { meta?: Record<string, unknown> }) {
   const total = payload.meta?.totalCount;
   return typeof total === "number" && Number.isFinite(total) ? total : undefined;
-}
-
-function parsePositiveIntegerEnv(name: string): { error: ToolErrorResult } | { value?: number } {
-  const raw = Deno.env.get(name);
-  if (typeof raw === "undefined" || raw === "") return {};
-
-  const value = Number(raw);
-  if (!Number.isInteger(value) || value < 1) {
-    return {
-      error: errorResult(
-        makeError(500, `Invalid ${name}`, `${name} must be a positive integer; received ${raw}.`),
-      ),
-    };
-  }
-
-  return { value };
-}
-
-function paginationConfig(): ResolvedPaginationConfig {
-  const restPageSize = parsePositiveIntegerEnv("REST_PAGE_SIZE");
-  if ("error" in restPageSize) return restPageSize;
-
-  const concurrencyCount = parsePositiveIntegerEnv("FETCH_CONCURRENCY_COUNT");
-  if ("error" in concurrencyCount) return concurrencyCount;
-
-  return {
-    concurrencyCount: concurrencyCount.value ?? 1,
-    ...(restPageSize.value ? { restPageSize: restPageSize.value } : {}),
-  };
 }
 
 function partialResultError(message: string, details: string) {
@@ -190,10 +143,7 @@ function stablePayload(
     };
   }
 
-  if (operation.output.shape === "ok") {
-    return { ok: true };
-  }
-
+  if (operation.output.shape === "ok") return { ok: true };
   return { kind: "json", value: payload };
 }
 
@@ -216,9 +166,10 @@ function isUnderBasePath(candidate: URL, base: URL) {
 
 function resolvePageUrl(
   baseUrl: string,
+  polarionBaseUrl: string,
   pageNumber: number,
 ): { error: ToolErrorResult } | { url: string } {
-  const polarionUrl = new URL(getPolarionBaseUrl());
+  const polarionUrl = new URL(polarionBaseUrl);
   let resolved: URL;
   try {
     resolved = new URL(baseUrl, polarionUrl);
@@ -259,7 +210,6 @@ function mergeCollectionPage(
   seenIncluded: Set<string>,
 ) {
   acc.data.push(...page.data);
-
   if (Array.isArray(page.included) && page.included.length > 0) {
     acc.included ??= [];
     for (const entry of page.included) {
@@ -270,11 +220,9 @@ function mergeCollectionPage(
       }
     }
   }
-
   if (page.meta && typeof page.meta === "object") {
     acc.meta = { ...acc.meta, ...page.meta };
   }
-
   const links = stripPagingLinks(page.links);
   if (links) acc.links = { ...acc.links, ...links };
 }
@@ -284,11 +232,8 @@ async function fetchJsonPage(
   init: RequestInit,
 ): Promise<{ error: ToolErrorResult } | { json: unknown }> {
   const response = await fetch(url, init);
-  if (!response.ok) {
-    return {
-      error: errorResult(httpError(response.status, await response.text())),
-    };
-  }
+  if (!response.ok)
+    return { error: errorResult(httpError(response.status, await response.text())) };
 
   const contentType = response.headers.get("content-type") ?? "";
   if (!contentType.includes("json")) {
@@ -302,15 +247,14 @@ async function fetchJsonPage(
     };
   }
 
-  return {
-    json: normalizeResponseValue(await response.json()),
-  };
+  return { json: normalizeResponseValue(await response.json()) };
 }
 
 async function fetchAllPages(
   operation: (typeof GENERATED_OPERATIONS)[number],
   firstPage: JsonApiCollection,
   firstPageUrl: string,
+  polarionBaseUrl: string,
   init: RequestInit,
   concurrencyCount: number,
 ): Promise<ToolResult> {
@@ -356,7 +300,7 @@ async function fetchAllPages(
     > = [];
 
     for (let pageNumber = start; pageNumber <= end; pageNumber += 1) {
-      const pageUrl = resolvePageUrl(firstPageUrl, pageNumber);
+      const pageUrl = resolvePageUrl(firstPageUrl, polarionBaseUrl, pageNumber);
       if ("error" in pageUrl) return pageUrl.error;
       requests.push(fetchJsonPage(pageUrl.url, init).then((result) => ({ pageNumber, result })));
     }
@@ -366,7 +310,6 @@ async function fetchAllPages(
 
     for (const page of pages) {
       if ("error" in page.result) return page.result.error;
-
       const payload = page.result.json;
       if (!isJsonApiCollection(payload)) {
         return partialResultError(
@@ -374,7 +317,6 @@ async function fetchAllPages(
           `Expected JSON:API collection while fetching page ${page.pageNumber}`,
         );
       }
-
       mergeCollectionPage(merged, payload, seenIncluded);
     }
   }
@@ -398,29 +340,33 @@ function buildQuery(
   operation: (typeof GENERATED_OPERATIONS)[number],
 ) {
   const query: Record<string, unknown> = {};
-
   for (const [key, wireName] of Object.entries(operation.wire.queryParamMap)) {
     const value = args[key];
     if (typeof value !== "undefined") query[wireName] = value;
   }
-
   return query;
 }
 
-async function executeOperation(
-  operation: (typeof GENERATED_OPERATIONS)[number],
+function findOperation(name: string) {
+  return GENERATED_OPERATIONS.find((operation) => operation.name === name);
+}
+
+export async function executeGeneratedOperation(
+  name: string,
   args: Record<string, unknown>,
-  extra: RequestContextLike,
+  config: PolarionConfig = polarionConfig(),
 ): Promise<ToolResult> {
+  const operation = findOperation(name);
+  if (!operation) return errorResult(makeError(404, `Unknown Polarion operation: ${name}`));
+
   try {
     const pathParams = Object.fromEntries(
       Object.entries(operation.wire.pathParamMap).map(([key, wireName]) => [wireName, args[key]]),
     );
-    const queryString = toQueryString(buildQuery(args, operation) as any);
-    const config = paginationConfig();
-    if ("error" in config) return config.error;
-
-    const baseOperationUrl = `${getPolarionBaseUrl()}${interpolatePath(
+    const queryString = toQueryString(
+      buildQuery(args, operation) as Parameters<typeof toQueryString>[0],
+    );
+    const baseOperationUrl = `${config.baseUrl}${interpolatePath(
       operation.pathTemplate,
       pathParams,
     )}${queryString}`;
@@ -433,28 +379,18 @@ async function executeOperation(
       operationUrl.searchParams.set("page[size]", String(config.restPageSize));
     }
     const url = operationUrl.toString();
-
     const headers: Record<string, string> = {
       Accept: "application/json",
-      ...authHeaders(extra),
+      ...authHeaders(),
     };
-
-    const init: RequestInit = {
-      method: operation.method,
-      headers,
-    };
-
+    const init: RequestInit = { method: operation.method, headers };
     if (operation.wire.bodyContentType) {
       headers["Content-Type"] = operation.wire.bodyContentType;
-      if (typeof args.body !== "undefined") {
-        init.body = JSON.stringify(args.body);
-      }
+      if (typeof args.body !== "undefined") init.body = JSON.stringify(args.body);
     }
 
     const response = await fetch(url, init);
-    if (!response.ok) {
-      return errorResult(httpError(response.status, await response.text()));
-    }
+    if (!response.ok) return errorResult(httpError(response.status, await response.text()));
 
     if (operation.output.mode === "no_content" || response.status === 204) {
       const payload = stablePayload(operation, undefined);
@@ -467,15 +403,10 @@ async function executeOperation(
     const contentType = response.headers.get("content-type") ?? "";
     if (!contentType.includes("json")) {
       const text = await response.text();
-      return {
-        content: [{ type: "text" as const, text }],
-        structuredContent: { text },
-      };
+      return { content: [{ type: "text" as const, text }], structuredContent: { text } };
     }
 
-    const rawData = await response.json();
-    const normalizedData = normalizeResponseValue(rawData);
-
+    const normalizedData = normalizeResponseValue(await response.json());
     if (
       operation.method === "GET" &&
       operation.output.collection?.autoPaginate &&
@@ -484,7 +415,14 @@ async function executeOperation(
       const total = totalCount(normalizedData);
       if (typeof total === "number") {
         if (normalizedData.data.length < total) {
-          return await fetchAllPages(operation, normalizedData, url, init, config.concurrencyCount);
+          return await fetchAllPages(
+            operation,
+            normalizedData,
+            url,
+            config.baseUrl,
+            init,
+            config.fetchConcurrencyCount,
+          );
         }
         if (normalizedData.data.length > total) {
           return partialResultError(
@@ -496,14 +434,24 @@ async function executeOperation(
     }
 
     const payload = stablePayload(operation, normalizedData);
-
-    return {
-      ...ok(payload),
-      structuredContent: payload,
-    };
+    return { ...ok(payload), structuredContent: payload };
   } catch (error) {
     return errorResult(networkError(error));
   }
+}
+
+export async function callGeneratedOperation(
+  name: string,
+  args: Record<string, unknown>,
+  config: PolarionConfig = polarionConfig(),
+): Promise<unknown> {
+  const result = await executeGeneratedOperation(name, args, config);
+  if ("isError" in result && result.isError) {
+    const text = result.content[0]?.text ?? "Tool call failed";
+    throw new Error(text);
+  }
+  if ("structuredContent" in result) return result.structuredContent;
+  return result.content[0]?.text;
 }
 
 export function registerGeneratedTools(server: McpServer) {
@@ -523,12 +471,8 @@ export function registerGeneratedTools(server: McpServer) {
       },
       withToolLogging(
         operation.name,
-        async (args, extra) =>
-          await executeOperation(
-            operation,
-            args as Record<string, unknown>,
-            extra as RequestContextLike,
-          ),
+        async (args) =>
+          await executeGeneratedOperation(operation.name, args as Record<string, unknown>),
         () => ({
           operation_id: operation.name,
           resource_group: operation.resourceGroup,

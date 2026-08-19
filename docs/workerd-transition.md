@@ -1,7 +1,8 @@
 # Workerd transition
 
-This file is the plan. No implementation in this PR. Date: 19 August 2026.
-Repo verified on `main` at `986a6fc`.
+This file is the research and plan that led to the workerd cutover.
+Implemented as a hard cutover onto pnpm/Node, workerd in Docker, and
+Cloudflare's `/mcp?codemode=false` factory. Date: 19 August 2026.
 
 ## The plan
 

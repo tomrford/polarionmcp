@@ -1,5 +1,7 @@
-# dependencies (bun install)
+# dependencies
 node_modules
+.wrangler
+worker-configuration.d.ts
 
 # output
 out

@@ -5,55 +5,20 @@ export interface ToolLogEvent {
   duration_ms: number;
   http_status?: number;
   operation_id?: string;
-  policy_mode?: string;
-  scope_mode?: string;
   error_type?: string;
   target_id?: string;
-  attribute_count?: number;
   resource_group?: string;
   method?: string;
   path_template?: string;
 }
 
 function safeErrorType(errorLike: unknown): string | undefined {
-  if (!errorLike || typeof errorLike !== "object") return undefined;
-  if (!("message" in errorLike)) return undefined;
-  const message = errorLike.message;
-  return typeof message === "string" ? message : undefined;
+  if (!errorLike || typeof errorLike !== "object" || !("message" in errorLike)) return undefined;
+  return typeof errorLike.message === "string" ? errorLike.message : undefined;
 }
 
 export function logToolEvent(event: ToolLogEvent) {
   console.error(JSON.stringify(event));
-}
-
-export function logToolSuccess(
-  tool_name: string,
-  startedAt: number,
-  details: Omit<ToolLogEvent, "event" | "tool_name" | "outcome" | "duration_ms"> = {},
-) {
-  logToolEvent({
-    event: "tool_call",
-    tool_name,
-    outcome: "success",
-    duration_ms: Date.now() - startedAt,
-    ...details,
-  });
-}
-
-export function logToolError(
-  tool_name: string,
-  startedAt: number,
-  details: Omit<ToolLogEvent, "event" | "tool_name" | "outcome" | "duration_ms"> = {},
-  errorLike?: unknown,
-) {
-  logToolEvent({
-    event: "tool_call",
-    tool_name,
-    outcome: "error",
-    duration_ms: Date.now() - startedAt,
-    error_type: details.error_type ?? safeErrorType(errorLike),
-    ...details,
-  });
 }
 
 function firstContentText(result: unknown): string | undefined {
@@ -66,19 +31,14 @@ function firstContentText(result: unknown): string | undefined {
   ) {
     return undefined;
   }
-
   const first = result.content[0];
-  if (!first || typeof first !== "object" || first.type !== "text") {
-    return undefined;
-  }
-
+  if (!first || typeof first !== "object" || first.type !== "text") return undefined;
   return typeof first.text === "string" ? first.text : undefined;
 }
 
 function parseStructuredPayload(result: unknown): Record<string, unknown> | undefined {
   const text = firstContentText(result);
   if (!text) return undefined;
-
   try {
     const parsed = JSON.parse(text);
     return parsed && typeof parsed === "object" ? (parsed as Record<string, unknown>) : undefined;
@@ -89,40 +49,43 @@ function parseStructuredPayload(result: unknown): Record<string, unknown> | unde
 
 export function withToolLogging<Args, Result>(
   toolName: string,
-  handler: (
-    args: Args,
-    extra: import("./helpers.ts").RequestContextLike,
-  ) => Promise<Result> | Result,
+  handler: (args: Args) => Promise<Result> | Result,
   details?: (
     args: Args,
     result?: Result,
   ) => Omit<ToolLogEvent, "event" | "tool_name" | "outcome" | "duration_ms">,
 ) {
-  return async (args: Args, extra: import("./helpers.ts").RequestContextLike) => {
+  return async (args: Args) => {
     const startedAt = Date.now();
-
     try {
-      const result = await handler(args, extra);
+      const result = await handler(args);
       const payload = parseStructuredPayload(result);
       const isError =
         !!result && typeof result === "object" && "isError" in result && result.isError === true;
-
-      if (isError) {
-        logToolError(toolName, startedAt, {
-          ...details?.(args, result),
-          http_status:
-            typeof payload?.["status_code"] === "number" ? payload["status_code"] : undefined,
-          error_type: typeof payload?.["message"] === "string" ? payload["message"] : undefined,
-        });
-      } else {
-        logToolSuccess(toolName, startedAt, {
-          ...details?.(args, result),
-        });
-      }
-
+      logToolEvent({
+        event: "tool_call",
+        tool_name: toolName,
+        outcome: isError ? "error" : "success",
+        duration_ms: Date.now() - startedAt,
+        ...details?.(args, result),
+        ...(isError
+          ? {
+              http_status:
+                typeof payload?.status_code === "number" ? payload.status_code : undefined,
+              error_type: typeof payload?.message === "string" ? payload.message : undefined,
+            }
+          : {}),
+      });
       return result;
     } catch (error) {
-      logToolError(toolName, startedAt, details?.(args), error);
+      logToolEvent({
+        event: "tool_call",
+        tool_name: toolName,
+        outcome: "error",
+        duration_ms: Date.now() - startedAt,
+        error_type: safeErrorType(error),
+        ...details?.(args),
+      });
       throw error;
     }
   };
