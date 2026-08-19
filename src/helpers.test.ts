@@ -83,7 +83,11 @@ describe("runWithResolvedAccessToken", () => {
 
   test("throws when the resolver has no token", async () => {
     await expect(
-      runWithResolvedAccessToken({}, () => undefined, async () => "ok"),
+      runWithResolvedAccessToken(
+        {},
+        () => undefined,
+        async () => "ok",
+      ),
     ).rejects.toThrow("No Polarion access token available");
   });
 });
