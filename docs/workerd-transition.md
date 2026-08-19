@@ -193,3 +193,44 @@ Treat workerd as a future runtime experiment, not a simplification of Polarion, 
 A later spike would need to prove, in one container, all of: Streamable HTTP `/mcp`, host Bearer auth that never enters the child, `DynamicWorkerExecutor` or equivalent `LOADER.load()`, Polarion host fetch with the current allowlist behaviour, `search` + `code` + `read_attachment` as **one** public server, and an attachment policy that does not exec `cwebp` from an isolate. Until that spike is green, a move would replace a working Deno child with a larger operational surface.
 
 **(A)** is also honest if the isolate quality of the current Deno child is acceptable. **(B)** is technically possible and is not a simplification of today’s architecture.
+
+## Follow-up (19 August 2026): discarded Deno surface, two-Worker model, WASM WebP
+
+Tom’s later constraints: drop stdio; do not keep Deno APIs; node/pnpm can own codegen; deprecate `CUSTOM_INSTRUCTIONS.md` filesystem reads; V8 isolate is the point; WebP exists only to shrink images for Claude; WASM encoder is acceptable.
+
+Those Deno items in section 3 were an inventory of what changes, not reasons to stay. With them discarded, they are not blockers.
+
+### Codegen on node/pnpm
+
+`scripts/generate.ts` is ordinary TypeScript plus `Deno.readTextFile` / `writeTextFile` / `mkdir` and one `Deno.Command` that runs `npm:openapi-typescript@7.10.1`. That ports to `node:fs` and `pnpm exec openapi-typescript` with no product change. The allowlist and generated operations stay.
+
+### Two Workers vs stock `@cloudflare/codemode`
+
+`codeMcpServer({ server, executor })` binds an existing MCP server. It does **not** put that tools MCP in its own Worker.
+
+Stock topology, including [`examples/codemode-mcp`](https://github.com/cloudflare/agents/tree/main/examples/codemode-mcp):
+
+1. **One long-lived parent Worker** owns HTTP `/mcp` (or `/codemode`). Inside that isolate sit both MCP servers, linked by `InMemoryTransport` — the same pair polarionmcp already has. Polarion `operationId` tools stay here, with host Bearer auth.
+2. **One Dynamic Worker per `code()` call.** `DynamicWorkerExecutor` does `LOADER.load()`, injects RPC `ToolDispatcher` stubs, sets `globalOutbound: null`, runs the script, discards the isolate.
+
+Sandbox `codemode.getProjects(...)` is RPC back into the parent, which then calls the in-process tools MCP. There is no second long-lived tools Worker.
+
+You *can* move Polarion tools into a static service-binding Worker. That is an extra split, not what the package does, and it does not buy a better sandbox.
+
+`codemode=false` as “go straight to the tools” also does not need a second Worker. Serve the existing Polarion `McpServer` without wrapping it. The official example does that as a **second HTTP path** (`/mcp` raw tools, `/codemode` wrapped). That is two public MCP servers. Draft PR #4 did the same split on one `/mcp` with `?codemode=false`. Both are feasible. Both are the public-surface shape previously rejected. The V8 sandbox does not require that opt-out.
+
+Default product on workerd: one public server (`search`, `code`, `read_attachment`); tools MCP stays private inside the parent; each `code()` gets a throwaway isolate.
+
+### WASM WebP
+
+`@imagemagick/magick-wasm` is a poor fit on workerd. The wasm is about **13.9 MiB**. Cloudflare Workers / workerd disallow `eval` and `WebAssembly.compile()` of raw bytes ([magick-wasm#195](https://github.com/dlemstra/magick-wasm/discussions/195)). People who hit that switched to jSquash.
+
+Prefer **`@jsquash/jpeg` + `@jsquash/png` + `@jsquash/webp`**. jSquash is built for no-eval runtimes, uses libwebp, documents a Workers import of the `.wasm` as a `CompiledWasm` module, and is about **1 MiB** per codec rather than a full ImageMagick. That matches the current job: decode JPEG/PNG, encode lossless-ish WebP, stay under the existing 4–8 MiB attachment caps. Run it in the **parent** Worker on `read_attachment`, not inside the Dynamic Worker.
+
+### Feasible?
+
+**Yes.** With the Deno surface dropped, CUSTOM_INSTRUCTIONS deprecated, codegen on pnpm, and jSquash in the parent, MCP-on-workerd in Docker is a runtime swap plus attachment codec, not a Polarion redesign.
+
+What remains to build: wrangler/`workerd serve` Compose process; parent Worker `fetch` + host Bearer; keep or lightly adapt the Polarion tools MCP + `search`/`code`/`read_attachment`; `DynamicWorkerExecutor` + `worker_loaders`; jSquash WebP; vitest-pool-workers. Auth, allowlist, pagination envelopes stay.
+
+That is path **(B)** if the isolate is the goal. Path **(C)** only if you still want a spike before touching Compose. The earlier “Deno APIs would break” list is not a reason to wait.
