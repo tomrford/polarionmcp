@@ -90,6 +90,23 @@ describe("MCP public surface", () => {
     expect(names).not.toContain("createProject");
   });
 
+  test.each([{ projectId: "PRJ" }, { projectId: 123, workItemId: "WI-1" }])(
+    "curated tools reject malformed arguments before contacting Polarion: %j",
+    async (args) => {
+      const fetchSpy = vi.spyOn(globalThis, "fetch");
+      try {
+        const { body } = await mcp("/mcp?codemode=false", "tools/call", {
+          name: "getWorkItem",
+          arguments: args,
+        });
+        expect(body.result?.isError).toBe(true);
+        expect(fetchSpy).not.toHaveBeenCalled();
+      } finally {
+        fetchSpy.mockRestore();
+      }
+    },
+  );
+
   test("code RPCs curated Polarion tools with host-side auth", async () => {
     const fetchSpy = vi.spyOn(globalThis, "fetch");
     fetchSpy.mockImplementation((input) => {
@@ -133,6 +150,32 @@ describe("MCP public surface", () => {
     expect(body.result?.content?.[0]?.text).toContain("string-boom");
   });
 
+  test.each([
+    "async _ => 42",
+    "async () => 42",
+    "(async () => 42)",
+    "// leading comment\nasync _ => 42 // trailing comment",
+    "```js\nasync _ => 42\n```",
+  ])("code evaluates valid JavaScript functions: %s", async (code) => {
+    const { body } = await mcp("/mcp", "tools/call", {
+      name: "code",
+      arguments: { code },
+    });
+    expect(body.result?.isError).not.toBe(true);
+    expect(body.result?.content?.[0]?.text).toBe("42");
+  });
+
+  test.each(["return 42;", "async () => { throw ''; }"])(
+    "code rejects invalid input or thrown values: %s",
+    async (code) => {
+      const { body } = await mcp("/mcp", "tools/call", {
+        name: "code",
+        arguments: { code },
+      });
+      expect(body.result?.isError).toBe(true);
+    },
+  );
+
   test("code runs an arrow function after a leading comment", async () => {
     const { body } = await mcp("/mcp", "tools/call", {
       name: "code",
@@ -142,7 +185,7 @@ describe("MCP public surface", () => {
     expect(JSON.parse(body.result?.content?.[0]?.text ?? "{}")).toEqual({ ok: true });
   });
 
-  test("read_attachment transcodes PNG to lossless WebP", async () => {
+  test("read_attachment keeps PNG when the full WebP reply would be larger", async () => {
     const png = Uint8Array.from([
       0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a, 0x00, 0x00, 0x00, 0x0d, 0x49, 0x48, 0x44,
       0x52, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00, 0x01, 0x08, 0x02, 0x00, 0x00, 0x00, 0x90,
@@ -168,14 +211,14 @@ describe("MCP public surface", () => {
       });
       const image = body.result?.content?.find((part) => part.type === "image");
       const text = body.result?.content?.find((part) => part.type === "text")?.text ?? "{}";
-      expect(image?.mimeType).toBe("image/webp");
+      expect(image?.mimeType).toBe("image/png");
       expect(image?.data).toMatch(/^[A-Za-z0-9+/]+=*$/);
       expect(JSON.parse(text)).toMatchObject({
         kind: "attachment",
-        mimeType: "image/webp",
-        conversion: "lossless-webp",
-        originalMimeType: "image/png",
+        mimeType: "image/png",
       });
+      expect(JSON.parse(text)).not.toHaveProperty("conversion");
+      expect(Uint8Array.from(atob(image!.data!), (char) => char.charCodeAt(0))).toEqual(png);
     } finally {
       fetchSpy.mockRestore();
     }

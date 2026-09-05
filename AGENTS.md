@@ -11,9 +11,11 @@ Default to using pnpm and Node in this repo.
 
 ## Runtime And Auth
 
-- Deploy with Docker Compose (`workerd serve`)
-- Local development: `pnpm dev` (Wrangler)
-- HTTP mode serves stateless Streamable HTTP at `/mcp` with JSON responses, plus unauthenticated `GET /healthz` and `GET /readyz`
+- Deploy with Docker Compose (Node supervises a disposable workerd process per MCP request)
+- Local development: `pnpm dev` (same supervisor; Node 22.9+)
+- All MCP requests have a 30-second wall-clock deadline and at most four run concurrently
+- Do not serve workerd or Wrangler directly: standalone workerd does not enforce CPU limits
+- HTTP mode serves stateless Streamable HTTP at `/mcp` with JSON for modern MCP and SSE for older revisions, plus unauthenticated `GET /healthz` and `GET /readyz`
 - HTTP mode expects caller `Authorization: Bearer <token>` headers
 - Required base config: `POLARION_BASE_URL`
 - Optional: `POLARION_GUIDELINES`, `REST_PAGE_SIZE`, `FETCH_CONCURRENCY_COUNT`, `READ_ATTACHMENT_INLINE_RESULT_MAX_BYTES`
@@ -23,4 +25,6 @@ Default to using pnpm and Node in this repo.
 
 - Use `pnpm <name>` for repo tasks
 - Regenerate generated artifacts with `pnpm generate`
+- The generated operation registry is excluded from formatting; workerd config is generated under `dist/`
+- `pnpm test` includes real-process tests against a local mock Polarion endpoint
 - Full gate: `pnpm fmt:check`, `pnpm lint`, `pnpm test`, `pnpm check`

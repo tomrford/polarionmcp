@@ -12,9 +12,3 @@ services:
       REST_PAGE_SIZE: ${REST_PAGE_SIZE:-}
       FETCH_CONCURRENCY_COUNT: ${FETCH_CONCURRENCY_COUNT:-}
       READ_ATTACHMENT_INLINE_RESULT_MAX_BYTES: ${READ_ATTACHMENT_INLINE_RESULT_MAX_BYTES:-}
-    healthcheck:
-      test: ["CMD", "wget", "-qO-", "http://127.0.0.1:8080/healthz"]
-      interval: 30s
-      timeout: 5s
-      retries: 3
-      start_period: 10s

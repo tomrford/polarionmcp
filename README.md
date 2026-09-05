@@ -53,9 +53,10 @@ controls which operations are exposed — see [docs/allowlist.md](docs/allowlist
   `{ kind: "resource", item, ... }`, and `204` writes normalize to `{ ok: true }`.
 - Only the final `code` result returned to the MCP client may be truncated.
 - Attachment content routes stay outside `codemode`. `read_attachment` validates
-  Polarion attachment content URLs, transcodes PNG and JPEG attachments to
-  lossless WebP, and returns inline images only when the serialized MCP result
-  fits the configured inline budget.
+  Polarion attachment content URLs, compares PNG/JPEG originals against lossless
+  WebP using the complete serialized reply size, and returns the smaller result
+  when it fits the configured inline budget. Image dimensions and visible pixels
+  are preserved; oversized images return metadata.
 - Auth stays host-side. The sandboxed `code` path never receives credentials.
 
 ## Client configuration
@@ -82,7 +83,8 @@ Opt out of Code Mode on the same URL:
 http://localhost:8080/mcp?codemode=false
 ```
 
-The HTTP endpoint is stateless and returns JSON-RPC responses directly. It does
+The HTTP endpoint is stateless and returns JSON-RPC responses. Modern MCP requests
+receive JSON; the SDK serves older protocol revisions over SSE. It does
 not issue or require `Mcp-Session-Id`. `GET` and `DELETE` requests to `/mcp`
 return `405 Method Not Allowed`.
 
@@ -96,7 +98,7 @@ cp .env.example .env
 docker compose up -d --build
 ```
 
-Local development can also use Wrangler, which drives the same Worker:
+Local development uses Node 22.9 or newer and the same supervised workerd runtime:
 
 ```bash
 pnpm install
@@ -117,15 +119,24 @@ pnpm dev
 HTTP mode serves `/mcp` plus unauthenticated `GET /healthz` and `GET /readyz`.
 Callers authenticate each MCP request with `Authorization: Bearer <token>`.
 
-The production process is `workerd serve`.
+The Node launcher gives each MCP request a disposable `workerd serve` process.
+It terminates that process after 30 seconds, on client disconnection, or after the
+response finishes. The deadline covers startup, Polarion calls and response
+delivery. Four requests may run concurrently; additional requests receive `503`
+with `Retry-After: 1`. Health checks remain responsive during code execution.
+
+This external watchdog is required because standalone workerd does not enforce
+CPU limits. Both `pnpm start` and Docker use it. Running Wrangler or workerd
+directly bypasses the watchdog.
+
+The parent can reach private Polarion addresses. The Dynamic Worker has no direct
+network access and receives only the curated operation dispatcher.
 
 ## Code generation
 
 The generator reads the full upstream spec from
 [polarionrest.json](polarionrest.json), trims it through the allowlist, and writes:
 
-- [generated/polarion.trimmed.json](generated/polarion.trimmed.json) — trimmed OpenAPI spec
-- [generated/polarion.ts](generated/polarion.ts) — TypeScript client
 - [src/generated/operations.ts](src/generated/operations.ts) — operation registry
 - [docs/allowlist.md](docs/allowlist.md) — allowed-vs-blocked inventory
 
@@ -134,6 +145,9 @@ Regenerate with:
 ```bash
 pnpm generate
 ```
+
+Generated files retain the generator's formatting. The formatter excludes the
+operation registry so regeneration produces reviewable semantic diffs.
 
 ## Development
 

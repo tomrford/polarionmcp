@@ -5,8 +5,8 @@
   "type": "module",
   "packageManager": "pnpm@10.15.0",
   "scripts": {
-    "dev": "wrangler dev --ip 0.0.0.0 --port 8080",
-    "start": "pnpm build && workerd serve config.capnp --experimental --socket-addr http=*:8080",
+    "dev": "pnpm start",
+    "start": "pnpm build && node --env-file-if-exists=.env src/serve.mjs",
     "generate": "tsx scripts/generate.ts",
     "lint": "oxlint src/ scripts/ tests/",
     "lint:fix": "oxlint --fix src/ scripts/ tests/",
@@ -15,7 +15,8 @@
     "types": "wrangler types",
     "typecheck": "tsc --noEmit",
     "check": "wrangler types && tsc --noEmit",
-    "test": "vitest run",
+    "test": "vitest run && pnpm test:runtime",
+    "test:runtime": "pnpm build && node --test tests/runtime.test.mjs",
     "test:watch": "vitest",
     "build": "wrangler deploy --dry-run --outdir=dist && tsx scripts/write-workerd-config.ts"
   },
@@ -31,7 +32,6 @@
     "@cloudflare/vitest-pool-workers": "^0.22.0",
     "@modelcontextprotocol/client": "2.0.0",
     "@types/node": "^24.3.0",
-    "openapi-typescript": "^7.10.1",
     "oxfmt": "^0.31.0",
     "oxlint": "^1.46.0",
     "tsx": "^4.20.5",

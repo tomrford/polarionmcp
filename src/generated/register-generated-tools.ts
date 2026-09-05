@@ -1,10 +1,9 @@
-import type { McpServer } from "@modelcontextprotocol/server";
+import { fromJsonSchema, type McpServer } from "@modelcontextprotocol/server";
 import { type PolarionConfig, polarionConfig } from "../config";
 import { httpError, makeError, networkError } from "../errors";
 import { authHeaders, errorResult, interpolatePath, ok, toQueryString } from "../helpers";
 import { withToolLogging } from "../logging";
 import { GENERATED_OPERATIONS } from "./operations";
-import { jsonSchemaToZod } from "./schema-to-zod";
 
 type ToolErrorResult = ReturnType<typeof errorResult>;
 type ToolStructuredResult = {
@@ -456,12 +455,13 @@ export async function callGeneratedOperation(
 
 export function registerGeneratedTools(server: McpServer) {
   for (const operation of GENERATED_OPERATIONS) {
+    const schema: Record<string, unknown> = operation.input.schema;
     server.registerTool(
       operation.name,
       {
         title: operation.name,
         description: `${operation.method} ${operation.pathTemplate}. Returns ${operation.output.summary}.`,
-        inputSchema: jsonSchemaToZod(operation.input.schema),
+        inputSchema: fromJsonSchema<Record<string, unknown>>(schema),
         annotations: operation.annotations,
         _meta: {
           resourceGroup: operation.resourceGroup,

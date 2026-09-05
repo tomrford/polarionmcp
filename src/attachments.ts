@@ -71,11 +71,7 @@ async function readLimitedBytes(
   }
 
   if (!response.body) {
-    const bytes = new Uint8Array(await response.arrayBuffer());
-    if (bytes.length > maxBytes) {
-      return { error: errorResult(makeError(413, "Attachment is too large")) };
-    }
-    return { bytes };
+    return { bytes: new Uint8Array() };
   }
 
   const reader = response.body.getReader();
@@ -186,7 +182,10 @@ async function transcodeLosslessWebp(
     const encoded = await (
       await import("@jsquash/webp/encode")
     ).default(imageData, {
+      // Equivalent to cwebp -z 9: maximum lossless compression effort.
       lossless: 1,
+      quality: 100,
+      method: 6,
     });
     return { bytes: new Uint8Array(encoded) };
   } catch (error) {
@@ -201,28 +200,32 @@ async function transcodeLosslessWebp(
 async function inlineImageCandidate(
   bytes: Uint8Array,
   mimeType: string,
+  url: URL,
 ): Promise<{ candidate: ImageCandidate } | { error: ToolErrorResult }> {
+  const original: ImageCandidate = {
+    bytes,
+    mimeType,
+    sourceMimeType: mimeType,
+    sourceByteLength: bytes.length,
+  };
   if (!WEBP_TRANSCODE_MIME_TYPES.has(mimeType)) {
-    return {
-      candidate: {
-        bytes,
-        mimeType,
-        sourceMimeType: mimeType,
-        sourceByteLength: bytes.length,
-      },
-    };
+    return { candidate: original };
   }
 
   const result = await transcodeLosslessWebp(bytes, mimeType);
   if ("error" in result) return result;
+  const converted: ImageCandidate = {
+    ...original,
+    bytes: result.bytes,
+    mimeType: "image/webp",
+    conversion: "lossless-webp",
+  };
   return {
-    candidate: {
-      bytes: result.bytes,
-      mimeType: "image/webp",
-      sourceMimeType: mimeType,
-      sourceByteLength: bytes.length,
-      conversion: "lossless-webp",
-    },
+    candidate:
+      serializedByteLength(imageResult(converted, url)) <
+      serializedByteLength(imageResult(original, url))
+        ? converted
+        : original,
   };
 }
 
@@ -308,7 +311,7 @@ async function renderAttachmentResult(
     }
 
     const imageMimeType = sniffedImageMime ?? headerImageMime!;
-    const candidateResult = await inlineImageCandidate(bytes, imageMimeType);
+    const candidateResult = await inlineImageCandidate(bytes, imageMimeType, url);
     if ("error" in candidateResult) return candidateResult.error;
     const result = imageResult(candidateResult.candidate, url);
     const resultByteLength = serializedByteLength(result);
@@ -419,14 +422,10 @@ export function registerAttachmentTool(server: McpServer) {
         openWorldHint: true,
       },
     },
-    withToolLogging(
-      "read_attachment",
-      async (args) => await readAttachment(args),
-      (args) => ({
-        operation_id: "read_attachment",
-        method: "GET",
-        target_id: typeof args.resourceId === "string" ? args.resourceId : undefined,
-      }),
-    ),
+    withToolLogging("read_attachment", readAttachment, (args) => ({
+      operation_id: "read_attachment",
+      method: "GET",
+      target_id: typeof args.resourceId === "string" ? args.resourceId : undefined,
+    })),
   );
 }

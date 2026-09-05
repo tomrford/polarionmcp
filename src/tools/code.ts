@@ -8,7 +8,7 @@ import { getPolarionAccessToken, runWithPolarionAccessToken } from "../request-c
 import { truncateResponse } from "../truncate";
 
 type CodeExecutorEntrypoint = {
-  evaluate(): Promise<{ result: unknown; err?: string; stack?: string }>;
+  evaluate(): Promise<unknown>;
 };
 
 export class PolarionDispatcher extends WorkerEntrypoint<Env, { token: string }> {
@@ -26,62 +26,6 @@ export class PolarionDispatcher extends WorkerEntrypoint<Env, { token: string }>
   }
 }
 
-export const CODE_EVAL_TIMEOUT_MS = 30_000;
-
-function stripCodeFences(code: string): string {
-  const match = code.match(/^```(?:js|javascript|typescript|ts|tsx|jsx)?\s*\n([\s\S]*?)```\s*$/);
-  return match ? match[1] : code;
-}
-
-function stripLeadingCommentsAndWhitespace(source: string): string {
-  let index = 0;
-  while (index < source.length) {
-    const char = source[index];
-    if (char === " " || char === "\t" || char === "\n" || char === "\r") {
-      index += 1;
-      continue;
-    }
-    if (source.startsWith("//", index)) {
-      const end = source.indexOf("\n", index);
-      index = end === -1 ? source.length : end + 1;
-      continue;
-    }
-    if (source.startsWith("/*", index)) {
-      const end = source.indexOf("*/", index + 2);
-      index = end === -1 ? source.length : end + 2;
-      continue;
-    }
-    break;
-  }
-  return source.slice(index);
-}
-
-function isArrowFunction(source: string): boolean {
-  return /^(async\s*)?\([^)]*\)\s*=>/.test(source);
-}
-
-export function normalizeCode(code: string): string {
-  const trimmed = stripCodeFences(code.trim());
-  if (!trimmed.trim()) return "async () => {}";
-  const source = trimmed.trim();
-  if (isArrowFunction(stripLeadingCommentsAndWhitespace(source))) return source;
-  return `async () => {\n${source}\n}`;
-}
-
-export async function withTimeout<T>(promise: Promise<T>, ms: number, message: string): Promise<T> {
-  let timer: ReturnType<typeof setTimeout> | undefined;
-  try {
-    return await Promise.race([
-      promise,
-      new Promise<never>((_, reject) => {
-        timer = setTimeout(() => reject(new Error(message)), ms);
-      }),
-    ]);
-  } finally {
-    if (timer !== undefined) clearTimeout(timer);
-  }
-}
-
 function formatError(error: unknown) {
   return error instanceof Error ? error.message : String(error);
 }
@@ -92,7 +36,6 @@ async function runCode(code: string, token: string): Promise<unknown> {
     compatibilityDate: "2026-07-02",
     mainModule: "worker.js",
     globalOutbound: null,
-    limits: { cpuMs: CODE_EVAL_TIMEOUT_MS },
     env: {
       polarion: exports.PolarionDispatcher({ props: { token } }),
     },
@@ -116,14 +59,11 @@ export default class CodeExecutor extends WorkerEntrypoint {
       ]),
     );
     try {
-      const result = await (${normalizeCode(code)})();
-      return { result, err: undefined };
+      return await (
+${code.trim().replace(/^```(?:js|javascript)?\s*\n([\s\S]*?)```\s*$/, "$1")}
+      )();
     } catch (err) {
-      return {
-        result: undefined,
-        err: formatChildError(err),
-        stack: err instanceof Error ? err.stack : undefined,
-      };
+      throw new Error(formatChildError(err));
     }
   }
 }
@@ -132,13 +72,7 @@ export default class CodeExecutor extends WorkerEntrypoint {
   });
 
   const entrypoint = worker.getEntrypoint() as unknown as CodeExecutorEntrypoint;
-  const response = await withTimeout(
-    entrypoint.evaluate(),
-    CODE_EVAL_TIMEOUT_MS,
-    `Code execution timed out after ${CODE_EVAL_TIMEOUT_MS}ms`,
-  );
-  if (response.err) throw new Error(response.err);
-  return response.result;
+  return await entrypoint.evaluate();
 }
 
 export function registerCodeTool(server: McpServer) {

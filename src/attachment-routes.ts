@@ -1,4 +1,4 @@
-import { getPolarionBaseUrl } from "./config";
+import { polarionConfig } from "./config";
 import { type ErrorResponse, makeError } from "./errors";
 
 export const ATTACHMENT_RESOURCE_TYPES = [
@@ -90,7 +90,7 @@ function basePath(base: URL) {
 }
 
 function urlForContentPath(path: string, revision: string | undefined) {
-  const base = new URL(getPolarionBaseUrl());
+  const base = new URL(polarionConfig().baseUrl);
   const url = new URL(base.toString());
   url.pathname = `${basePath(base)}${path}`;
   url.search = "";
@@ -100,7 +100,7 @@ function urlForContentPath(path: string, revision: string | undefined) {
 }
 
 function urlForRestRelative(rawPathAndQuery: string) {
-  const base = new URL(getPolarionBaseUrl());
+  const base = new URL(polarionConfig().baseUrl);
   const relative = rawPathAndQuery.startsWith("/") ? rawPathAndQuery : `/${rawPathAndQuery}`;
   return new URL(`${basePath(base)}${relative}`, base);
 }
@@ -127,7 +127,7 @@ function resolveContentUrl(
   rawUrl: string,
   revision: string | undefined,
 ): { url: URL } | RouteError {
-  const base = new URL(getPolarionBaseUrl());
+  const base = new URL(polarionConfig().baseUrl);
   let url: URL;
 
   try {

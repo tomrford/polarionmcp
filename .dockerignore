@@ -7,11 +7,13 @@
 .wrangler
 AGENTS.md
 coverage/
+dist/
 docs/
 friction.md
 logs/
 node_modules/
 out/
 polarionrest.json
-scripts/
+scripts/*
+!scripts/write-workerd-config.ts
 tests/

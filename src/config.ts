@@ -56,7 +56,3 @@ export function polarionConfig(overrides: Partial<PolarionConfig> = {}): Polario
     inlineAttachmentMaxBytes: inline,
   };
 }
-
-export function getPolarionBaseUrl(config: PolarionConfig = polarionConfig()): string {
-  return config.baseUrl;
-}

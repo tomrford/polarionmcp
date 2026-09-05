@@ -1,5 +1,4 @@
 import { mkdir, readFile, writeFile } from "node:fs/promises";
-import { spawn } from "node:child_process";
 import { pathToFileURL } from "node:url";
 import { ALLOWED_OPERATION_IDS } from "../src/openapi/allowed-operations";
 
@@ -106,8 +105,6 @@ type GeneratedOperation = {
 };
 
 const ROOT_SPEC_PATH = "polarionrest.json";
-const TRIMMED_SPEC_PATH = "generated/polarion.trimmed.json";
-const GENERATED_TYPES_PATH = "generated/polarion.ts";
 const GENERATED_OPERATIONS_PATH = "src/generated/operations.ts";
 const ALLOWLIST_DOC_PATH = "docs/allowlist.md";
 const METHOD_ORDER: HttpMethod[] = ["get", "post", "patch", "delete"];
@@ -527,24 +524,6 @@ export const GENERATED_OPERATIONS = ${JSON.stringify(
 `;
 }
 
-async function runOpenApiTypescript(trimmedSpecPath: string, outputPath: string) {
-  const code = await new Promise<number>((resolve, reject) => {
-    const child = spawn(
-      process.execPath,
-      [
-        new URL("../node_modules/openapi-typescript/bin/cli.js", import.meta.url).pathname,
-        trimmedSpecPath,
-        "-o",
-        outputPath,
-      ],
-      { stdio: "inherit" },
-    );
-    child.on("error", reject);
-    child.on("close", (exitCode) => resolve(exitCode ?? 1));
-  });
-  if (code !== 0) throw new Error("openapi-typescript generation failed");
-}
-
 function renderAllowlistDoc(
   fullSpec: OpenApiSpec,
   selected: Array<{ path: string; method: HttpMethod; operation: OpenApiOperation }>,
@@ -597,14 +576,11 @@ async function main() {
   const { trimmedSpec, selected } = createTrimmedSpec(fullSpec);
   const generatedOperations = buildGeneratedOperations(trimmedSpec, selected);
 
-  await mkdir("generated", { recursive: true });
   await mkdir("src/generated", { recursive: true });
   await mkdir("docs", { recursive: true });
 
-  await writeFile(TRIMMED_SPEC_PATH, JSON.stringify(trimmedSpec, null, 2) + "\n");
   await writeFile(GENERATED_OPERATIONS_PATH, renderOperationsModule(generatedOperations));
   await writeFile(ALLOWLIST_DOC_PATH, renderAllowlistDoc(fullSpec, selected) + "\n");
-  await runOpenApiTypescript(TRIMMED_SPEC_PATH, GENERATED_TYPES_PATH);
 }
 
 if (import.meta.url === pathToFileURL(process.argv[1] ?? "").href) {

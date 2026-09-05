@@ -89,7 +89,6 @@ export function searchCatalog(query: string, limit: number) {
   const normalizedQuery = normalizeSearchText(query);
   const tokens = normalizedQuery.split(/\s+/).filter(Boolean);
   const compactQuery = compactSearchText(query);
-  const compactTokens = compactQuery.match(/[a-z0-9]+/g) ?? [];
 
   const scored = CATALOG.map((entry) => {
     let score = 0;
@@ -109,9 +108,11 @@ export function searchCatalog(query: string, limit: number) {
       }
       if (haystack.includes(token)) score += 10;
     }
-    for (const token of compactTokens) {
-      const stemmedToken = stemSearchToken(token);
-      if (compactHaystack.includes(token) || compactHaystack.includes(stemmedToken)) score += 12;
+    if (compactQuery) {
+      const stemmedQuery = stemSearchToken(compactQuery);
+      if (compactHaystack.includes(compactQuery) || compactHaystack.includes(stemmedQuery)) {
+        score += 12;
+      }
     }
     return { entry, score };
   })

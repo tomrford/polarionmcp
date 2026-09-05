@@ -3,7 +3,7 @@ import { readdir, writeFile } from "node:fs/promises";
 const wasmModules = (await readdir("dist"))
   .filter((name) => name.endsWith(".wasm"))
   .sort()
-  .map((name) => `    (name = "./${name}", wasm = embed "dist/${name}"),`)
+  .map((name) => `    (name = "./${name}", wasm = embed "${name}"),`)
   .join("\n");
 
 if (!wasmModules) {
@@ -18,7 +18,7 @@ const config :Workerd.Config = (
     (name = "main", worker = .mainWorker),
     (name = "internet",
       network = (
-        allow = ["public"],
+        allow = ["public", "private"],
         tlsOptions = (trustBrowserCas = true)
       )
     ),
@@ -30,7 +30,7 @@ const config :Workerd.Config = (
 
 const mainWorker :Workerd.Worker = (
   modules = [
-    (name = "index.js", esModule = embed "dist/index.js"),
+    (name = "index.js", esModule = embed "index.js"),
 ${wasmModules}
   ],
   compatibilityDate = "2026-07-02",
@@ -47,4 +47,4 @@ ${wasmModules}
 );
 `;
 
-await writeFile("config.capnp", capnp);
+await writeFile("dist/config.capnp", capnp);
