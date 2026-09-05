@@ -1,5 +1,5 @@
-import { describe, expect, test } from "./test/test.ts";
-import { httpError, makeError, networkError } from "./errors.ts";
+import { describe, expect, test } from "vitest";
+import { httpError, makeError, networkError } from "../src/errors";
 
 describe("errors", () => {
   test("makeError returns structured error", () => {
@@ -21,13 +21,11 @@ describe("errors", () => {
   });
 
   test("httpError adds short 403 guidance", () => {
-    const e = httpError(403, "forbidden");
-    expect(e.suggestion).toBe("Access denied. User action required.");
+    expect(httpError(403, "forbidden").suggestion).toBe("Access denied. User action required.");
   });
 
   test("httpError adds short 404 guidance", () => {
-    const e = httpError(404, "missing");
-    expect(e.suggestion).toBe("Not found at this path.");
+    expect(httpError(404, "missing").suggestion).toBe("Not found at this path.");
   });
 
   test("networkError wraps Error instance", () => {
@@ -38,7 +36,6 @@ describe("errors", () => {
   });
 
   test("networkError wraps non-Error", () => {
-    const e = networkError("timeout");
-    expect(e.details).toBe("timeout");
+    expect(networkError("timeout").details).toBe("timeout");
   });
 });

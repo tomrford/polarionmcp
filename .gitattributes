@@ -3,4 +3,4 @@
 generated/polarion.trimmed.json linguist-generated=true
 generated/polarion.ts linguist-generated=true
 src/generated/operations.ts linguist-generated=true
-deno.lock linguist-generated=true
+pnpm-lock.yaml linguist-generated=true

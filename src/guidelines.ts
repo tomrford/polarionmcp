@@ -1,6 +1,6 @@
-export const PUBLIC_SERVER_INSTRUCTIONS = `This server allows you to interact with Polarion.
+export const DEFAULT_GUIDELINES = `This server allows you to interact with Polarion.
 
-It exposes search, code, read_attachment and optionally a set of custom instructions.
+It exposes search, code, and read_attachment by default. Clients that already sandbox tools can opt out of Code Mode with ?codemode=false on /mcp. That switch lists curated Polarion operationId tools plus read_attachment. It does not expose raw OpenAPI.
 
 Use search first when you need to discover the available Polarion functions, parameter shapes, or return shapes.
 
@@ -19,7 +19,7 @@ Guidance:
 - use project scope, query filters, and fields to keep reads targeted
 - generated tools use exact OpenAPI operationId names such as getProjects, getWorkItems, and patchWorkItem
 - generated reads return stable top-level envelopes: collections use { kind: "collection", items, ... }, single resources use { kind: "resource", item, ... }, and 204 writes use { ok: true }
-- read_attachment transcodes PNG/JPEG attachments to lossless WebP; if an image is still too large for the inline result budget, it returns metadata without an image block
+- read_attachment uses lossless WebP for PNG/JPEG attachments when it produces a smaller serialized reply; dimensions are preserved, and images exceeding the inline result budget return metadata without an image block
 - read_attachment returns only supported image content or UTF-8 text; binary attachment routes are not exposed through codemode
 - write operations usually take a top-level body object mirroring the JSON API request payload
 - if the final code result is truncated, your script still ran; rewrite the return value to send a smaller filtered or aggregated result
@@ -31,7 +31,7 @@ Polarion query syntax:
 - common fields: type, status, id, title, priority, severity, created, updated
 - examples: type:requirement AND status:open, id:PRJ*, severity:must_have`;
 
-export const PUBLIC_CODE_TOOL_DESCRIPTION = `Execute JavaScript code against the Polarion tool surface.
+export const CODE_TOOL_DESCRIPTION = `Execute JavaScript code against the Polarion tool surface.
 
 Before writing code, use the top-level search tool if you need to discover function names or parameter shapes.
 

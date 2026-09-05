@@ -1,13 +1,6 @@
-import { describe, expect, test } from "./test/test.ts";
-import {
-  authHeaders,
-  errorResult,
-  fieldsParam,
-  interpolatePath,
-  ok,
-  toQueryString,
-} from "./helpers.ts";
-import { runWithPolarionAccessToken } from "./request-context.ts";
+import { describe, expect, test } from "vitest";
+import { authHeaders, errorResult, interpolatePath, ok, toQueryString } from "../src/helpers";
+import { runWithPolarionAccessToken } from "../src/request-context";
 
 describe("errorResult", () => {
   test("wraps payload as JSON text with isError", () => {
@@ -33,39 +26,14 @@ describe("ok", () => {
   });
 });
 
-describe("fieldsParam", () => {
-  test("returns undefined when no fields", () => {
-    expect(fieldsParam("workitems")).toBeUndefined();
-    expect(fieldsParam("workitems", undefined)).toBeUndefined();
-  });
-
-  test("returns undefined for empty string", () => {
-    expect(fieldsParam("workitems", "")).toBeUndefined();
-  });
-
-  test("wraps fields in resource type key", () => {
-    expect(fieldsParam("workitems", "title,status")).toEqual({ workitems: "title,status" });
-  });
-
-  test("uses provided resource type as key", () => {
-    expect(fieldsParam("documents", "title")).toEqual({ documents: "title" });
-  });
-});
-
 describe("authHeaders", () => {
   test("prefers bridged token", async () => {
-    const headers = await runWithPolarionAccessToken("token-a", async () =>
-      authHeaders({
-        authInfo: { token: "token-b" },
-        requestInfo: { headers: { authorization: "Bearer token-c" } },
-      }),
-    );
-
+    const headers = await runWithPolarionAccessToken("token-a", async () => authHeaders());
     expect(headers).toEqual({ Authorization: "Bearer token-a" });
   });
 
   test("throws when no token is available", () => {
-    expect(() => authHeaders({})).toThrow("No Polarion access token available");
+    expect(() => authHeaders()).toThrow("No Polarion access token available");
   });
 });
 
@@ -122,10 +90,8 @@ describe("toQueryString", () => {
   });
 
   test("serializes array values as repeated keys", () => {
-    expect(
-      toQueryString({
-        include: ["project", "author"],
-      }),
-    ).toBe("?include=project&include=author");
+    expect(toQueryString({ include: ["project", "author"] })).toBe(
+      "?include=project&include=author",
+    );
   });
 });

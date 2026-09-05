@@ -1,21 +1,23 @@
-import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
-import type { CallToolResult } from "@modelcontextprotocol/sdk/types.js";
+import type { McpServer } from "@modelcontextprotocol/server";
 import { z } from "zod";
+import jpegWasm from "@jsquash/jpeg/codec/dec/mozjpeg_dec.wasm";
+import pngWasm from "@jsquash/png/codec/pkg/squoosh_png_bg.wasm";
+import webpWasm from "@jsquash/webp/codec/enc/webp_enc.wasm";
+import webpSimdWasm from "@jsquash/webp/codec/enc/webp_enc_simd.wasm";
 import {
   ATTACHMENT_RESOURCE_TYPES,
   type AttachmentReferenceArgs,
   resolveAttachmentContentUrl,
-} from "./attachment-routes.ts";
-import { httpError, makeError, networkError } from "./errors.ts";
-import { authHeaders, errorResult, type RequestContextLike } from "./helpers.ts";
-import { withToolLogging } from "./logging.ts";
-import { runWithPolarionAccessToken } from "./request-context.ts";
+} from "./attachment-routes";
+import { polarionConfig } from "./config";
+import { httpError, makeError, networkError } from "./errors";
+import { authHeaders, errorResult } from "./helpers";
+import { withToolLogging } from "./logging";
+import { getPolarionAccessToken } from "./request-context";
 
 const DEFAULT_MAX_BYTES = 4 * 1024 * 1024;
 const HARD_MAX_BYTES = 8 * 1024 * 1024;
-const DEFAULT_INLINE_RESULT_MAX_BYTES = 1_000_000;
 const HARD_INLINE_RESULT_MAX_BYTES = 8 * 1024 * 1024;
-
 const READ_MODES = ["auto", "image", "text"] as const;
 const SUPPORTED_IMAGE_MIME_TYPES = new Set(["image/jpeg", "image/png", "image/gif", "image/webp"]);
 const WEBP_TRANSCODE_MIME_TYPES = new Set(["image/jpeg", "image/png"]);
@@ -29,17 +31,12 @@ const SUPPORTED_TEXT_MIME_TYPES = new Set([
 ]);
 
 type ReadMode = (typeof READ_MODES)[number];
-type ResolveAccessToken = (extra: RequestContextLike) => string | undefined;
 type ToolErrorResult = ReturnType<typeof errorResult>;
-type AttachmentToolResult = CallToolResult | ToolErrorResult;
-type InlineResultMax = { value: number } | { error: ToolErrorResult };
-type TranscodeResult = { bytes: Uint8Array } | { error: ToolErrorResult };
 type AttachmentReadArgs = AttachmentReferenceArgs & {
   mode?: ReadMode;
   maxBytes?: number;
   maxInlineResultBytes?: number;
 };
-type ByteReadResult = { bytes: Uint8Array } | { error: ToolErrorResult };
 type ImageCandidate = {
   bytes: Uint8Array;
   mimeType: string;
@@ -53,28 +50,6 @@ function contentTypeMime(headers: Headers) {
   return raw && raw.length > 0 ? raw : undefined;
 }
 
-function inlineResultMaxBytes(maxInlineResultBytes: number | undefined): InlineResultMax {
-  if (typeof maxInlineResultBytes === "number") return { value: maxInlineResultBytes };
-
-  const raw = Deno.env.get("READ_ATTACHMENT_INLINE_RESULT_MAX_BYTES");
-  if (!raw) return { value: DEFAULT_INLINE_RESULT_MAX_BYTES };
-
-  const value = Number(raw);
-  if (!Number.isInteger(value) || value < 1 || value > HARD_INLINE_RESULT_MAX_BYTES) {
-    return {
-      error: errorResult(
-        makeError(
-          500,
-          "Invalid inline attachment size limit",
-          `READ_ATTACHMENT_INLINE_RESULT_MAX_BYTES must be an integer from 1 to ${HARD_INLINE_RESULT_MAX_BYTES}.`,
-        ),
-      ),
-    };
-  }
-
-  return { value };
-}
-
 function contentLength(headers: Headers) {
   const raw = headers.get("content-length");
   if (!raw) return undefined;
@@ -82,7 +57,10 @@ function contentLength(headers: Headers) {
   return Number.isInteger(value) && value >= 0 ? value : undefined;
 }
 
-async function readLimitedBytes(response: Response, maxBytes: number): Promise<ByteReadResult> {
+async function readLimitedBytes(
+  response: Response,
+  maxBytes: number,
+): Promise<{ bytes: Uint8Array } | { error: ToolErrorResult }> {
   const length = contentLength(response.headers);
   if (typeof length === "number" && length > maxBytes) {
     return {
@@ -93,17 +71,12 @@ async function readLimitedBytes(response: Response, maxBytes: number): Promise<B
   }
 
   if (!response.body) {
-    const bytes = new Uint8Array(await response.arrayBuffer());
-    if (bytes.length > maxBytes) {
-      return { error: errorResult(makeError(413, "Attachment is too large")) };
-    }
-    return { bytes };
+    return { bytes: new Uint8Array() };
   }
 
   const reader = response.body.getReader();
   const chunks: Uint8Array[] = [];
   let total = 0;
-
   while (true) {
     const { done, value } = await reader.read();
     if (done) break;
@@ -145,14 +118,10 @@ function sniffImageMime(bytes: Uint8Array) {
   if (bytes.length >= 3 && bytes[0] === 0xff && bytes[1] === 0xd8 && bytes[2] === 0xff) {
     return "image/jpeg";
   }
-  const head = ascii(bytes.slice(0, 12));
+  const head = String.fromCharCode(...bytes.slice(0, 12));
   if (head.startsWith("GIF87a") || head.startsWith("GIF89a")) return "image/gif";
   if (head.startsWith("RIFF") && head.slice(8, 12) === "WEBP") return "image/webp";
   return undefined;
-}
-
-function ascii(bytes: Uint8Array) {
-  return String.fromCharCode(...bytes);
 }
 
 function isTextMime(mimeType: string | undefined) {
@@ -161,7 +130,7 @@ function isTextMime(mimeType: string | undefined) {
 
 function decodeUtf8(bytes: Uint8Array) {
   try {
-    return new TextDecoder("utf-8", { fatal: true }).decode(bytes);
+    return new TextDecoder("utf-8", { fatal: true, ignoreBOM: false }).decode(bytes);
   } catch {
     return undefined;
   }
@@ -180,42 +149,50 @@ function serializedByteLength(value: unknown) {
   return new TextEncoder().encode(JSON.stringify(value)).length;
 }
 
-async function transcodeLosslessWebp(bytes: Uint8Array): Promise<TranscodeResult> {
+let codecsReady: Promise<void> | undefined;
+
+type WasmInit = (module?: WebAssembly.Module) => Promise<unknown>;
+
+async function initImageCodecs() {
+  const [{ init: initPng }, { init: initJpeg }, { init: initWebp }, { simd }] = await Promise.all([
+    import("@jsquash/png/decode"),
+    import("@jsquash/jpeg/decode"),
+    import("@jsquash/webp/encode"),
+    import("wasm-feature-detect"),
+  ]);
+  await Promise.all([
+    initPng(pngWasm),
+    (initJpeg as WasmInit)(jpegWasm),
+    (initWebp as WasmInit)((await simd()) ? webpSimdWasm : webpWasm),
+  ]);
+}
+
+async function transcodeLosslessWebp(
+  bytes: Uint8Array,
+  mimeType: string,
+): Promise<{ bytes: Uint8Array } | { error: ToolErrorResult }> {
   try {
-    const child = new Deno.Command("cwebp", {
-      args: ["-quiet", "-z", "9", "-metadata", "none", "-o", "-", "--", "-"],
-      stdin: "piped",
-      stdout: "piped",
-      stderr: "piped",
-    }).spawn();
-    const writer = child.stdin.getWriter();
-    await writer.write(bytes);
-    await writer.close();
-
-    const { success, stdout, stderr } = await child.output();
-    if (success) return { bytes: stdout };
-
-    return {
-      error: errorResult(
-        makeError(
-          500,
-          "Image conversion failed",
-          new TextDecoder().decode(stderr).trim() || "cwebp exited unsuccessfully.",
-          "Install libwebp so the cwebp command is available.",
-        ),
-      ),
-    };
+    codecsReady ??= initImageCodecs();
+    await codecsReady;
+    const source = Uint8Array.from(bytes).buffer;
+    const imageData =
+      mimeType === "image/png"
+        ? await (await import("@jsquash/png/decode")).default(source)
+        : await (await import("@jsquash/jpeg/decode")).default(source);
+    const encoded = await (
+      await import("@jsquash/webp/encode")
+    ).default(imageData, {
+      // Equivalent to cwebp -z 9: maximum lossless compression effort.
+      lossless: 1,
+      quality: 100,
+      method: 6,
+    });
+    return { bytes: new Uint8Array(encoded) };
   } catch (error) {
+    codecsReady = undefined;
     const details = error instanceof Error ? error.message : String(error);
     return {
-      error: errorResult(
-        makeError(
-          500,
-          "Image conversion failed",
-          details,
-          "Install libwebp so the cwebp command is available.",
-        ),
-      ),
+      error: errorResult(makeError(500, "Image conversion failed", details)),
     };
   }
 }
@@ -223,29 +200,32 @@ async function transcodeLosslessWebp(bytes: Uint8Array): Promise<TranscodeResult
 async function inlineImageCandidate(
   bytes: Uint8Array,
   mimeType: string,
+  url: URL,
 ): Promise<{ candidate: ImageCandidate } | { error: ToolErrorResult }> {
+  const original: ImageCandidate = {
+    bytes,
+    mimeType,
+    sourceMimeType: mimeType,
+    sourceByteLength: bytes.length,
+  };
   if (!WEBP_TRANSCODE_MIME_TYPES.has(mimeType)) {
-    return {
-      candidate: {
-        bytes,
-        mimeType,
-        sourceMimeType: mimeType,
-        sourceByteLength: bytes.length,
-      },
-    };
+    return { candidate: original };
   }
 
-  const result = await transcodeLosslessWebp(bytes);
+  const result = await transcodeLosslessWebp(bytes, mimeType);
   if ("error" in result) return result;
-
+  const converted: ImageCandidate = {
+    ...original,
+    bytes: result.bytes,
+    mimeType: "image/webp",
+    conversion: "lossless-webp",
+  };
   return {
-    candidate: {
-      bytes: result.bytes,
-      mimeType: "image/webp",
-      sourceMimeType: mimeType,
-      sourceByteLength: bytes.length,
-      conversion: "lossless-webp",
-    },
+    candidate:
+      serializedByteLength(imageResult(converted, url)) <
+      serializedByteLength(imageResult(original, url))
+        ? converted
+        : original,
   };
 }
 
@@ -265,20 +245,18 @@ function metadata(
   };
 }
 
-function imageResult(candidate: ImageCandidate, url: URL): CallToolResult {
+function imageResult(candidate: ImageCandidate, url: URL) {
   const extra: Record<string, unknown> = {};
   if (candidate.conversion) {
     extra.conversion = candidate.conversion;
     extra.originalMimeType = candidate.sourceMimeType;
     extra.originalByteLength = candidate.sourceByteLength;
   }
-
   const payload = metadata(candidate.mimeType, candidate.bytes.length, url, extra);
-
   return {
     content: [
-      { type: "image", data: toBase64(candidate.bytes), mimeType: candidate.mimeType },
-      { type: "text", text: JSON.stringify(payload) },
+      { type: "image" as const, data: toBase64(candidate.bytes), mimeType: candidate.mimeType },
+      { type: "text" as const, text: JSON.stringify(payload) },
     ],
     structuredContent: payload,
   };
@@ -289,7 +267,7 @@ function oversizedImageResult(
   url: URL,
   maxInlineResultBytes: number,
   inlineResultByteLength: number,
-): CallToolResult {
+) {
   const extra: Record<string, unknown> = {
     inline: false,
     inlineResultByteLength,
@@ -300,11 +278,9 @@ function oversizedImageResult(
     extra.originalMimeType = candidate.sourceMimeType;
     extra.originalByteLength = candidate.sourceByteLength;
   }
-
   const payload = metadata(candidate.mimeType, candidate.bytes.length, url, extra);
-
   return {
-    content: [{ type: "text", text: JSON.stringify(payload) }],
+    content: [{ type: "text" as const, text: JSON.stringify(payload) }],
     structuredContent: payload,
   };
 }
@@ -315,7 +291,7 @@ async function renderAttachmentResult(
   mode: ReadMode,
   url: URL,
   maxInlineResultBytes: number,
-): Promise<AttachmentToolResult> {
+) {
   const sniffedImageMime = sniffImageMime(bytes);
   const headerImageMime =
     mimeType && SUPPORTED_IMAGE_MIME_TYPES.has(mimeType) ? mimeType : undefined;
@@ -335,13 +311,11 @@ async function renderAttachmentResult(
     }
 
     const imageMimeType = sniffedImageMime ?? headerImageMime!;
-    const candidateResult = await inlineImageCandidate(bytes, imageMimeType);
+    const candidateResult = await inlineImageCandidate(bytes, imageMimeType, url);
     if ("error" in candidateResult) return candidateResult.error;
-
     const result = imageResult(candidateResult.candidate, url);
     const resultByteLength = serializedByteLength(result);
     if (resultByteLength <= maxInlineResultBytes) return result;
-
     return oversizedImageResult(
       candidateResult.candidate,
       url,
@@ -363,7 +337,7 @@ async function renderAttachmentResult(
     if (typeof text === "string") {
       const payload = metadata(mimeType ?? "text/plain", bytes.length, url);
       return {
-        content: [{ type: "text", text }],
+        content: [{ type: "text" as const, text }],
         structuredContent: payload,
       };
     }
@@ -378,12 +352,8 @@ async function renderAttachmentResult(
   );
 }
 
-async function readAttachment(
-  args: AttachmentReadArgs,
-  extra: RequestContextLike,
-  resolveAccessToken: ResolveAccessToken,
-): Promise<AttachmentToolResult> {
-  const token = resolveAccessToken(extra);
+export async function readAttachment(args: AttachmentReadArgs) {
+  const token = getPolarionAccessToken();
   if (!token) return errorResult(makeError(401, "No Polarion access token available"));
 
   const resolved = resolveAttachmentContentUrl(args);
@@ -391,47 +361,38 @@ async function readAttachment(
 
   const maxBytes = args.maxBytes ?? DEFAULT_MAX_BYTES;
   const mode = args.mode ?? "auto";
-  const inlineMax = inlineResultMaxBytes(args.maxInlineResultBytes);
-  if ("error" in inlineMax) return inlineMax.error;
+  const inlineMax = args.maxInlineResultBytes ?? polarionConfig().inlineAttachmentMaxBytes;
 
   try {
-    return await runWithPolarionAccessToken(token, async () => {
-      const response = await fetch(resolved.url, {
-        method: "GET",
-        headers: {
-          Accept: "application/octet-stream, image/*, text/*",
-          ...authHeaders(extra),
-        },
-      });
-
-      if (!response.ok) return errorResult(httpError(response.status, await response.text()));
-
-      const body = await readLimitedBytes(response, maxBytes);
-      if ("error" in body) return body.error;
-
-      return renderAttachmentResult(
-        body.bytes,
-        contentTypeMime(response.headers),
-        mode,
-        resolved.url,
-        inlineMax.value,
-      );
+    const response = await fetch(resolved.url, {
+      method: "GET",
+      headers: {
+        Accept: "application/octet-stream, image/*, text/*",
+        ...authHeaders(),
+      },
     });
+    if (!response.ok) return errorResult(httpError(response.status, await response.text()));
+    const body = await readLimitedBytes(response, maxBytes);
+    if ("error" in body) return body.error;
+    return renderAttachmentResult(
+      body.bytes,
+      contentTypeMime(response.headers),
+      mode,
+      resolved.url,
+      inlineMax,
+    );
   } catch (error) {
     return errorResult(networkError(error));
   }
 }
 
-export function registerAttachmentTool(
-  server: McpServer,
-  options: { resolveAccessToken: ResolveAccessToken },
-) {
+export function registerAttachmentTool(server: McpServer) {
   server.registerTool(
     "read_attachment",
     {
       description:
         "Read a Polarion attachment after code has found its attachment metadata. Accepts links.content as contentUrl, or resourceType plus JSON:API resourceId. Returns only supported image or UTF-8 text content.",
-      inputSchema: {
+      inputSchema: z.object({
         contentUrl: z
           .string()
           .optional()
@@ -451,9 +412,9 @@ export function registerAttachmentTool(
           .max(HARD_INLINE_RESULT_MAX_BYTES)
           .optional()
           .describe(
-            `Maximum serialized MCP result bytes for inline image content. Defaults to ${DEFAULT_INLINE_RESULT_MAX_BYTES}, or READ_ATTACHMENT_INLINE_RESULT_MAX_BYTES when set.`,
+            "Maximum serialized MCP result bytes for inline image content. Defaults to 1000000, or READ_ATTACHMENT_INLINE_RESULT_MAX_BYTES when set.",
           ),
-      },
+      }),
       annotations: {
         readOnlyHint: true,
         destructiveHint: false,
@@ -461,22 +422,10 @@ export function registerAttachmentTool(
         openWorldHint: true,
       },
     },
-    withToolLogging(
-      "read_attachment",
-      async (args, extra) =>
-        await readAttachment(
-          args as AttachmentReadArgs,
-          extra as RequestContextLike,
-          options.resolveAccessToken,
-        ),
-      (args) => ({
-        operation_id: "read_attachment",
-        method: "GET",
-        target_id:
-          typeof (args as AttachmentReadArgs).resourceId === "string"
-            ? (args as AttachmentReadArgs).resourceId
-            : undefined,
-      }),
-    ),
+    withToolLogging("read_attachment", readAttachment, (args) => ({
+      operation_id: "read_attachment",
+      method: "GET",
+      target_id: typeof args.resourceId === "string" ? args.resourceId : undefined,
+    })),
   );
 }
