@@ -1,5 +1,6 @@
 import { SELF } from "cloudflare:test";
 import { describe, expect, test, vi } from "vitest";
+import { generatedOperationNames } from "../src/catalog";
 
 const MODERN_MCP_VERSION = "2026-07-28";
 
@@ -139,6 +140,41 @@ describe("MCP public surface", () => {
     } finally {
       fetchSpy.mockRestore();
     }
+  });
+
+  test("code exposes codemode tools through reflection", async () => {
+    const names = generatedOperationNames();
+    const { body } = await mcp("/mcp", "tools/call", {
+      name: "code",
+      arguments: {
+        code: `async () => {
+          const keys = Object.keys(codemode);
+          const own = Reflect.ownKeys(codemode);
+          return {
+            keyCount: keys.length,
+            ownCount: own.length,
+            ownAllStrings: own.every((key) => typeof key === "string"),
+            sameOrder: own.length === keys.length && own.every((key, index) => key === keys[index]),
+            hasGetProjects: "getProjects" in codemode,
+            keysIncludeGetProjects: keys.includes("getProjects"),
+            hasSearch: "search" in codemode,
+            keysIncludeSearch: keys.includes("search"),
+          };
+        }`,
+      },
+    });
+    expect(body.result?.isError).toBeFalsy();
+    expect(JSON.parse(body.result?.content?.[0]?.text ?? "{}")).toEqual({
+      keyCount: names.length,
+      ownCount: names.length,
+      ownAllStrings: true,
+      sameOrder: true,
+      hasGetProjects: true,
+      keysIncludeGetProjects: true,
+      hasSearch: false,
+      keysIncludeSearch: false,
+    });
+    expect(names).toContain("getProjects");
   });
 
   test("code reports non-Error throws", async () => {
