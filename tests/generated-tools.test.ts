@@ -109,6 +109,38 @@ describe("generated tools", () => {
     });
   });
 
+  test("treats a non-JSON 200 as an error", async () => {
+    fetchSpy.mockResolvedValueOnce(
+      new Response("<html>login</html>", {
+        status: 200,
+        headers: { "content-type": "text/html" },
+      }),
+    );
+    const result = await call("getProjects", {});
+    expect("isError" in result && result.isError).toBe(true);
+    expect(textPayload(result)).toMatchObject({
+      error: true,
+      status_code: 415,
+      message: "Polarion returned a non-JSON response",
+    });
+  });
+
+  test("does not follow redirects or resend authorization", async () => {
+    fetchSpy.mockResolvedValueOnce(
+      new Response(null, {
+        status: 302,
+        headers: { location: "https://example.invalid/login" },
+      }),
+    );
+    const result = await call("getProjects", {});
+    expect("isError" in result && result.isError).toBe(true);
+    expect(textPayload(result).message).toBe("Polarion redirect was not followed");
+    expect(fetchSpy).toHaveBeenCalledTimes(1);
+    const init = fetchSpy.mock.calls[0]?.[1] as RequestInit;
+    expect(init.redirect).toBe("manual");
+    expect(init.headers).toMatchObject({ Authorization: "Bearer token" });
+  });
+
   test("tool errors surface structured error payloads", async () => {
     fetchSpy.mockResolvedValueOnce(
       new Response("bad request", { status: 400, headers: { "content-type": "text/plain" } }),

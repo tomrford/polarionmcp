@@ -6,6 +6,30 @@ import { readAttachment } from "../src/attachments";
 import { runWithPolarionAccessToken } from "../src/request-context";
 import { diagramPng } from "./diagram-fixture";
 
+describe("attachment fetch", () => {
+  afterEach(() => vi.restoreAllMocks());
+
+  test("does not follow redirects", async () => {
+    const fetchSpy = vi.spyOn(globalThis, "fetch").mockResolvedValue(
+      new Response(null, {
+        status: 302,
+        headers: { location: "https://example.invalid/login" },
+      }),
+    );
+    const result = await runWithPolarionAccessToken("token", () =>
+      readAttachment({
+        contentUrl: "/projects/PRJ/workitems/WI-1/attachments/A-1/content",
+      }),
+    );
+    expect("isError" in result && result.isError).toBe(true);
+    expect(JSON.parse(result.content[0].text!)).toMatchObject({
+      message: "Polarion redirect was not followed",
+    });
+    expect(fetchSpy).toHaveBeenCalledTimes(1);
+    expect(fetchSpy.mock.calls[0]?.[1]).toMatchObject({ redirect: "manual" });
+  });
+});
+
 describe("attachment image selection", () => {
   beforeEach(() => {
     vi.spyOn(globalThis, "fetch").mockImplementation(
