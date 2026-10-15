@@ -60,14 +60,18 @@ export function createSupervisor({
       if (slot) stop(slot, !closing);
       if (!job.response.destroyed && !job.response.headersSent && outcome !== "disconnected") {
         const status = outcome === "timeout" ? 504 : outcome === "shutdown" ? 503 : 502;
+        const writesWarning = "Polarion writes already sent may have completed.";
+        const dispatched = job.startedAt !== undefined;
         job.response
           .writeHead(status)
           .end(
             outcome === "timeout"
-              ? `Request exceeded ${timeoutMs}ms. Polarion writes already sent may have completed.`
+              ? `Request exceeded ${timeoutMs}ms. ${writesWarning}`
               : outcome === "shutdown"
                 ? "Server is shutting down"
-                : "Worker request failed",
+                : dispatched
+                  ? `Worker request failed. ${writesWarning}`
+                  : "Worker request failed",
           );
       } else {
         job.response.destroy();

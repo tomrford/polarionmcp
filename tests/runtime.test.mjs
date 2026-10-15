@@ -1,7 +1,9 @@
 import assert from "node:assert/strict";
-import { readFile, writeFile, rm } from "node:fs/promises";
+import { chmod, readFile, writeFile, rm } from "node:fs/promises";
 import { resolve } from "node:path";
+import { tmpdir } from "node:os";
 import { randomUUID } from "node:crypto";
+import { execPath } from "node:process";
 import { createServer, request as rawRequest } from "node:http";
 import { setTimeout as delay } from "node:timers/promises";
 import { test } from "node:test";
@@ -476,9 +478,47 @@ test(
       binary: "/nonexistent/polarion-review-workerd",
       maxConcurrent: 1,
     });
-    assert.equal((await call(url, "code", { code: "async () => 1" })).status, 502);
+    const startup = await call(url, "code", { code: "async () => 1" });
+    assert.equal(startup.status, 502);
+    assert.equal(startup.body, "Worker request failed");
     assert.equal((await call(url, "code", { code: "async () => 2" })).status, 502);
     assert.equal((await fetch(`${url}/healthz`)).status, 200);
+  },
+);
+
+test(
+  "a worker that dies after accepting a request warns that writes may have completed",
+  { timeout: 10_000 },
+  async (t) => {
+    const binary = resolve(tmpdir(), `polarion-crash-host-${randomUUID()}.mjs`);
+    await writeFile(
+      binary,
+      `#!${execPath}
+import { createServer } from "node:http";
+import { writeSync } from "node:fs";
+const server = createServer((request) => {
+  request.resume();
+  process.exit(1);
+});
+server.listen(0, "127.0.0.1", () => {
+  const address = server.address();
+  const port = address && typeof address === "object" ? address.port : 0;
+  writeSync(3, JSON.stringify({ event: "listen", socket: "http", port }) + "\\n");
+});
+`,
+    );
+    await chmod(binary, 0o755);
+    t.after(() => rm(binary, { force: true }));
+    const { url } = await fixture(t, (_request, response) => response.end(), {
+      binary,
+      maxConcurrent: 1,
+    });
+    const result = await call(url, "code", { code: "async () => 1" });
+    assert.equal(result.status, 502);
+    assert.match(
+      result.body,
+      /Worker request failed\. Polarion writes already sent may have completed\./,
+    );
   },
 );
 
