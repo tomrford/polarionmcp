@@ -1,0 +1,3 @@
+{
+  "ignorePatterns": ["src/generated/operations.ts", "worker-configuration.d.ts", "dist/**"]
+}

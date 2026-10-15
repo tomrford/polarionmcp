@@ -1,0 +1,28 @@
+{
+  "$schema": "./node_modules/wrangler/config-schema.json",
+  "name": "polarionmcp",
+  "main": "src/index.ts",
+  "compatibility_date": "2026-07-02",
+  "compatibility_flags": ["nodejs_compat"],
+  "workers_dev": false,
+  "preview_urls": false,
+  "dev": {
+    "ip": "0.0.0.0",
+    "port": 8080
+  },
+  "vars": {
+    "POLARION_BASE_URL": "https://example.invalid",
+    "POLARION_GUIDELINES": "",
+    "REST_PAGE_SIZE": "",
+    "FETCH_CONCURRENCY_COUNT": "",
+    "READ_ATTACHMENT_INLINE_RESULT_MAX_BYTES": ""
+  },
+  "worker_loaders": [
+    {
+      "binding": "LOADER"
+    }
+  ],
+  "rules": [
+    { "type": "CompiledWasm", "globs": ["**/*.wasm"], "fallthrough": true }
+  ]
+}

@@ -36,3 +36,18 @@ export function networkError(err: unknown): ErrorResponse {
   const msg = err instanceof Error ? err.message : String(err);
   return makeError(0, "Network error", msg);
 }
+
+export function isRedirect(response: Response): boolean {
+  // workerd returns the raw 3xx for redirect: "manual" rather than an opaque redirect.
+  return response.status >= 300 && response.status < 400;
+}
+
+export function redirectError(response: Response): ErrorResponse {
+  const location = response.headers.get("location");
+  return makeError(
+    502,
+    "Polarion redirected the request",
+    location ? `Location: ${location}` : `HTTP ${response.status}`,
+    "Check that POLARION_BASE_URL is the exact REST base URL.",
+  );
+}

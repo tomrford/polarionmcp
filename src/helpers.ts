@@ -1,25 +1,19 @@
-import { getPolarionAccessToken } from "./request-context.ts";
+import { getPolarionAccessToken } from "./request-context";
 
-export interface RequestContextLike {
-  authInfo?: { token?: string };
-  requestInfo?: {
-    headers?: Record<string, string | string[] | undefined>;
-  };
+export function authHeaders(): { Authorization: string } {
+  const token = getPolarionAccessToken();
+  if (!token) throw new Error("No Polarion access token available");
+  return { Authorization: `Bearer ${token}` };
 }
 
-/** Render the bridged Polarion token into an Authorization header for downstream fetches. */
-export function authHeaders(_extra: RequestContextLike): { Authorization: string } {
-  const token = getPolarionAccessToken();
-
-  if (!token) throw new Error("No Polarion access token available");
-
-  return { Authorization: `Bearer ${token}` };
+export function formatError(error: unknown) {
+  return error instanceof Error ? error.message : String(error);
 }
 
 export function errorResult(payload: unknown) {
   return {
     content: [{ type: "text" as const, text: JSON.stringify(payload) }],
-    isError: true,
+    isError: true as const,
   };
 }
 
@@ -29,23 +23,21 @@ export function ok(payload: unknown) {
   };
 }
 
-export function fieldsParam(resourceType: string, fields?: string) {
-  if (!fields) return undefined;
-  return { [resourceType]: fields } as Record<string, string>;
-}
-
 export function interpolatePath(
   pathTemplate: string,
   pathParams: Record<string, string | number | boolean | undefined>,
 ) {
   return pathTemplate.replaceAll(/\{([^}]+)\}/g, (_match, rawKey: string) => {
     const value = pathParams[rawKey];
-
     if (typeof value === "undefined") {
       throw new Error(`Missing required path parameter: ${rawKey}`);
     }
-
-    return encodeURIComponent(String(value));
+    const segment = String(value);
+    // URL parsing collapses "." and ".." segments, which would retarget the request.
+    if (segment === "" || segment === "." || segment === "..") {
+      throw new Error(`Invalid path parameter ${rawKey}: ${JSON.stringify(segment)}`);
+    }
+    return encodeURIComponent(segment);
   });
 }
 
@@ -60,31 +52,25 @@ type QueryValue =
 
 function appendQueryValue(params: URLSearchParams, key: string, value: QueryValue) {
   if (value === null || typeof value === "undefined") return;
-
   if (Array.isArray(value)) {
     for (const item of value) appendQueryValue(params, key, item);
     return;
   }
-
   if (typeof value === "object") {
     for (const [nestedKey, nestedValue] of Object.entries(value)) {
       appendQueryValue(params, `${key}[${nestedKey}]`, nestedValue);
     }
     return;
   }
-
   params.append(key, String(value));
 }
 
 export function toQueryString(query: Record<string, QueryValue> | undefined): string {
   if (!query) return "";
-
   const params = new URLSearchParams();
-
   for (const [key, value] of Object.entries(query)) {
     appendQueryValue(params, key, value);
   }
-
   const rendered = params.toString();
   return rendered ? `?${rendered}` : "";
 }

@@ -295,4 +295,3 @@ Blocked operations: 86
 - `setLicense` | POST `/users/{userId}/actions/setLicense`
 - `unmarkProject` | POST `/projects/{projectId}/actions/unmarkProject`
 - `updateAvatar` | POST `/users/{userId}/actions/updateAvatar`
-

@@ -13,15 +13,11 @@ export type GeneratedOperation = {
     openWorldHint: boolean;
   };
   input: {
-    required: string[];
     schema: JsonSchema;
-    pathParams: string[];
-    queryParams: string[];
-    hasBody: boolean;
   };
   wire: {
-    pathParamMap: Record<string, string>;
-    queryParamMap: Record<string, string>;
+    pathParams: string[];
+    queryParams: string[];
     bodyContentType?: "application/json";
   };
   output: {

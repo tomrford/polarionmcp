@@ -1,10 +1,11 @@
 {
   "mcpServers": {
     "polarion": {
-      "type": "stdio",
-      "command": "nix",
-      "args": ["develop", "-c", "deno", "task", "start:stdio"],
-      "env": {}
+      "type": "streamable-http",
+      "url": "http://localhost:8080/mcp",
+      "headers": {
+        "Authorization": "Bearer ${POLARION_ACCESS_TOKEN}"
+      }
     }
   }
 }

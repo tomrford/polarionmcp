@@ -1,5 +1,5 @@
-import { getPolarionBaseUrl } from "./client.ts";
-import { type ErrorResponse, makeError } from "./errors.ts";
+import { polarionConfig } from "./config";
+import { type ErrorResponse, makeError } from "./errors";
 
 export const ATTACHMENT_RESOURCE_TYPES = [
   "document_attachments",
@@ -10,7 +10,7 @@ export const ATTACHMENT_RESOURCE_TYPES = [
   "teststepresult_attachments",
 ] as const;
 
-export type AttachmentResourceType = (typeof ATTACHMENT_RESOURCE_TYPES)[number];
+type AttachmentResourceType = (typeof ATTACHMENT_RESOURCE_TYPES)[number];
 
 export type AttachmentReferenceArgs = {
   contentUrl?: string;
@@ -90,7 +90,7 @@ function basePath(base: URL) {
 }
 
 function urlForContentPath(path: string, revision: string | undefined) {
-  const base = new URL(getPolarionBaseUrl());
+  const base = new URL(polarionConfig().baseUrl);
   const url = new URL(base.toString());
   url.pathname = `${basePath(base)}${path}`;
   url.search = "";
@@ -100,7 +100,7 @@ function urlForContentPath(path: string, revision: string | undefined) {
 }
 
 function urlForRestRelative(rawPathAndQuery: string) {
-  const base = new URL(getPolarionBaseUrl());
+  const base = new URL(polarionConfig().baseUrl);
   const relative = rawPathAndQuery.startsWith("/") ? rawPathAndQuery : `/${rawPathAndQuery}`;
   return new URL(`${basePath(base)}${relative}`, base);
 }
@@ -127,7 +127,7 @@ function resolveContentUrl(
   rawUrl: string,
   revision: string | undefined,
 ): { url: URL } | RouteError {
-  const base = new URL(getPolarionBaseUrl());
+  const base = new URL(polarionConfig().baseUrl);
   let url: URL;
 
   try {
@@ -185,12 +185,15 @@ function resolveResourceId(
   const shape = RESOURCE_SHAPES[resourceType];
   const parts = resourceId.split("/");
 
-  if (parts.length !== shape.parts || parts.some((part) => part.length === 0)) {
+  if (
+    parts.length !== shape.parts ||
+    parts.some((part) => part === "" || part === "." || part === "..")
+  ) {
     return {
       error: makeError(
         400,
         "Invalid attachment resourceId",
-        `${resourceType} resource IDs must have ${shape.parts} slash-separated parts.`,
+        `${resourceType} resource IDs must have ${shape.parts} slash-separated parts, none empty, "." or "..".`,
       ),
     };
   }

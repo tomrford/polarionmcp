@@ -1,4 +1,7 @@
-import { ALLOWED_OPERATION_IDS } from "../src/openapi/allowed-operations.ts";
+import { readFile, writeFile } from "node:fs/promises";
+import { pathToFileURL } from "node:url";
+import type { GeneratedOperation } from "../src/generated/types";
+import { ALLOWED_OPERATION_IDS } from "../src/openapi/allowed-operations";
 
 type HttpMethod = "get" | "post" | "patch" | "delete";
 
@@ -69,42 +72,7 @@ type OpenApiSpec = {
   paths: Record<string, OpenApiPathItem>;
 };
 
-type GeneratedOperation = {
-  name: string;
-  method: "GET" | "POST" | "PATCH" | "DELETE";
-  pathTemplate: string;
-  description: string;
-  resourceGroup: string;
-  annotations: {
-    readOnlyHint: boolean;
-    destructiveHint: boolean;
-    idempotentHint: boolean;
-    openWorldHint: boolean;
-  };
-  input: {
-    required: string[];
-    schema: Record<string, unknown>;
-    pathParams: string[];
-    queryParams: string[];
-    hasBody: boolean;
-  };
-  wire: {
-    pathParamMap: Record<string, string>;
-    queryParamMap: Record<string, string>;
-    bodyContentType?: "application/json";
-  };
-  output: {
-    mode: "json" | "no_content";
-    summary: string;
-    collection?: {
-      autoPaginate: true;
-    };
-  };
-};
-
 const ROOT_SPEC_PATH = "polarionrest.json";
-const TRIMMED_SPEC_PATH = "generated/polarion.trimmed.json";
-const GENERATED_TYPES_PATH = "generated/polarion.ts";
 const GENERATED_OPERATIONS_PATH = "src/generated/operations.ts";
 const ALLOWLIST_DOC_PATH = "docs/allowlist.md";
 const METHOD_ORDER: HttpMethod[] = ["get", "post", "patch", "delete"];
@@ -173,13 +141,6 @@ function annotationsForMethod(method: GeneratedOperation["method"]) {
         readOnlyHint: true,
         destructiveHint: false,
         idempotentHint: true,
-        openWorldHint: true,
-      };
-    case "DELETE":
-      return {
-        readOnlyHint: false,
-        destructiveHint: true,
-        idempotentHint: false,
         openWorldHint: true,
       };
     default:
@@ -340,26 +301,23 @@ function buildOutputSummary(
   const rawSchema = rawResponse.content?.["application/json"]?.schema;
   const resolvedSchema = resolvedResponse.content?.["application/json"]?.schema;
   const shape = responseShape(resolvedSchema);
-  const shapeLabel =
-    shape === "collection" ? "collection" : shape === "resource" ? "resource" : "json";
   const name = refName(rawSchema);
   const keys = topLevelKeys(resolvedSchema);
   if (name && keys.length > 0) {
-    return { mode: "json", shape, summary: `${shapeLabel}: ${name} (${keys.join("/")})` };
+    return { mode: "json", shape, summary: `${shape}: ${name} (${keys.join("/")})` };
   }
-  if (name) return { mode: "json", shape, summary: `${shapeLabel}: ${name}` };
+  if (name) return { mode: "json", shape, summary: `${shape}: ${name}` };
   if (keys.length > 0) {
-    return { mode: "json", shape, summary: `${shapeLabel}: object (${keys.join("/")})` };
+    return { mode: "json", shape, summary: `${shape}: object (${keys.join("/")})` };
   }
-  return { mode: "json", shape, summary: `${shapeLabel}: ${status} JSON response` };
+  return { mode: "json", shape, summary: `${shape}: ${status} JSON response` };
 }
 
-function summarizeInput(required: string[], properties: string[], hasBody: boolean) {
+function summarizeInput(required: string[], properties: string[]) {
   const optional = properties.filter((name) => !required.includes(name));
   const parts: string[] = [];
   if (required.length > 0) parts.push(`required: ${required.join(", ")}`);
   if (optional.length > 0) parts.push(`optional: ${optional.join(", ")}`);
-  if (hasBody && !properties.includes("body")) parts.push("includes body");
   return parts.join("; ") || "no parameters";
 }
 
@@ -433,8 +391,6 @@ function buildGeneratedOperations(
     const required = new Set<string>();
     const pathParams: string[] = [];
     const queryParams: string[] = [];
-    const pathParamMap: Record<string, string> = {};
-    const queryParamMap: Record<string, string> = {};
     let autoPaginateCollection = false;
 
     for (const parameter of params) {
@@ -444,7 +400,6 @@ function buildGeneratedOperations(
       if (parameter.in === "path") {
         properties[parameter.name] = schema;
         pathParams.push(parameter.name);
-        pathParamMap[parameter.name] = parameter.name;
         if (parameter.required) required.add(parameter.name);
         continue;
       }
@@ -456,12 +411,10 @@ function buildGeneratedOperations(
 
       properties[parameter.name] = schema;
       queryParams.push(parameter.name);
-      queryParamMap[parameter.name] = parameter.name;
       if (parameter.required) required.add(parameter.name);
     }
 
     const bodySchema = resolvedOperation.requestBody?.content?.["application/json"]?.schema;
-    const hasBody = !!bodySchema;
     if (bodySchema) {
       properties.body = bodyInputSchema(bodySchema, resolvedOperation.requestBody?.description);
       if (resolvedOperation.requestBody?.required) required.add("body");
@@ -489,15 +442,11 @@ function buildGeneratedOperations(
       resourceGroup: resourceGroupForPath(path),
       annotations: annotationsForMethod(methodUpper),
       input: {
-        required: requiredList,
         schema: inputSchema,
-        pathParams,
-        queryParams,
-        hasBody,
       },
       wire: {
-        pathParamMap,
-        queryParamMap,
+        pathParams,
+        queryParams,
         ...(bodySchema ? { bodyContentType: "application/json" as const } : {}),
       },
       output: {
@@ -505,7 +454,7 @@ function buildGeneratedOperations(
         ...(autoPaginateCollection ? { collection: { autoPaginate: true as const } } : {}),
       },
       meta: {
-        inputSummary: summarizeInput(requiredList, propertyNames, hasBody),
+        inputSummary: summarizeInput(requiredList, propertyNames),
       },
     };
   });
@@ -514,25 +463,13 @@ function buildGeneratedOperations(
 function renderOperationsModule(operations: GeneratedOperation[]) {
   return `// This file is generated by scripts/generate.ts. Do not edit manually.
 
-import type { GeneratedOperation } from "./types.ts";
+import type { GeneratedOperation } from "./types";
 
-export const GENERATED_OPERATIONS = ${JSON.stringify(
-    operations,
-    null,
-    2,
-  )} satisfies GeneratedOperation[];
+// One operation per line keeps diffs reviewable without indenting the bundled JSON.
+export const GENERATED_OPERATIONS = [
+${operations.map((operation) => `  ${JSON.stringify(operation)},`).join("\n")}
+] satisfies GeneratedOperation[];
 `;
-}
-
-async function runOpenApiTypescript(trimmedSpecPath: string, outputPath: string) {
-  const command = new Deno.Command(Deno.execPath(), {
-    args: ["run", "-A", "npm:openapi-typescript@7.10.1", trimmedSpecPath, "-o", outputPath],
-    stdout: "inherit",
-    stderr: "inherit",
-  });
-
-  const { code } = await command.output();
-  if (code !== 0) throw new Error("openapi-typescript generation failed");
 }
 
 function renderAllowlistDoc(
@@ -583,20 +520,14 @@ ${renderEntries(blocked)}
 }
 
 async function main() {
-  const fullSpec = JSON.parse(await Deno.readTextFile(ROOT_SPEC_PATH)) as OpenApiSpec;
+  const fullSpec = JSON.parse(await readFile(ROOT_SPEC_PATH, "utf8")) as OpenApiSpec;
   const { trimmedSpec, selected } = createTrimmedSpec(fullSpec);
   const generatedOperations = buildGeneratedOperations(trimmedSpec, selected);
 
-  await Deno.mkdir("generated", { recursive: true });
-  await Deno.mkdir("src/generated", { recursive: true });
-  await Deno.mkdir("docs", { recursive: true });
-
-  await Deno.writeTextFile(TRIMMED_SPEC_PATH, JSON.stringify(trimmedSpec, null, 2) + "\n");
-  await Deno.writeTextFile(GENERATED_OPERATIONS_PATH, renderOperationsModule(generatedOperations));
-  await Deno.writeTextFile(ALLOWLIST_DOC_PATH, renderAllowlistDoc(fullSpec, selected) + "\n");
-  await runOpenApiTypescript(TRIMMED_SPEC_PATH, GENERATED_TYPES_PATH);
+  await writeFile(GENERATED_OPERATIONS_PATH, renderOperationsModule(generatedOperations));
+  await writeFile(ALLOWLIST_DOC_PATH, renderAllowlistDoc(fullSpec, selected));
 }
 
-if (import.meta.main) {
+if (import.meta.url === pathToFileURL(process.argv[1] ?? "").href) {
   await main();
 }

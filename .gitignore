@@ -1,13 +1,12 @@
-# dependencies (bun install)
+# dependencies
 node_modules
+.wrangler
+worker-configuration.d.ts
 
 # output
 out
 dist
 *.tgz
-
-# demo server db
-demo-polarion.sqlite
 
 # code coverage
 coverage
@@ -17,9 +16,6 @@ coverage
 logs
 _.log
 report.[0-9]_.[0-9]_.[0-9]_.[0-9]_.json
-
-# local deployment guidance
-CUSTOM_INSTRUCTIONS.md
 
 # dotenv environment variable files
 .env
@@ -38,4 +34,6 @@ CUSTOM_INSTRUCTIONS.md
 
 # Finder (MacOS) folder config
 .DS_Store
-.direnv/
+
+# agent worktrees
+.claude/worktrees
