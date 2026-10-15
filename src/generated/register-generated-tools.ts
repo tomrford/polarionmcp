@@ -226,11 +226,29 @@ function mergeCollectionPage(
   if (links) acc.links = { ...acc.links, ...links };
 }
 
+function isRedirect(response: Response): boolean {
+  return (
+    String(response.type) === "opaqueredirect" || (response.status >= 300 && response.status < 400)
+  );
+}
+
+function redirectError(response: Response): ToolErrorResult {
+  const location = response.headers.get("location");
+  return errorResult(
+    makeError(
+      400,
+      "Polarion redirect was not followed",
+      location ? `Location: ${location}` : `HTTP ${response.status}`,
+    ),
+  );
+}
+
 async function fetchJsonPage(
   url: string,
   init: RequestInit,
 ): Promise<{ error: ToolErrorResult } | { json: unknown }> {
   const response = await fetch(url, init);
+  if (isRedirect(response)) return { error: redirectError(response) };
   if (!response.ok)
     return { error: errorResult(httpError(response.status, await response.text())) };
 
@@ -382,13 +400,14 @@ export async function executeGeneratedOperation(
       Accept: "application/json",
       ...authHeaders(),
     };
-    const init: RequestInit = { method: operation.method, headers };
+    const init: RequestInit = { method: operation.method, headers, redirect: "manual" };
     if (operation.wire.bodyContentType) {
       headers["Content-Type"] = operation.wire.bodyContentType;
       if (typeof args.body !== "undefined") init.body = JSON.stringify(args.body);
     }
 
     const response = await fetch(url, init);
+    if (isRedirect(response)) return redirectError(response);
     if (!response.ok) return errorResult(httpError(response.status, await response.text()));
 
     if (operation.output.mode === "no_content" || response.status === 204) {
@@ -401,8 +420,13 @@ export async function executeGeneratedOperation(
 
     const contentType = response.headers.get("content-type") ?? "";
     if (!contentType.includes("json")) {
-      const text = await response.text();
-      return { content: [{ type: "text" as const, text }], structuredContent: { text } };
+      return errorResult(
+        makeError(
+          415,
+          "Polarion returned a non-JSON response",
+          `content-type ${contentType || "(missing)"}`,
+        ),
+      );
     }
 
     const normalizedData = normalizeResponseValue(await response.json());

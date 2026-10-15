@@ -387,11 +387,24 @@ export async function readAttachment(args: AttachmentReadArgs) {
   try {
     const response = await fetch(resolved.url, {
       method: "GET",
+      redirect: "manual",
       headers: {
         Accept: "application/octet-stream, image/*, text/*",
         ...authHeaders(),
       },
     });
+    if (
+      String(response.type) === "opaqueredirect" ||
+      (response.status >= 300 && response.status < 400)
+    ) {
+      return errorResult(
+        makeError(
+          400,
+          "Polarion redirect was not followed",
+          response.headers.get("location") ?? `HTTP ${response.status}`,
+        ),
+      );
+    }
     if (!response.ok) return errorResult(httpError(response.status, await response.text()));
     const body = await readLimitedBytes(response, maxBytes);
     if ("error" in body) return body.error;
