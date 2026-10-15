@@ -19,6 +19,52 @@ export function ok(payload: unknown) {
   };
 }
 
+export function unsafePathSegment(value: string): string | undefined {
+  if (value.length === 0) return "empty";
+  if (value === "." || value === "..") return value;
+  let decoded: string;
+  try {
+    decoded = decodeURIComponent(value);
+  } catch {
+    return "malformed percent-encoding";
+  }
+  if (decoded.length === 0) return "empty";
+  if (decoded === "." || decoded === "..") return decoded;
+  return undefined;
+}
+
+export function encodePathSegment(value: string | number | boolean): string {
+  const text = String(value);
+  const reason = unsafePathSegment(text);
+  if (reason === "empty") throw new Error("Invalid path segment: empty");
+  if (reason) throw new Error(`Invalid path segment: ${text}`);
+  return encodeURIComponent(text);
+}
+
+export function assertUrlUnderBase(url: URL, baseUrl: string): void {
+  const base = new URL(baseUrl);
+  const prefix =
+    base.pathname === "/"
+      ? ""
+      : base.pathname.endsWith("/")
+        ? base.pathname.slice(0, -1)
+        : base.pathname;
+  const under =
+    url.origin === base.origin &&
+    (prefix === "" || url.pathname === prefix || url.pathname.startsWith(`${prefix}/`));
+  if (!under) {
+    throw new Error(`Refusing Polarion URL outside ${base.origin}${prefix || "/"}`);
+  }
+  if (
+    url.pathname
+      .split("/")
+      .slice(1)
+      .some((segment) => segment.length === 0 || segment === "." || segment === "..")
+  ) {
+    throw new Error("Refusing Polarion URL with an empty or dot path segment");
+  }
+}
+
 export function interpolatePath(
   pathTemplate: string,
   pathParams: Record<string, string | number | boolean | undefined>,
@@ -28,7 +74,7 @@ export function interpolatePath(
     if (typeof value === "undefined") {
       throw new Error(`Missing required path parameter: ${rawKey}`);
     }
-    return encodeURIComponent(String(value));
+    return encodePathSegment(value);
   });
 }
 

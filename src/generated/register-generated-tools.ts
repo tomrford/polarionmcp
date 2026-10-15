@@ -1,7 +1,14 @@
 import { fromJsonSchema, type McpServer } from "@modelcontextprotocol/server";
 import { type PolarionConfig, polarionConfig } from "../config";
 import { httpError, makeError, networkError } from "../errors";
-import { authHeaders, errorResult, interpolatePath, ok, toQueryString } from "../helpers";
+import {
+  assertUrlUnderBase,
+  authHeaders,
+  errorResult,
+  interpolatePath,
+  ok,
+  toQueryString,
+} from "../helpers";
 import { withToolLogging } from "../logging";
 import { GENERATED_OPERATIONS } from "./operations";
 
@@ -370,6 +377,7 @@ export async function executeGeneratedOperation(
       pathParams,
     )}${queryString}`;
     const operationUrl = new URL(baseOperationUrl);
+    assertUrlUnderBase(operationUrl, config.baseUrl);
     if (
       operation.method === "GET" &&
       operation.output.collection?.autoPaginate &&
@@ -435,6 +443,14 @@ export async function executeGeneratedOperation(
     const payload = stablePayload(operation, normalizedData);
     return { ...ok(payload), structuredContent: payload };
   } catch (error) {
+    if (
+      error instanceof Error &&
+      (error.message.startsWith("Invalid path segment") ||
+        error.message.startsWith("Refusing Polarion URL") ||
+        error.message.startsWith("Missing required path parameter"))
+    ) {
+      return errorResult(makeError(400, error.message));
+    }
     return errorResult(networkError(error));
   }
 }

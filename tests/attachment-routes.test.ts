@@ -28,6 +28,26 @@ describe("resolveAttachmentContentUrl", () => {
     }
   });
 
+  test("rejects dot and empty resource id segments", () => {
+    for (const resourceId of ["PRJ/WI-1/..", "PRJ/../A-1", "PRJ/WI-1/", "%2e%2e/WI-1/A-1"]) {
+      const resolved = resolveAttachmentContentUrl({
+        resourceType: "workitem_attachments",
+        resourceId,
+      });
+      expect(resolved, resourceId).toHaveProperty("error");
+    }
+  });
+
+  test("rejects dot segments in a content URL before normalization", () => {
+    const resolved = resolveAttachmentContentUrl({
+      contentUrl: "/projects/PRJ/workitems/WI-1/attachments/../A-1/content",
+    });
+    expect(resolved).toHaveProperty("error");
+    if ("error" in resolved) {
+      expect(resolved.error.message).toBe("Rejected attachment URL");
+    }
+  });
+
   test("rejects a cross-origin content URL", () => {
     const resolved = resolveAttachmentContentUrl({
       contentUrl: "https://attacker.invalid/projects/PRJ/workitems/WI-1/attachments/A-1/content",

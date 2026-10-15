@@ -1,5 +1,6 @@
 import { polarionConfig } from "./config";
 import { type ErrorResponse, makeError } from "./errors";
+import { assertUrlUnderBase, encodePathSegment, unsafePathSegment } from "./helpers";
 
 export const ATTACHMENT_RESOURCE_TYPES = [
   "document_attachments",
@@ -81,7 +82,22 @@ const RESOURCE_SHAPES: Record<AttachmentResourceType, ResourceShape> = {
 };
 
 function encode(value: string | undefined) {
-  return encodeURIComponent(value ?? "");
+  return encodePathSegment(value ?? "");
+}
+
+function rawPathname(raw: string): string {
+  if (raw.startsWith("/")) return raw.split(/[?#]/, 1)[0] ?? "/";
+  const absolute = raw.match(/^https?:\/\/[^/?#]+([^?#]*)/i);
+  if (absolute) return absolute[1] || "/";
+  const relative = raw.split(/[?#]/, 1)[0] ?? "";
+  return relative.startsWith("/") ? relative : `/${relative}`;
+}
+
+function pathSegmentsAreSafe(pathname: string): boolean {
+  return pathname
+    .split("/")
+    .slice(1)
+    .every((segment) => unsafePathSegment(segment) === undefined);
 }
 
 function basePath(base: URL) {
@@ -96,6 +112,7 @@ function urlForContentPath(path: string, revision: string | undefined) {
   url.search = "";
   url.hash = "";
   if (revision) url.searchParams.set("revision", revision);
+  assertUrlUnderBase(url, polarionConfig().baseUrl);
   return url;
 }
 
@@ -132,6 +149,15 @@ function resolveContentUrl(
 
   try {
     const trimmed = rawUrl.trim();
+    if (!pathSegmentsAreSafe(rawPathname(trimmed))) {
+      return {
+        error: makeError(
+          400,
+          "Rejected attachment URL",
+          "URL path contains an empty or dot segment.",
+        ),
+      };
+    }
     if (trimmed.startsWith("/projects/")) {
       url = urlForRestRelative(trimmed);
     } else if (trimmed.startsWith("projects/")) {
@@ -174,6 +200,13 @@ function resolveContentUrl(
     }
   }
 
+  try {
+    assertUrlUnderBase(url, base.toString());
+  } catch (error) {
+    const message = error instanceof Error ? error.message : String(error);
+    return { error: makeError(403, "Rejected attachment URL", message) };
+  }
+
   return { url };
 }
 
@@ -185,17 +218,22 @@ function resolveResourceId(
   const shape = RESOURCE_SHAPES[resourceType];
   const parts = resourceId.split("/");
 
-  if (parts.length !== shape.parts || parts.some((part) => part.length === 0)) {
+  if (parts.length !== shape.parts || parts.some((part) => unsafePathSegment(part) !== undefined)) {
     return {
       error: makeError(
         400,
         "Invalid attachment resourceId",
-        `${resourceType} resource IDs must have ${shape.parts} slash-separated parts.`,
+        `${resourceType} resource IDs must have ${shape.parts} slash-separated parts, and no part may be empty, ".", or "..".`,
       ),
     };
   }
 
-  return { url: urlForContentPath(shape.path(parts), revision) };
+  try {
+    return { url: urlForContentPath(shape.path(parts), revision) };
+  } catch (error) {
+    const message = error instanceof Error ? error.message : String(error);
+    return { error: makeError(400, "Invalid attachment resourceId", message) };
+  }
 }
 
 export function resolveAttachmentContentUrl(

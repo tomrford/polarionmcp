@@ -1,5 +1,12 @@
 import { describe, expect, test } from "vitest";
-import { authHeaders, errorResult, interpolatePath, ok, toQueryString } from "../src/helpers";
+import {
+  assertUrlUnderBase,
+  authHeaders,
+  errorResult,
+  interpolatePath,
+  ok,
+  toQueryString,
+} from "../src/helpers";
 import { runWithPolarionAccessToken } from "../src/request-context";
 
 describe("errorResult", () => {
@@ -62,6 +69,41 @@ describe("interpolatePath", () => {
         projectId: "MYPROJ",
       }),
     ).toThrow("Missing required path parameter: workItemId");
+  });
+
+  test("rejects empty and dot segments before encoding", () => {
+    expect(() => interpolatePath("/projects/{projectId}", { projectId: ".." })).toThrow(
+      "Invalid path segment: ..",
+    );
+    expect(() => interpolatePath("/projects/{projectId}", { projectId: "." })).toThrow(
+      "Invalid path segment: .",
+    );
+    expect(() => interpolatePath("/projects/{projectId}", { projectId: "" })).toThrow(
+      "Invalid path segment: empty",
+    );
+    expect(() => interpolatePath("/projects/{projectId}", { projectId: "%2e%2e" })).toThrow(
+      "Invalid path segment: %2e%2e",
+    );
+  });
+});
+
+describe("assertUrlUnderBase", () => {
+  test("accepts a path under the REST prefix", () => {
+    expect(() =>
+      assertUrlUnderBase(
+        new URL("https://polarion.example/polarion/rest/v1/projects/PRJ"),
+        "https://polarion.example/polarion/rest/v1",
+      ),
+    ).not.toThrow();
+  });
+
+  test("rejects a normalized path outside the REST prefix", () => {
+    expect(() =>
+      assertUrlUnderBase(
+        new URL("https://polarion.example/polarion/"),
+        "https://polarion.example/polarion/rest/v1",
+      ),
+    ).toThrow("Refusing Polarion URL outside");
   });
 });
 

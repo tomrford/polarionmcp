@@ -281,6 +281,25 @@ describe("generated tools", () => {
     });
   });
 
+  test("rejects dot segments in path parameters before fetch", async () => {
+    const result = await call(
+      "deleteTestStepResultAttachment",
+      {
+        projectId: "PRJ",
+        testRunId: "TR-1",
+        testCaseProjectId: "PRJ",
+        testCaseId: "TC-1",
+        iteration: "0",
+        testStepIndex: "1",
+        attachmentId: "..",
+      },
+      polarionConfig({ baseUrl: "https://polarion.example/polarion/rest/v1" }),
+    );
+    expect("isError" in result && result.isError).toBe(true);
+    expect(textPayload(result).message).toContain("Invalid path segment");
+    expect(fetchSpy).not.toHaveBeenCalled();
+  });
+
   test("returns the first collection when auto-paginated collection omits totalCount", async () => {
     fetchSpy.mockResolvedValueOnce(
       jsonResponse({
