@@ -84,13 +84,29 @@ function isJsonApiResource(payload: unknown): payload is JsonApiResource {
   );
 }
 
+const DEFAULT_COLLECTION_PAGE_CAP = 100;
+const DEFAULT_COLLECTION_ITEM_CAP = 10_000;
+
 function totalCount(payload: { meta?: Record<string, unknown> }) {
   const total = payload.meta?.totalCount;
-  return typeof total === "number" && Number.isFinite(total) ? total : undefined;
+  return typeof total === "number" && Number.isInteger(total) && total >= 0 ? total : undefined;
 }
 
-function partialResultError(message: string, details: string) {
-  return errorResult(makeError(409, message, details));
+function collectionPageCap(config: PolarionConfig) {
+  return config.collectionPageCap ?? DEFAULT_COLLECTION_PAGE_CAP;
+}
+
+function collectionItemCap(config: PolarionConfig) {
+  return config.collectionItemCap ?? DEFAULT_COLLECTION_ITEM_CAP;
+}
+
+function nextLink(page: { links?: Record<string, unknown> }) {
+  const next = page.links?.next;
+  return typeof next === "string" && next.length > 0 ? next : undefined;
+}
+
+function reachedCollectionCap(pagesFetched: number, itemCount: number, config: PolarionConfig) {
+  return pagesFetched >= collectionPageCap(config) || itemCount >= collectionItemCap(config);
 }
 
 function stripPagingLinks(links: Record<string, unknown> | undefined) {
@@ -163,44 +179,34 @@ function isUnderBasePath(candidate: URL, base: URL) {
   return candidate.pathname === basePath || candidate.pathname.startsWith(`${basePath}/`);
 }
 
-function resolvePageUrl(
+function resolvePolarionUrl(
+  rawUrl: string,
   baseUrl: string,
   polarionBaseUrl: string,
-  pageNumber: number,
-): { error: ToolErrorResult } | { url: string } {
+): { url: string } | undefined {
   const polarionUrl = new URL(polarionBaseUrl);
   let resolved: URL;
   try {
-    resolved = new URL(baseUrl, polarionUrl);
+    resolved = new URL(rawUrl, baseUrl);
   } catch {
-    return {
-      error: partialResultError(
-        "Polarion pagination could not resolve the page URL",
-        `Could not resolve pagination URL: ${baseUrl}`,
-      ),
-    };
+    return undefined;
   }
-
-  if (resolved.origin !== polarionUrl.origin) {
-    return {
-      error: partialResultError(
-        "Polarion pagination resolved a cross-origin page URL",
-        `Refusing to fetch pagination URL outside ${polarionUrl.origin}: ${resolved.toString()}`,
-      ),
-    };
+  if (resolved.origin !== polarionUrl.origin || !isUnderBasePath(resolved, polarionUrl)) {
+    return undefined;
   }
-
-  if (!isUnderBasePath(resolved, polarionUrl)) {
-    return {
-      error: partialResultError(
-        "Polarion pagination resolved a page URL outside the configured base path",
-        `Refusing to fetch pagination URL outside ${polarionUrl.pathname}: ${resolved.toString()}`,
-      ),
-    };
-  }
-
-  resolved.searchParams.set("page[number]", String(pageNumber));
   return { url: resolved.toString() };
+}
+
+function resolvePageNumberUrl(
+  firstPageUrl: string,
+  polarionBaseUrl: string,
+  pageNumber: number,
+): { url: string } | undefined {
+  const resolved = resolvePolarionUrl(firstPageUrl, polarionBaseUrl, polarionBaseUrl);
+  if (!resolved) return undefined;
+  const url = new URL(resolved.url);
+  url.searchParams.set("page[number]", String(pageNumber));
+  return resolvePolarionUrl(url.toString(), polarionBaseUrl, polarionBaseUrl);
 }
 
 function mergeCollectionPage(
@@ -226,27 +232,42 @@ function mergeCollectionPage(
   if (links) acc.links = { ...acc.links, ...links };
 }
 
-async function fetchJsonPage(
+function collectionResult(
+  operation: (typeof GENERATED_OPERATIONS)[number],
+  merged: JsonApiCollection,
+  next?: string,
+): ToolStructuredResult {
+  const payload: Record<string, unknown> = {
+    ...stablePayload(operation, merged),
+    ...(next ? { incomplete: true, next } : {}),
+  };
+  return {
+    content: [{ type: "text" as const, text: JSON.stringify(payload) }],
+    structuredContent: payload,
+  };
+}
+
+async function readCollectionPage(
   url: string,
   init: RequestInit,
-): Promise<{ error: ToolErrorResult } | { json: unknown }> {
-  const response = await fetch(url, init);
-  if (!response.ok)
-    return { error: errorResult(httpError(response.status, await response.text())) };
-
-  const contentType = response.headers.get("content-type") ?? "";
-  if (!contentType.includes("json")) {
-    return {
-      error: partialResultError(
-        "Polarion pagination returned non-JSON content",
-        `Expected JSON while following ${url}; received content-type ${
-          contentType || "(missing)"
-        }.`,
-      ),
-    };
+): Promise<JsonApiCollection | undefined> {
+  try {
+    const response = await fetch(url, init);
+    if (!response.ok) return undefined;
+    const contentType = response.headers.get("content-type") ?? "";
+    if (!contentType.includes("json")) return undefined;
+    const payload = normalizeResponseValue(await response.json());
+    return isJsonApiCollection(payload) ? payload : undefined;
+  } catch {
+    return undefined;
   }
+}
 
-  return { json: normalizeResponseValue(await response.json()) };
+function plannedPageCount(firstPage: JsonApiCollection) {
+  const total = totalCount(firstPage);
+  const pageSize = firstPage.data.length;
+  if (total === undefined || pageSize < 1 || total <= pageSize) return undefined;
+  return Math.ceil(total / pageSize);
 }
 
 async function fetchAllPages(
@@ -255,33 +276,10 @@ async function fetchAllPages(
   firstPageUrl: string,
   polarionBaseUrl: string,
   init: RequestInit,
-  concurrencyCount: number,
+  config: PolarionConfig,
 ): Promise<ToolResult> {
   const seenIncluded = new Set<string>();
-  const total = totalCount(firstPage);
-  if (typeof total !== "number") {
-    return partialResultError(
-      "Polarion pagination did not return totalCount",
-      "Auto-paginated collections require meta.totalCount to plan page fetches.",
-    );
-  }
-
-  const observedPageSize = firstPage.data.length;
-  if (total > 0 && observedPageSize === 0) {
-    return partialResultError(
-      "Polarion pagination returned an empty first page",
-      `Cannot plan pagination for ${total} total items from an empty first page.`,
-    );
-  }
-
-  const totalPages = observedPageSize === 0 ? 1 : Math.ceil(total / observedPageSize);
-  if (totalPages > 10_000) {
-    return partialResultError(
-      "Polarion pagination exceeded safety limit",
-      "More than 10000 pages are required to fetch the collection.",
-    );
-  }
-
+  const seenUrls = new Set<string>([new URL(firstPageUrl).toString()]);
   const merged: JsonApiCollection = {
     ...Object.fromEntries(
       Object.entries(firstPage).filter(
@@ -292,46 +290,67 @@ async function fetchAllPages(
   };
   mergeCollectionPage(merged, firstPage, seenIncluded);
 
-  for (let start = 2; start <= totalPages; start += concurrencyCount) {
-    const end = Math.min(totalPages, start + concurrencyCount - 1);
-    const requests: Array<
-      Promise<{ pageNumber: number; result: Awaited<ReturnType<typeof fetchJsonPage>> }>
-    > = [];
-
-    for (let pageNumber = start; pageNumber <= end; pageNumber += 1) {
-      const pageUrl = resolvePageUrl(firstPageUrl, polarionBaseUrl, pageNumber);
-      if ("error" in pageUrl) return pageUrl.error;
-      requests.push(fetchJsonPage(pageUrl.url, init).then((result) => ({ pageNumber, result })));
-    }
-
-    const pages = await Promise.all(requests);
-    pages.sort((a, b) => a.pageNumber - b.pageNumber);
-
-    for (const page of pages) {
-      if ("error" in page.result) return page.result.error;
-      const payload = page.result.json;
-      if (!isJsonApiCollection(payload)) {
-        return partialResultError(
-          "Polarion pagination returned a non-collection payload",
-          `Expected JSON:API collection while fetching page ${page.pageNumber}`,
-        );
-      }
-      mergeCollectionPage(merged, payload, seenIncluded);
-    }
-  }
-
-  if (merged.data.length !== total) {
-    return partialResultError(
-      "Polarion returned a partial collection",
-      `Walked ${merged.data.length} items but meta.totalCount reports ${total}.`,
-    );
-  }
-
-  const payload = stablePayload(operation, merged);
-  return {
-    content: [{ type: "text" as const, text: JSON.stringify(payload) }],
-    structuredContent: payload,
+  let pendingNext = nextLink(firstPage);
+  let pagesFetched = 1;
+  const finish = () => collectionResult(operation, merged, pendingNext);
+  const absorb = (page: JsonApiCollection) => {
+    mergeCollectionPage(merged, page, seenIncluded);
+    pagesFetched += 1;
+    pendingNext = nextLink(page);
   };
+
+  // totalCount only sizes a parallel page[number] plan. Absence of links.next is what ends the walk.
+  const planned = plannedPageCount(firstPage);
+  if (planned !== undefined) {
+    const lastPlanned = Math.min(planned, collectionPageCap(config));
+    let start = 2;
+    while (
+      start <= lastPlanned &&
+      pendingNext &&
+      !reachedCollectionCap(pagesFetched, merged.data.length, config)
+    ) {
+      const end = Math.min(lastPlanned, start + config.fetchConcurrencyCount - 1);
+      const jobs: Array<{ pageNumber: number; url: string }> = [];
+      for (let pageNumber = start; pageNumber <= end; pageNumber += 1) {
+        const resolved = resolvePageNumberUrl(firstPageUrl, polarionBaseUrl, pageNumber);
+        if (!resolved || seenUrls.has(resolved.url)) break;
+        seenUrls.add(resolved.url);
+        jobs.push({ pageNumber, url: resolved.url });
+      }
+      if (jobs.length === 0 || jobs[0]?.pageNumber !== start) return finish();
+
+      const pages = await Promise.all(
+        jobs.map(async (job) => ({
+          pageNumber: job.pageNumber,
+          page: await readCollectionPage(job.url, init),
+        })),
+      );
+      pages.sort((left, right) => left.pageNumber - right.pageNumber);
+
+      let stoppedEarly = false;
+      for (const entry of pages) {
+        if (!entry.page) return finish();
+        absorb(entry.page);
+        if (!pendingNext || reachedCollectionCap(pagesFetched, merged.data.length, config)) {
+          stoppedEarly = true;
+          break;
+        }
+      }
+      if (stoppedEarly || jobs.length < end - start + 1) break;
+      start = end + 1;
+    }
+  }
+
+  while (pendingNext && !reachedCollectionCap(pagesFetched, merged.data.length, config)) {
+    const resolved = resolvePolarionUrl(pendingNext, firstPageUrl, polarionBaseUrl);
+    if (!resolved || seenUrls.has(resolved.url)) break;
+    seenUrls.add(resolved.url);
+    const page = await readCollectionPage(resolved.url, init);
+    if (!page) break;
+    absorb(page);
+  }
+
+  return finish();
 }
 
 function buildQuery(
@@ -409,27 +428,10 @@ export async function executeGeneratedOperation(
     if (
       operation.method === "GET" &&
       operation.output.collection?.autoPaginate &&
-      isJsonApiCollection(normalizedData)
+      isJsonApiCollection(normalizedData) &&
+      nextLink(normalizedData)
     ) {
-      const total = totalCount(normalizedData);
-      if (typeof total === "number") {
-        if (normalizedData.data.length < total) {
-          return await fetchAllPages(
-            operation,
-            normalizedData,
-            url,
-            config.baseUrl,
-            init,
-            config.fetchConcurrencyCount,
-          );
-        }
-        if (normalizedData.data.length > total) {
-          return partialResultError(
-            "Polarion returned a partial collection",
-            `Response contains ${normalizedData.data.length} items but meta.totalCount reports ${total}.`,
-          );
-        }
-      }
+      return await fetchAllPages(operation, normalizedData, url, config.baseUrl, init, config);
     }
 
     const payload = stablePayload(operation, normalizedData);

@@ -15,7 +15,7 @@ full JSON:API resourceId.
 Prefer project-scoped work over all-project reads.
 
 Guidance:
-- generated list operations fetch all Polarion pages and return full collections
+- generated list operations follow links.next until it is absent. meta.totalCount, when present, only plans parallel page fetches. A page cap, item cap, or unreadable next page returns the items already collected with incomplete: true and that next link
 - use project scope, query filters, and fields to keep reads targeted
 - generated tools use exact OpenAPI operationId names such as getProjects, getWorkItems, and patchWorkItem
 - generated reads return stable top-level envelopes: collections use { kind: "collection", items, ... }, single resources use { kind: "resource", item, ... }, and 204 writes use { ok: true }

@@ -152,7 +152,7 @@ describe("generated tools", () => {
     expect(payload.links).toBeUndefined();
   });
 
-  test("fetches collection pages by page number and returns the full collection", async () => {
+  test("fetches remaining page numbers in parallel when totalCount is present", async () => {
     fetchSpy.mockResolvedValueOnce(
       jsonResponse({
         data: [
@@ -169,7 +169,7 @@ describe("generated tools", () => {
           { id: "3", type: "projects" },
           { id: "4", type: "projects" },
         ],
-        links: {},
+        links: { next: "https://example.invalid/projects?page[number]=3" },
         meta: { totalCount: 5 },
       }),
     );
@@ -193,6 +193,7 @@ describe("generated tools", () => {
       ],
       meta: { totalCount: 5 },
     });
+    expect(payload.incomplete).toBeUndefined();
     expect(fetchSpy.mock.calls).toHaveLength(3);
     expect(fetchSpy.mock.calls[1]![0]).toBe("https://example.invalid/projects?page%5Bnumber%5D=2");
     expect(fetchSpy.mock.calls[2]![0]).toBe("https://example.invalid/projects?page%5Bnumber%5D=3");
@@ -211,15 +212,120 @@ describe("generated tools", () => {
     expect(fetchSpy.mock.calls[0]![0]).toBe("https://example.invalid/projects?page%5Bsize%5D=250");
   });
 
-  test("fetches follow-up pages in concurrency-sized batches", async () => {
+  test("issues a concurrency-sized batch before those pages resolve", async () => {
+    const page2 = deferred<Response>();
+    const page3 = deferred<Response>();
+    fetchSpy
+      .mockResolvedValueOnce(
+        jsonResponse({
+          data: [
+            { id: "1", type: "projects" },
+            { id: "2", type: "projects" },
+          ],
+          links: { next: "https://example.invalid/projects?page[number]=2" },
+          meta: { totalCount: 7 },
+        }),
+      )
+      .mockImplementationOnce(() => page2.promise)
+      .mockImplementationOnce(() => page3.promise)
+      .mockResolvedValueOnce(
+        jsonResponse({
+          data: [{ id: "7", type: "projects" }],
+          links: {},
+          meta: { totalCount: 7 },
+        }),
+      );
+
+    const pending = call("getProjects", {}, polarionConfig({ fetchConcurrencyCount: 2 }));
+    await vi.waitFor(() => expect(fetchSpy.mock.calls.length).toBe(3));
+    expect(fetchSpy.mock.calls[1]![0]).toBe("https://example.invalid/projects?page%5Bnumber%5D=2");
+    expect(fetchSpy.mock.calls[2]![0]).toBe("https://example.invalid/projects?page%5Bnumber%5D=3");
+
+    page2.resolve(
+      jsonResponse({
+        data: [
+          { id: "3", type: "projects" },
+          { id: "4", type: "projects" },
+        ],
+        links: { next: "https://example.invalid/projects?page[number]=3" },
+        meta: { totalCount: 7 },
+      }),
+    );
+    page3.resolve(
+      jsonResponse({
+        data: [
+          { id: "5", type: "projects" },
+          { id: "6", type: "projects" },
+        ],
+        links: { next: "https://example.invalid/projects?page[number]=4" },
+        meta: { totalCount: 7 },
+      }),
+    );
+
+    const payload = textPayload(await pending);
+    expect(payload.items).toHaveLength(7);
+    expect(payload.incomplete).toBeUndefined();
+    expect(fetchSpy.mock.calls).toHaveLength(4);
+    expect(fetchSpy.mock.calls[3]![0]).toBe("https://example.invalid/projects?page%5Bnumber%5D=4");
+  });
+
+  test("follows links.next one page at a time when totalCount is omitted", async () => {
+    const page2 = deferred<Response>();
+    const page3 = deferred<Response>();
+    fetchSpy
+      .mockResolvedValueOnce(
+        jsonResponse({
+          data: [{ id: "1", type: "projects" }],
+          links: { next: "https://example.invalid/projects?page[number]=2" },
+          meta: {},
+        }),
+      )
+      .mockImplementationOnce(() => page2.promise)
+      .mockImplementationOnce(() => page3.promise);
+
+    const pending = call("getProjects", {}, polarionConfig({ fetchConcurrencyCount: 2 }));
+    await vi.waitFor(() => expect(fetchSpy.mock.calls.length).toBe(2));
+    expect(fetchSpy.mock.calls.length).toBe(2);
+    expect(fetchSpy.mock.calls[1]![0]).toBe("https://example.invalid/projects?page[number]=2");
+
+    page2.resolve(
+      jsonResponse({
+        data: [{ id: "2", type: "projects" }],
+        links: { next: "?page[number]=3" },
+        meta: {},
+      }),
+    );
+    await vi.waitFor(() => expect(fetchSpy.mock.calls.length).toBe(3));
+    expect(fetchSpy.mock.calls[2]![0]).toBe("https://example.invalid/projects?page[number]=3");
+    page3.resolve(
+      jsonResponse({
+        data: [{ id: "3", type: "projects" }],
+        links: {},
+        meta: {},
+      }),
+    );
+
+    const payload = textPayload(await pending);
+    expect(payload).toMatchObject({
+      kind: "collection",
+      items: [
+        { id: "1", type: "projects" },
+        { id: "2", type: "projects" },
+        { id: "3", type: "projects" },
+      ],
+    });
+    expect(payload.incomplete).toBeUndefined();
+  });
+
+  test("stops when links.next is absent even if totalCount is larger", async () => {
     fetchSpy.mockResolvedValueOnce(
       jsonResponse({
         data: [
           { id: "1", type: "projects" },
           { id: "2", type: "projects" },
         ],
-        links: {},
-        meta: { totalCount: 7 },
+        links: { next: "https://example.invalid/projects?page[number]=2" },
+        meta: { totalCount: 5 },
       }),
     );
     fetchSpy.mockResolvedValueOnce(
@@ -229,35 +335,50 @@ describe("generated tools", () => {
           { id: "4", type: "projects" },
         ],
         links: {},
-        meta: { totalCount: 7 },
-      }),
-    );
-    fetchSpy.mockResolvedValueOnce(
-      jsonResponse({
-        data: [
-          { id: "5", type: "projects" },
-          { id: "6", type: "projects" },
-        ],
-        links: {},
-        meta: { totalCount: 7 },
-      }),
-    );
-    fetchSpy.mockResolvedValueOnce(
-      jsonResponse({
-        data: [{ id: "7", type: "projects" }],
-        links: {},
-        meta: { totalCount: 7 },
+        meta: { totalCount: 5 },
       }),
     );
 
-    const payload = textPayload(
-      await call("getProjects", {}, polarionConfig({ fetchConcurrencyCount: 2 })),
-    );
-    expect(payload.items).toHaveLength(7);
-    expect(fetchSpy.mock.calls).toHaveLength(4);
+    const payload = textPayload(await call("getProjects", {}));
+    expect(payload.items).toHaveLength(4);
+    expect(payload.incomplete).toBeUndefined();
+    expect(fetchSpy.mock.calls).toHaveLength(2);
   });
 
-  test("errors when a follow-up page returns non-JSON content", async () => {
+  test("keeps walking links.next when totalCount stops short", async () => {
+    fetchSpy.mockResolvedValueOnce(
+      jsonResponse({
+        data: [{ id: "1", type: "projects" }],
+        links: { next: "https://example.invalid/projects?page[number]=2" },
+        meta: { totalCount: 2 },
+      }),
+    );
+    fetchSpy.mockResolvedValueOnce(
+      jsonResponse({
+        data: [{ id: "2", type: "projects" }],
+        links: { next: "https://example.invalid/projects?page[number]=3" },
+        meta: { totalCount: 2 },
+      }),
+    );
+    fetchSpy.mockResolvedValueOnce(
+      jsonResponse({
+        data: [{ id: "3", type: "projects" }],
+        links: {},
+        meta: { totalCount: 2 },
+      }),
+    );
+
+    const payload = textPayload(await call("getProjects", {}));
+    expect(payload.items).toEqual([
+      { id: "1", type: "projects" },
+      { id: "2", type: "projects" },
+      { id: "3", type: "projects" },
+    ]);
+    expect(payload.incomplete).toBeUndefined();
+    expect(fetchSpy.mock.calls[2]![0]).toBe("https://example.invalid/projects?page[number]=3");
+  });
+
+  test("returns a truncated collection when a follow-up page is not JSON", async () => {
     fetchSpy.mockResolvedValueOnce(
       jsonResponse({
         data: [{ id: "1", type: "projects" }],
@@ -273,29 +394,148 @@ describe("generated tools", () => {
     );
 
     const result = await call("getProjects", {});
-    expect("isError" in result && result.isError).toBe(true);
+    expect("isError" in result && result.isError).toBe(false);
     expect(textPayload(result)).toMatchObject({
-      error: true,
-      status_code: 409,
-      message: "Polarion pagination returned non-JSON content",
+      kind: "collection",
+      items: [{ id: "1", type: "projects" }],
+      incomplete: true,
+      next: "https://example.invalid/projects?page[number]=2",
     });
   });
 
-  test("returns the first collection when auto-paginated collection omits totalCount", async () => {
+  test("does not error when the first page is longer than totalCount", async () => {
     fetchSpy.mockResolvedValueOnce(
       jsonResponse({
-        data: [{ id: "1", type: "projects" }],
+        data: [
+          { id: "1", type: "projects" },
+          { id: "2", type: "projects" },
+        ],
         links: {},
-        meta: {},
+        meta: { totalCount: 1 },
       }),
     );
 
     const result = await call("getProjects", {});
-    expect(textPayload(result)).toMatchObject({
-      kind: "collection",
-      items: [{ id: "1", type: "projects" }],
-      meta: {},
-    });
+    const payload = textPayload(result);
+    expect("isError" in result && result.isError).toBe(false);
+    expect(payload.items).toHaveLength(2);
+    expect(payload.incomplete).toBeUndefined();
     expect(fetchSpy.mock.calls).toHaveLength(1);
   });
+
+  test("returns the first collection when the next link is absent", async () => {
+    fetchSpy.mockResolvedValueOnce(
+      jsonResponse({
+        data: [{ id: "1", type: "projects" }],
+        links: {},
+        meta: { totalCount: 5 },
+      }),
+    );
+
+    const payload = textPayload(await call("getProjects", {}));
+    expect(payload).toMatchObject({
+      kind: "collection",
+      items: [{ id: "1", type: "projects" }],
+      meta: { totalCount: 5 },
+    });
+    expect(payload.incomplete).toBeUndefined();
+    expect(fetchSpy.mock.calls).toHaveLength(1);
+  });
+
+  test("marks the page cap and does not fetch past it", async () => {
+    const next = "https://example.invalid/projects?page[number]=3";
+    fetchSpy.mockResolvedValueOnce(
+      jsonResponse({
+        data: [{ id: "1", type: "projects" }],
+        links: { next: "https://example.invalid/projects?page[number]=2" },
+        meta: { totalCount: 3 },
+      }),
+    );
+    fetchSpy.mockResolvedValueOnce(
+      jsonResponse({
+        data: [{ id: "2", type: "projects" }],
+        links: { next },
+        meta: { totalCount: 3 },
+      }),
+    );
+
+    const payload = textPayload(
+      await call("getProjects", {}, polarionConfig({ collectionPageCap: 2 })),
+    );
+    expect(payload).toMatchObject({
+      items: [
+        { id: "1", type: "projects" },
+        { id: "2", type: "projects" },
+      ],
+      incomplete: true,
+      next,
+    });
+    expect(fetchSpy.mock.calls).toHaveLength(2);
+  });
+
+  test("marks the item cap without dropping items already fetched", async () => {
+    const next = "https://example.invalid/projects?page[number]=2";
+    fetchSpy.mockResolvedValueOnce(
+      jsonResponse({
+        data: [
+          { id: "1", type: "projects" },
+          { id: "2", type: "projects" },
+        ],
+        links: { next },
+        meta: { totalCount: 4 },
+      }),
+    );
+
+    const payload = textPayload(
+      await call("getProjects", {}, polarionConfig({ collectionItemCap: 2 })),
+    );
+    expect(payload.items).toHaveLength(2);
+    expect(payload).toMatchObject({ incomplete: true, next });
+    expect(fetchSpy.mock.calls).toHaveLength(1);
+  });
+
+  test("does not follow a cross-origin or out-of-base next link", async () => {
+    const next = "https://evil.example/projects?page[number]=2";
+    fetchSpy.mockResolvedValueOnce(
+      jsonResponse({
+        data: [{ id: "1", type: "projects" }],
+        links: { next },
+      }),
+    );
+
+    const crossOrigin = textPayload(await call("getProjects", {}));
+    expect(crossOrigin).toMatchObject({
+      items: [{ id: "1", type: "projects" }],
+      incomplete: true,
+      next,
+    });
+    expect(fetchSpy.mock.calls).toHaveLength(1);
+
+    fetchSpy.mockResolvedValueOnce(
+      jsonResponse({
+        data: [{ id: "1", type: "projects" }],
+        links: { next: "https://polarion.example/other" },
+      }),
+    );
+    const outside = textPayload(
+      await call(
+        "getProjects",
+        {},
+        polarionConfig({ baseUrl: "https://polarion.example/polarion/rest/v1" }),
+      ),
+    );
+    expect(outside).toMatchObject({
+      incomplete: true,
+      next: "https://polarion.example/other",
+    });
+    expect(fetchSpy.mock.calls).toHaveLength(2);
+  });
 });
+
+function deferred<T>() {
+  let resolve!: (value: T) => void;
+  const promise = new Promise<T>((done) => {
+    resolve = done;
+  });
+  return { promise, resolve };
+}

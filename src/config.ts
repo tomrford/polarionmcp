@@ -6,6 +6,8 @@ export type PolarionConfig = {
   guidelines: string;
   restPageSize?: number;
   fetchConcurrencyCount: number;
+  collectionPageCap?: number;
+  collectionItemCap?: number;
   inlineAttachmentMaxBytes: number;
 };
 
@@ -15,6 +17,14 @@ const HARD_INLINE_ATTACHMENT_MAX_BYTES = 8 * 1024 * 1024;
 function optionalText(value: string | undefined): string | undefined {
   const trimmed = value?.trim();
   return trimmed ? trimmed : undefined;
+}
+
+function positiveOverride(name: string, value: number | undefined): number | undefined {
+  if (value === undefined) return undefined;
+  if (!Number.isInteger(value) || value < 1) {
+    throw new Error(`${name} must be a positive integer; received ${value}.`);
+  }
+  return value;
 }
 
 function optionalPositiveInt(name: string, value: string | undefined): number | undefined {
@@ -53,6 +63,8 @@ export function polarionConfig(overrides: Partial<PolarionConfig> = {}): Polario
       overrides.fetchConcurrencyCount ??
       optionalPositiveInt("FETCH_CONCURRENCY_COUNT", env.FETCH_CONCURRENCY_COUNT) ??
       1,
+    collectionPageCap: positiveOverride("collectionPageCap", overrides.collectionPageCap),
+    collectionItemCap: positiveOverride("collectionItemCap", overrides.collectionItemCap),
     inlineAttachmentMaxBytes: inline,
   };
 }

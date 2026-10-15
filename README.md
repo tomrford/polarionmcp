@@ -45,7 +45,7 @@ controls which operations are exposed — see [docs/allowlist.md](docs/allowlist
 
 ### Design notes
 
-- Generated list operations fetch all Polarion pages and return full collections.
+- Generated list operations follow `links.next` until it is absent. When `meta.totalCount` is present, the remaining `page[number]` requests run in parallel. A page cap, item cap, or unreadable next page returns the items already collected with `incomplete: true` and that next link.
 - Request shapes are tuned for scripting: path params and query params sit at
   top level; request payload goes under `body`.
 - Generated reads return stable top-level envelopes: collections use
@@ -113,7 +113,7 @@ pnpm dev
 | `POLARION_BASE_URL` | yes | Full base URL, e.g. `https://polarion.example.com/polarion/rest/v1` |
 | `POLARION_GUIDELINES` | no | Server instructions. The baked-in default is used when unset |
 | `REST_PAGE_SIZE` | no | Page size for generated collection reads; Polarion default when unset |
-| `FETCH_CONCURRENCY_COUNT` | no | Concurrent page fetches for generated collection reads (default `1`) |
+| `FETCH_CONCURRENCY_COUNT` | no | Parallel `page[number]` fetches when a collection includes `meta.totalCount` (default `1`). Without `totalCount`, pages are followed via `links.next` one at a time |
 | `READ_ATTACHMENT_INLINE_RESULT_MAX_BYTES` | no | Serialized inline image result budget (default `1000000`) |
 
 HTTP mode serves `/mcp` plus unauthenticated `GET /healthz` and `GET /readyz`.
