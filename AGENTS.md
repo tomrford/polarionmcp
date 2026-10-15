@@ -11,9 +11,10 @@ Default to using pnpm and Node in this repo.
 
 ## Runtime And Auth
 
-- Deploy with Docker Compose (Node supervises a disposable workerd process per MCP request)
+- Deploy with Docker Compose (Node supervises four reusable workerd processes, one MCP request per process)
+- Hosts recycle between requests after 100 completed POSTs to reclaim native memory
 - Local development: `pnpm dev` (same supervisor; Node 22.9+)
-- All MCP requests have a 30-second wall-clock deadline and at most four run concurrently
+- All MCP requests have a 30-second wall-clock deadline including queue time; four run concurrently and up to 32 wait in FIFO order
 - Do not serve workerd or Wrangler directly: standalone workerd does not enforce CPU limits
 - HTTP mode serves stateless Streamable HTTP at `/mcp` with JSON for modern MCP and SSE for older revisions, plus unauthenticated `GET /healthz` and `GET /readyz`
 - HTTP mode expects caller `Authorization: Bearer <token>` headers

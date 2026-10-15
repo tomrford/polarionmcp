@@ -119,11 +119,31 @@ pnpm dev
 HTTP mode serves `/mcp` plus unauthenticated `GET /healthz` and `GET /readyz`.
 Callers authenticate each MCP request with `Authorization: Bearer <token>`.
 
-The Node launcher gives each MCP request a disposable `workerd serve` process.
-It terminates that process after 30 seconds, on client disconnection, or after the
-response finishes. The deadline covers startup, Polarion calls and response
-delivery. Four requests may run concurrently; additional requests receive `503`
-with `Retry-After: 1`. Health checks remain responsive during code execution.
+The Node launcher keeps four `workerd serve` processes running. Each process
+handles one MCP request at a time and loads a fresh Dynamic Worker for each
+`code` call. A healthy process returns to the pool after the complete response. After 100
+completed requests, the launcher replaces that process to reclaim native memory.
+The current response finishes before replacement. This local policy limits the
+memory accumulation observed in sustained tests.
+
+Up to 32 additional requests wait in a FIFO queue. The 30-second deadline starts
+when a request reaches the launcher and covers queue time, startup, Polarion
+calls and response delivery. An expired request receives `504` if the response
+has not started. A full queue returns `503` with `Retry-After: 1`.
+
+A timeout, client disconnection during execution or failed worker causes the
+launcher to kill and replace that process. It never retries the operation.
+Polarion writes already sent may have completed. Queued requests that disconnect
+or expire leave the queue without running. All MCP requests share the four
+slots, including catalog and direct-tool requests. Node health checks remain
+responsive when all slots are busy. Failed host startups retry after a one-second
+pause. `/readyz` returns `503` when no host is ready.
+
+Completion logs include `outcome`, `queueMs`, `workerMs`, `durationMs` and the
+worker PID. These are elapsed times, not CPU measurements. Queue time includes
+any wait for a host to start. Worker time includes response delivery. Responses
+also include queue time in the `Server-Timing` header. Logs omit request bodies
+and authorization headers.
 
 This external watchdog is required because standalone workerd does not enforce
 CPU limits. Both `pnpm start` and Docker use it. Running Wrangler or workerd
