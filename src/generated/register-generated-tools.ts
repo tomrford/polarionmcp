@@ -350,13 +350,65 @@ function findOperation(name: string) {
   return GENERATED_OPERATIONS.find((operation) => operation.name === name);
 }
 
+type SchemaIssue = { message: string; path?: ReadonlyArray<PropertyKey> };
+type CompiledSchema = {
+  "~standard": {
+    validate: (
+      value: unknown,
+    ) =>
+      | { value: unknown; issues?: undefined }
+      | { issues: ReadonlyArray<SchemaIssue> }
+      | Promise<{ value: unknown; issues?: undefined } | { issues: ReadonlyArray<SchemaIssue> }>;
+  };
+};
+
+const compiledSchemas = new Map<string, CompiledSchema>();
+
+function compiledSchema(operation: (typeof GENERATED_OPERATIONS)[number]): CompiledSchema {
+  const cached = compiledSchemas.get(operation.name);
+  if (cached) return cached;
+  const compiled = fromJsonSchema(
+    operation.input.schema as unknown as Parameters<typeof fromJsonSchema>[0],
+  ) as unknown as CompiledSchema;
+  compiledSchemas.set(operation.name, compiled);
+  return compiled;
+}
+
+function issueText(issue: SchemaIssue): string {
+  const path = issue.path?.map(String).join(".");
+  return path ? `${path}: ${issue.message}` : issue.message;
+}
+
+async function validateArgs(
+  operation: (typeof GENERATED_OPERATIONS)[number],
+  args: unknown,
+): Promise<{ value: Record<string, unknown> } | { error: ToolErrorResult }> {
+  const result = await compiledSchema(operation)["~standard"].validate(args);
+  if ("issues" in result && result.issues) {
+    return {
+      error: errorResult(
+        makeError(400, "Invalid arguments", result.issues.map(issueText).join("; ")),
+      ),
+    };
+  }
+  if (!result.value || typeof result.value !== "object" || Array.isArray(result.value)) {
+    return {
+      error: errorResult(makeError(400, "Invalid arguments", "Arguments must be an object.")),
+    };
+  }
+  return { value: result.value as Record<string, unknown> };
+}
+
 export async function executeGeneratedOperation(
   name: string,
-  args: Record<string, unknown>,
+  rawArgs: unknown,
   config: PolarionConfig = polarionConfig(),
 ): Promise<ToolResult> {
   const operation = findOperation(name);
   if (!operation) return errorResult(makeError(404, `Unknown Polarion operation: ${name}`));
+  const validated = await validateArgs(operation, rawArgs);
+  if ("error" in validated) return validated.error;
+  const args = validated.value;
 
   try {
     const pathParams = Object.fromEntries(
@@ -441,7 +493,7 @@ export async function executeGeneratedOperation(
 
 export async function callGeneratedOperation(
   name: string,
-  args: Record<string, unknown>,
+  args: unknown,
   config: PolarionConfig = polarionConfig(),
 ): Promise<unknown> {
   const result = await executeGeneratedOperation(name, args, config);

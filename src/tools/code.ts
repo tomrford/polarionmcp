@@ -19,14 +19,7 @@ export class PolarionDispatcher extends WorkerEntrypoint<Env, { token: string }>
   async call(name: string, args: unknown) {
     const token = this.ctx.props.token;
     if (!token) throw new Error("No Polarion access token available");
-    return await runWithPolarionAccessToken(token, () =>
-      callGeneratedOperation(
-        name,
-        args && typeof args === "object" && !Array.isArray(args)
-          ? (args as Record<string, unknown>)
-          : {},
-      ),
-    );
+    return await runWithPolarionAccessToken(token, () => callGeneratedOperation(name, args));
   }
 }
 

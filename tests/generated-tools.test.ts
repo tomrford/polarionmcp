@@ -34,6 +34,24 @@ describe("generated tools", () => {
     );
   }
 
+  test("rejects malformed arguments before fetch", async () => {
+    const missing = await call("getWorkItem", { projectId: "PRJ" });
+    const typed = await call("getWorkItem", { projectId: 123, workItemId: "WI-1" });
+    const extra = await call("patchWorkItem", {
+      projectId: "PRJ",
+      workItemId: "REQ-1",
+      workflowActon: "start_progress",
+      body: { data: { type: "workitems", id: "PRJ/REQ-1" } },
+    });
+    const notObject = await call("getProjects", [] as unknown as Record<string, unknown>);
+
+    for (const result of [missing, typed, extra, notObject]) {
+      expect("isError" in result && result.isError).toBe(true);
+      expect(textPayload(result).message).toBe("Invalid arguments");
+    }
+    expect(fetchSpy).not.toHaveBeenCalled();
+  });
+
   test("getProjects shapes pagination and auth headers", async () => {
     fetchSpy.mockResolvedValueOnce(
       jsonResponse({

@@ -107,6 +107,24 @@ describe("MCP public surface", () => {
     },
   );
 
+  test.each([{ projectId: "PRJ" }, { projectId: 123, workItemId: "WI-1" }])(
+    "code rejects malformed generated arguments before contacting Polarion: %j",
+    async (args) => {
+      const fetchSpy = vi.spyOn(globalThis, "fetch");
+      try {
+        const { body } = await mcp("/mcp", "tools/call", {
+          name: "code",
+          arguments: { code: `async () => await codemode.getWorkItem(${JSON.stringify(args)})` },
+        });
+        expect(body.result?.isError).toBe(true);
+        expect(body.result?.content?.[0]?.text).toContain("Invalid arguments");
+        expect(fetchSpy).not.toHaveBeenCalled();
+      } finally {
+        fetchSpy.mockRestore();
+      }
+    },
+  );
+
   test("code RPCs curated Polarion tools with host-side auth", async () => {
     const fetchSpy = vi.spyOn(globalThis, "fetch");
     fetchSpy.mockImplementation((input) => {
