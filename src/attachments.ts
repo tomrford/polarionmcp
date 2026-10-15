@@ -30,6 +30,27 @@ const SUPPORTED_TEXT_MIME_TYPES = new Set([
   "application/x-yaml",
 ]);
 
+const ATTACHMENT_INPUT_SCHEMA = z.object({
+  contentUrl: z.string().optional().describe("Attachment links.content URL from Polarion metadata"),
+  resourceType: z.enum(ATTACHMENT_RESOURCE_TYPES).optional(),
+  resourceId: z
+    .string()
+    .optional()
+    .describe("Full slash-separated JSON:API attachment resource id"),
+  revision: z.string().optional().describe("Optional revision override"),
+  mode: z.enum(READ_MODES).optional().default("auto"),
+  maxBytes: z.number().int().min(1).max(HARD_MAX_BYTES).optional().default(DEFAULT_MAX_BYTES),
+  maxInlineResultBytes: z
+    .number()
+    .int()
+    .min(1)
+    .max(HARD_INLINE_RESULT_MAX_BYTES)
+    .optional()
+    .describe(
+      "Maximum serialized MCP result bytes for inline image content. Defaults to 1000000, or READ_ATTACHMENT_INLINE_RESULT_MAX_BYTES when set.",
+    ),
+});
+
 type ReadMode = (typeof READ_MODES)[number];
 type ToolErrorResult = ReturnType<typeof errorResult>;
 type AttachmentReadArgs = AttachmentReferenceArgs & {
@@ -392,29 +413,7 @@ export function registerAttachmentTool(server: McpServer) {
     {
       description:
         "Read a Polarion attachment after code has found its attachment metadata. Accepts links.content as contentUrl, or resourceType plus JSON:API resourceId. Returns only supported image or UTF-8 text content.",
-      inputSchema: z.object({
-        contentUrl: z
-          .string()
-          .optional()
-          .describe("Attachment links.content URL from Polarion metadata"),
-        resourceType: z.enum(ATTACHMENT_RESOURCE_TYPES).optional(),
-        resourceId: z
-          .string()
-          .optional()
-          .describe("Full slash-separated JSON:API attachment resource id"),
-        revision: z.string().optional().describe("Optional revision override"),
-        mode: z.enum(READ_MODES).optional().default("auto"),
-        maxBytes: z.number().int().min(1).max(HARD_MAX_BYTES).optional().default(DEFAULT_MAX_BYTES),
-        maxInlineResultBytes: z
-          .number()
-          .int()
-          .min(1)
-          .max(HARD_INLINE_RESULT_MAX_BYTES)
-          .optional()
-          .describe(
-            "Maximum serialized MCP result bytes for inline image content. Defaults to 1000000, or READ_ATTACHMENT_INLINE_RESULT_MAX_BYTES when set.",
-          ),
-      }),
+      inputSchema: ATTACHMENT_INPUT_SCHEMA,
       annotations: {
         readOnlyHint: true,
         destructiveHint: false,

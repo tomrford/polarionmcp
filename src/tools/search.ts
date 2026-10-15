@@ -3,6 +3,11 @@ import { z } from "zod";
 import { searchCatalog } from "../catalog";
 import { getPolarionAccessToken } from "../request-context";
 
+const SEARCH_INPUT_SCHEMA = z.object({
+  query: z.string().describe("Partial tool name, route intent, or parameter keyword to search for"),
+  limit: z.number().min(1).max(20).optional().default(8).describe("Maximum matches to return"),
+});
+
 function formatError(error: unknown) {
   return error instanceof Error ? error.message : String(error);
 }
@@ -14,18 +19,7 @@ export function registerSearchTool(server: McpServer) {
       title: "Polarion operation search",
       description:
         "Fuzzy-search the Polarion code tool catalog by function name, partial name, route intent, or parameter name. Use this before code when you are unsure what to call.",
-      inputSchema: z.object({
-        query: z
-          .string()
-          .describe("Partial tool name, route intent, or parameter keyword to search for"),
-        limit: z
-          .number()
-          .min(1)
-          .max(20)
-          .optional()
-          .default(8)
-          .describe("Maximum matches to return"),
-      }),
+      inputSchema: SEARCH_INPUT_SCHEMA,
       annotations: {
         title: "Polarion operation search",
         readOnlyHint: true,

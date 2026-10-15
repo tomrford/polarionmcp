@@ -7,6 +7,10 @@ import { callGeneratedOperation } from "../generated/register-generated-tools";
 import { getPolarionAccessToken, runWithPolarionAccessToken } from "../request-context";
 import { truncateResponse } from "../truncate";
 
+const CODE_INPUT_SCHEMA = z.object({
+  code: z.string().describe("JavaScript async arrow function to execute"),
+});
+
 type CodeExecutorEntrypoint = {
   evaluate(): Promise<unknown>;
 };
@@ -81,9 +85,7 @@ export function registerCodeTool(server: McpServer) {
     {
       title: "Polarion code executor",
       description: CODE_TOOL_DESCRIPTION,
-      inputSchema: z.object({
-        code: z.string().describe("JavaScript async arrow function to execute"),
-      }),
+      inputSchema: CODE_INPUT_SCHEMA,
       annotations: { title: "Polarion code executor" },
     },
     async ({ code }) => {
