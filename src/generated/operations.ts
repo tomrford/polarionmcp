@@ -16,9 +16,6 @@ export const GENERATED_OPERATIONS = [
       "openWorldHint": true
     },
     "input": {
-      "required": [
-        "resourceType"
-      ],
       "schema": {
         "type": "object",
         "properties": {
@@ -35,20 +32,14 @@ export const GENERATED_OPERATIONS = [
           "resourceType"
         ],
         "additionalProperties": false
-      },
+      }
+    },
+    "wire": {
       "pathParams": [],
       "queryParams": [
         "resourceType",
         "targetType"
-      ],
-      "hasBody": false
-    },
-    "wire": {
-      "pathParamMap": {},
-      "queryParamMap": {
-        "resourceType": "resourceType",
-        "targetType": "targetType"
-      }
+      ]
     },
     "output": {
       "mode": "json",
@@ -72,10 +63,6 @@ export const GENERATED_OPERATIONS = [
       "openWorldHint": true
     },
     "input": {
-      "required": [
-        "resourceType",
-        "targetType"
-      ],
       "schema": {
         "type": "object",
         "properties": {
@@ -287,7 +274,9 @@ export const GENERATED_OPERATIONS = [
           "targetType"
         ],
         "additionalProperties": false
-      },
+      }
+    },
+    "wire": {
       "pathParams": [
         "resourceType",
         "targetType"
@@ -295,18 +284,7 @@ export const GENERATED_OPERATIONS = [
       "queryParams": [
         "fields",
         "include"
-      ],
-      "hasBody": false
-    },
-    "wire": {
-      "pathParamMap": {
-        "resourceType": "resourceType",
-        "targetType": "targetType"
-      },
-      "queryParamMap": {
-        "fields": "fields",
-        "include": "include"
-      }
+      ]
     },
     "output": {
       "mode": "json",
@@ -330,7 +308,6 @@ export const GENERATED_OPERATIONS = [
       "openWorldHint": true
     },
     "input": {
-      "required": [],
       "schema": {
         "type": "object",
         "properties": {
@@ -526,18 +503,13 @@ export const GENERATED_OPERATIONS = [
           }
         },
         "additionalProperties": false
-      },
+      }
+    },
+    "wire": {
       "pathParams": [],
       "queryParams": [
         "fields"
-      ],
-      "hasBody": false
-    },
-    "wire": {
-      "pathParamMap": {},
-      "queryParamMap": {
-        "fields": "fields"
-      }
+      ]
     },
     "output": {
       "mode": "json",
@@ -564,11 +536,6 @@ export const GENERATED_OPERATIONS = [
       "openWorldHint": true
     },
     "input": {
-      "required": [
-        "enumContext",
-        "enumName",
-        "targetType"
-      ],
       "schema": {
         "type": "object",
         "properties": {
@@ -785,7 +752,9 @@ export const GENERATED_OPERATIONS = [
           "targetType"
         ],
         "additionalProperties": false
-      },
+      }
+    },
+    "wire": {
       "pathParams": [
         "enumContext",
         "enumName",
@@ -794,19 +763,7 @@ export const GENERATED_OPERATIONS = [
       "queryParams": [
         "fields",
         "include"
-      ],
-      "hasBody": false
-    },
-    "wire": {
-      "pathParamMap": {
-        "enumContext": "enumContext",
-        "enumName": "enumName",
-        "targetType": "targetType"
-      },
-      "queryParamMap": {
-        "fields": "fields",
-        "include": "include"
-      }
+      ]
     },
     "output": {
       "mode": "json",
@@ -830,7 +787,6 @@ export const GENERATED_OPERATIONS = [
       "openWorldHint": true
     },
     "input": {
-      "required": [],
       "schema": {
         "type": "object",
         "properties": {
@@ -1034,22 +990,15 @@ export const GENERATED_OPERATIONS = [
           }
         },
         "additionalProperties": false
-      },
+      }
+    },
+    "wire": {
       "pathParams": [],
       "queryParams": [
         "fields",
         "include",
         "projectId"
-      ],
-      "hasBody": false
-    },
-    "wire": {
-      "pathParamMap": {},
-      "queryParamMap": {
-        "fields": "fields",
-        "include": "include",
-        "projectId": "projectId"
-      }
+      ]
     },
     "output": {
       "mode": "json",
@@ -1076,9 +1025,6 @@ export const GENERATED_OPERATIONS = [
       "openWorldHint": true
     },
     "input": {
-      "required": [
-        "jobId"
-      ],
       "schema": {
         "type": "object",
         "properties": {
@@ -1285,24 +1231,16 @@ export const GENERATED_OPERATIONS = [
           "jobId"
         ],
         "additionalProperties": false
-      },
+      }
+    },
+    "wire": {
       "pathParams": [
         "jobId"
       ],
       "queryParams": [
         "fields",
         "include"
-      ],
-      "hasBody": false
-    },
-    "wire": {
-      "pathParamMap": {
-        "jobId": "jobId"
-      },
-      "queryParamMap": {
-        "fields": "fields",
-        "include": "include"
-      }
+      ]
     },
     "output": {
       "mode": "json",
@@ -1326,9 +1264,6 @@ export const GENERATED_OPERATIONS = [
       "openWorldHint": true
     },
     "input": {
-      "required": [
-        "body"
-      ],
       "schema": {
         "type": "object",
         "properties": {
@@ -1342,14 +1277,11 @@ export const GENERATED_OPERATIONS = [
           "body"
         ],
         "additionalProperties": false
-      },
-      "pathParams": [],
-      "queryParams": [],
-      "hasBody": true
+      }
     },
     "wire": {
-      "pathParamMap": {},
-      "queryParamMap": {},
+      "pathParams": [],
+      "queryParams": [],
       "bodyContentType": "application/json"
     },
     "output": {
@@ -1374,7 +1306,6 @@ export const GENERATED_OPERATIONS = [
       "openWorldHint": true
     },
     "input": {
-      "required": [],
       "schema": {
         "type": "object",
         "properties": {
@@ -1574,20 +1505,14 @@ export const GENERATED_OPERATIONS = [
           }
         },
         "additionalProperties": false
-      },
+      }
+    },
+    "wire": {
       "pathParams": [],
       "queryParams": [
         "fields",
         "include"
-      ],
-      "hasBody": false
-    },
-    "wire": {
-      "pathParamMap": {},
-      "queryParamMap": {
-        "fields": "fields",
-        "include": "include"
-      }
+      ]
     },
     "output": {
       "mode": "json",
@@ -1611,7 +1536,6 @@ export const GENERATED_OPERATIONS = [
       "openWorldHint": true
     },
     "input": {
-      "required": [],
       "schema": {
         "type": "object",
         "properties": {
@@ -1823,7 +1747,9 @@ export const GENERATED_OPERATIONS = [
           }
         },
         "additionalProperties": false
-      },
+      }
+    },
+    "wire": {
       "pathParams": [],
       "queryParams": [
         "fields",
@@ -1831,18 +1757,7 @@ export const GENERATED_OPERATIONS = [
         "query",
         "sort",
         "revision"
-      ],
-      "hasBody": false
-    },
-    "wire": {
-      "pathParamMap": {},
-      "queryParamMap": {
-        "fields": "fields",
-        "include": "include",
-        "query": "query",
-        "sort": "sort",
-        "revision": "revision"
-      }
+      ]
     },
     "output": {
       "mode": "json",
@@ -1869,9 +1784,6 @@ export const GENERATED_OPERATIONS = [
       "openWorldHint": true
     },
     "input": {
-      "required": [
-        "projectId"
-      ],
       "schema": {
         "type": "object",
         "properties": {
@@ -2082,7 +1994,9 @@ export const GENERATED_OPERATIONS = [
           "projectId"
         ],
         "additionalProperties": false
-      },
+      }
+    },
+    "wire": {
       "pathParams": [
         "projectId"
       ],
@@ -2090,18 +2004,7 @@ export const GENERATED_OPERATIONS = [
         "fields",
         "include",
         "revision"
-      ],
-      "hasBody": false
-    },
-    "wire": {
-      "pathParamMap": {
-        "projectId": "projectId"
-      },
-      "queryParamMap": {
-        "fields": "fields",
-        "include": "include",
-        "revision": "revision"
-      }
+      ]
     },
     "output": {
       "mode": "json",
@@ -2125,10 +2028,6 @@ export const GENERATED_OPERATIONS = [
       "openWorldHint": true
     },
     "input": {
-      "required": [
-        "projectId",
-        "resourceType"
-      ],
       "schema": {
         "type": "object",
         "properties": {
@@ -2150,24 +2049,16 @@ export const GENERATED_OPERATIONS = [
           "resourceType"
         ],
         "additionalProperties": false
-      },
+      }
+    },
+    "wire": {
       "pathParams": [
         "projectId"
       ],
       "queryParams": [
         "resourceType",
         "targetType"
-      ],
-      "hasBody": false
-    },
-    "wire": {
-      "pathParamMap": {
-        "projectId": "projectId"
-      },
-      "queryParamMap": {
-        "resourceType": "resourceType",
-        "targetType": "targetType"
-      }
+      ]
     },
     "output": {
       "mode": "json",
@@ -2191,9 +2082,6 @@ export const GENERATED_OPERATIONS = [
       "openWorldHint": true
     },
     "input": {
-      "required": [
-        "projectId"
-      ],
       "schema": {
         "type": "object",
         "properties": {
@@ -2412,7 +2300,9 @@ export const GENERATED_OPERATIONS = [
           "projectId"
         ],
         "additionalProperties": false
-      },
+      }
+    },
+    "wire": {
       "pathParams": [
         "projectId"
       ],
@@ -2422,20 +2312,7 @@ export const GENERATED_OPERATIONS = [
         "query",
         "sort",
         "revision"
-      ],
-      "hasBody": false
-    },
-    "wire": {
-      "pathParamMap": {
-        "projectId": "projectId"
-      },
-      "queryParamMap": {
-        "fields": "fields",
-        "include": "include",
-        "query": "query",
-        "sort": "sort",
-        "revision": "revision"
-      }
+      ]
     },
     "output": {
       "mode": "json",
@@ -2462,10 +2339,6 @@ export const GENERATED_OPERATIONS = [
       "openWorldHint": true
     },
     "input": {
-      "required": [
-        "projectId",
-        "body"
-      ],
       "schema": {
         "type": "object",
         "properties": {
@@ -2484,18 +2357,13 @@ export const GENERATED_OPERATIONS = [
           "body"
         ],
         "additionalProperties": false
-      },
+      }
+    },
+    "wire": {
       "pathParams": [
         "projectId"
       ],
       "queryParams": [],
-      "hasBody": true
-    },
-    "wire": {
-      "pathParamMap": {
-        "projectId": "projectId"
-      },
-      "queryParamMap": {},
       "bodyContentType": "application/json"
     },
     "output": {
@@ -2520,10 +2388,6 @@ export const GENERATED_OPERATIONS = [
       "openWorldHint": true
     },
     "input": {
-      "required": [
-        "projectId",
-        "body"
-      ],
       "schema": {
         "type": "object",
         "properties": {
@@ -2542,18 +2406,13 @@ export const GENERATED_OPERATIONS = [
           "body"
         ],
         "additionalProperties": false
-      },
+      }
+    },
+    "wire": {
       "pathParams": [
         "projectId"
       ],
       "queryParams": [],
-      "hasBody": true
-    },
-    "wire": {
-      "pathParamMap": {
-        "projectId": "projectId"
-      },
-      "queryParamMap": {},
       "bodyContentType": "application/json"
     },
     "output": {
@@ -2578,10 +2437,6 @@ export const GENERATED_OPERATIONS = [
       "openWorldHint": true
     },
     "input": {
-      "required": [
-        "projectId",
-        "collectionId"
-      ],
       "schema": {
         "type": "object",
         "properties": {
@@ -2797,7 +2652,9 @@ export const GENERATED_OPERATIONS = [
           "collectionId"
         ],
         "additionalProperties": false
-      },
+      }
+    },
+    "wire": {
       "pathParams": [
         "projectId",
         "collectionId"
@@ -2806,19 +2663,7 @@ export const GENERATED_OPERATIONS = [
         "fields",
         "include",
         "revision"
-      ],
-      "hasBody": false
-    },
-    "wire": {
-      "pathParamMap": {
-        "projectId": "projectId",
-        "collectionId": "collectionId"
-      },
-      "queryParamMap": {
-        "fields": "fields",
-        "include": "include",
-        "revision": "revision"
-      }
+      ]
     },
     "output": {
       "mode": "json",
@@ -2842,11 +2687,6 @@ export const GENERATED_OPERATIONS = [
       "openWorldHint": true
     },
     "input": {
-      "required": [
-        "projectId",
-        "collectionId",
-        "body"
-      ],
       "schema": {
         "type": "object",
         "properties": {
@@ -2870,20 +2710,14 @@ export const GENERATED_OPERATIONS = [
           "body"
         ],
         "additionalProperties": false
-      },
+      }
+    },
+    "wire": {
       "pathParams": [
         "projectId",
         "collectionId"
       ],
       "queryParams": [],
-      "hasBody": true
-    },
-    "wire": {
-      "pathParamMap": {
-        "projectId": "projectId",
-        "collectionId": "collectionId"
-      },
-      "queryParamMap": {},
       "bodyContentType": "application/json"
     },
     "output": {
@@ -2908,10 +2742,6 @@ export const GENERATED_OPERATIONS = [
       "openWorldHint": true
     },
     "input": {
-      "required": [
-        "projectId",
-        "collectionId"
-      ],
       "schema": {
         "type": "object",
         "properties": {
@@ -2929,20 +2759,14 @@ export const GENERATED_OPERATIONS = [
           "collectionId"
         ],
         "additionalProperties": false
-      },
+      }
+    },
+    "wire": {
       "pathParams": [
         "projectId",
         "collectionId"
       ],
-      "queryParams": [],
-      "hasBody": false
-    },
-    "wire": {
-      "pathParamMap": {
-        "projectId": "projectId",
-        "collectionId": "collectionId"
-      },
-      "queryParamMap": {}
+      "queryParams": []
     },
     "output": {
       "mode": "no_content",
@@ -2966,10 +2790,6 @@ export const GENERATED_OPERATIONS = [
       "openWorldHint": true
     },
     "input": {
-      "required": [
-        "projectId",
-        "collectionId"
-      ],
       "schema": {
         "type": "object",
         "properties": {
@@ -2987,20 +2807,14 @@ export const GENERATED_OPERATIONS = [
           "collectionId"
         ],
         "additionalProperties": false
-      },
+      }
+    },
+    "wire": {
       "pathParams": [
         "projectId",
         "collectionId"
       ],
-      "queryParams": [],
-      "hasBody": false
-    },
-    "wire": {
-      "pathParamMap": {
-        "projectId": "projectId",
-        "collectionId": "collectionId"
-      },
-      "queryParamMap": {}
+      "queryParams": []
     },
     "output": {
       "mode": "no_content",
@@ -3024,10 +2838,6 @@ export const GENERATED_OPERATIONS = [
       "openWorldHint": true
     },
     "input": {
-      "required": [
-        "projectId",
-        "collectionId"
-      ],
       "schema": {
         "type": "object",
         "properties": {
@@ -3045,20 +2855,14 @@ export const GENERATED_OPERATIONS = [
           "collectionId"
         ],
         "additionalProperties": false
-      },
+      }
+    },
+    "wire": {
       "pathParams": [
         "projectId",
         "collectionId"
       ],
-      "queryParams": [],
-      "hasBody": false
-    },
-    "wire": {
-      "pathParamMap": {
-        "projectId": "projectId",
-        "collectionId": "collectionId"
-      },
-      "queryParamMap": {}
+      "queryParams": []
     },
     "output": {
       "mode": "json",
@@ -3082,10 +2886,6 @@ export const GENERATED_OPERATIONS = [
       "openWorldHint": true
     },
     "input": {
-      "required": [
-        "projectId",
-        "collectionId"
-      ],
       "schema": {
         "type": "object",
         "properties": {
@@ -3103,20 +2903,14 @@ export const GENERATED_OPERATIONS = [
           "collectionId"
         ],
         "additionalProperties": false
-      },
+      }
+    },
+    "wire": {
       "pathParams": [
         "projectId",
         "collectionId"
       ],
-      "queryParams": [],
-      "hasBody": false
-    },
-    "wire": {
-      "pathParamMap": {
-        "projectId": "projectId",
-        "collectionId": "collectionId"
-      },
-      "queryParamMap": {}
+      "queryParams": []
     },
     "output": {
       "mode": "no_content",
@@ -3140,11 +2934,6 @@ export const GENERATED_OPERATIONS = [
       "openWorldHint": true
     },
     "input": {
-      "required": [
-        "projectId",
-        "collectionId",
-        "body"
-      ],
       "schema": {
         "type": "object",
         "properties": {
@@ -3172,7 +2961,9 @@ export const GENERATED_OPERATIONS = [
           "body"
         ],
         "additionalProperties": false
-      },
+      }
+    },
+    "wire": {
       "pathParams": [
         "projectId",
         "collectionId"
@@ -3180,16 +2971,6 @@ export const GENERATED_OPERATIONS = [
       "queryParams": [
         "revision"
       ],
-      "hasBody": true
-    },
-    "wire": {
-      "pathParamMap": {
-        "projectId": "projectId",
-        "collectionId": "collectionId"
-      },
-      "queryParamMap": {
-        "revision": "revision"
-      },
       "bodyContentType": "application/json"
     },
     "output": {
@@ -3214,11 +2995,6 @@ export const GENERATED_OPERATIONS = [
       "openWorldHint": true
     },
     "input": {
-      "required": [
-        "projectId",
-        "collectionId",
-        "relationshipId"
-      ],
       "schema": {
         "type": "object",
         "properties": {
@@ -3439,7 +3215,9 @@ export const GENERATED_OPERATIONS = [
           "relationshipId"
         ],
         "additionalProperties": false
-      },
+      }
+    },
+    "wire": {
       "pathParams": [
         "projectId",
         "collectionId",
@@ -3449,20 +3227,7 @@ export const GENERATED_OPERATIONS = [
         "fields",
         "include",
         "revision"
-      ],
-      "hasBody": false
-    },
-    "wire": {
-      "pathParamMap": {
-        "projectId": "projectId",
-        "collectionId": "collectionId",
-        "relationshipId": "relationshipId"
-      },
-      "queryParamMap": {
-        "fields": "fields",
-        "include": "include",
-        "revision": "revision"
-      }
+      ]
     },
     "output": {
       "mode": "json",
@@ -3489,12 +3254,6 @@ export const GENERATED_OPERATIONS = [
       "openWorldHint": true
     },
     "input": {
-      "required": [
-        "projectId",
-        "collectionId",
-        "relationshipId",
-        "body"
-      ],
       "schema": {
         "type": "object",
         "properties": {
@@ -3523,22 +3282,15 @@ export const GENERATED_OPERATIONS = [
           "body"
         ],
         "additionalProperties": false
-      },
+      }
+    },
+    "wire": {
       "pathParams": [
         "projectId",
         "collectionId",
         "relationshipId"
       ],
       "queryParams": [],
-      "hasBody": true
-    },
-    "wire": {
-      "pathParamMap": {
-        "projectId": "projectId",
-        "collectionId": "collectionId",
-        "relationshipId": "relationshipId"
-      },
-      "queryParamMap": {},
       "bodyContentType": "application/json"
     },
     "output": {
@@ -3563,12 +3315,6 @@ export const GENERATED_OPERATIONS = [
       "openWorldHint": true
     },
     "input": {
-      "required": [
-        "projectId",
-        "collectionId",
-        "relationshipId",
-        "body"
-      ],
       "schema": {
         "type": "object",
         "properties": {
@@ -3597,22 +3343,15 @@ export const GENERATED_OPERATIONS = [
           "body"
         ],
         "additionalProperties": false
-      },
+      }
+    },
+    "wire": {
       "pathParams": [
         "projectId",
         "collectionId",
         "relationshipId"
       ],
       "queryParams": [],
-      "hasBody": true
-    },
-    "wire": {
-      "pathParamMap": {
-        "projectId": "projectId",
-        "collectionId": "collectionId",
-        "relationshipId": "relationshipId"
-      },
-      "queryParamMap": {},
       "bodyContentType": "application/json"
     },
     "output": {
@@ -3637,12 +3376,6 @@ export const GENERATED_OPERATIONS = [
       "openWorldHint": true
     },
     "input": {
-      "required": [
-        "projectId",
-        "collectionId",
-        "relationshipId",
-        "body"
-      ],
       "schema": {
         "type": "object",
         "properties": {
@@ -3671,22 +3404,15 @@ export const GENERATED_OPERATIONS = [
           "body"
         ],
         "additionalProperties": false
-      },
+      }
+    },
+    "wire": {
       "pathParams": [
         "projectId",
         "collectionId",
         "relationshipId"
       ],
       "queryParams": [],
-      "hasBody": true
-    },
-    "wire": {
-      "pathParamMap": {
-        "projectId": "projectId",
-        "collectionId": "collectionId",
-        "relationshipId": "relationshipId"
-      },
-      "queryParamMap": {},
       "bodyContentType": "application/json"
     },
     "output": {
@@ -3711,11 +3437,6 @@ export const GENERATED_OPERATIONS = [
       "openWorldHint": true
     },
     "input": {
-      "required": [
-        "projectId",
-        "resourceType",
-        "targetType"
-      ],
       "schema": {
         "type": "object",
         "properties": {
@@ -3932,7 +3653,9 @@ export const GENERATED_OPERATIONS = [
           "targetType"
         ],
         "additionalProperties": false
-      },
+      }
+    },
+    "wire": {
       "pathParams": [
         "projectId",
         "resourceType",
@@ -3941,19 +3664,7 @@ export const GENERATED_OPERATIONS = [
       "queryParams": [
         "fields",
         "include"
-      ],
-      "hasBody": false
-    },
-    "wire": {
-      "pathParamMap": {
-        "projectId": "projectId",
-        "resourceType": "resourceType",
-        "targetType": "targetType"
-      },
-      "queryParamMap": {
-        "fields": "fields",
-        "include": "include"
-      }
+      ]
     },
     "output": {
       "mode": "json",
@@ -3977,9 +3688,6 @@ export const GENERATED_OPERATIONS = [
       "openWorldHint": true
     },
     "input": {
-      "required": [
-        "projectId"
-      ],
       "schema": {
         "type": "object",
         "properties": {
@@ -4198,7 +3906,9 @@ export const GENERATED_OPERATIONS = [
           "projectId"
         ],
         "additionalProperties": false
-      },
+      }
+    },
+    "wire": {
       "pathParams": [
         "projectId"
       ],
@@ -4208,20 +3918,7 @@ export const GENERATED_OPERATIONS = [
         "query",
         "sort",
         "revision"
-      ],
-      "hasBody": false
-    },
-    "wire": {
-      "pathParamMap": {
-        "projectId": "projectId"
-      },
-      "queryParamMap": {
-        "fields": "fields",
-        "include": "include",
-        "query": "query",
-        "sort": "sort",
-        "revision": "revision"
-      }
+      ]
     },
     "output": {
       "mode": "json",
@@ -4248,10 +3945,6 @@ export const GENERATED_OPERATIONS = [
       "openWorldHint": true
     },
     "input": {
-      "required": [
-        "projectId",
-        "fieldId"
-      ],
       "schema": {
         "type": "object",
         "properties": {
@@ -4273,24 +3966,16 @@ export const GENERATED_OPERATIONS = [
           "fieldId"
         ],
         "additionalProperties": false
-      },
+      }
+    },
+    "wire": {
       "pathParams": [
         "projectId",
         "fieldId"
       ],
       "queryParams": [
         "type"
-      ],
-      "hasBody": false
-    },
-    "wire": {
-      "pathParamMap": {
-        "projectId": "projectId",
-        "fieldId": "fieldId"
-      },
-      "queryParamMap": {
-        "type": "type"
-      }
+      ]
     },
     "output": {
       "mode": "json",
@@ -4317,9 +4002,6 @@ export const GENERATED_OPERATIONS = [
       "openWorldHint": true
     },
     "input": {
-      "required": [
-        "projectId"
-      ],
       "schema": {
         "type": "object",
         "properties": {
@@ -4522,22 +4204,15 @@ export const GENERATED_OPERATIONS = [
           "projectId"
         ],
         "additionalProperties": false
-      },
+      }
+    },
+    "wire": {
       "pathParams": [
         "projectId"
       ],
       "queryParams": [
         "fields"
-      ],
-      "hasBody": false
-    },
-    "wire": {
-      "pathParamMap": {
-        "projectId": "projectId"
-      },
-      "queryParamMap": {
-        "fields": "fields"
-      }
+      ]
     },
     "output": {
       "mode": "json",
@@ -4564,12 +4239,6 @@ export const GENERATED_OPERATIONS = [
       "openWorldHint": true
     },
     "input": {
-      "required": [
-        "projectId",
-        "enumContext",
-        "enumName",
-        "targetType"
-      ],
       "schema": {
         "type": "object",
         "properties": {
@@ -4791,7 +4460,9 @@ export const GENERATED_OPERATIONS = [
           "targetType"
         ],
         "additionalProperties": false
-      },
+      }
+    },
+    "wire": {
       "pathParams": [
         "projectId",
         "enumContext",
@@ -4801,20 +4472,7 @@ export const GENERATED_OPERATIONS = [
       "queryParams": [
         "fields",
         "include"
-      ],
-      "hasBody": false
-    },
-    "wire": {
-      "pathParamMap": {
-        "projectId": "projectId",
-        "enumContext": "enumContext",
-        "enumName": "enumName",
-        "targetType": "targetType"
-      },
-      "queryParamMap": {
-        "fields": "fields",
-        "include": "include"
-      }
+      ]
     },
     "output": {
       "mode": "json",
@@ -4838,9 +4496,6 @@ export const GENERATED_OPERATIONS = [
       "openWorldHint": true
     },
     "input": {
-      "required": [
-        "projectId"
-      ],
       "schema": {
         "type": "object",
         "properties": {
@@ -5059,7 +4714,9 @@ export const GENERATED_OPERATIONS = [
           "projectId"
         ],
         "additionalProperties": false
-      },
+      }
+    },
+    "wire": {
       "pathParams": [
         "projectId"
       ],
@@ -5069,20 +4726,7 @@ export const GENERATED_OPERATIONS = [
         "query",
         "sort",
         "revision"
-      ],
-      "hasBody": false
-    },
-    "wire": {
-      "pathParamMap": {
-        "projectId": "projectId"
-      },
-      "queryParamMap": {
-        "fields": "fields",
-        "include": "include",
-        "query": "query",
-        "sort": "sort",
-        "revision": "revision"
-      }
+      ]
     },
     "output": {
       "mode": "json",
@@ -5109,9 +4753,6 @@ export const GENERATED_OPERATIONS = [
       "openWorldHint": true
     },
     "input": {
-      "required": [
-        "projectId"
-      ],
       "schema": {
         "type": "object",
         "properties": {
@@ -5334,7 +4975,9 @@ export const GENERATED_OPERATIONS = [
           "projectId"
         ],
         "additionalProperties": false
-      },
+      }
+    },
+    "wire": {
       "pathParams": [
         "projectId"
       ],
@@ -5345,21 +4988,7 @@ export const GENERATED_OPERATIONS = [
         "sort",
         "revision",
         "templates"
-      ],
-      "hasBody": false
-    },
-    "wire": {
-      "pathParamMap": {
-        "projectId": "projectId"
-      },
-      "queryParamMap": {
-        "fields": "fields",
-        "include": "include",
-        "query": "query",
-        "sort": "sort",
-        "revision": "revision",
-        "templates": "templates"
-      }
+      ]
     },
     "output": {
       "mode": "json",
@@ -5386,10 +5015,6 @@ export const GENERATED_OPERATIONS = [
       "openWorldHint": true
     },
     "input": {
-      "required": [
-        "projectId",
-        "body"
-      ],
       "schema": {
         "type": "object",
         "properties": {
@@ -5408,18 +5033,13 @@ export const GENERATED_OPERATIONS = [
           "body"
         ],
         "additionalProperties": false
-      },
+      }
+    },
+    "wire": {
       "pathParams": [
         "projectId"
       ],
       "queryParams": [],
-      "hasBody": true
-    },
-    "wire": {
-      "pathParamMap": {
-        "projectId": "projectId"
-      },
-      "queryParamMap": {},
       "bodyContentType": "application/json"
     },
     "output": {
@@ -5444,10 +5064,6 @@ export const GENERATED_OPERATIONS = [
       "openWorldHint": true
     },
     "input": {
-      "required": [
-        "projectId",
-        "body"
-      ],
       "schema": {
         "type": "object",
         "properties": {
@@ -5466,18 +5082,13 @@ export const GENERATED_OPERATIONS = [
           "body"
         ],
         "additionalProperties": false
-      },
+      }
+    },
+    "wire": {
       "pathParams": [
         "projectId"
       ],
       "queryParams": [],
-      "hasBody": true
-    },
-    "wire": {
-      "pathParamMap": {
-        "projectId": "projectId"
-      },
-      "queryParamMap": {},
       "bodyContentType": "application/json"
     },
     "output": {
@@ -5502,10 +5113,6 @@ export const GENERATED_OPERATIONS = [
       "openWorldHint": true
     },
     "input": {
-      "required": [
-        "projectId",
-        "planId"
-      ],
       "schema": {
         "type": "object",
         "properties": {
@@ -5721,7 +5328,9 @@ export const GENERATED_OPERATIONS = [
           "planId"
         ],
         "additionalProperties": false
-      },
+      }
+    },
+    "wire": {
       "pathParams": [
         "projectId",
         "planId"
@@ -5730,19 +5339,7 @@ export const GENERATED_OPERATIONS = [
         "fields",
         "include",
         "revision"
-      ],
-      "hasBody": false
-    },
-    "wire": {
-      "pathParamMap": {
-        "projectId": "projectId",
-        "planId": "planId"
-      },
-      "queryParamMap": {
-        "fields": "fields",
-        "include": "include",
-        "revision": "revision"
-      }
+      ]
     },
     "output": {
       "mode": "json",
@@ -5766,11 +5363,6 @@ export const GENERATED_OPERATIONS = [
       "openWorldHint": true
     },
     "input": {
-      "required": [
-        "projectId",
-        "planId",
-        "body"
-      ],
       "schema": {
         "type": "object",
         "properties": {
@@ -5794,20 +5386,14 @@ export const GENERATED_OPERATIONS = [
           "body"
         ],
         "additionalProperties": false
-      },
+      }
+    },
+    "wire": {
       "pathParams": [
         "projectId",
         "planId"
       ],
       "queryParams": [],
-      "hasBody": true
-    },
-    "wire": {
-      "pathParamMap": {
-        "projectId": "projectId",
-        "planId": "planId"
-      },
-      "queryParamMap": {},
       "bodyContentType": "application/json"
     },
     "output": {
@@ -5832,10 +5418,6 @@ export const GENERATED_OPERATIONS = [
       "openWorldHint": true
     },
     "input": {
-      "required": [
-        "projectId",
-        "planId"
-      ],
       "schema": {
         "type": "object",
         "properties": {
@@ -5853,20 +5435,14 @@ export const GENERATED_OPERATIONS = [
           "planId"
         ],
         "additionalProperties": false
-      },
+      }
+    },
+    "wire": {
       "pathParams": [
         "projectId",
         "planId"
       ],
-      "queryParams": [],
-      "hasBody": false
-    },
-    "wire": {
-      "pathParamMap": {
-        "projectId": "projectId",
-        "planId": "planId"
-      },
-      "queryParamMap": {}
+      "queryParams": []
     },
     "output": {
       "mode": "no_content",
@@ -5890,10 +5466,6 @@ export const GENERATED_OPERATIONS = [
       "openWorldHint": true
     },
     "input": {
-      "required": [
-        "projectId",
-        "planId"
-      ],
       "schema": {
         "type": "object",
         "properties": {
@@ -5911,20 +5483,14 @@ export const GENERATED_OPERATIONS = [
           "planId"
         ],
         "additionalProperties": false
-      },
+      }
+    },
+    "wire": {
       "pathParams": [
         "projectId",
         "planId"
       ],
-      "queryParams": [],
-      "hasBody": false
-    },
-    "wire": {
-      "pathParamMap": {
-        "projectId": "projectId",
-        "planId": "planId"
-      },
-      "queryParamMap": {}
+      "queryParams": []
     },
     "output": {
       "mode": "json",
@@ -5948,11 +5514,6 @@ export const GENERATED_OPERATIONS = [
       "openWorldHint": true
     },
     "input": {
-      "required": [
-        "projectId",
-        "planId",
-        "relationshipId"
-      ],
       "schema": {
         "type": "object",
         "properties": {
@@ -6173,7 +5734,9 @@ export const GENERATED_OPERATIONS = [
           "relationshipId"
         ],
         "additionalProperties": false
-      },
+      }
+    },
+    "wire": {
       "pathParams": [
         "projectId",
         "planId",
@@ -6183,20 +5746,7 @@ export const GENERATED_OPERATIONS = [
         "fields",
         "include",
         "revision"
-      ],
-      "hasBody": false
-    },
-    "wire": {
-      "pathParamMap": {
-        "projectId": "projectId",
-        "planId": "planId",
-        "relationshipId": "relationshipId"
-      },
-      "queryParamMap": {
-        "fields": "fields",
-        "include": "include",
-        "revision": "revision"
-      }
+      ]
     },
     "output": {
       "mode": "json",
@@ -6223,12 +5773,6 @@ export const GENERATED_OPERATIONS = [
       "openWorldHint": true
     },
     "input": {
-      "required": [
-        "projectId",
-        "planId",
-        "relationshipId",
-        "body"
-      ],
       "schema": {
         "type": "object",
         "properties": {
@@ -6257,22 +5801,15 @@ export const GENERATED_OPERATIONS = [
           "body"
         ],
         "additionalProperties": false
-      },
+      }
+    },
+    "wire": {
       "pathParams": [
         "projectId",
         "planId",
         "relationshipId"
       ],
       "queryParams": [],
-      "hasBody": true
-    },
-    "wire": {
-      "pathParamMap": {
-        "projectId": "projectId",
-        "planId": "planId",
-        "relationshipId": "relationshipId"
-      },
-      "queryParamMap": {},
       "bodyContentType": "application/json"
     },
     "output": {
@@ -6297,12 +5834,6 @@ export const GENERATED_OPERATIONS = [
       "openWorldHint": true
     },
     "input": {
-      "required": [
-        "projectId",
-        "planId",
-        "relationshipId",
-        "body"
-      ],
       "schema": {
         "type": "object",
         "properties": {
@@ -6331,22 +5862,15 @@ export const GENERATED_OPERATIONS = [
           "body"
         ],
         "additionalProperties": false
-      },
+      }
+    },
+    "wire": {
       "pathParams": [
         "projectId",
         "planId",
         "relationshipId"
       ],
       "queryParams": [],
-      "hasBody": true
-    },
-    "wire": {
-      "pathParamMap": {
-        "projectId": "projectId",
-        "planId": "planId",
-        "relationshipId": "relationshipId"
-      },
-      "queryParamMap": {},
       "bodyContentType": "application/json"
     },
     "output": {
@@ -6371,12 +5895,6 @@ export const GENERATED_OPERATIONS = [
       "openWorldHint": true
     },
     "input": {
-      "required": [
-        "projectId",
-        "planId",
-        "relationshipId",
-        "body"
-      ],
       "schema": {
         "type": "object",
         "properties": {
@@ -6405,22 +5923,15 @@ export const GENERATED_OPERATIONS = [
           "body"
         ],
         "additionalProperties": false
-      },
+      }
+    },
+    "wire": {
       "pathParams": [
         "projectId",
         "planId",
         "relationshipId"
       ],
       "queryParams": [],
-      "hasBody": true
-    },
-    "wire": {
-      "pathParamMap": {
-        "projectId": "projectId",
-        "planId": "planId",
-        "relationshipId": "relationshipId"
-      },
-      "queryParamMap": {},
       "bodyContentType": "application/json"
     },
     "output": {
@@ -6445,10 +5956,6 @@ export const GENERATED_OPERATIONS = [
       "openWorldHint": true
     },
     "input": {
-      "required": [
-        "projectId",
-        "spaceId"
-      ],
       "schema": {
         "type": "object",
         "properties": {
@@ -6668,7 +6175,9 @@ export const GENERATED_OPERATIONS = [
           "spaceId"
         ],
         "additionalProperties": false
-      },
+      }
+    },
+    "wire": {
       "pathParams": [
         "projectId",
         "spaceId"
@@ -6678,20 +6187,7 @@ export const GENERATED_OPERATIONS = [
         "include",
         "query",
         "sort"
-      ],
-      "hasBody": false
-    },
-    "wire": {
-      "pathParamMap": {
-        "projectId": "projectId",
-        "spaceId": "spaceId"
-      },
-      "queryParamMap": {
-        "fields": "fields",
-        "include": "include",
-        "query": "query",
-        "sort": "sort"
-      }
+      ]
     },
     "output": {
       "mode": "json",
@@ -6718,11 +6214,6 @@ export const GENERATED_OPERATIONS = [
       "openWorldHint": true
     },
     "input": {
-      "required": [
-        "projectId",
-        "spaceId",
-        "body"
-      ],
       "schema": {
         "type": "object",
         "properties": {
@@ -6746,20 +6237,14 @@ export const GENERATED_OPERATIONS = [
           "body"
         ],
         "additionalProperties": false
-      },
+      }
+    },
+    "wire": {
       "pathParams": [
         "projectId",
         "spaceId"
       ],
       "queryParams": [],
-      "hasBody": true
-    },
-    "wire": {
-      "pathParamMap": {
-        "projectId": "projectId",
-        "spaceId": "spaceId"
-      },
-      "queryParamMap": {},
       "bodyContentType": "application/json"
     },
     "output": {
@@ -6784,11 +6269,6 @@ export const GENERATED_OPERATIONS = [
       "openWorldHint": true
     },
     "input": {
-      "required": [
-        "projectId",
-        "spaceId",
-        "documentName"
-      ],
       "schema": {
         "type": "object",
         "properties": {
@@ -7009,7 +6489,9 @@ export const GENERATED_OPERATIONS = [
           "documentName"
         ],
         "additionalProperties": false
-      },
+      }
+    },
+    "wire": {
       "pathParams": [
         "projectId",
         "spaceId",
@@ -7019,20 +6501,7 @@ export const GENERATED_OPERATIONS = [
         "fields",
         "include",
         "revision"
-      ],
-      "hasBody": false
-    },
-    "wire": {
-      "pathParamMap": {
-        "projectId": "projectId",
-        "spaceId": "spaceId",
-        "documentName": "documentName"
-      },
-      "queryParamMap": {
-        "fields": "fields",
-        "include": "include",
-        "revision": "revision"
-      }
+      ]
     },
     "output": {
       "mode": "json",
@@ -7056,12 +6525,6 @@ export const GENERATED_OPERATIONS = [
       "openWorldHint": true
     },
     "input": {
-      "required": [
-        "projectId",
-        "spaceId",
-        "documentName",
-        "body"
-      ],
       "schema": {
         "type": "object",
         "properties": {
@@ -7094,7 +6557,9 @@ export const GENERATED_OPERATIONS = [
           "body"
         ],
         "additionalProperties": false
-      },
+      }
+    },
+    "wire": {
       "pathParams": [
         "projectId",
         "spaceId",
@@ -7103,17 +6568,6 @@ export const GENERATED_OPERATIONS = [
       "queryParams": [
         "workflowAction"
       ],
-      "hasBody": true
-    },
-    "wire": {
-      "pathParamMap": {
-        "projectId": "projectId",
-        "spaceId": "spaceId",
-        "documentName": "documentName"
-      },
-      "queryParamMap": {
-        "workflowAction": "workflowAction"
-      },
       "bodyContentType": "application/json"
     },
     "output": {
@@ -7138,12 +6592,6 @@ export const GENERATED_OPERATIONS = [
       "openWorldHint": true
     },
     "input": {
-      "required": [
-        "projectId",
-        "spaceId",
-        "documentName",
-        "body"
-      ],
       "schema": {
         "type": "object",
         "properties": {
@@ -7176,7 +6624,9 @@ export const GENERATED_OPERATIONS = [
           "body"
         ],
         "additionalProperties": false
-      },
+      }
+    },
+    "wire": {
       "pathParams": [
         "projectId",
         "spaceId",
@@ -7185,17 +6635,6 @@ export const GENERATED_OPERATIONS = [
       "queryParams": [
         "revision"
       ],
-      "hasBody": true
-    },
-    "wire": {
-      "pathParamMap": {
-        "projectId": "projectId",
-        "spaceId": "spaceId",
-        "documentName": "documentName"
-      },
-      "queryParamMap": {
-        "revision": "revision"
-      },
       "bodyContentType": "application/json"
     },
     "output": {
@@ -7220,12 +6659,6 @@ export const GENERATED_OPERATIONS = [
       "openWorldHint": true
     },
     "input": {
-      "required": [
-        "projectId",
-        "spaceId",
-        "documentName",
-        "body"
-      ],
       "schema": {
         "type": "object",
         "properties": {
@@ -7258,7 +6691,9 @@ export const GENERATED_OPERATIONS = [
           "body"
         ],
         "additionalProperties": false
-      },
+      }
+    },
+    "wire": {
       "pathParams": [
         "projectId",
         "spaceId",
@@ -7267,17 +6702,6 @@ export const GENERATED_OPERATIONS = [
       "queryParams": [
         "revision"
       ],
-      "hasBody": true
-    },
-    "wire": {
-      "pathParamMap": {
-        "projectId": "projectId",
-        "spaceId": "spaceId",
-        "documentName": "documentName"
-      },
-      "queryParamMap": {
-        "revision": "revision"
-      },
       "bodyContentType": "application/json"
     },
     "output": {
@@ -7302,11 +6726,6 @@ export const GENERATED_OPERATIONS = [
       "openWorldHint": true
     },
     "input": {
-      "required": [
-        "projectId",
-        "spaceId",
-        "documentName"
-      ],
       "schema": {
         "type": "object",
         "properties": {
@@ -7329,22 +6748,15 @@ export const GENERATED_OPERATIONS = [
           "documentName"
         ],
         "additionalProperties": false
-      },
+      }
+    },
+    "wire": {
       "pathParams": [
         "projectId",
         "spaceId",
         "documentName"
       ],
-      "queryParams": [],
-      "hasBody": false
-    },
-    "wire": {
-      "pathParamMap": {
-        "projectId": "projectId",
-        "spaceId": "spaceId",
-        "documentName": "documentName"
-      },
-      "queryParamMap": {}
+      "queryParams": []
     },
     "output": {
       "mode": "json",
@@ -7368,11 +6780,6 @@ export const GENERATED_OPERATIONS = [
       "openWorldHint": true
     },
     "input": {
-      "required": [
-        "projectId",
-        "spaceId",
-        "documentName"
-      ],
       "schema": {
         "type": "object",
         "properties": {
@@ -7400,22 +6807,15 @@ export const GENERATED_OPERATIONS = [
           "documentName"
         ],
         "additionalProperties": false
-      },
+      }
+    },
+    "wire": {
       "pathParams": [
         "projectId",
         "spaceId",
         "documentName"
       ],
       "queryParams": [],
-      "hasBody": true
-    },
-    "wire": {
-      "pathParamMap": {
-        "projectId": "projectId",
-        "spaceId": "spaceId",
-        "documentName": "documentName"
-      },
-      "queryParamMap": {},
       "bodyContentType": "application/json"
     },
     "output": {
@@ -7440,11 +6840,6 @@ export const GENERATED_OPERATIONS = [
       "openWorldHint": true
     },
     "input": {
-      "required": [
-        "projectId",
-        "spaceId",
-        "documentName"
-      ],
       "schema": {
         "type": "object",
         "properties": {
@@ -7472,22 +6867,15 @@ export const GENERATED_OPERATIONS = [
           "documentName"
         ],
         "additionalProperties": false
-      },
+      }
+    },
+    "wire": {
       "pathParams": [
         "projectId",
         "spaceId",
         "documentName"
       ],
       "queryParams": [],
-      "hasBody": true
-    },
-    "wire": {
-      "pathParamMap": {
-        "projectId": "projectId",
-        "spaceId": "spaceId",
-        "documentName": "documentName"
-      },
-      "queryParamMap": {},
       "bodyContentType": "application/json"
     },
     "output": {
@@ -7512,11 +6900,6 @@ export const GENERATED_OPERATIONS = [
       "openWorldHint": true
     },
     "input": {
-      "required": [
-        "projectId",
-        "spaceId",
-        "documentName"
-      ],
       "schema": {
         "type": "object",
         "properties": {
@@ -7737,7 +7120,9 @@ export const GENERATED_OPERATIONS = [
           "documentName"
         ],
         "additionalProperties": false
-      },
+      }
+    },
+    "wire": {
       "pathParams": [
         "projectId",
         "spaceId",
@@ -7747,20 +7132,7 @@ export const GENERATED_OPERATIONS = [
         "fields",
         "include",
         "revision"
-      ],
-      "hasBody": false
-    },
-    "wire": {
-      "pathParamMap": {
-        "projectId": "projectId",
-        "spaceId": "spaceId",
-        "documentName": "documentName"
-      },
-      "queryParamMap": {
-        "fields": "fields",
-        "include": "include",
-        "revision": "revision"
-      }
+      ]
     },
     "output": {
       "mode": "json",
@@ -7787,12 +7159,6 @@ export const GENERATED_OPERATIONS = [
       "openWorldHint": true
     },
     "input": {
-      "required": [
-        "projectId",
-        "spaceId",
-        "documentName",
-        "attachmentId"
-      ],
       "schema": {
         "type": "object",
         "properties": {
@@ -8018,7 +7384,9 @@ export const GENERATED_OPERATIONS = [
           "attachmentId"
         ],
         "additionalProperties": false
-      },
+      }
+    },
+    "wire": {
       "pathParams": [
         "projectId",
         "spaceId",
@@ -8029,21 +7397,7 @@ export const GENERATED_OPERATIONS = [
         "fields",
         "include",
         "revision"
-      ],
-      "hasBody": false
-    },
-    "wire": {
-      "pathParamMap": {
-        "projectId": "projectId",
-        "spaceId": "spaceId",
-        "documentName": "documentName",
-        "attachmentId": "attachmentId"
-      },
-      "queryParamMap": {
-        "fields": "fields",
-        "include": "include",
-        "revision": "revision"
-      }
+      ]
     },
     "output": {
       "mode": "json",
@@ -8067,11 +7421,6 @@ export const GENERATED_OPERATIONS = [
       "openWorldHint": true
     },
     "input": {
-      "required": [
-        "projectId",
-        "spaceId",
-        "documentName"
-      ],
       "schema": {
         "type": "object",
         "properties": {
@@ -8292,7 +7641,9 @@ export const GENERATED_OPERATIONS = [
           "documentName"
         ],
         "additionalProperties": false
-      },
+      }
+    },
+    "wire": {
       "pathParams": [
         "projectId",
         "spaceId",
@@ -8302,20 +7653,7 @@ export const GENERATED_OPERATIONS = [
         "fields",
         "include",
         "revision"
-      ],
-      "hasBody": false
-    },
-    "wire": {
-      "pathParamMap": {
-        "projectId": "projectId",
-        "spaceId": "spaceId",
-        "documentName": "documentName"
-      },
-      "queryParamMap": {
-        "fields": "fields",
-        "include": "include",
-        "revision": "revision"
-      }
+      ]
     },
     "output": {
       "mode": "json",
@@ -8342,12 +7680,6 @@ export const GENERATED_OPERATIONS = [
       "openWorldHint": true
     },
     "input": {
-      "required": [
-        "projectId",
-        "spaceId",
-        "documentName",
-        "body"
-      ],
       "schema": {
         "type": "object",
         "properties": {
@@ -8376,22 +7708,15 @@ export const GENERATED_OPERATIONS = [
           "body"
         ],
         "additionalProperties": false
-      },
+      }
+    },
+    "wire": {
       "pathParams": [
         "projectId",
         "spaceId",
         "documentName"
       ],
       "queryParams": [],
-      "hasBody": true
-    },
-    "wire": {
-      "pathParamMap": {
-        "projectId": "projectId",
-        "spaceId": "spaceId",
-        "documentName": "documentName"
-      },
-      "queryParamMap": {},
       "bodyContentType": "application/json"
     },
     "output": {
@@ -8416,12 +7741,6 @@ export const GENERATED_OPERATIONS = [
       "openWorldHint": true
     },
     "input": {
-      "required": [
-        "projectId",
-        "spaceId",
-        "documentName",
-        "commentId"
-      ],
       "schema": {
         "type": "object",
         "properties": {
@@ -8647,7 +7966,9 @@ export const GENERATED_OPERATIONS = [
           "commentId"
         ],
         "additionalProperties": false
-      },
+      }
+    },
+    "wire": {
       "pathParams": [
         "projectId",
         "spaceId",
@@ -8658,21 +7979,7 @@ export const GENERATED_OPERATIONS = [
         "fields",
         "include",
         "revision"
-      ],
-      "hasBody": false
-    },
-    "wire": {
-      "pathParamMap": {
-        "projectId": "projectId",
-        "spaceId": "spaceId",
-        "documentName": "documentName",
-        "commentId": "commentId"
-      },
-      "queryParamMap": {
-        "fields": "fields",
-        "include": "include",
-        "revision": "revision"
-      }
+      ]
     },
     "output": {
       "mode": "json",
@@ -8696,13 +8003,6 @@ export const GENERATED_OPERATIONS = [
       "openWorldHint": true
     },
     "input": {
-      "required": [
-        "projectId",
-        "spaceId",
-        "documentName",
-        "commentId",
-        "body"
-      ],
       "schema": {
         "type": "object",
         "properties": {
@@ -8736,7 +8036,9 @@ export const GENERATED_OPERATIONS = [
           "body"
         ],
         "additionalProperties": false
-      },
+      }
+    },
+    "wire": {
       "pathParams": [
         "projectId",
         "spaceId",
@@ -8744,16 +8046,6 @@ export const GENERATED_OPERATIONS = [
         "commentId"
       ],
       "queryParams": [],
-      "hasBody": true
-    },
-    "wire": {
-      "pathParamMap": {
-        "projectId": "projectId",
-        "spaceId": "spaceId",
-        "documentName": "documentName",
-        "commentId": "commentId"
-      },
-      "queryParamMap": {},
       "bodyContentType": "application/json"
     },
     "output": {
@@ -8778,12 +8070,6 @@ export const GENERATED_OPERATIONS = [
       "openWorldHint": true
     },
     "input": {
-      "required": [
-        "projectId",
-        "spaceId",
-        "documentName",
-        "fieldId"
-      ],
       "schema": {
         "type": "object",
         "properties": {
@@ -8811,24 +8097,16 @@ export const GENERATED_OPERATIONS = [
           "fieldId"
         ],
         "additionalProperties": false
-      },
+      }
+    },
+    "wire": {
       "pathParams": [
         "projectId",
         "spaceId",
         "documentName",
         "fieldId"
       ],
-      "queryParams": [],
-      "hasBody": false
-    },
-    "wire": {
-      "pathParamMap": {
-        "projectId": "projectId",
-        "spaceId": "spaceId",
-        "documentName": "documentName",
-        "fieldId": "fieldId"
-      },
-      "queryParamMap": {}
+      "queryParams": []
     },
     "output": {
       "mode": "json",
@@ -8855,12 +8133,6 @@ export const GENERATED_OPERATIONS = [
       "openWorldHint": true
     },
     "input": {
-      "required": [
-        "projectId",
-        "spaceId",
-        "documentName",
-        "fieldId"
-      ],
       "schema": {
         "type": "object",
         "properties": {
@@ -8892,7 +8164,9 @@ export const GENERATED_OPERATIONS = [
           "fieldId"
         ],
         "additionalProperties": false
-      },
+      }
+    },
+    "wire": {
       "pathParams": [
         "projectId",
         "spaceId",
@@ -8901,19 +8175,7 @@ export const GENERATED_OPERATIONS = [
       ],
       "queryParams": [
         "revision"
-      ],
-      "hasBody": false
-    },
-    "wire": {
-      "pathParamMap": {
-        "projectId": "projectId",
-        "spaceId": "spaceId",
-        "documentName": "documentName",
-        "fieldId": "fieldId"
-      },
-      "queryParamMap": {
-        "revision": "revision"
-      }
+      ]
     },
     "output": {
       "mode": "json",
@@ -8940,11 +8202,6 @@ export const GENERATED_OPERATIONS = [
       "openWorldHint": true
     },
     "input": {
-      "required": [
-        "projectId",
-        "spaceId",
-        "documentName"
-      ],
       "schema": {
         "type": "object",
         "properties": {
@@ -9165,7 +8422,9 @@ export const GENERATED_OPERATIONS = [
           "documentName"
         ],
         "additionalProperties": false
-      },
+      }
+    },
+    "wire": {
       "pathParams": [
         "projectId",
         "spaceId",
@@ -9175,20 +8434,7 @@ export const GENERATED_OPERATIONS = [
         "fields",
         "include",
         "revision"
-      ],
-      "hasBody": false
-    },
-    "wire": {
-      "pathParamMap": {
-        "projectId": "projectId",
-        "spaceId": "spaceId",
-        "documentName": "documentName"
-      },
-      "queryParamMap": {
-        "fields": "fields",
-        "include": "include",
-        "revision": "revision"
-      }
+      ]
     },
     "output": {
       "mode": "json",
@@ -9215,12 +8461,6 @@ export const GENERATED_OPERATIONS = [
       "openWorldHint": true
     },
     "input": {
-      "required": [
-        "projectId",
-        "spaceId",
-        "documentName",
-        "body"
-      ],
       "schema": {
         "type": "object",
         "properties": {
@@ -9249,22 +8489,15 @@ export const GENERATED_OPERATIONS = [
           "body"
         ],
         "additionalProperties": false
-      },
+      }
+    },
+    "wire": {
       "pathParams": [
         "projectId",
         "spaceId",
         "documentName"
       ],
       "queryParams": [],
-      "hasBody": true
-    },
-    "wire": {
-      "pathParamMap": {
-        "projectId": "projectId",
-        "spaceId": "spaceId",
-        "documentName": "documentName"
-      },
-      "queryParamMap": {},
       "bodyContentType": "application/json"
     },
     "output": {
@@ -9289,12 +8522,6 @@ export const GENERATED_OPERATIONS = [
       "openWorldHint": true
     },
     "input": {
-      "required": [
-        "projectId",
-        "spaceId",
-        "documentName",
-        "body"
-      ],
       "schema": {
         "type": "object",
         "properties": {
@@ -9323,22 +8550,15 @@ export const GENERATED_OPERATIONS = [
           "body"
         ],
         "additionalProperties": false
-      },
+      }
+    },
+    "wire": {
       "pathParams": [
         "projectId",
         "spaceId",
         "documentName"
       ],
       "queryParams": [],
-      "hasBody": true
-    },
-    "wire": {
-      "pathParamMap": {
-        "projectId": "projectId",
-        "spaceId": "spaceId",
-        "documentName": "documentName"
-      },
-      "queryParamMap": {},
       "bodyContentType": "application/json"
     },
     "output": {
@@ -9363,12 +8583,6 @@ export const GENERATED_OPERATIONS = [
       "openWorldHint": true
     },
     "input": {
-      "required": [
-        "projectId",
-        "spaceId",
-        "documentName",
-        "partId"
-      ],
       "schema": {
         "type": "object",
         "properties": {
@@ -9594,7 +8808,9 @@ export const GENERATED_OPERATIONS = [
           "partId"
         ],
         "additionalProperties": false
-      },
+      }
+    },
+    "wire": {
       "pathParams": [
         "projectId",
         "spaceId",
@@ -9605,21 +8821,7 @@ export const GENERATED_OPERATIONS = [
         "fields",
         "include",
         "revision"
-      ],
-      "hasBody": false
-    },
-    "wire": {
-      "pathParamMap": {
-        "projectId": "projectId",
-        "spaceId": "spaceId",
-        "documentName": "documentName",
-        "partId": "partId"
-      },
-      "queryParamMap": {
-        "fields": "fields",
-        "include": "include",
-        "revision": "revision"
-      }
+      ]
     },
     "output": {
       "mode": "json",
@@ -9643,13 +8845,6 @@ export const GENERATED_OPERATIONS = [
       "openWorldHint": true
     },
     "input": {
-      "required": [
-        "projectId",
-        "spaceId",
-        "documentName",
-        "partId",
-        "body"
-      ],
       "schema": {
         "type": "object",
         "properties": {
@@ -9683,7 +8878,9 @@ export const GENERATED_OPERATIONS = [
           "body"
         ],
         "additionalProperties": false
-      },
+      }
+    },
+    "wire": {
       "pathParams": [
         "projectId",
         "spaceId",
@@ -9691,16 +8888,6 @@ export const GENERATED_OPERATIONS = [
         "partId"
       ],
       "queryParams": [],
-      "hasBody": true
-    },
-    "wire": {
-      "pathParamMap": {
-        "projectId": "projectId",
-        "spaceId": "spaceId",
-        "documentName": "documentName",
-        "partId": "partId"
-      },
-      "queryParamMap": {},
       "bodyContentType": "application/json"
     },
     "output": {
@@ -9725,12 +8912,6 @@ export const GENERATED_OPERATIONS = [
       "openWorldHint": true
     },
     "input": {
-      "required": [
-        "projectId",
-        "spaceId",
-        "documentName",
-        "body"
-      ],
       "schema": {
         "type": "object",
         "properties": {
@@ -9759,22 +8940,15 @@ export const GENERATED_OPERATIONS = [
           "body"
         ],
         "additionalProperties": false
-      },
+      }
+    },
+    "wire": {
       "pathParams": [
         "projectId",
         "spaceId",
         "documentName"
       ],
       "queryParams": [],
-      "hasBody": true
-    },
-    "wire": {
-      "pathParamMap": {
-        "projectId": "projectId",
-        "spaceId": "spaceId",
-        "documentName": "documentName"
-      },
-      "queryParamMap": {},
       "bodyContentType": "application/json"
     },
     "output": {
@@ -9799,10 +8973,6 @@ export const GENERATED_OPERATIONS = [
       "openWorldHint": true
     },
     "input": {
-      "required": [
-        "projectId",
-        "spaceId"
-      ],
       "schema": {
         "type": "object",
         "properties": {
@@ -10022,7 +9192,9 @@ export const GENERATED_OPERATIONS = [
           "spaceId"
         ],
         "additionalProperties": false
-      },
+      }
+    },
+    "wire": {
       "pathParams": [
         "projectId",
         "spaceId"
@@ -10032,20 +9204,7 @@ export const GENERATED_OPERATIONS = [
         "include",
         "query",
         "sort"
-      ],
-      "hasBody": false
-    },
-    "wire": {
-      "pathParamMap": {
-        "projectId": "projectId",
-        "spaceId": "spaceId"
-      },
-      "queryParamMap": {
-        "fields": "fields",
-        "include": "include",
-        "query": "query",
-        "sort": "sort"
-      }
+      ]
     },
     "output": {
       "mode": "json",
@@ -10072,11 +9231,6 @@ export const GENERATED_OPERATIONS = [
       "openWorldHint": true
     },
     "input": {
-      "required": [
-        "projectId",
-        "spaceId",
-        "body"
-      ],
       "schema": {
         "type": "object",
         "properties": {
@@ -10100,20 +9254,14 @@ export const GENERATED_OPERATIONS = [
           "body"
         ],
         "additionalProperties": false
-      },
+      }
+    },
+    "wire": {
       "pathParams": [
         "projectId",
         "spaceId"
       ],
       "queryParams": [],
-      "hasBody": true
-    },
-    "wire": {
-      "pathParamMap": {
-        "projectId": "projectId",
-        "spaceId": "spaceId"
-      },
-      "queryParamMap": {},
       "bodyContentType": "application/json"
     },
     "output": {
@@ -10138,11 +9286,6 @@ export const GENERATED_OPERATIONS = [
       "openWorldHint": true
     },
     "input": {
-      "required": [
-        "projectId",
-        "spaceId",
-        "pageName"
-      ],
       "schema": {
         "type": "object",
         "properties": {
@@ -10363,7 +9506,9 @@ export const GENERATED_OPERATIONS = [
           "pageName"
         ],
         "additionalProperties": false
-      },
+      }
+    },
+    "wire": {
       "pathParams": [
         "projectId",
         "spaceId",
@@ -10373,20 +9518,7 @@ export const GENERATED_OPERATIONS = [
         "fields",
         "include",
         "revision"
-      ],
-      "hasBody": false
-    },
-    "wire": {
-      "pathParamMap": {
-        "projectId": "projectId",
-        "spaceId": "spaceId",
-        "pageName": "pageName"
-      },
-      "queryParamMap": {
-        "fields": "fields",
-        "include": "include",
-        "revision": "revision"
-      }
+      ]
     },
     "output": {
       "mode": "json",
@@ -10410,12 +9542,6 @@ export const GENERATED_OPERATIONS = [
       "openWorldHint": true
     },
     "input": {
-      "required": [
-        "projectId",
-        "spaceId",
-        "pageName",
-        "body"
-      ],
       "schema": {
         "type": "object",
         "properties": {
@@ -10444,22 +9570,15 @@ export const GENERATED_OPERATIONS = [
           "body"
         ],
         "additionalProperties": false
-      },
+      }
+    },
+    "wire": {
       "pathParams": [
         "projectId",
         "spaceId",
         "pageName"
       ],
       "queryParams": [],
-      "hasBody": true
-    },
-    "wire": {
-      "pathParamMap": {
-        "projectId": "projectId",
-        "spaceId": "spaceId",
-        "pageName": "pageName"
-      },
-      "queryParamMap": {},
       "bodyContentType": "application/json"
     },
     "output": {
@@ -10484,11 +9603,6 @@ export const GENERATED_OPERATIONS = [
       "openWorldHint": true
     },
     "input": {
-      "required": [
-        "projectId",
-        "spaceId",
-        "pageName"
-      ],
       "schema": {
         "type": "object",
         "properties": {
@@ -10511,22 +9625,15 @@ export const GENERATED_OPERATIONS = [
           "pageName"
         ],
         "additionalProperties": false
-      },
+      }
+    },
+    "wire": {
       "pathParams": [
         "projectId",
         "spaceId",
         "pageName"
       ],
-      "queryParams": [],
-      "hasBody": false
-    },
-    "wire": {
-      "pathParamMap": {
-        "projectId": "projectId",
-        "spaceId": "spaceId",
-        "pageName": "pageName"
-      },
-      "queryParamMap": {}
+      "queryParams": []
     },
     "output": {
       "mode": "no_content",
@@ -10550,11 +9657,6 @@ export const GENERATED_OPERATIONS = [
       "openWorldHint": true
     },
     "input": {
-      "required": [
-        "projectId",
-        "spaceId",
-        "pageName"
-      ],
       "schema": {
         "type": "object",
         "properties": {
@@ -10775,7 +9877,9 @@ export const GENERATED_OPERATIONS = [
           "pageName"
         ],
         "additionalProperties": false
-      },
+      }
+    },
+    "wire": {
       "pathParams": [
         "projectId",
         "spaceId",
@@ -10785,20 +9889,7 @@ export const GENERATED_OPERATIONS = [
         "fields",
         "include",
         "revision"
-      ],
-      "hasBody": false
-    },
-    "wire": {
-      "pathParamMap": {
-        "projectId": "projectId",
-        "spaceId": "spaceId",
-        "pageName": "pageName"
-      },
-      "queryParamMap": {
-        "fields": "fields",
-        "include": "include",
-        "revision": "revision"
-      }
+      ]
     },
     "output": {
       "mode": "json",
@@ -10825,12 +9916,6 @@ export const GENERATED_OPERATIONS = [
       "openWorldHint": true
     },
     "input": {
-      "required": [
-        "projectId",
-        "spaceId",
-        "pageName",
-        "attachmentId"
-      ],
       "schema": {
         "type": "object",
         "properties": {
@@ -11056,7 +10141,9 @@ export const GENERATED_OPERATIONS = [
           "attachmentId"
         ],
         "additionalProperties": false
-      },
+      }
+    },
+    "wire": {
       "pathParams": [
         "projectId",
         "spaceId",
@@ -11067,21 +10154,7 @@ export const GENERATED_OPERATIONS = [
         "fields",
         "include",
         "revision"
-      ],
-      "hasBody": false
-    },
-    "wire": {
-      "pathParamMap": {
-        "projectId": "projectId",
-        "spaceId": "spaceId",
-        "pageName": "pageName",
-        "attachmentId": "attachmentId"
-      },
-      "queryParamMap": {
-        "fields": "fields",
-        "include": "include",
-        "revision": "revision"
-      }
+      ]
     },
     "output": {
       "mode": "json",
@@ -11105,12 +10178,6 @@ export const GENERATED_OPERATIONS = [
       "openWorldHint": true
     },
     "input": {
-      "required": [
-        "projectId",
-        "spaceId",
-        "pageName",
-        "attachmentId"
-      ],
       "schema": {
         "type": "object",
         "properties": {
@@ -11138,24 +10205,16 @@ export const GENERATED_OPERATIONS = [
           "attachmentId"
         ],
         "additionalProperties": false
-      },
+      }
+    },
+    "wire": {
       "pathParams": [
         "projectId",
         "spaceId",
         "pageName",
         "attachmentId"
       ],
-      "queryParams": [],
-      "hasBody": false
-    },
-    "wire": {
-      "pathParamMap": {
-        "projectId": "projectId",
-        "spaceId": "spaceId",
-        "pageName": "pageName",
-        "attachmentId": "attachmentId"
-      },
-      "queryParamMap": {}
+      "queryParams": []
     },
     "output": {
       "mode": "no_content",
@@ -11179,11 +10238,6 @@ export const GENERATED_OPERATIONS = [
       "openWorldHint": true
     },
     "input": {
-      "required": [
-        "projectId",
-        "spaceId",
-        "pageName"
-      ],
       "schema": {
         "type": "object",
         "properties": {
@@ -11404,7 +10458,9 @@ export const GENERATED_OPERATIONS = [
           "pageName"
         ],
         "additionalProperties": false
-      },
+      }
+    },
+    "wire": {
       "pathParams": [
         "projectId",
         "spaceId",
@@ -11414,20 +10470,7 @@ export const GENERATED_OPERATIONS = [
         "fields",
         "include",
         "revision"
-      ],
-      "hasBody": false
-    },
-    "wire": {
-      "pathParamMap": {
-        "projectId": "projectId",
-        "spaceId": "spaceId",
-        "pageName": "pageName"
-      },
-      "queryParamMap": {
-        "fields": "fields",
-        "include": "include",
-        "revision": "revision"
-      }
+      ]
     },
     "output": {
       "mode": "json",
@@ -11454,12 +10497,6 @@ export const GENERATED_OPERATIONS = [
       "openWorldHint": true
     },
     "input": {
-      "required": [
-        "projectId",
-        "spaceId",
-        "pageName",
-        "body"
-      ],
       "schema": {
         "type": "object",
         "properties": {
@@ -11488,22 +10525,15 @@ export const GENERATED_OPERATIONS = [
           "body"
         ],
         "additionalProperties": false
-      },
+      }
+    },
+    "wire": {
       "pathParams": [
         "projectId",
         "spaceId",
         "pageName"
       ],
       "queryParams": [],
-      "hasBody": true
-    },
-    "wire": {
-      "pathParamMap": {
-        "projectId": "projectId",
-        "spaceId": "spaceId",
-        "pageName": "pageName"
-      },
-      "queryParamMap": {},
       "bodyContentType": "application/json"
     },
     "output": {
@@ -11528,12 +10558,6 @@ export const GENERATED_OPERATIONS = [
       "openWorldHint": true
     },
     "input": {
-      "required": [
-        "projectId",
-        "spaceId",
-        "pageName",
-        "commentId"
-      ],
       "schema": {
         "type": "object",
         "properties": {
@@ -11759,7 +10783,9 @@ export const GENERATED_OPERATIONS = [
           "commentId"
         ],
         "additionalProperties": false
-      },
+      }
+    },
+    "wire": {
       "pathParams": [
         "projectId",
         "spaceId",
@@ -11770,21 +10796,7 @@ export const GENERATED_OPERATIONS = [
         "fields",
         "include",
         "revision"
-      ],
-      "hasBody": false
-    },
-    "wire": {
-      "pathParamMap": {
-        "projectId": "projectId",
-        "spaceId": "spaceId",
-        "pageName": "pageName",
-        "commentId": "commentId"
-      },
-      "queryParamMap": {
-        "fields": "fields",
-        "include": "include",
-        "revision": "revision"
-      }
+      ]
     },
     "output": {
       "mode": "json",
@@ -11808,13 +10820,6 @@ export const GENERATED_OPERATIONS = [
       "openWorldHint": true
     },
     "input": {
-      "required": [
-        "projectId",
-        "spaceId",
-        "pageName",
-        "commentId",
-        "body"
-      ],
       "schema": {
         "type": "object",
         "properties": {
@@ -11848,7 +10853,9 @@ export const GENERATED_OPERATIONS = [
           "body"
         ],
         "additionalProperties": false
-      },
+      }
+    },
+    "wire": {
       "pathParams": [
         "projectId",
         "spaceId",
@@ -11856,16 +10863,6 @@ export const GENERATED_OPERATIONS = [
         "commentId"
       ],
       "queryParams": [],
-      "hasBody": true
-    },
-    "wire": {
-      "pathParamMap": {
-        "projectId": "projectId",
-        "spaceId": "spaceId",
-        "pageName": "pageName",
-        "commentId": "commentId"
-      },
-      "queryParamMap": {},
       "bodyContentType": "application/json"
     },
     "output": {
@@ -11890,12 +10887,6 @@ export const GENERATED_OPERATIONS = [
       "openWorldHint": true
     },
     "input": {
-      "required": [
-        "projectId",
-        "spaceId",
-        "pageName",
-        "relationshipId"
-      ],
       "schema": {
         "type": "object",
         "properties": {
@@ -12121,7 +11112,9 @@ export const GENERATED_OPERATIONS = [
           "relationshipId"
         ],
         "additionalProperties": false
-      },
+      }
+    },
+    "wire": {
       "pathParams": [
         "projectId",
         "spaceId",
@@ -12132,21 +11125,7 @@ export const GENERATED_OPERATIONS = [
         "fields",
         "include",
         "revision"
-      ],
-      "hasBody": false
-    },
-    "wire": {
-      "pathParamMap": {
-        "projectId": "projectId",
-        "spaceId": "spaceId",
-        "pageName": "pageName",
-        "relationshipId": "relationshipId"
-      },
-      "queryParamMap": {
-        "fields": "fields",
-        "include": "include",
-        "revision": "revision"
-      }
+      ]
     },
     "output": {
       "mode": "json",
@@ -12173,13 +11152,6 @@ export const GENERATED_OPERATIONS = [
       "openWorldHint": true
     },
     "input": {
-      "required": [
-        "projectId",
-        "spaceId",
-        "pageName",
-        "relationshipId",
-        "body"
-      ],
       "schema": {
         "type": "object",
         "properties": {
@@ -12213,7 +11185,9 @@ export const GENERATED_OPERATIONS = [
           "body"
         ],
         "additionalProperties": false
-      },
+      }
+    },
+    "wire": {
       "pathParams": [
         "projectId",
         "spaceId",
@@ -12221,16 +11195,6 @@ export const GENERATED_OPERATIONS = [
         "relationshipId"
       ],
       "queryParams": [],
-      "hasBody": true
-    },
-    "wire": {
-      "pathParamMap": {
-        "projectId": "projectId",
-        "spaceId": "spaceId",
-        "pageName": "pageName",
-        "relationshipId": "relationshipId"
-      },
-      "queryParamMap": {},
       "bodyContentType": "application/json"
     },
     "output": {
@@ -12255,13 +11219,6 @@ export const GENERATED_OPERATIONS = [
       "openWorldHint": true
     },
     "input": {
-      "required": [
-        "projectId",
-        "spaceId",
-        "pageName",
-        "relationshipId",
-        "body"
-      ],
       "schema": {
         "type": "object",
         "properties": {
@@ -12295,7 +11252,9 @@ export const GENERATED_OPERATIONS = [
           "body"
         ],
         "additionalProperties": false
-      },
+      }
+    },
+    "wire": {
       "pathParams": [
         "projectId",
         "spaceId",
@@ -12303,16 +11262,6 @@ export const GENERATED_OPERATIONS = [
         "relationshipId"
       ],
       "queryParams": [],
-      "hasBody": true
-    },
-    "wire": {
-      "pathParamMap": {
-        "projectId": "projectId",
-        "spaceId": "spaceId",
-        "pageName": "pageName",
-        "relationshipId": "relationshipId"
-      },
-      "queryParamMap": {},
       "bodyContentType": "application/json"
     },
     "output": {
@@ -12337,13 +11286,6 @@ export const GENERATED_OPERATIONS = [
       "openWorldHint": true
     },
     "input": {
-      "required": [
-        "projectId",
-        "spaceId",
-        "pageName",
-        "relationshipId",
-        "body"
-      ],
       "schema": {
         "type": "object",
         "properties": {
@@ -12377,7 +11319,9 @@ export const GENERATED_OPERATIONS = [
           "body"
         ],
         "additionalProperties": false
-      },
+      }
+    },
+    "wire": {
       "pathParams": [
         "projectId",
         "spaceId",
@@ -12385,16 +11329,6 @@ export const GENERATED_OPERATIONS = [
         "relationshipId"
       ],
       "queryParams": [],
-      "hasBody": true
-    },
-    "wire": {
-      "pathParamMap": {
-        "projectId": "projectId",
-        "spaceId": "spaceId",
-        "pageName": "pageName",
-        "relationshipId": "relationshipId"
-      },
-      "queryParamMap": {},
       "bodyContentType": "application/json"
     },
     "output": {
@@ -12419,9 +11353,6 @@ export const GENERATED_OPERATIONS = [
       "openWorldHint": true
     },
     "input": {
-      "required": [
-        "projectId"
-      ],
       "schema": {
         "type": "object",
         "properties": {
@@ -12628,24 +11559,16 @@ export const GENERATED_OPERATIONS = [
           "projectId"
         ],
         "additionalProperties": false
-      },
+      }
+    },
+    "wire": {
       "pathParams": [
         "projectId"
       ],
       "queryParams": [
         "fields",
         "include"
-      ],
-      "hasBody": false
-    },
-    "wire": {
-      "pathParamMap": {
-        "projectId": "projectId"
-      },
-      "queryParamMap": {
-        "fields": "fields",
-        "include": "include"
-      }
+      ]
     },
     "output": {
       "mode": "json",
@@ -12672,10 +11595,6 @@ export const GENERATED_OPERATIONS = [
       "openWorldHint": true
     },
     "input": {
-      "required": [
-        "projectId",
-        "testParamId"
-      ],
       "schema": {
         "type": "object",
         "properties": {
@@ -12887,7 +11806,9 @@ export const GENERATED_OPERATIONS = [
           "testParamId"
         ],
         "additionalProperties": false
-      },
+      }
+    },
+    "wire": {
       "pathParams": [
         "projectId",
         "testParamId"
@@ -12895,18 +11816,7 @@ export const GENERATED_OPERATIONS = [
       "queryParams": [
         "fields",
         "include"
-      ],
-      "hasBody": false
-    },
-    "wire": {
-      "pathParamMap": {
-        "projectId": "projectId",
-        "testParamId": "testParamId"
-      },
-      "queryParamMap": {
-        "fields": "fields",
-        "include": "include"
-      }
+      ]
     },
     "output": {
       "mode": "json",
@@ -12930,9 +11840,6 @@ export const GENERATED_OPERATIONS = [
       "openWorldHint": true
     },
     "input": {
-      "required": [
-        "projectId"
-      ],
       "schema": {
         "type": "object",
         "properties": {
@@ -13155,7 +12062,9 @@ export const GENERATED_OPERATIONS = [
           "projectId"
         ],
         "additionalProperties": false
-      },
+      }
+    },
+    "wire": {
       "pathParams": [
         "projectId"
       ],
@@ -13166,21 +12075,7 @@ export const GENERATED_OPERATIONS = [
         "sort",
         "revision",
         "templates"
-      ],
-      "hasBody": false
-    },
-    "wire": {
-      "pathParamMap": {
-        "projectId": "projectId"
-      },
-      "queryParamMap": {
-        "fields": "fields",
-        "include": "include",
-        "query": "query",
-        "sort": "sort",
-        "revision": "revision",
-        "templates": "templates"
-      }
+      ]
     },
     "output": {
       "mode": "json",
@@ -13207,10 +12102,6 @@ export const GENERATED_OPERATIONS = [
       "openWorldHint": true
     },
     "input": {
-      "required": [
-        "projectId",
-        "body"
-      ],
       "schema": {
         "type": "object",
         "properties": {
@@ -13229,18 +12120,13 @@ export const GENERATED_OPERATIONS = [
           "body"
         ],
         "additionalProperties": false
-      },
+      }
+    },
+    "wire": {
       "pathParams": [
         "projectId"
       ],
       "queryParams": [],
-      "hasBody": true
-    },
-    "wire": {
-      "pathParamMap": {
-        "projectId": "projectId"
-      },
-      "queryParamMap": {},
       "bodyContentType": "application/json"
     },
     "output": {
@@ -13265,10 +12151,6 @@ export const GENERATED_OPERATIONS = [
       "openWorldHint": true
     },
     "input": {
-      "required": [
-        "projectId",
-        "body"
-      ],
       "schema": {
         "type": "object",
         "properties": {
@@ -13287,18 +12169,13 @@ export const GENERATED_OPERATIONS = [
           "body"
         ],
         "additionalProperties": false
-      },
+      }
+    },
+    "wire": {
       "pathParams": [
         "projectId"
       ],
       "queryParams": [],
-      "hasBody": true
-    },
-    "wire": {
-      "pathParamMap": {
-        "projectId": "projectId"
-      },
-      "queryParamMap": {},
       "bodyContentType": "application/json"
     },
     "output": {
@@ -13323,10 +12200,6 @@ export const GENERATED_OPERATIONS = [
       "openWorldHint": true
     },
     "input": {
-      "required": [
-        "projectId",
-        "body"
-      ],
       "schema": {
         "type": "object",
         "properties": {
@@ -13345,18 +12218,13 @@ export const GENERATED_OPERATIONS = [
           "body"
         ],
         "additionalProperties": false
-      },
+      }
+    },
+    "wire": {
       "pathParams": [
         "projectId"
       ],
       "queryParams": [],
-      "hasBody": true
-    },
-    "wire": {
-      "pathParamMap": {
-        "projectId": "projectId"
-      },
-      "queryParamMap": {},
       "bodyContentType": "application/json"
     },
     "output": {
@@ -13381,10 +12249,6 @@ export const GENERATED_OPERATIONS = [
       "openWorldHint": true
     },
     "input": {
-      "required": [
-        "projectId",
-        "testRunId"
-      ],
       "schema": {
         "type": "object",
         "properties": {
@@ -13600,7 +12464,9 @@ export const GENERATED_OPERATIONS = [
           "testRunId"
         ],
         "additionalProperties": false
-      },
+      }
+    },
+    "wire": {
       "pathParams": [
         "projectId",
         "testRunId"
@@ -13609,19 +12475,7 @@ export const GENERATED_OPERATIONS = [
         "fields",
         "include",
         "revision"
-      ],
-      "hasBody": false
-    },
-    "wire": {
-      "pathParamMap": {
-        "projectId": "projectId",
-        "testRunId": "testRunId"
-      },
-      "queryParamMap": {
-        "fields": "fields",
-        "include": "include",
-        "revision": "revision"
-      }
+      ]
     },
     "output": {
       "mode": "json",
@@ -13645,11 +12499,6 @@ export const GENERATED_OPERATIONS = [
       "openWorldHint": true
     },
     "input": {
-      "required": [
-        "projectId",
-        "testRunId",
-        "body"
-      ],
       "schema": {
         "type": "object",
         "properties": {
@@ -13673,20 +12522,14 @@ export const GENERATED_OPERATIONS = [
           "body"
         ],
         "additionalProperties": false
-      },
+      }
+    },
+    "wire": {
       "pathParams": [
         "projectId",
         "testRunId"
       ],
       "queryParams": [],
-      "hasBody": true
-    },
-    "wire": {
-      "pathParamMap": {
-        "projectId": "projectId",
-        "testRunId": "testRunId"
-      },
-      "queryParamMap": {},
       "bodyContentType": "application/json"
     },
     "output": {
@@ -13711,10 +12554,6 @@ export const GENERATED_OPERATIONS = [
       "openWorldHint": true
     },
     "input": {
-      "required": [
-        "projectId",
-        "testRunId"
-      ],
       "schema": {
         "type": "object",
         "properties": {
@@ -13732,20 +12571,14 @@ export const GENERATED_OPERATIONS = [
           "testRunId"
         ],
         "additionalProperties": false
-      },
+      }
+    },
+    "wire": {
       "pathParams": [
         "projectId",
         "testRunId"
       ],
-      "queryParams": [],
-      "hasBody": false
-    },
-    "wire": {
-      "pathParamMap": {
-        "projectId": "projectId",
-        "testRunId": "testRunId"
-      },
-      "queryParamMap": {}
+      "queryParams": []
     },
     "output": {
       "mode": "no_content",
@@ -13769,10 +12602,6 @@ export const GENERATED_OPERATIONS = [
       "openWorldHint": true
     },
     "input": {
-      "required": [
-        "projectId",
-        "testRunId"
-      ],
       "schema": {
         "type": "object",
         "properties": {
@@ -13790,20 +12619,14 @@ export const GENERATED_OPERATIONS = [
           "testRunId"
         ],
         "additionalProperties": false
-      },
+      }
+    },
+    "wire": {
       "pathParams": [
         "projectId",
         "testRunId"
       ],
-      "queryParams": [],
-      "hasBody": false
-    },
-    "wire": {
-      "pathParamMap": {
-        "projectId": "projectId",
-        "testRunId": "testRunId"
-      },
-      "queryParamMap": {}
+      "queryParams": []
     },
     "output": {
       "mode": "json",
@@ -13827,10 +12650,6 @@ export const GENERATED_OPERATIONS = [
       "openWorldHint": true
     },
     "input": {
-      "required": [
-        "projectId",
-        "testRunId"
-      ],
       "schema": {
         "type": "object",
         "properties": {
@@ -13852,24 +12671,16 @@ export const GENERATED_OPERATIONS = [
           "testRunId"
         ],
         "additionalProperties": false
-      },
+      }
+    },
+    "wire": {
       "pathParams": [
         "projectId",
         "testRunId"
       ],
       "queryParams": [
         "revision"
-      ],
-      "hasBody": false
-    },
-    "wire": {
-      "pathParamMap": {
-        "projectId": "projectId",
-        "testRunId": "testRunId"
-      },
-      "queryParamMap": {
-        "revision": "revision"
-      }
+      ]
     },
     "output": {
       "mode": "json",
@@ -13896,10 +12707,6 @@ export const GENERATED_OPERATIONS = [
       "openWorldHint": true
     },
     "input": {
-      "required": [
-        "projectId",
-        "testRunId"
-      ],
       "schema": {
         "type": "object",
         "properties": {
@@ -14113,7 +12920,9 @@ export const GENERATED_OPERATIONS = [
           "testRunId"
         ],
         "additionalProperties": false
-      },
+      }
+    },
+    "wire": {
       "pathParams": [
         "projectId",
         "testRunId"
@@ -14122,19 +12931,7 @@ export const GENERATED_OPERATIONS = [
         "fields",
         "include",
         "revision"
-      ],
-      "hasBody": false
-    },
-    "wire": {
-      "pathParamMap": {
-        "projectId": "projectId",
-        "testRunId": "testRunId"
-      },
-      "queryParamMap": {
-        "fields": "fields",
-        "include": "include",
-        "revision": "revision"
-      }
+      ]
     },
     "output": {
       "mode": "json",
@@ -14161,11 +12958,6 @@ export const GENERATED_OPERATIONS = [
       "openWorldHint": true
     },
     "input": {
-      "required": [
-        "projectId",
-        "testRunId",
-        "body"
-      ],
       "schema": {
         "type": "object",
         "properties": {
@@ -14189,20 +12981,14 @@ export const GENERATED_OPERATIONS = [
           "body"
         ],
         "additionalProperties": false
-      },
+      }
+    },
+    "wire": {
       "pathParams": [
         "projectId",
         "testRunId"
       ],
       "queryParams": [],
-      "hasBody": true
-    },
-    "wire": {
-      "pathParamMap": {
-        "projectId": "projectId",
-        "testRunId": "testRunId"
-      },
-      "queryParamMap": {},
       "bodyContentType": "application/json"
     },
     "output": {
@@ -14227,11 +13013,6 @@ export const GENERATED_OPERATIONS = [
       "openWorldHint": true
     },
     "input": {
-      "required": [
-        "projectId",
-        "testRunId",
-        "attachmentId"
-      ],
       "schema": {
         "type": "object",
         "properties": {
@@ -14452,7 +13233,9 @@ export const GENERATED_OPERATIONS = [
           "attachmentId"
         ],
         "additionalProperties": false
-      },
+      }
+    },
+    "wire": {
       "pathParams": [
         "projectId",
         "testRunId",
@@ -14462,20 +13245,7 @@ export const GENERATED_OPERATIONS = [
         "fields",
         "include",
         "revision"
-      ],
-      "hasBody": false
-    },
-    "wire": {
-      "pathParamMap": {
-        "projectId": "projectId",
-        "testRunId": "testRunId",
-        "attachmentId": "attachmentId"
-      },
-      "queryParamMap": {
-        "fields": "fields",
-        "include": "include",
-        "revision": "revision"
-      }
+      ]
     },
     "output": {
       "mode": "json",
@@ -14499,11 +13269,6 @@ export const GENERATED_OPERATIONS = [
       "openWorldHint": true
     },
     "input": {
-      "required": [
-        "projectId",
-        "testRunId",
-        "attachmentId"
-      ],
       "schema": {
         "type": "object",
         "properties": {
@@ -14526,22 +13291,15 @@ export const GENERATED_OPERATIONS = [
           "attachmentId"
         ],
         "additionalProperties": false
-      },
+      }
+    },
+    "wire": {
       "pathParams": [
         "projectId",
         "testRunId",
         "attachmentId"
       ],
-      "queryParams": [],
-      "hasBody": false
-    },
-    "wire": {
-      "pathParamMap": {
-        "projectId": "projectId",
-        "testRunId": "testRunId",
-        "attachmentId": "attachmentId"
-      },
-      "queryParamMap": {}
+      "queryParams": []
     },
     "output": {
       "mode": "no_content",
@@ -14565,10 +13323,6 @@ export const GENERATED_OPERATIONS = [
       "openWorldHint": true
     },
     "input": {
-      "required": [
-        "projectId",
-        "testRunId"
-      ],
       "schema": {
         "type": "object",
         "properties": {
@@ -14784,7 +13538,9 @@ export const GENERATED_OPERATIONS = [
           "testRunId"
         ],
         "additionalProperties": false
-      },
+      }
+    },
+    "wire": {
       "pathParams": [
         "projectId",
         "testRunId"
@@ -14793,19 +13549,7 @@ export const GENERATED_OPERATIONS = [
         "fields",
         "include",
         "revision"
-      ],
-      "hasBody": false
-    },
-    "wire": {
-      "pathParamMap": {
-        "projectId": "projectId",
-        "testRunId": "testRunId"
-      },
-      "queryParamMap": {
-        "fields": "fields",
-        "include": "include",
-        "revision": "revision"
-      }
+      ]
     },
     "output": {
       "mode": "json",
@@ -14832,11 +13576,6 @@ export const GENERATED_OPERATIONS = [
       "openWorldHint": true
     },
     "input": {
-      "required": [
-        "projectId",
-        "testRunId",
-        "body"
-      ],
       "schema": {
         "type": "object",
         "properties": {
@@ -14860,20 +13599,14 @@ export const GENERATED_OPERATIONS = [
           "body"
         ],
         "additionalProperties": false
-      },
+      }
+    },
+    "wire": {
       "pathParams": [
         "projectId",
         "testRunId"
       ],
       "queryParams": [],
-      "hasBody": true
-    },
-    "wire": {
-      "pathParamMap": {
-        "projectId": "projectId",
-        "testRunId": "testRunId"
-      },
-      "queryParamMap": {},
       "bodyContentType": "application/json"
     },
     "output": {
@@ -14898,11 +13631,6 @@ export const GENERATED_OPERATIONS = [
       "openWorldHint": true
     },
     "input": {
-      "required": [
-        "projectId",
-        "testRunId",
-        "body"
-      ],
       "schema": {
         "type": "object",
         "properties": {
@@ -14926,20 +13654,14 @@ export const GENERATED_OPERATIONS = [
           "body"
         ],
         "additionalProperties": false
-      },
+      }
+    },
+    "wire": {
       "pathParams": [
         "projectId",
         "testRunId"
       ],
       "queryParams": [],
-      "hasBody": true
-    },
-    "wire": {
-      "pathParamMap": {
-        "projectId": "projectId",
-        "testRunId": "testRunId"
-      },
-      "queryParamMap": {},
       "bodyContentType": "application/json"
     },
     "output": {
@@ -14964,11 +13686,6 @@ export const GENERATED_OPERATIONS = [
       "openWorldHint": true
     },
     "input": {
-      "required": [
-        "projectId",
-        "testRunId",
-        "commentId"
-      ],
       "schema": {
         "type": "object",
         "properties": {
@@ -15189,7 +13906,9 @@ export const GENERATED_OPERATIONS = [
           "commentId"
         ],
         "additionalProperties": false
-      },
+      }
+    },
+    "wire": {
       "pathParams": [
         "projectId",
         "testRunId",
@@ -15199,20 +13918,7 @@ export const GENERATED_OPERATIONS = [
         "fields",
         "include",
         "revision"
-      ],
-      "hasBody": false
-    },
-    "wire": {
-      "pathParamMap": {
-        "projectId": "projectId",
-        "testRunId": "testRunId",
-        "commentId": "commentId"
-      },
-      "queryParamMap": {
-        "fields": "fields",
-        "include": "include",
-        "revision": "revision"
-      }
+      ]
     },
     "output": {
       "mode": "json",
@@ -15236,12 +13942,6 @@ export const GENERATED_OPERATIONS = [
       "openWorldHint": true
     },
     "input": {
-      "required": [
-        "projectId",
-        "testRunId",
-        "commentId",
-        "body"
-      ],
       "schema": {
         "type": "object",
         "properties": {
@@ -15270,22 +13970,15 @@ export const GENERATED_OPERATIONS = [
           "body"
         ],
         "additionalProperties": false
-      },
+      }
+    },
+    "wire": {
       "pathParams": [
         "projectId",
         "testRunId",
         "commentId"
       ],
       "queryParams": [],
-      "hasBody": true
-    },
-    "wire": {
-      "pathParamMap": {
-        "projectId": "projectId",
-        "testRunId": "testRunId",
-        "commentId": "commentId"
-      },
-      "queryParamMap": {},
       "bodyContentType": "application/json"
     },
     "output": {
@@ -15310,10 +14003,6 @@ export const GENERATED_OPERATIONS = [
       "openWorldHint": true
     },
     "input": {
-      "required": [
-        "projectId",
-        "testRunId"
-      ],
       "schema": {
         "type": "object",
         "properties": {
@@ -15529,7 +14218,9 @@ export const GENERATED_OPERATIONS = [
           "testRunId"
         ],
         "additionalProperties": false
-      },
+      }
+    },
+    "wire": {
       "pathParams": [
         "projectId",
         "testRunId"
@@ -15538,19 +14229,7 @@ export const GENERATED_OPERATIONS = [
         "fields",
         "include",
         "revision"
-      ],
-      "hasBody": false
-    },
-    "wire": {
-      "pathParamMap": {
-        "projectId": "projectId",
-        "testRunId": "testRunId"
-      },
-      "queryParamMap": {
-        "fields": "fields",
-        "include": "include",
-        "revision": "revision"
-      }
+      ]
     },
     "output": {
       "mode": "json",
@@ -15577,11 +14256,6 @@ export const GENERATED_OPERATIONS = [
       "openWorldHint": true
     },
     "input": {
-      "required": [
-        "projectId",
-        "testRunId",
-        "body"
-      ],
       "schema": {
         "type": "object",
         "properties": {
@@ -15605,20 +14279,14 @@ export const GENERATED_OPERATIONS = [
           "body"
         ],
         "additionalProperties": false
-      },
+      }
+    },
+    "wire": {
       "pathParams": [
         "projectId",
         "testRunId"
       ],
       "queryParams": [],
-      "hasBody": true
-    },
-    "wire": {
-      "pathParamMap": {
-        "projectId": "projectId",
-        "testRunId": "testRunId"
-      },
-      "queryParamMap": {},
       "bodyContentType": "application/json"
     },
     "output": {
@@ -15643,11 +14311,6 @@ export const GENERATED_OPERATIONS = [
       "openWorldHint": true
     },
     "input": {
-      "required": [
-        "projectId",
-        "testRunId",
-        "testParamId"
-      ],
       "schema": {
         "type": "object",
         "properties": {
@@ -15868,7 +14531,9 @@ export const GENERATED_OPERATIONS = [
           "testParamId"
         ],
         "additionalProperties": false
-      },
+      }
+    },
+    "wire": {
       "pathParams": [
         "projectId",
         "testRunId",
@@ -15878,20 +14543,7 @@ export const GENERATED_OPERATIONS = [
         "fields",
         "include",
         "revision"
-      ],
-      "hasBody": false
-    },
-    "wire": {
-      "pathParamMap": {
-        "projectId": "projectId",
-        "testRunId": "testRunId",
-        "testParamId": "testParamId"
-      },
-      "queryParamMap": {
-        "fields": "fields",
-        "include": "include",
-        "revision": "revision"
-      }
+      ]
     },
     "output": {
       "mode": "json",
@@ -15915,11 +14567,6 @@ export const GENERATED_OPERATIONS = [
       "openWorldHint": true
     },
     "input": {
-      "required": [
-        "projectId",
-        "testRunId",
-        "testParamId"
-      ],
       "schema": {
         "type": "object",
         "properties": {
@@ -15942,22 +14589,15 @@ export const GENERATED_OPERATIONS = [
           "testParamId"
         ],
         "additionalProperties": false
-      },
+      }
+    },
+    "wire": {
       "pathParams": [
         "projectId",
         "testRunId",
         "testParamId"
       ],
-      "queryParams": [],
-      "hasBody": false
-    },
-    "wire": {
-      "pathParamMap": {
-        "projectId": "projectId",
-        "testRunId": "testRunId",
-        "testParamId": "testParamId"
-      },
-      "queryParamMap": {}
+      "queryParams": []
     },
     "output": {
       "mode": "no_content",
@@ -15981,10 +14621,6 @@ export const GENERATED_OPERATIONS = [
       "openWorldHint": true
     },
     "input": {
-      "required": [
-        "projectId",
-        "testRunId"
-      ],
       "schema": {
         "type": "object",
         "properties": {
@@ -16200,7 +14836,9 @@ export const GENERATED_OPERATIONS = [
           "testRunId"
         ],
         "additionalProperties": false
-      },
+      }
+    },
+    "wire": {
       "pathParams": [
         "projectId",
         "testRunId"
@@ -16209,19 +14847,7 @@ export const GENERATED_OPERATIONS = [
         "fields",
         "include",
         "revision"
-      ],
-      "hasBody": false
-    },
-    "wire": {
-      "pathParamMap": {
-        "projectId": "projectId",
-        "testRunId": "testRunId"
-      },
-      "queryParamMap": {
-        "fields": "fields",
-        "include": "include",
-        "revision": "revision"
-      }
+      ]
     },
     "output": {
       "mode": "json",
@@ -16248,11 +14874,6 @@ export const GENERATED_OPERATIONS = [
       "openWorldHint": true
     },
     "input": {
-      "required": [
-        "projectId",
-        "testRunId",
-        "body"
-      ],
       "schema": {
         "type": "object",
         "properties": {
@@ -16276,20 +14897,14 @@ export const GENERATED_OPERATIONS = [
           "body"
         ],
         "additionalProperties": false
-      },
+      }
+    },
+    "wire": {
       "pathParams": [
         "projectId",
         "testRunId"
       ],
       "queryParams": [],
-      "hasBody": true
-    },
-    "wire": {
-      "pathParamMap": {
-        "projectId": "projectId",
-        "testRunId": "testRunId"
-      },
-      "queryParamMap": {},
       "bodyContentType": "application/json"
     },
     "output": {
@@ -16314,11 +14929,6 @@ export const GENERATED_OPERATIONS = [
       "openWorldHint": true
     },
     "input": {
-      "required": [
-        "projectId",
-        "testRunId",
-        "body"
-      ],
       "schema": {
         "type": "object",
         "properties": {
@@ -16342,20 +14952,14 @@ export const GENERATED_OPERATIONS = [
           "body"
         ],
         "additionalProperties": false
-      },
+      }
+    },
+    "wire": {
       "pathParams": [
         "projectId",
         "testRunId"
       ],
       "queryParams": [],
-      "hasBody": true
-    },
-    "wire": {
-      "pathParamMap": {
-        "projectId": "projectId",
-        "testRunId": "testRunId"
-      },
-      "queryParamMap": {},
       "bodyContentType": "application/json"
     },
     "output": {
@@ -16380,11 +14984,6 @@ export const GENERATED_OPERATIONS = [
       "openWorldHint": true
     },
     "input": {
-      "required": [
-        "projectId",
-        "testRunId",
-        "testParamId"
-      ],
       "schema": {
         "type": "object",
         "properties": {
@@ -16605,7 +15204,9 @@ export const GENERATED_OPERATIONS = [
           "testParamId"
         ],
         "additionalProperties": false
-      },
+      }
+    },
+    "wire": {
       "pathParams": [
         "projectId",
         "testRunId",
@@ -16615,20 +15216,7 @@ export const GENERATED_OPERATIONS = [
         "fields",
         "include",
         "revision"
-      ],
-      "hasBody": false
-    },
-    "wire": {
-      "pathParamMap": {
-        "projectId": "projectId",
-        "testRunId": "testRunId",
-        "testParamId": "testParamId"
-      },
-      "queryParamMap": {
-        "fields": "fields",
-        "include": "include",
-        "revision": "revision"
-      }
+      ]
     },
     "output": {
       "mode": "json",
@@ -16652,11 +15240,6 @@ export const GENERATED_OPERATIONS = [
       "openWorldHint": true
     },
     "input": {
-      "required": [
-        "projectId",
-        "testRunId",
-        "testParamId"
-      ],
       "schema": {
         "type": "object",
         "properties": {
@@ -16679,22 +15262,15 @@ export const GENERATED_OPERATIONS = [
           "testParamId"
         ],
         "additionalProperties": false
-      },
+      }
+    },
+    "wire": {
       "pathParams": [
         "projectId",
         "testRunId",
         "testParamId"
       ],
-      "queryParams": [],
-      "hasBody": false
-    },
-    "wire": {
-      "pathParamMap": {
-        "projectId": "projectId",
-        "testRunId": "testRunId",
-        "testParamId": "testParamId"
-      },
-      "queryParamMap": {}
+      "queryParams": []
     },
     "output": {
       "mode": "no_content",
@@ -16718,10 +15294,6 @@ export const GENERATED_OPERATIONS = [
       "openWorldHint": true
     },
     "input": {
-      "required": [
-        "projectId",
-        "testRunId"
-      ],
       "schema": {
         "type": "object",
         "properties": {
@@ -16949,7 +15521,9 @@ export const GENERATED_OPERATIONS = [
           "testRunId"
         ],
         "additionalProperties": false
-      },
+      }
+    },
+    "wire": {
       "pathParams": [
         "projectId",
         "testRunId"
@@ -16961,22 +15535,7 @@ export const GENERATED_OPERATIONS = [
         "testCaseProjectId",
         "testCaseId",
         "testResultId"
-      ],
-      "hasBody": false
-    },
-    "wire": {
-      "pathParamMap": {
-        "projectId": "projectId",
-        "testRunId": "testRunId"
-      },
-      "queryParamMap": {
-        "fields": "fields",
-        "include": "include",
-        "revision": "revision",
-        "testCaseProjectId": "testCaseProjectId",
-        "testCaseId": "testCaseId",
-        "testResultId": "testResultId"
-      }
+      ]
     },
     "output": {
       "mode": "json",
@@ -17003,11 +15562,6 @@ export const GENERATED_OPERATIONS = [
       "openWorldHint": true
     },
     "input": {
-      "required": [
-        "projectId",
-        "testRunId",
-        "body"
-      ],
       "schema": {
         "type": "object",
         "properties": {
@@ -17031,20 +15585,14 @@ export const GENERATED_OPERATIONS = [
           "body"
         ],
         "additionalProperties": false
-      },
+      }
+    },
+    "wire": {
       "pathParams": [
         "projectId",
         "testRunId"
       ],
       "queryParams": [],
-      "hasBody": true
-    },
-    "wire": {
-      "pathParamMap": {
-        "projectId": "projectId",
-        "testRunId": "testRunId"
-      },
-      "queryParamMap": {},
       "bodyContentType": "application/json"
     },
     "output": {
@@ -17069,11 +15617,6 @@ export const GENERATED_OPERATIONS = [
       "openWorldHint": true
     },
     "input": {
-      "required": [
-        "projectId",
-        "testRunId",
-        "body"
-      ],
       "schema": {
         "type": "object",
         "properties": {
@@ -17097,20 +15640,14 @@ export const GENERATED_OPERATIONS = [
           "body"
         ],
         "additionalProperties": false
-      },
+      }
+    },
+    "wire": {
       "pathParams": [
         "projectId",
         "testRunId"
       ],
       "queryParams": [],
-      "hasBody": true
-    },
-    "wire": {
-      "pathParamMap": {
-        "projectId": "projectId",
-        "testRunId": "testRunId"
-      },
-      "queryParamMap": {},
       "bodyContentType": "application/json"
     },
     "output": {
@@ -17135,13 +15672,6 @@ export const GENERATED_OPERATIONS = [
       "openWorldHint": true
     },
     "input": {
-      "required": [
-        "projectId",
-        "testRunId",
-        "testCaseProjectId",
-        "testCaseId",
-        "iteration"
-      ],
       "schema": {
         "type": "object",
         "properties": {
@@ -17372,7 +15902,9 @@ export const GENERATED_OPERATIONS = [
           "iteration"
         ],
         "additionalProperties": false
-      },
+      }
+    },
+    "wire": {
       "pathParams": [
         "projectId",
         "testRunId",
@@ -17384,22 +15916,7 @@ export const GENERATED_OPERATIONS = [
         "fields",
         "include",
         "revision"
-      ],
-      "hasBody": false
-    },
-    "wire": {
-      "pathParamMap": {
-        "projectId": "projectId",
-        "testRunId": "testRunId",
-        "testCaseProjectId": "testCaseProjectId",
-        "testCaseId": "testCaseId",
-        "iteration": "iteration"
-      },
-      "queryParamMap": {
-        "fields": "fields",
-        "include": "include",
-        "revision": "revision"
-      }
+      ]
     },
     "output": {
       "mode": "json",
@@ -17423,14 +15940,6 @@ export const GENERATED_OPERATIONS = [
       "openWorldHint": true
     },
     "input": {
-      "required": [
-        "projectId",
-        "testRunId",
-        "testCaseProjectId",
-        "testCaseId",
-        "iteration",
-        "body"
-      ],
       "schema": {
         "type": "object",
         "properties": {
@@ -17469,7 +15978,9 @@ export const GENERATED_OPERATIONS = [
           "body"
         ],
         "additionalProperties": false
-      },
+      }
+    },
+    "wire": {
       "pathParams": [
         "projectId",
         "testRunId",
@@ -17478,17 +15989,6 @@ export const GENERATED_OPERATIONS = [
         "iteration"
       ],
       "queryParams": [],
-      "hasBody": true
-    },
-    "wire": {
-      "pathParamMap": {
-        "projectId": "projectId",
-        "testRunId": "testRunId",
-        "testCaseProjectId": "testCaseProjectId",
-        "testCaseId": "testCaseId",
-        "iteration": "iteration"
-      },
-      "queryParamMap": {},
       "bodyContentType": "application/json"
     },
     "output": {
@@ -17513,13 +16013,6 @@ export const GENERATED_OPERATIONS = [
       "openWorldHint": true
     },
     "input": {
-      "required": [
-        "projectId",
-        "testRunId",
-        "testCaseProjectId",
-        "testCaseId",
-        "iteration"
-      ],
       "schema": {
         "type": "object",
         "properties": {
@@ -17552,7 +16045,9 @@ export const GENERATED_OPERATIONS = [
           "iteration"
         ],
         "additionalProperties": false
-      },
+      }
+    },
+    "wire": {
       "pathParams": [
         "projectId",
         "testRunId",
@@ -17560,18 +16055,7 @@ export const GENERATED_OPERATIONS = [
         "testCaseId",
         "iteration"
       ],
-      "queryParams": [],
-      "hasBody": false
-    },
-    "wire": {
-      "pathParamMap": {
-        "projectId": "projectId",
-        "testRunId": "testRunId",
-        "testCaseProjectId": "testCaseProjectId",
-        "testCaseId": "testCaseId",
-        "iteration": "iteration"
-      },
-      "queryParamMap": {}
+      "queryParams": []
     },
     "output": {
       "mode": "no_content",
@@ -17595,13 +16079,6 @@ export const GENERATED_OPERATIONS = [
       "openWorldHint": true
     },
     "input": {
-      "required": [
-        "projectId",
-        "testRunId",
-        "testCaseProjectId",
-        "testCaseId",
-        "iteration"
-      ],
       "schema": {
         "type": "object",
         "properties": {
@@ -17634,7 +16111,9 @@ export const GENERATED_OPERATIONS = [
           "iteration"
         ],
         "additionalProperties": false
-      },
+      }
+    },
+    "wire": {
       "pathParams": [
         "projectId",
         "testRunId",
@@ -17642,18 +16121,7 @@ export const GENERATED_OPERATIONS = [
         "testCaseId",
         "iteration"
       ],
-      "queryParams": [],
-      "hasBody": false
-    },
-    "wire": {
-      "pathParamMap": {
-        "projectId": "projectId",
-        "testRunId": "testRunId",
-        "testCaseProjectId": "testCaseProjectId",
-        "testCaseId": "testCaseId",
-        "iteration": "iteration"
-      },
-      "queryParamMap": {}
+      "queryParams": []
     },
     "output": {
       "mode": "json",
@@ -17677,13 +16145,6 @@ export const GENERATED_OPERATIONS = [
       "openWorldHint": true
     },
     "input": {
-      "required": [
-        "projectId",
-        "testRunId",
-        "testCaseProjectId",
-        "testCaseId",
-        "iteration"
-      ],
       "schema": {
         "type": "object",
         "properties": {
@@ -17914,7 +16375,9 @@ export const GENERATED_OPERATIONS = [
           "iteration"
         ],
         "additionalProperties": false
-      },
+      }
+    },
+    "wire": {
       "pathParams": [
         "projectId",
         "testRunId",
@@ -17926,22 +16389,7 @@ export const GENERATED_OPERATIONS = [
         "fields",
         "include",
         "revision"
-      ],
-      "hasBody": false
-    },
-    "wire": {
-      "pathParamMap": {
-        "projectId": "projectId",
-        "testRunId": "testRunId",
-        "testCaseProjectId": "testCaseProjectId",
-        "testCaseId": "testCaseId",
-        "iteration": "iteration"
-      },
-      "queryParamMap": {
-        "fields": "fields",
-        "include": "include",
-        "revision": "revision"
-      }
+      ]
     },
     "output": {
       "mode": "json",
@@ -17968,14 +16416,6 @@ export const GENERATED_OPERATIONS = [
       "openWorldHint": true
     },
     "input": {
-      "required": [
-        "projectId",
-        "testRunId",
-        "testCaseProjectId",
-        "testCaseId",
-        "iteration",
-        "body"
-      ],
       "schema": {
         "type": "object",
         "properties": {
@@ -18014,7 +16454,9 @@ export const GENERATED_OPERATIONS = [
           "body"
         ],
         "additionalProperties": false
-      },
+      }
+    },
+    "wire": {
       "pathParams": [
         "projectId",
         "testRunId",
@@ -18023,17 +16465,6 @@ export const GENERATED_OPERATIONS = [
         "iteration"
       ],
       "queryParams": [],
-      "hasBody": true
-    },
-    "wire": {
-      "pathParamMap": {
-        "projectId": "projectId",
-        "testRunId": "testRunId",
-        "testCaseProjectId": "testCaseProjectId",
-        "testCaseId": "testCaseId",
-        "iteration": "iteration"
-      },
-      "queryParamMap": {},
       "bodyContentType": "application/json"
     },
     "output": {
@@ -18058,14 +16489,6 @@ export const GENERATED_OPERATIONS = [
       "openWorldHint": true
     },
     "input": {
-      "required": [
-        "projectId",
-        "testRunId",
-        "testCaseProjectId",
-        "testCaseId",
-        "iteration",
-        "attachmentId"
-      ],
       "schema": {
         "type": "object",
         "properties": {
@@ -18301,7 +16724,9 @@ export const GENERATED_OPERATIONS = [
           "attachmentId"
         ],
         "additionalProperties": false
-      },
+      }
+    },
+    "wire": {
       "pathParams": [
         "projectId",
         "testRunId",
@@ -18314,23 +16739,7 @@ export const GENERATED_OPERATIONS = [
         "fields",
         "include",
         "revision"
-      ],
-      "hasBody": false
-    },
-    "wire": {
-      "pathParamMap": {
-        "projectId": "projectId",
-        "testRunId": "testRunId",
-        "testCaseProjectId": "testCaseProjectId",
-        "testCaseId": "testCaseId",
-        "iteration": "iteration",
-        "attachmentId": "attachmentId"
-      },
-      "queryParamMap": {
-        "fields": "fields",
-        "include": "include",
-        "revision": "revision"
-      }
+      ]
     },
     "output": {
       "mode": "json",
@@ -18354,14 +16763,6 @@ export const GENERATED_OPERATIONS = [
       "openWorldHint": true
     },
     "input": {
-      "required": [
-        "projectId",
-        "testRunId",
-        "testCaseProjectId",
-        "testCaseId",
-        "iteration",
-        "attachmentId"
-      ],
       "schema": {
         "type": "object",
         "properties": {
@@ -18399,7 +16800,9 @@ export const GENERATED_OPERATIONS = [
           "attachmentId"
         ],
         "additionalProperties": false
-      },
+      }
+    },
+    "wire": {
       "pathParams": [
         "projectId",
         "testRunId",
@@ -18408,19 +16811,7 @@ export const GENERATED_OPERATIONS = [
         "iteration",
         "attachmentId"
       ],
-      "queryParams": [],
-      "hasBody": false
-    },
-    "wire": {
-      "pathParamMap": {
-        "projectId": "projectId",
-        "testRunId": "testRunId",
-        "testCaseProjectId": "testCaseProjectId",
-        "testCaseId": "testCaseId",
-        "iteration": "iteration",
-        "attachmentId": "attachmentId"
-      },
-      "queryParamMap": {}
+      "queryParams": []
     },
     "output": {
       "mode": "no_content",
@@ -18444,13 +16835,6 @@ export const GENERATED_OPERATIONS = [
       "openWorldHint": true
     },
     "input": {
-      "required": [
-        "projectId",
-        "testRunId",
-        "testCaseProjectId",
-        "testCaseId",
-        "iteration"
-      ],
       "schema": {
         "type": "object",
         "properties": {
@@ -18681,7 +17065,9 @@ export const GENERATED_OPERATIONS = [
           "iteration"
         ],
         "additionalProperties": false
-      },
+      }
+    },
+    "wire": {
       "pathParams": [
         "projectId",
         "testRunId",
@@ -18693,22 +17079,7 @@ export const GENERATED_OPERATIONS = [
         "fields",
         "include",
         "revision"
-      ],
-      "hasBody": false
-    },
-    "wire": {
-      "pathParamMap": {
-        "projectId": "projectId",
-        "testRunId": "testRunId",
-        "testCaseProjectId": "testCaseProjectId",
-        "testCaseId": "testCaseId",
-        "iteration": "iteration"
-      },
-      "queryParamMap": {
-        "fields": "fields",
-        "include": "include",
-        "revision": "revision"
-      }
+      ]
     },
     "output": {
       "mode": "json",
@@ -18735,14 +17106,6 @@ export const GENERATED_OPERATIONS = [
       "openWorldHint": true
     },
     "input": {
-      "required": [
-        "projectId",
-        "testRunId",
-        "testCaseProjectId",
-        "testCaseId",
-        "iteration",
-        "body"
-      ],
       "schema": {
         "type": "object",
         "properties": {
@@ -18781,7 +17144,9 @@ export const GENERATED_OPERATIONS = [
           "body"
         ],
         "additionalProperties": false
-      },
+      }
+    },
+    "wire": {
       "pathParams": [
         "projectId",
         "testRunId",
@@ -18790,17 +17155,6 @@ export const GENERATED_OPERATIONS = [
         "iteration"
       ],
       "queryParams": [],
-      "hasBody": true
-    },
-    "wire": {
-      "pathParamMap": {
-        "projectId": "projectId",
-        "testRunId": "testRunId",
-        "testCaseProjectId": "testCaseProjectId",
-        "testCaseId": "testCaseId",
-        "iteration": "iteration"
-      },
-      "queryParamMap": {},
       "bodyContentType": "application/json"
     },
     "output": {
@@ -18825,14 +17179,6 @@ export const GENERATED_OPERATIONS = [
       "openWorldHint": true
     },
     "input": {
-      "required": [
-        "projectId",
-        "testRunId",
-        "testCaseProjectId",
-        "testCaseId",
-        "iteration",
-        "testParamId"
-      ],
       "schema": {
         "type": "object",
         "properties": {
@@ -19068,7 +17414,9 @@ export const GENERATED_OPERATIONS = [
           "testParamId"
         ],
         "additionalProperties": false
-      },
+      }
+    },
+    "wire": {
       "pathParams": [
         "projectId",
         "testRunId",
@@ -19081,23 +17429,7 @@ export const GENERATED_OPERATIONS = [
         "fields",
         "include",
         "revision"
-      ],
-      "hasBody": false
-    },
-    "wire": {
-      "pathParamMap": {
-        "projectId": "projectId",
-        "testRunId": "testRunId",
-        "testCaseProjectId": "testCaseProjectId",
-        "testCaseId": "testCaseId",
-        "iteration": "iteration",
-        "testParamId": "testParamId"
-      },
-      "queryParamMap": {
-        "fields": "fields",
-        "include": "include",
-        "revision": "revision"
-      }
+      ]
     },
     "output": {
       "mode": "json",
@@ -19121,14 +17453,6 @@ export const GENERATED_OPERATIONS = [
       "openWorldHint": true
     },
     "input": {
-      "required": [
-        "projectId",
-        "testRunId",
-        "testCaseProjectId",
-        "testCaseId",
-        "iteration",
-        "testParamId"
-      ],
       "schema": {
         "type": "object",
         "properties": {
@@ -19166,7 +17490,9 @@ export const GENERATED_OPERATIONS = [
           "testParamId"
         ],
         "additionalProperties": false
-      },
+      }
+    },
+    "wire": {
       "pathParams": [
         "projectId",
         "testRunId",
@@ -19175,19 +17501,7 @@ export const GENERATED_OPERATIONS = [
         "iteration",
         "testParamId"
       ],
-      "queryParams": [],
-      "hasBody": false
-    },
-    "wire": {
-      "pathParamMap": {
-        "projectId": "projectId",
-        "testRunId": "testRunId",
-        "testCaseProjectId": "testCaseProjectId",
-        "testCaseId": "testCaseId",
-        "iteration": "iteration",
-        "testParamId": "testParamId"
-      },
-      "queryParamMap": {}
+      "queryParams": []
     },
     "output": {
       "mode": "no_content",
@@ -19211,13 +17525,6 @@ export const GENERATED_OPERATIONS = [
       "openWorldHint": true
     },
     "input": {
-      "required": [
-        "projectId",
-        "testRunId",
-        "testCaseProjectId",
-        "testCaseId",
-        "iteration"
-      ],
       "schema": {
         "type": "object",
         "properties": {
@@ -19448,7 +17755,9 @@ export const GENERATED_OPERATIONS = [
           "iteration"
         ],
         "additionalProperties": false
-      },
+      }
+    },
+    "wire": {
       "pathParams": [
         "projectId",
         "testRunId",
@@ -19460,22 +17769,7 @@ export const GENERATED_OPERATIONS = [
         "fields",
         "include",
         "revision"
-      ],
-      "hasBody": false
-    },
-    "wire": {
-      "pathParamMap": {
-        "projectId": "projectId",
-        "testRunId": "testRunId",
-        "testCaseProjectId": "testCaseProjectId",
-        "testCaseId": "testCaseId",
-        "iteration": "iteration"
-      },
-      "queryParamMap": {
-        "fields": "fields",
-        "include": "include",
-        "revision": "revision"
-      }
+      ]
     },
     "output": {
       "mode": "json",
@@ -19502,14 +17796,6 @@ export const GENERATED_OPERATIONS = [
       "openWorldHint": true
     },
     "input": {
-      "required": [
-        "projectId",
-        "testRunId",
-        "testCaseProjectId",
-        "testCaseId",
-        "iteration",
-        "body"
-      ],
       "schema": {
         "type": "object",
         "properties": {
@@ -19548,7 +17834,9 @@ export const GENERATED_OPERATIONS = [
           "body"
         ],
         "additionalProperties": false
-      },
+      }
+    },
+    "wire": {
       "pathParams": [
         "projectId",
         "testRunId",
@@ -19557,17 +17845,6 @@ export const GENERATED_OPERATIONS = [
         "iteration"
       ],
       "queryParams": [],
-      "hasBody": true
-    },
-    "wire": {
-      "pathParamMap": {
-        "projectId": "projectId",
-        "testRunId": "testRunId",
-        "testCaseProjectId": "testCaseProjectId",
-        "testCaseId": "testCaseId",
-        "iteration": "iteration"
-      },
-      "queryParamMap": {},
       "bodyContentType": "application/json"
     },
     "output": {
@@ -19592,14 +17869,6 @@ export const GENERATED_OPERATIONS = [
       "openWorldHint": true
     },
     "input": {
-      "required": [
-        "projectId",
-        "testRunId",
-        "testCaseProjectId",
-        "testCaseId",
-        "iteration",
-        "body"
-      ],
       "schema": {
         "type": "object",
         "properties": {
@@ -19638,7 +17907,9 @@ export const GENERATED_OPERATIONS = [
           "body"
         ],
         "additionalProperties": false
-      },
+      }
+    },
+    "wire": {
       "pathParams": [
         "projectId",
         "testRunId",
@@ -19647,17 +17918,6 @@ export const GENERATED_OPERATIONS = [
         "iteration"
       ],
       "queryParams": [],
-      "hasBody": true
-    },
-    "wire": {
-      "pathParamMap": {
-        "projectId": "projectId",
-        "testRunId": "testRunId",
-        "testCaseProjectId": "testCaseProjectId",
-        "testCaseId": "testCaseId",
-        "iteration": "iteration"
-      },
-      "queryParamMap": {},
       "bodyContentType": "application/json"
     },
     "output": {
@@ -19682,14 +17942,6 @@ export const GENERATED_OPERATIONS = [
       "openWorldHint": true
     },
     "input": {
-      "required": [
-        "projectId",
-        "testRunId",
-        "testCaseProjectId",
-        "testCaseId",
-        "iteration",
-        "testStepIndex"
-      ],
       "schema": {
         "type": "object",
         "properties": {
@@ -19925,7 +18177,9 @@ export const GENERATED_OPERATIONS = [
           "testStepIndex"
         ],
         "additionalProperties": false
-      },
+      }
+    },
+    "wire": {
       "pathParams": [
         "projectId",
         "testRunId",
@@ -19938,23 +18192,7 @@ export const GENERATED_OPERATIONS = [
         "fields",
         "include",
         "revision"
-      ],
-      "hasBody": false
-    },
-    "wire": {
-      "pathParamMap": {
-        "projectId": "projectId",
-        "testRunId": "testRunId",
-        "testCaseProjectId": "testCaseProjectId",
-        "testCaseId": "testCaseId",
-        "iteration": "iteration",
-        "testStepIndex": "testStepIndex"
-      },
-      "queryParamMap": {
-        "fields": "fields",
-        "include": "include",
-        "revision": "revision"
-      }
+      ]
     },
     "output": {
       "mode": "json",
@@ -19978,15 +18216,6 @@ export const GENERATED_OPERATIONS = [
       "openWorldHint": true
     },
     "input": {
-      "required": [
-        "projectId",
-        "testRunId",
-        "testCaseProjectId",
-        "testCaseId",
-        "iteration",
-        "testStepIndex",
-        "body"
-      ],
       "schema": {
         "type": "object",
         "properties": {
@@ -20030,7 +18259,9 @@ export const GENERATED_OPERATIONS = [
           "body"
         ],
         "additionalProperties": false
-      },
+      }
+    },
+    "wire": {
       "pathParams": [
         "projectId",
         "testRunId",
@@ -20040,18 +18271,6 @@ export const GENERATED_OPERATIONS = [
         "testStepIndex"
       ],
       "queryParams": [],
-      "hasBody": true
-    },
-    "wire": {
-      "pathParamMap": {
-        "projectId": "projectId",
-        "testRunId": "testRunId",
-        "testCaseProjectId": "testCaseProjectId",
-        "testCaseId": "testCaseId",
-        "iteration": "iteration",
-        "testStepIndex": "testStepIndex"
-      },
-      "queryParamMap": {},
       "bodyContentType": "application/json"
     },
     "output": {
@@ -20076,14 +18295,6 @@ export const GENERATED_OPERATIONS = [
       "openWorldHint": true
     },
     "input": {
-      "required": [
-        "projectId",
-        "testRunId",
-        "testCaseProjectId",
-        "testCaseId",
-        "iteration",
-        "testStepIndex"
-      ],
       "schema": {
         "type": "object",
         "properties": {
@@ -20319,7 +18530,9 @@ export const GENERATED_OPERATIONS = [
           "testStepIndex"
         ],
         "additionalProperties": false
-      },
+      }
+    },
+    "wire": {
       "pathParams": [
         "projectId",
         "testRunId",
@@ -20332,23 +18545,7 @@ export const GENERATED_OPERATIONS = [
         "fields",
         "include",
         "revision"
-      ],
-      "hasBody": false
-    },
-    "wire": {
-      "pathParamMap": {
-        "projectId": "projectId",
-        "testRunId": "testRunId",
-        "testCaseProjectId": "testCaseProjectId",
-        "testCaseId": "testCaseId",
-        "iteration": "iteration",
-        "testStepIndex": "testStepIndex"
-      },
-      "queryParamMap": {
-        "fields": "fields",
-        "include": "include",
-        "revision": "revision"
-      }
+      ]
     },
     "output": {
       "mode": "json",
@@ -20375,15 +18572,6 @@ export const GENERATED_OPERATIONS = [
       "openWorldHint": true
     },
     "input": {
-      "required": [
-        "projectId",
-        "testRunId",
-        "testCaseProjectId",
-        "testCaseId",
-        "iteration",
-        "testStepIndex",
-        "body"
-      ],
       "schema": {
         "type": "object",
         "properties": {
@@ -20427,7 +18615,9 @@ export const GENERATED_OPERATIONS = [
           "body"
         ],
         "additionalProperties": false
-      },
+      }
+    },
+    "wire": {
       "pathParams": [
         "projectId",
         "testRunId",
@@ -20437,18 +18627,6 @@ export const GENERATED_OPERATIONS = [
         "testStepIndex"
       ],
       "queryParams": [],
-      "hasBody": true
-    },
-    "wire": {
-      "pathParamMap": {
-        "projectId": "projectId",
-        "testRunId": "testRunId",
-        "testCaseProjectId": "testCaseProjectId",
-        "testCaseId": "testCaseId",
-        "iteration": "iteration",
-        "testStepIndex": "testStepIndex"
-      },
-      "queryParamMap": {},
       "bodyContentType": "application/json"
     },
     "output": {
@@ -20473,15 +18651,6 @@ export const GENERATED_OPERATIONS = [
       "openWorldHint": true
     },
     "input": {
-      "required": [
-        "projectId",
-        "testRunId",
-        "testCaseProjectId",
-        "testCaseId",
-        "iteration",
-        "testStepIndex",
-        "attachmentId"
-      ],
       "schema": {
         "type": "object",
         "properties": {
@@ -20722,7 +18891,9 @@ export const GENERATED_OPERATIONS = [
           "attachmentId"
         ],
         "additionalProperties": false
-      },
+      }
+    },
+    "wire": {
       "pathParams": [
         "projectId",
         "testRunId",
@@ -20736,24 +18907,7 @@ export const GENERATED_OPERATIONS = [
         "fields",
         "include",
         "revision"
-      ],
-      "hasBody": false
-    },
-    "wire": {
-      "pathParamMap": {
-        "projectId": "projectId",
-        "testRunId": "testRunId",
-        "testCaseProjectId": "testCaseProjectId",
-        "testCaseId": "testCaseId",
-        "iteration": "iteration",
-        "testStepIndex": "testStepIndex",
-        "attachmentId": "attachmentId"
-      },
-      "queryParamMap": {
-        "fields": "fields",
-        "include": "include",
-        "revision": "revision"
-      }
+      ]
     },
     "output": {
       "mode": "json",
@@ -20777,15 +18931,6 @@ export const GENERATED_OPERATIONS = [
       "openWorldHint": true
     },
     "input": {
-      "required": [
-        "projectId",
-        "testRunId",
-        "testCaseProjectId",
-        "testCaseId",
-        "iteration",
-        "testStepIndex",
-        "attachmentId"
-      ],
       "schema": {
         "type": "object",
         "properties": {
@@ -20828,7 +18973,9 @@ export const GENERATED_OPERATIONS = [
           "attachmentId"
         ],
         "additionalProperties": false
-      },
+      }
+    },
+    "wire": {
       "pathParams": [
         "projectId",
         "testRunId",
@@ -20838,20 +18985,7 @@ export const GENERATED_OPERATIONS = [
         "testStepIndex",
         "attachmentId"
       ],
-      "queryParams": [],
-      "hasBody": false
-    },
-    "wire": {
-      "pathParamMap": {
-        "projectId": "projectId",
-        "testRunId": "testRunId",
-        "testCaseProjectId": "testCaseProjectId",
-        "testCaseId": "testCaseId",
-        "iteration": "iteration",
-        "testStepIndex": "testStepIndex",
-        "attachmentId": "attachmentId"
-      },
-      "queryParamMap": {}
+      "queryParams": []
     },
     "output": {
       "mode": "no_content",
@@ -20875,9 +19009,6 @@ export const GENERATED_OPERATIONS = [
       "openWorldHint": true
     },
     "input": {
-      "required": [
-        "projectId"
-      ],
       "schema": {
         "type": "object",
         "properties": {
@@ -21096,7 +19227,9 @@ export const GENERATED_OPERATIONS = [
           "projectId"
         ],
         "additionalProperties": false
-      },
+      }
+    },
+    "wire": {
       "pathParams": [
         "projectId"
       ],
@@ -21106,20 +19239,7 @@ export const GENERATED_OPERATIONS = [
         "query",
         "sort",
         "revision"
-      ],
-      "hasBody": false
-    },
-    "wire": {
-      "pathParamMap": {
-        "projectId": "projectId"
-      },
-      "queryParamMap": {
-        "fields": "fields",
-        "include": "include",
-        "query": "query",
-        "sort": "sort",
-        "revision": "revision"
-      }
+      ]
     },
     "output": {
       "mode": "json",
@@ -21146,10 +19266,6 @@ export const GENERATED_OPERATIONS = [
       "openWorldHint": true
     },
     "input": {
-      "required": [
-        "projectId",
-        "body"
-      ],
       "schema": {
         "type": "object",
         "properties": {
@@ -21168,18 +19284,13 @@ export const GENERATED_OPERATIONS = [
           "body"
         ],
         "additionalProperties": false
-      },
+      }
+    },
+    "wire": {
       "pathParams": [
         "projectId"
       ],
       "queryParams": [],
-      "hasBody": true
-    },
-    "wire": {
-      "pathParamMap": {
-        "projectId": "projectId"
-      },
-      "queryParamMap": {},
       "bodyContentType": "application/json"
     },
     "output": {
@@ -21204,10 +19315,6 @@ export const GENERATED_OPERATIONS = [
       "openWorldHint": true
     },
     "input": {
-      "required": [
-        "projectId",
-        "body"
-      ],
       "schema": {
         "type": "object",
         "properties": {
@@ -21234,7 +19341,9 @@ export const GENERATED_OPERATIONS = [
           "body"
         ],
         "additionalProperties": false
-      },
+      }
+    },
+    "wire": {
       "pathParams": [
         "projectId"
       ],
@@ -21242,16 +19351,6 @@ export const GENERATED_OPERATIONS = [
         "workflowAction",
         "changeTypeTo"
       ],
-      "hasBody": true
-    },
-    "wire": {
-      "pathParamMap": {
-        "projectId": "projectId"
-      },
-      "queryParamMap": {
-        "workflowAction": "workflowAction",
-        "changeTypeTo": "changeTypeTo"
-      },
       "bodyContentType": "application/json"
     },
     "output": {
@@ -21276,10 +19375,6 @@ export const GENERATED_OPERATIONS = [
       "openWorldHint": true
     },
     "input": {
-      "required": [
-        "projectId",
-        "body"
-      ],
       "schema": {
         "type": "object",
         "properties": {
@@ -21298,18 +19393,13 @@ export const GENERATED_OPERATIONS = [
           "body"
         ],
         "additionalProperties": false
-      },
+      }
+    },
+    "wire": {
       "pathParams": [
         "projectId"
       ],
       "queryParams": [],
-      "hasBody": true
-    },
-    "wire": {
-      "pathParamMap": {
-        "projectId": "projectId"
-      },
-      "queryParamMap": {},
       "bodyContentType": "application/json"
     },
     "output": {
@@ -21334,10 +19424,6 @@ export const GENERATED_OPERATIONS = [
       "openWorldHint": true
     },
     "input": {
-      "required": [
-        "projectId",
-        "workItemId"
-      ],
       "schema": {
         "type": "object",
         "properties": {
@@ -21553,7 +19639,9 @@ export const GENERATED_OPERATIONS = [
           "workItemId"
         ],
         "additionalProperties": false
-      },
+      }
+    },
+    "wire": {
       "pathParams": [
         "projectId",
         "workItemId"
@@ -21562,19 +19650,7 @@ export const GENERATED_OPERATIONS = [
         "fields",
         "include",
         "revision"
-      ],
-      "hasBody": false
-    },
-    "wire": {
-      "pathParamMap": {
-        "projectId": "projectId",
-        "workItemId": "workItemId"
-      },
-      "queryParamMap": {
-        "fields": "fields",
-        "include": "include",
-        "revision": "revision"
-      }
+      ]
     },
     "output": {
       "mode": "json",
@@ -21598,11 +19674,6 @@ export const GENERATED_OPERATIONS = [
       "openWorldHint": true
     },
     "input": {
-      "required": [
-        "projectId",
-        "workItemId",
-        "body"
-      ],
       "schema": {
         "type": "object",
         "properties": {
@@ -21634,7 +19705,9 @@ export const GENERATED_OPERATIONS = [
           "body"
         ],
         "additionalProperties": false
-      },
+      }
+    },
+    "wire": {
       "pathParams": [
         "projectId",
         "workItemId"
@@ -21643,17 +19716,6 @@ export const GENERATED_OPERATIONS = [
         "workflowAction",
         "changeTypeTo"
       ],
-      "hasBody": true
-    },
-    "wire": {
-      "pathParamMap": {
-        "projectId": "projectId",
-        "workItemId": "workItemId"
-      },
-      "queryParamMap": {
-        "workflowAction": "workflowAction",
-        "changeTypeTo": "changeTypeTo"
-      },
       "bodyContentType": "application/json"
     },
     "output": {
@@ -21678,10 +19740,6 @@ export const GENERATED_OPERATIONS = [
       "openWorldHint": true
     },
     "input": {
-      "required": [
-        "projectId",
-        "workItemId"
-      ],
       "schema": {
         "type": "object",
         "properties": {
@@ -21699,20 +19757,14 @@ export const GENERATED_OPERATIONS = [
           "workItemId"
         ],
         "additionalProperties": false
-      },
+      }
+    },
+    "wire": {
       "pathParams": [
         "projectId",
         "workItemId"
       ],
-      "queryParams": [],
-      "hasBody": false
-    },
-    "wire": {
-      "pathParamMap": {
-        "projectId": "projectId",
-        "workItemId": "workItemId"
-      },
-      "queryParamMap": {}
+      "queryParams": []
     },
     "output": {
       "mode": "json",
@@ -21736,10 +19788,6 @@ export const GENERATED_OPERATIONS = [
       "openWorldHint": true
     },
     "input": {
-      "required": [
-        "projectId",
-        "workItemId"
-      ],
       "schema": {
         "type": "object",
         "properties": {
@@ -21761,24 +19809,16 @@ export const GENERATED_OPERATIONS = [
           "workItemId"
         ],
         "additionalProperties": false
-      },
+      }
+    },
+    "wire": {
       "pathParams": [
         "projectId",
         "workItemId"
       ],
       "queryParams": [
         "revision"
-      ],
-      "hasBody": false
-    },
-    "wire": {
-      "pathParamMap": {
-        "projectId": "projectId",
-        "workItemId": "workItemId"
-      },
-      "queryParamMap": {
-        "revision": "revision"
-      }
+      ]
     },
     "output": {
       "mode": "json",
@@ -21805,10 +19845,6 @@ export const GENERATED_OPERATIONS = [
       "openWorldHint": true
     },
     "input": {
-      "required": [
-        "projectId",
-        "workItemId"
-      ],
       "schema": {
         "type": "object",
         "properties": {
@@ -21826,20 +19862,14 @@ export const GENERATED_OPERATIONS = [
           "workItemId"
         ],
         "additionalProperties": false
-      },
+      }
+    },
+    "wire": {
       "pathParams": [
         "projectId",
         "workItemId"
       ],
-      "queryParams": [],
-      "hasBody": false
-    },
-    "wire": {
-      "pathParamMap": {
-        "projectId": "projectId",
-        "workItemId": "workItemId"
-      },
-      "queryParamMap": {}
+      "queryParams": []
     },
     "output": {
       "mode": "no_content",
@@ -21863,11 +19893,6 @@ export const GENERATED_OPERATIONS = [
       "openWorldHint": true
     },
     "input": {
-      "required": [
-        "projectId",
-        "workItemId",
-        "body"
-      ],
       "schema": {
         "type": "object",
         "properties": {
@@ -21891,20 +19916,14 @@ export const GENERATED_OPERATIONS = [
           "body"
         ],
         "additionalProperties": false
-      },
+      }
+    },
+    "wire": {
       "pathParams": [
         "projectId",
         "workItemId"
       ],
       "queryParams": [],
-      "hasBody": true
-    },
-    "wire": {
-      "pathParamMap": {
-        "projectId": "projectId",
-        "workItemId": "workItemId"
-      },
-      "queryParamMap": {},
       "bodyContentType": "application/json"
     },
     "output": {
@@ -21929,10 +19948,6 @@ export const GENERATED_OPERATIONS = [
       "openWorldHint": true
     },
     "input": {
-      "required": [
-        "projectId",
-        "workItemId"
-      ],
       "schema": {
         "type": "object",
         "properties": {
@@ -22148,7 +20163,9 @@ export const GENERATED_OPERATIONS = [
           "workItemId"
         ],
         "additionalProperties": false
-      },
+      }
+    },
+    "wire": {
       "pathParams": [
         "projectId",
         "workItemId"
@@ -22157,19 +20174,7 @@ export const GENERATED_OPERATIONS = [
         "fields",
         "include",
         "revision"
-      ],
-      "hasBody": false
-    },
-    "wire": {
-      "pathParamMap": {
-        "projectId": "projectId",
-        "workItemId": "workItemId"
-      },
-      "queryParamMap": {
-        "fields": "fields",
-        "include": "include",
-        "revision": "revision"
-      }
+      ]
     },
     "output": {
       "mode": "json",
@@ -22196,11 +20201,6 @@ export const GENERATED_OPERATIONS = [
       "openWorldHint": true
     },
     "input": {
-      "required": [
-        "projectId",
-        "workItemId",
-        "body"
-      ],
       "schema": {
         "type": "object",
         "properties": {
@@ -22224,20 +20224,14 @@ export const GENERATED_OPERATIONS = [
           "body"
         ],
         "additionalProperties": false
-      },
+      }
+    },
+    "wire": {
       "pathParams": [
         "projectId",
         "workItemId"
       ],
       "queryParams": [],
-      "hasBody": true
-    },
-    "wire": {
-      "pathParamMap": {
-        "projectId": "projectId",
-        "workItemId": "workItemId"
-      },
-      "queryParamMap": {},
       "bodyContentType": "application/json"
     },
     "output": {
@@ -22262,11 +20256,6 @@ export const GENERATED_OPERATIONS = [
       "openWorldHint": true
     },
     "input": {
-      "required": [
-        "projectId",
-        "workItemId",
-        "body"
-      ],
       "schema": {
         "type": "object",
         "properties": {
@@ -22290,20 +20279,14 @@ export const GENERATED_OPERATIONS = [
           "body"
         ],
         "additionalProperties": false
-      },
+      }
+    },
+    "wire": {
       "pathParams": [
         "projectId",
         "workItemId"
       ],
       "queryParams": [],
-      "hasBody": true
-    },
-    "wire": {
-      "pathParamMap": {
-        "projectId": "projectId",
-        "workItemId": "workItemId"
-      },
-      "queryParamMap": {},
       "bodyContentType": "application/json"
     },
     "output": {
@@ -22328,11 +20311,6 @@ export const GENERATED_OPERATIONS = [
       "openWorldHint": true
     },
     "input": {
-      "required": [
-        "projectId",
-        "workItemId",
-        "body"
-      ],
       "schema": {
         "type": "object",
         "properties": {
@@ -22356,20 +20334,14 @@ export const GENERATED_OPERATIONS = [
           "body"
         ],
         "additionalProperties": false
-      },
+      }
+    },
+    "wire": {
       "pathParams": [
         "projectId",
         "workItemId"
       ],
       "queryParams": [],
-      "hasBody": true
-    },
-    "wire": {
-      "pathParamMap": {
-        "projectId": "projectId",
-        "workItemId": "workItemId"
-      },
-      "queryParamMap": {},
       "bodyContentType": "application/json"
     },
     "output": {
@@ -22394,11 +20366,6 @@ export const GENERATED_OPERATIONS = [
       "openWorldHint": true
     },
     "input": {
-      "required": [
-        "projectId",
-        "workItemId",
-        "userId"
-      ],
       "schema": {
         "type": "object",
         "properties": {
@@ -22619,7 +20586,9 @@ export const GENERATED_OPERATIONS = [
           "userId"
         ],
         "additionalProperties": false
-      },
+      }
+    },
+    "wire": {
       "pathParams": [
         "projectId",
         "workItemId",
@@ -22629,20 +20598,7 @@ export const GENERATED_OPERATIONS = [
         "fields",
         "include",
         "revision"
-      ],
-      "hasBody": false
-    },
-    "wire": {
-      "pathParamMap": {
-        "projectId": "projectId",
-        "workItemId": "workItemId",
-        "userId": "userId"
-      },
-      "queryParamMap": {
-        "fields": "fields",
-        "include": "include",
-        "revision": "revision"
-      }
+      ]
     },
     "output": {
       "mode": "json",
@@ -22666,12 +20622,6 @@ export const GENERATED_OPERATIONS = [
       "openWorldHint": true
     },
     "input": {
-      "required": [
-        "projectId",
-        "workItemId",
-        "userId",
-        "body"
-      ],
       "schema": {
         "type": "object",
         "properties": {
@@ -22700,22 +20650,15 @@ export const GENERATED_OPERATIONS = [
           "body"
         ],
         "additionalProperties": false
-      },
+      }
+    },
+    "wire": {
       "pathParams": [
         "projectId",
         "workItemId",
         "userId"
       ],
       "queryParams": [],
-      "hasBody": true
-    },
-    "wire": {
-      "pathParamMap": {
-        "projectId": "projectId",
-        "workItemId": "workItemId",
-        "userId": "userId"
-      },
-      "queryParamMap": {},
       "bodyContentType": "application/json"
     },
     "output": {
@@ -22740,11 +20683,6 @@ export const GENERATED_OPERATIONS = [
       "openWorldHint": true
     },
     "input": {
-      "required": [
-        "projectId",
-        "workItemId",
-        "userId"
-      ],
       "schema": {
         "type": "object",
         "properties": {
@@ -22767,22 +20705,15 @@ export const GENERATED_OPERATIONS = [
           "userId"
         ],
         "additionalProperties": false
-      },
+      }
+    },
+    "wire": {
       "pathParams": [
         "projectId",
         "workItemId",
         "userId"
       ],
-      "queryParams": [],
-      "hasBody": false
-    },
-    "wire": {
-      "pathParamMap": {
-        "projectId": "projectId",
-        "workItemId": "workItemId",
-        "userId": "userId"
-      },
-      "queryParamMap": {}
+      "queryParams": []
     },
     "output": {
       "mode": "no_content",
@@ -22806,10 +20737,6 @@ export const GENERATED_OPERATIONS = [
       "openWorldHint": true
     },
     "input": {
-      "required": [
-        "projectId",
-        "workItemId"
-      ],
       "schema": {
         "type": "object",
         "properties": {
@@ -23023,7 +20950,9 @@ export const GENERATED_OPERATIONS = [
           "workItemId"
         ],
         "additionalProperties": false
-      },
+      }
+    },
+    "wire": {
       "pathParams": [
         "projectId",
         "workItemId"
@@ -23032,19 +20961,7 @@ export const GENERATED_OPERATIONS = [
         "fields",
         "include",
         "revision"
-      ],
-      "hasBody": false
-    },
-    "wire": {
-      "pathParamMap": {
-        "projectId": "projectId",
-        "workItemId": "workItemId"
-      },
-      "queryParamMap": {
-        "fields": "fields",
-        "include": "include",
-        "revision": "revision"
-      }
+      ]
     },
     "output": {
       "mode": "json",
@@ -23071,11 +20988,6 @@ export const GENERATED_OPERATIONS = [
       "openWorldHint": true
     },
     "input": {
-      "required": [
-        "projectId",
-        "workItemId",
-        "attachmentId"
-      ],
       "schema": {
         "type": "object",
         "properties": {
@@ -23296,7 +21208,9 @@ export const GENERATED_OPERATIONS = [
           "attachmentId"
         ],
         "additionalProperties": false
-      },
+      }
+    },
+    "wire": {
       "pathParams": [
         "projectId",
         "workItemId",
@@ -23306,20 +21220,7 @@ export const GENERATED_OPERATIONS = [
         "fields",
         "include",
         "revision"
-      ],
-      "hasBody": false
-    },
-    "wire": {
-      "pathParamMap": {
-        "projectId": "projectId",
-        "workItemId": "workItemId",
-        "attachmentId": "attachmentId"
-      },
-      "queryParamMap": {
-        "fields": "fields",
-        "include": "include",
-        "revision": "revision"
-      }
+      ]
     },
     "output": {
       "mode": "json",
@@ -23343,11 +21244,6 @@ export const GENERATED_OPERATIONS = [
       "openWorldHint": true
     },
     "input": {
-      "required": [
-        "projectId",
-        "workItemId",
-        "attachmentId"
-      ],
       "schema": {
         "type": "object",
         "properties": {
@@ -23370,22 +21266,15 @@ export const GENERATED_OPERATIONS = [
           "attachmentId"
         ],
         "additionalProperties": false
-      },
+      }
+    },
+    "wire": {
       "pathParams": [
         "projectId",
         "workItemId",
         "attachmentId"
       ],
-      "queryParams": [],
-      "hasBody": false
-    },
-    "wire": {
-      "pathParamMap": {
-        "projectId": "projectId",
-        "workItemId": "workItemId",
-        "attachmentId": "attachmentId"
-      },
-      "queryParamMap": {}
+      "queryParams": []
     },
     "output": {
       "mode": "no_content",
@@ -23409,10 +21298,6 @@ export const GENERATED_OPERATIONS = [
       "openWorldHint": true
     },
     "input": {
-      "required": [
-        "projectId",
-        "workItemId"
-      ],
       "schema": {
         "type": "object",
         "properties": {
@@ -23628,7 +21513,9 @@ export const GENERATED_OPERATIONS = [
           "workItemId"
         ],
         "additionalProperties": false
-      },
+      }
+    },
+    "wire": {
       "pathParams": [
         "projectId",
         "workItemId"
@@ -23637,19 +21524,7 @@ export const GENERATED_OPERATIONS = [
         "fields",
         "include",
         "revision"
-      ],
-      "hasBody": false
-    },
-    "wire": {
-      "pathParamMap": {
-        "projectId": "projectId",
-        "workItemId": "workItemId"
-      },
-      "queryParamMap": {
-        "fields": "fields",
-        "include": "include",
-        "revision": "revision"
-      }
+      ]
     },
     "output": {
       "mode": "json",
@@ -23676,11 +21551,6 @@ export const GENERATED_OPERATIONS = [
       "openWorldHint": true
     },
     "input": {
-      "required": [
-        "projectId",
-        "workItemId",
-        "body"
-      ],
       "schema": {
         "type": "object",
         "properties": {
@@ -23704,20 +21574,14 @@ export const GENERATED_OPERATIONS = [
           "body"
         ],
         "additionalProperties": false
-      },
+      }
+    },
+    "wire": {
       "pathParams": [
         "projectId",
         "workItemId"
       ],
       "queryParams": [],
-      "hasBody": true
-    },
-    "wire": {
-      "pathParamMap": {
-        "projectId": "projectId",
-        "workItemId": "workItemId"
-      },
-      "queryParamMap": {},
       "bodyContentType": "application/json"
     },
     "output": {
@@ -23742,10 +21606,6 @@ export const GENERATED_OPERATIONS = [
       "openWorldHint": true
     },
     "input": {
-      "required": [
-        "projectId",
-        "workItemId"
-      ],
       "schema": {
         "type": "object",
         "properties": {
@@ -23961,7 +21821,9 @@ export const GENERATED_OPERATIONS = [
           "workItemId"
         ],
         "additionalProperties": false
-      },
+      }
+    },
+    "wire": {
       "pathParams": [
         "projectId",
         "workItemId"
@@ -23970,19 +21832,7 @@ export const GENERATED_OPERATIONS = [
         "fields",
         "include",
         "revision"
-      ],
-      "hasBody": false
-    },
-    "wire": {
-      "pathParamMap": {
-        "projectId": "projectId",
-        "workItemId": "workItemId"
-      },
-      "queryParamMap": {
-        "fields": "fields",
-        "include": "include",
-        "revision": "revision"
-      }
+      ]
     },
     "output": {
       "mode": "json",
@@ -24009,11 +21859,6 @@ export const GENERATED_OPERATIONS = [
       "openWorldHint": true
     },
     "input": {
-      "required": [
-        "projectId",
-        "workItemId",
-        "body"
-      ],
       "schema": {
         "type": "object",
         "properties": {
@@ -24037,20 +21882,14 @@ export const GENERATED_OPERATIONS = [
           "body"
         ],
         "additionalProperties": false
-      },
+      }
+    },
+    "wire": {
       "pathParams": [
         "projectId",
         "workItemId"
       ],
       "queryParams": [],
-      "hasBody": true
-    },
-    "wire": {
-      "pathParamMap": {
-        "projectId": "projectId",
-        "workItemId": "workItemId"
-      },
-      "queryParamMap": {},
       "bodyContentType": "application/json"
     },
     "output": {
@@ -24075,11 +21914,6 @@ export const GENERATED_OPERATIONS = [
       "openWorldHint": true
     },
     "input": {
-      "required": [
-        "projectId",
-        "workItemId",
-        "commentId"
-      ],
       "schema": {
         "type": "object",
         "properties": {
@@ -24300,7 +22134,9 @@ export const GENERATED_OPERATIONS = [
           "commentId"
         ],
         "additionalProperties": false
-      },
+      }
+    },
+    "wire": {
       "pathParams": [
         "projectId",
         "workItemId",
@@ -24310,20 +22146,7 @@ export const GENERATED_OPERATIONS = [
         "fields",
         "include",
         "revision"
-      ],
-      "hasBody": false
-    },
-    "wire": {
-      "pathParamMap": {
-        "projectId": "projectId",
-        "workItemId": "workItemId",
-        "commentId": "commentId"
-      },
-      "queryParamMap": {
-        "fields": "fields",
-        "include": "include",
-        "revision": "revision"
-      }
+      ]
     },
     "output": {
       "mode": "json",
@@ -24347,12 +22170,6 @@ export const GENERATED_OPERATIONS = [
       "openWorldHint": true
     },
     "input": {
-      "required": [
-        "projectId",
-        "workItemId",
-        "commentId",
-        "body"
-      ],
       "schema": {
         "type": "object",
         "properties": {
@@ -24381,22 +22198,15 @@ export const GENERATED_OPERATIONS = [
           "body"
         ],
         "additionalProperties": false
-      },
+      }
+    },
+    "wire": {
       "pathParams": [
         "projectId",
         "workItemId",
         "commentId"
       ],
       "queryParams": [],
-      "hasBody": true
-    },
-    "wire": {
-      "pathParamMap": {
-        "projectId": "projectId",
-        "workItemId": "workItemId",
-        "commentId": "commentId"
-      },
-      "queryParamMap": {},
       "bodyContentType": "application/json"
     },
     "output": {
@@ -24421,10 +22231,6 @@ export const GENERATED_OPERATIONS = [
       "openWorldHint": true
     },
     "input": {
-      "required": [
-        "projectId",
-        "workItemId"
-      ],
       "schema": {
         "type": "object",
         "properties": {
@@ -24640,7 +22446,9 @@ export const GENERATED_OPERATIONS = [
           "workItemId"
         ],
         "additionalProperties": false
-      },
+      }
+    },
+    "wire": {
       "pathParams": [
         "projectId",
         "workItemId"
@@ -24649,19 +22457,7 @@ export const GENERATED_OPERATIONS = [
         "fields",
         "include",
         "revision"
-      ],
-      "hasBody": false
-    },
-    "wire": {
-      "pathParamMap": {
-        "projectId": "projectId",
-        "workItemId": "workItemId"
-      },
-      "queryParamMap": {
-        "fields": "fields",
-        "include": "include",
-        "revision": "revision"
-      }
+      ]
     },
     "output": {
       "mode": "json",
@@ -24688,11 +22484,6 @@ export const GENERATED_OPERATIONS = [
       "openWorldHint": true
     },
     "input": {
-      "required": [
-        "projectId",
-        "workItemId",
-        "body"
-      ],
       "schema": {
         "type": "object",
         "properties": {
@@ -24716,20 +22507,14 @@ export const GENERATED_OPERATIONS = [
           "body"
         ],
         "additionalProperties": false
-      },
+      }
+    },
+    "wire": {
       "pathParams": [
         "projectId",
         "workItemId"
       ],
       "queryParams": [],
-      "hasBody": true
-    },
-    "wire": {
-      "pathParamMap": {
-        "projectId": "projectId",
-        "workItemId": "workItemId"
-      },
-      "queryParamMap": {},
       "bodyContentType": "application/json"
     },
     "output": {
@@ -24754,11 +22539,6 @@ export const GENERATED_OPERATIONS = [
       "openWorldHint": true
     },
     "input": {
-      "required": [
-        "projectId",
-        "workItemId",
-        "body"
-      ],
       "schema": {
         "type": "object",
         "properties": {
@@ -24782,20 +22562,14 @@ export const GENERATED_OPERATIONS = [
           "body"
         ],
         "additionalProperties": false
-      },
+      }
+    },
+    "wire": {
       "pathParams": [
         "projectId",
         "workItemId"
       ],
       "queryParams": [],
-      "hasBody": true
-    },
-    "wire": {
-      "pathParamMap": {
-        "projectId": "projectId",
-        "workItemId": "workItemId"
-      },
-      "queryParamMap": {},
       "bodyContentType": "application/json"
     },
     "output": {
@@ -24820,14 +22594,6 @@ export const GENERATED_OPERATIONS = [
       "openWorldHint": true
     },
     "input": {
-      "required": [
-        "projectId",
-        "workItemId",
-        "roleId",
-        "hostname",
-        "targetProjectId",
-        "linkedWorkItemId"
-      ],
       "schema": {
         "type": "object",
         "properties": {
@@ -25063,7 +22829,9 @@ export const GENERATED_OPERATIONS = [
           "linkedWorkItemId"
         ],
         "additionalProperties": false
-      },
+      }
+    },
+    "wire": {
       "pathParams": [
         "projectId",
         "workItemId",
@@ -25076,23 +22844,7 @@ export const GENERATED_OPERATIONS = [
         "fields",
         "include",
         "revision"
-      ],
-      "hasBody": false
-    },
-    "wire": {
-      "pathParamMap": {
-        "projectId": "projectId",
-        "workItemId": "workItemId",
-        "roleId": "roleId",
-        "hostname": "hostname",
-        "targetProjectId": "targetProjectId",
-        "linkedWorkItemId": "linkedWorkItemId"
-      },
-      "queryParamMap": {
-        "fields": "fields",
-        "include": "include",
-        "revision": "revision"
-      }
+      ]
     },
     "output": {
       "mode": "json",
@@ -25116,14 +22868,6 @@ export const GENERATED_OPERATIONS = [
       "openWorldHint": true
     },
     "input": {
-      "required": [
-        "projectId",
-        "workItemId",
-        "roleId",
-        "hostname",
-        "targetProjectId",
-        "linkedWorkItemId"
-      ],
       "schema": {
         "type": "object",
         "properties": {
@@ -25161,7 +22905,9 @@ export const GENERATED_OPERATIONS = [
           "linkedWorkItemId"
         ],
         "additionalProperties": false
-      },
+      }
+    },
+    "wire": {
       "pathParams": [
         "projectId",
         "workItemId",
@@ -25170,19 +22916,7 @@ export const GENERATED_OPERATIONS = [
         "targetProjectId",
         "linkedWorkItemId"
       ],
-      "queryParams": [],
-      "hasBody": false
-    },
-    "wire": {
-      "pathParamMap": {
-        "projectId": "projectId",
-        "workItemId": "workItemId",
-        "roleId": "roleId",
-        "hostname": "hostname",
-        "targetProjectId": "targetProjectId",
-        "linkedWorkItemId": "linkedWorkItemId"
-      },
-      "queryParamMap": {}
+      "queryParams": []
     },
     "output": {
       "mode": "no_content",
@@ -25206,10 +22940,6 @@ export const GENERATED_OPERATIONS = [
       "openWorldHint": true
     },
     "input": {
-      "required": [
-        "projectId",
-        "workItemId"
-      ],
       "schema": {
         "type": "object",
         "properties": {
@@ -25425,7 +23155,9 @@ export const GENERATED_OPERATIONS = [
           "workItemId"
         ],
         "additionalProperties": false
-      },
+      }
+    },
+    "wire": {
       "pathParams": [
         "projectId",
         "workItemId"
@@ -25434,19 +23166,7 @@ export const GENERATED_OPERATIONS = [
         "fields",
         "include",
         "revision"
-      ],
-      "hasBody": false
-    },
-    "wire": {
-      "pathParamMap": {
-        "projectId": "projectId",
-        "workItemId": "workItemId"
-      },
-      "queryParamMap": {
-        "fields": "fields",
-        "include": "include",
-        "revision": "revision"
-      }
+      ]
     },
     "output": {
       "mode": "json",
@@ -25473,13 +23193,6 @@ export const GENERATED_OPERATIONS = [
       "openWorldHint": true
     },
     "input": {
-      "required": [
-        "projectId",
-        "workItemId",
-        "selectionTypeId",
-        "targetProjectId",
-        "targetWorkItemId"
-      ],
       "schema": {
         "type": "object",
         "properties": {
@@ -25710,7 +23423,9 @@ export const GENERATED_OPERATIONS = [
           "targetWorkItemId"
         ],
         "additionalProperties": false
-      },
+      }
+    },
+    "wire": {
       "pathParams": [
         "projectId",
         "workItemId",
@@ -25722,22 +23437,7 @@ export const GENERATED_OPERATIONS = [
         "fields",
         "include",
         "revision"
-      ],
-      "hasBody": false
-    },
-    "wire": {
-      "pathParamMap": {
-        "projectId": "projectId",
-        "workItemId": "workItemId",
-        "selectionTypeId": "selectionTypeId",
-        "targetProjectId": "targetProjectId",
-        "targetWorkItemId": "targetWorkItemId"
-      },
-      "queryParamMap": {
-        "fields": "fields",
-        "include": "include",
-        "revision": "revision"
-      }
+      ]
     },
     "output": {
       "mode": "json",
@@ -25761,11 +23461,6 @@ export const GENERATED_OPERATIONS = [
       "openWorldHint": true
     },
     "input": {
-      "required": [
-        "projectId",
-        "workItemId",
-        "fieldId"
-      ],
       "schema": {
         "type": "object",
         "properties": {
@@ -25788,22 +23483,15 @@ export const GENERATED_OPERATIONS = [
           "fieldId"
         ],
         "additionalProperties": false
-      },
+      }
+    },
+    "wire": {
       "pathParams": [
         "projectId",
         "workItemId",
         "fieldId"
       ],
-      "queryParams": [],
-      "hasBody": false
-    },
-    "wire": {
-      "pathParamMap": {
-        "projectId": "projectId",
-        "workItemId": "workItemId",
-        "fieldId": "fieldId"
-      },
-      "queryParamMap": {}
+      "queryParams": []
     },
     "output": {
       "mode": "json",
@@ -25830,11 +23518,6 @@ export const GENERATED_OPERATIONS = [
       "openWorldHint": true
     },
     "input": {
-      "required": [
-        "projectId",
-        "workItemId",
-        "fieldId"
-      ],
       "schema": {
         "type": "object",
         "properties": {
@@ -25861,7 +23544,9 @@ export const GENERATED_OPERATIONS = [
           "fieldId"
         ],
         "additionalProperties": false
-      },
+      }
+    },
+    "wire": {
       "pathParams": [
         "projectId",
         "workItemId",
@@ -25869,18 +23554,7 @@ export const GENERATED_OPERATIONS = [
       ],
       "queryParams": [
         "revision"
-      ],
-      "hasBody": false
-    },
-    "wire": {
-      "pathParamMap": {
-        "projectId": "projectId",
-        "workItemId": "workItemId",
-        "fieldId": "fieldId"
-      },
-      "queryParamMap": {
-        "revision": "revision"
-      }
+      ]
     },
     "output": {
       "mode": "json",
@@ -25907,10 +23581,6 @@ export const GENERATED_OPERATIONS = [
       "openWorldHint": true
     },
     "input": {
-      "required": [
-        "projectId",
-        "workItemId"
-      ],
       "schema": {
         "type": "object",
         "properties": {
@@ -26134,7 +23804,9 @@ export const GENERATED_OPERATIONS = [
           "workItemId"
         ],
         "additionalProperties": false
-      },
+      }
+    },
+    "wire": {
       "pathParams": [
         "projectId",
         "workItemId"
@@ -26145,21 +23817,7 @@ export const GENERATED_OPERATIONS = [
         "query",
         "sort",
         "revision"
-      ],
-      "hasBody": false
-    },
-    "wire": {
-      "pathParamMap": {
-        "projectId": "projectId",
-        "workItemId": "workItemId"
-      },
-      "queryParamMap": {
-        "fields": "fields",
-        "include": "include",
-        "query": "query",
-        "sort": "sort",
-        "revision": "revision"
-      }
+      ]
     },
     "output": {
       "mode": "json",
@@ -26186,11 +23844,6 @@ export const GENERATED_OPERATIONS = [
       "openWorldHint": true
     },
     "input": {
-      "required": [
-        "projectId",
-        "workItemId",
-        "body"
-      ],
       "schema": {
         "type": "object",
         "properties": {
@@ -26214,20 +23867,14 @@ export const GENERATED_OPERATIONS = [
           "body"
         ],
         "additionalProperties": false
-      },
+      }
+    },
+    "wire": {
       "pathParams": [
         "projectId",
         "workItemId"
       ],
       "queryParams": [],
-      "hasBody": true
-    },
-    "wire": {
-      "pathParamMap": {
-        "projectId": "projectId",
-        "workItemId": "workItemId"
-      },
-      "queryParamMap": {},
       "bodyContentType": "application/json"
     },
     "output": {
@@ -26252,11 +23899,6 @@ export const GENERATED_OPERATIONS = [
       "openWorldHint": true
     },
     "input": {
-      "required": [
-        "projectId",
-        "workItemId",
-        "body"
-      ],
       "schema": {
         "type": "object",
         "properties": {
@@ -26280,20 +23922,14 @@ export const GENERATED_OPERATIONS = [
           "body"
         ],
         "additionalProperties": false
-      },
+      }
+    },
+    "wire": {
       "pathParams": [
         "projectId",
         "workItemId"
       ],
       "queryParams": [],
-      "hasBody": true
-    },
-    "wire": {
-      "pathParamMap": {
-        "projectId": "projectId",
-        "workItemId": "workItemId"
-      },
-      "queryParamMap": {},
       "bodyContentType": "application/json"
     },
     "output": {
@@ -26318,10 +23954,6 @@ export const GENERATED_OPERATIONS = [
       "openWorldHint": true
     },
     "input": {
-      "required": [
-        "projectId",
-        "workItemId"
-      ],
       "schema": {
         "type": "object",
         "properties": {
@@ -26537,7 +24169,9 @@ export const GENERATED_OPERATIONS = [
           "workItemId"
         ],
         "additionalProperties": false
-      },
+      }
+    },
+    "wire": {
       "pathParams": [
         "projectId",
         "workItemId"
@@ -26546,19 +24180,7 @@ export const GENERATED_OPERATIONS = [
         "fields",
         "include",
         "revision"
-      ],
-      "hasBody": false
-    },
-    "wire": {
-      "pathParamMap": {
-        "projectId": "projectId",
-        "workItemId": "workItemId"
-      },
-      "queryParamMap": {
-        "fields": "fields",
-        "include": "include",
-        "revision": "revision"
-      }
+      ]
     },
     "output": {
       "mode": "json",
@@ -26585,11 +24207,6 @@ export const GENERATED_OPERATIONS = [
       "openWorldHint": true
     },
     "input": {
-      "required": [
-        "projectId",
-        "workItemId",
-        "body"
-      ],
       "schema": {
         "type": "object",
         "properties": {
@@ -26613,20 +24230,14 @@ export const GENERATED_OPERATIONS = [
           "body"
         ],
         "additionalProperties": false
-      },
+      }
+    },
+    "wire": {
       "pathParams": [
         "projectId",
         "workItemId"
       ],
       "queryParams": [],
-      "hasBody": true
-    },
-    "wire": {
-      "pathParamMap": {
-        "projectId": "projectId",
-        "workItemId": "workItemId"
-      },
-      "queryParamMap": {},
       "bodyContentType": "application/json"
     },
     "output": {
@@ -26651,11 +24262,6 @@ export const GENERATED_OPERATIONS = [
       "openWorldHint": true
     },
     "input": {
-      "required": [
-        "projectId",
-        "workItemId",
-        "body"
-      ],
       "schema": {
         "type": "object",
         "properties": {
@@ -26679,20 +24285,14 @@ export const GENERATED_OPERATIONS = [
           "body"
         ],
         "additionalProperties": false
-      },
+      }
+    },
+    "wire": {
       "pathParams": [
         "projectId",
         "workItemId"
       ],
       "queryParams": [],
-      "hasBody": true
-    },
-    "wire": {
-      "pathParamMap": {
-        "projectId": "projectId",
-        "workItemId": "workItemId"
-      },
-      "queryParamMap": {},
       "bodyContentType": "application/json"
     },
     "output": {
@@ -26717,13 +24317,6 @@ export const GENERATED_OPERATIONS = [
       "openWorldHint": true
     },
     "input": {
-      "required": [
-        "projectId",
-        "workItemId",
-        "roleId",
-        "targetProjectId",
-        "linkedWorkItemId"
-      ],
       "schema": {
         "type": "object",
         "properties": {
@@ -26954,7 +24547,9 @@ export const GENERATED_OPERATIONS = [
           "linkedWorkItemId"
         ],
         "additionalProperties": false
-      },
+      }
+    },
+    "wire": {
       "pathParams": [
         "projectId",
         "workItemId",
@@ -26966,22 +24561,7 @@ export const GENERATED_OPERATIONS = [
         "fields",
         "include",
         "revision"
-      ],
-      "hasBody": false
-    },
-    "wire": {
-      "pathParamMap": {
-        "projectId": "projectId",
-        "workItemId": "workItemId",
-        "roleId": "roleId",
-        "targetProjectId": "targetProjectId",
-        "linkedWorkItemId": "linkedWorkItemId"
-      },
-      "queryParamMap": {
-        "fields": "fields",
-        "include": "include",
-        "revision": "revision"
-      }
+      ]
     },
     "output": {
       "mode": "json",
@@ -27005,14 +24585,6 @@ export const GENERATED_OPERATIONS = [
       "openWorldHint": true
     },
     "input": {
-      "required": [
-        "projectId",
-        "workItemId",
-        "roleId",
-        "targetProjectId",
-        "linkedWorkItemId",
-        "body"
-      ],
       "schema": {
         "type": "object",
         "properties": {
@@ -27051,7 +24623,9 @@ export const GENERATED_OPERATIONS = [
           "body"
         ],
         "additionalProperties": false
-      },
+      }
+    },
+    "wire": {
       "pathParams": [
         "projectId",
         "workItemId",
@@ -27060,17 +24634,6 @@ export const GENERATED_OPERATIONS = [
         "linkedWorkItemId"
       ],
       "queryParams": [],
-      "hasBody": true
-    },
-    "wire": {
-      "pathParamMap": {
-        "projectId": "projectId",
-        "workItemId": "workItemId",
-        "roleId": "roleId",
-        "targetProjectId": "targetProjectId",
-        "linkedWorkItemId": "linkedWorkItemId"
-      },
-      "queryParamMap": {},
       "bodyContentType": "application/json"
     },
     "output": {
@@ -27095,13 +24658,6 @@ export const GENERATED_OPERATIONS = [
       "openWorldHint": true
     },
     "input": {
-      "required": [
-        "projectId",
-        "workItemId",
-        "roleId",
-        "targetProjectId",
-        "linkedWorkItemId"
-      ],
       "schema": {
         "type": "object",
         "properties": {
@@ -27134,7 +24690,9 @@ export const GENERATED_OPERATIONS = [
           "linkedWorkItemId"
         ],
         "additionalProperties": false
-      },
+      }
+    },
+    "wire": {
       "pathParams": [
         "projectId",
         "workItemId",
@@ -27142,18 +24700,7 @@ export const GENERATED_OPERATIONS = [
         "targetProjectId",
         "linkedWorkItemId"
       ],
-      "queryParams": [],
-      "hasBody": false
-    },
-    "wire": {
-      "pathParamMap": {
-        "projectId": "projectId",
-        "workItemId": "workItemId",
-        "roleId": "roleId",
-        "targetProjectId": "targetProjectId",
-        "linkedWorkItemId": "linkedWorkItemId"
-      },
-      "queryParamMap": {}
+      "queryParams": []
     },
     "output": {
       "mode": "no_content",
@@ -27177,11 +24724,6 @@ export const GENERATED_OPERATIONS = [
       "openWorldHint": true
     },
     "input": {
-      "required": [
-        "projectId",
-        "workItemId",
-        "relationshipId"
-      ],
       "schema": {
         "type": "object",
         "properties": {
@@ -27402,7 +24944,9 @@ export const GENERATED_OPERATIONS = [
           "relationshipId"
         ],
         "additionalProperties": false
-      },
+      }
+    },
+    "wire": {
       "pathParams": [
         "projectId",
         "workItemId",
@@ -27412,20 +24956,7 @@ export const GENERATED_OPERATIONS = [
         "fields",
         "include",
         "revision"
-      ],
-      "hasBody": false
-    },
-    "wire": {
-      "pathParamMap": {
-        "projectId": "projectId",
-        "workItemId": "workItemId",
-        "relationshipId": "relationshipId"
-      },
-      "queryParamMap": {
-        "fields": "fields",
-        "include": "include",
-        "revision": "revision"
-      }
+      ]
     },
     "output": {
       "mode": "json",
@@ -27452,12 +24983,6 @@ export const GENERATED_OPERATIONS = [
       "openWorldHint": true
     },
     "input": {
-      "required": [
-        "projectId",
-        "workItemId",
-        "relationshipId",
-        "body"
-      ],
       "schema": {
         "type": "object",
         "properties": {
@@ -27486,22 +25011,15 @@ export const GENERATED_OPERATIONS = [
           "body"
         ],
         "additionalProperties": false
-      },
+      }
+    },
+    "wire": {
       "pathParams": [
         "projectId",
         "workItemId",
         "relationshipId"
       ],
       "queryParams": [],
-      "hasBody": true
-    },
-    "wire": {
-      "pathParamMap": {
-        "projectId": "projectId",
-        "workItemId": "workItemId",
-        "relationshipId": "relationshipId"
-      },
-      "queryParamMap": {},
       "bodyContentType": "application/json"
     },
     "output": {
@@ -27526,12 +25044,6 @@ export const GENERATED_OPERATIONS = [
       "openWorldHint": true
     },
     "input": {
-      "required": [
-        "projectId",
-        "workItemId",
-        "relationshipId",
-        "body"
-      ],
       "schema": {
         "type": "object",
         "properties": {
@@ -27560,22 +25072,15 @@ export const GENERATED_OPERATIONS = [
           "body"
         ],
         "additionalProperties": false
-      },
+      }
+    },
+    "wire": {
       "pathParams": [
         "projectId",
         "workItemId",
         "relationshipId"
       ],
       "queryParams": [],
-      "hasBody": true
-    },
-    "wire": {
-      "pathParamMap": {
-        "projectId": "projectId",
-        "workItemId": "workItemId",
-        "relationshipId": "relationshipId"
-      },
-      "queryParamMap": {},
       "bodyContentType": "application/json"
     },
     "output": {
@@ -27600,12 +25105,6 @@ export const GENERATED_OPERATIONS = [
       "openWorldHint": true
     },
     "input": {
-      "required": [
-        "projectId",
-        "workItemId",
-        "relationshipId",
-        "body"
-      ],
       "schema": {
         "type": "object",
         "properties": {
@@ -27634,22 +25133,15 @@ export const GENERATED_OPERATIONS = [
           "body"
         ],
         "additionalProperties": false
-      },
+      }
+    },
+    "wire": {
       "pathParams": [
         "projectId",
         "workItemId",
         "relationshipId"
       ],
       "queryParams": [],
-      "hasBody": true
-    },
-    "wire": {
-      "pathParamMap": {
-        "projectId": "projectId",
-        "workItemId": "workItemId",
-        "relationshipId": "relationshipId"
-      },
-      "queryParamMap": {},
       "bodyContentType": "application/json"
     },
     "output": {
@@ -27674,10 +25166,6 @@ export const GENERATED_OPERATIONS = [
       "openWorldHint": true
     },
     "input": {
-      "required": [
-        "projectId",
-        "workItemId"
-      ],
       "schema": {
         "type": "object",
         "properties": {
@@ -27893,7 +25381,9 @@ export const GENERATED_OPERATIONS = [
           "workItemId"
         ],
         "additionalProperties": false
-      },
+      }
+    },
+    "wire": {
       "pathParams": [
         "projectId",
         "workItemId"
@@ -27902,19 +25392,7 @@ export const GENERATED_OPERATIONS = [
         "fields",
         "include",
         "revision"
-      ],
-      "hasBody": false
-    },
-    "wire": {
-      "pathParamMap": {
-        "projectId": "projectId",
-        "workItemId": "workItemId"
-      },
-      "queryParamMap": {
-        "fields": "fields",
-        "include": "include",
-        "revision": "revision"
-      }
+      ]
     },
     "output": {
       "mode": "json",
@@ -27941,11 +25419,6 @@ export const GENERATED_OPERATIONS = [
       "openWorldHint": true
     },
     "input": {
-      "required": [
-        "projectId",
-        "workItemId",
-        "testParamId"
-      ],
       "schema": {
         "type": "object",
         "properties": {
@@ -28166,7 +25639,9 @@ export const GENERATED_OPERATIONS = [
           "testParamId"
         ],
         "additionalProperties": false
-      },
+      }
+    },
+    "wire": {
       "pathParams": [
         "projectId",
         "workItemId",
@@ -28176,20 +25651,7 @@ export const GENERATED_OPERATIONS = [
         "fields",
         "include",
         "revision"
-      ],
-      "hasBody": false
-    },
-    "wire": {
-      "pathParamMap": {
-        "projectId": "projectId",
-        "workItemId": "workItemId",
-        "testParamId": "testParamId"
-      },
-      "queryParamMap": {
-        "fields": "fields",
-        "include": "include",
-        "revision": "revision"
-      }
+      ]
     },
     "output": {
       "mode": "json",
@@ -28213,10 +25675,6 @@ export const GENERATED_OPERATIONS = [
       "openWorldHint": true
     },
     "input": {
-      "required": [
-        "projectId",
-        "workItemId"
-      ],
       "schema": {
         "type": "object",
         "properties": {
@@ -28432,7 +25890,9 @@ export const GENERATED_OPERATIONS = [
           "workItemId"
         ],
         "additionalProperties": false
-      },
+      }
+    },
+    "wire": {
       "pathParams": [
         "projectId",
         "workItemId"
@@ -28441,19 +25901,7 @@ export const GENERATED_OPERATIONS = [
         "fields",
         "include",
         "revision"
-      ],
-      "hasBody": false
-    },
-    "wire": {
-      "pathParamMap": {
-        "projectId": "projectId",
-        "workItemId": "workItemId"
-      },
-      "queryParamMap": {
-        "fields": "fields",
-        "include": "include",
-        "revision": "revision"
-      }
+      ]
     },
     "output": {
       "mode": "json",
@@ -28480,11 +25928,6 @@ export const GENERATED_OPERATIONS = [
       "openWorldHint": true
     },
     "input": {
-      "required": [
-        "projectId",
-        "workItemId",
-        "body"
-      ],
       "schema": {
         "type": "object",
         "properties": {
@@ -28508,20 +25951,14 @@ export const GENERATED_OPERATIONS = [
           "body"
         ],
         "additionalProperties": false
-      },
+      }
+    },
+    "wire": {
       "pathParams": [
         "projectId",
         "workItemId"
       ],
       "queryParams": [],
-      "hasBody": true
-    },
-    "wire": {
-      "pathParamMap": {
-        "projectId": "projectId",
-        "workItemId": "workItemId"
-      },
-      "queryParamMap": {},
       "bodyContentType": "application/json"
     },
     "output": {
@@ -28546,11 +25983,6 @@ export const GENERATED_OPERATIONS = [
       "openWorldHint": true
     },
     "input": {
-      "required": [
-        "projectId",
-        "workItemId",
-        "body"
-      ],
       "schema": {
         "type": "object",
         "properties": {
@@ -28574,20 +26006,14 @@ export const GENERATED_OPERATIONS = [
           "body"
         ],
         "additionalProperties": false
-      },
+      }
+    },
+    "wire": {
       "pathParams": [
         "projectId",
         "workItemId"
       ],
       "queryParams": [],
-      "hasBody": true
-    },
-    "wire": {
-      "pathParamMap": {
-        "projectId": "projectId",
-        "workItemId": "workItemId"
-      },
-      "queryParamMap": {},
       "bodyContentType": "application/json"
     },
     "output": {
@@ -28612,11 +26038,6 @@ export const GENERATED_OPERATIONS = [
       "openWorldHint": true
     },
     "input": {
-      "required": [
-        "projectId",
-        "workItemId",
-        "body"
-      ],
       "schema": {
         "type": "object",
         "properties": {
@@ -28640,20 +26061,14 @@ export const GENERATED_OPERATIONS = [
           "body"
         ],
         "additionalProperties": false
-      },
+      }
+    },
+    "wire": {
       "pathParams": [
         "projectId",
         "workItemId"
       ],
       "queryParams": [],
-      "hasBody": true
-    },
-    "wire": {
-      "pathParamMap": {
-        "projectId": "projectId",
-        "workItemId": "workItemId"
-      },
-      "queryParamMap": {},
       "bodyContentType": "application/json"
     },
     "output": {
@@ -28678,11 +26093,6 @@ export const GENERATED_OPERATIONS = [
       "openWorldHint": true
     },
     "input": {
-      "required": [
-        "projectId",
-        "workItemId",
-        "testStepIndex"
-      ],
       "schema": {
         "type": "object",
         "properties": {
@@ -28903,7 +26313,9 @@ export const GENERATED_OPERATIONS = [
           "testStepIndex"
         ],
         "additionalProperties": false
-      },
+      }
+    },
+    "wire": {
       "pathParams": [
         "projectId",
         "workItemId",
@@ -28913,20 +26325,7 @@ export const GENERATED_OPERATIONS = [
         "fields",
         "include",
         "revision"
-      ],
-      "hasBody": false
-    },
-    "wire": {
-      "pathParamMap": {
-        "projectId": "projectId",
-        "workItemId": "workItemId",
-        "testStepIndex": "testStepIndex"
-      },
-      "queryParamMap": {
-        "fields": "fields",
-        "include": "include",
-        "revision": "revision"
-      }
+      ]
     },
     "output": {
       "mode": "json",
@@ -28950,12 +26349,6 @@ export const GENERATED_OPERATIONS = [
       "openWorldHint": true
     },
     "input": {
-      "required": [
-        "projectId",
-        "workItemId",
-        "testStepIndex",
-        "body"
-      ],
       "schema": {
         "type": "object",
         "properties": {
@@ -28984,22 +26377,15 @@ export const GENERATED_OPERATIONS = [
           "body"
         ],
         "additionalProperties": false
-      },
+      }
+    },
+    "wire": {
       "pathParams": [
         "projectId",
         "workItemId",
         "testStepIndex"
       ],
       "queryParams": [],
-      "hasBody": true
-    },
-    "wire": {
-      "pathParamMap": {
-        "projectId": "projectId",
-        "workItemId": "workItemId",
-        "testStepIndex": "testStepIndex"
-      },
-      "queryParamMap": {},
       "bodyContentType": "application/json"
     },
     "output": {
@@ -29024,11 +26410,6 @@ export const GENERATED_OPERATIONS = [
       "openWorldHint": true
     },
     "input": {
-      "required": [
-        "projectId",
-        "workItemId",
-        "testStepIndex"
-      ],
       "schema": {
         "type": "object",
         "properties": {
@@ -29051,22 +26432,15 @@ export const GENERATED_OPERATIONS = [
           "testStepIndex"
         ],
         "additionalProperties": false
-      },
+      }
+    },
+    "wire": {
       "pathParams": [
         "projectId",
         "workItemId",
         "testStepIndex"
       ],
-      "queryParams": [],
-      "hasBody": false
-    },
-    "wire": {
-      "pathParamMap": {
-        "projectId": "projectId",
-        "workItemId": "workItemId",
-        "testStepIndex": "testStepIndex"
-      },
-      "queryParamMap": {}
+      "queryParams": []
     },
     "output": {
       "mode": "no_content",
@@ -29090,10 +26464,6 @@ export const GENERATED_OPERATIONS = [
       "openWorldHint": true
     },
     "input": {
-      "required": [
-        "projectId",
-        "workItemId"
-      ],
       "schema": {
         "type": "object",
         "properties": {
@@ -29309,7 +26679,9 @@ export const GENERATED_OPERATIONS = [
           "workItemId"
         ],
         "additionalProperties": false
-      },
+      }
+    },
+    "wire": {
       "pathParams": [
         "projectId",
         "workItemId"
@@ -29318,19 +26690,7 @@ export const GENERATED_OPERATIONS = [
         "fields",
         "include",
         "revision"
-      ],
-      "hasBody": false
-    },
-    "wire": {
-      "pathParamMap": {
-        "projectId": "projectId",
-        "workItemId": "workItemId"
-      },
-      "queryParamMap": {
-        "fields": "fields",
-        "include": "include",
-        "revision": "revision"
-      }
+      ]
     },
     "output": {
       "mode": "json",
@@ -29357,11 +26717,6 @@ export const GENERATED_OPERATIONS = [
       "openWorldHint": true
     },
     "input": {
-      "required": [
-        "projectId",
-        "workItemId",
-        "body"
-      ],
       "schema": {
         "type": "object",
         "properties": {
@@ -29385,20 +26740,14 @@ export const GENERATED_OPERATIONS = [
           "body"
         ],
         "additionalProperties": false
-      },
+      }
+    },
+    "wire": {
       "pathParams": [
         "projectId",
         "workItemId"
       ],
       "queryParams": [],
-      "hasBody": true
-    },
-    "wire": {
-      "pathParamMap": {
-        "projectId": "projectId",
-        "workItemId": "workItemId"
-      },
-      "queryParamMap": {},
       "bodyContentType": "application/json"
     },
     "output": {
@@ -29423,11 +26772,6 @@ export const GENERATED_OPERATIONS = [
       "openWorldHint": true
     },
     "input": {
-      "required": [
-        "projectId",
-        "workItemId",
-        "body"
-      ],
       "schema": {
         "type": "object",
         "properties": {
@@ -29451,20 +26795,14 @@ export const GENERATED_OPERATIONS = [
           "body"
         ],
         "additionalProperties": false
-      },
+      }
+    },
+    "wire": {
       "pathParams": [
         "projectId",
         "workItemId"
       ],
       "queryParams": [],
-      "hasBody": true
-    },
-    "wire": {
-      "pathParamMap": {
-        "projectId": "projectId",
-        "workItemId": "workItemId"
-      },
-      "queryParamMap": {},
       "bodyContentType": "application/json"
     },
     "output": {
@@ -29489,11 +26827,6 @@ export const GENERATED_OPERATIONS = [
       "openWorldHint": true
     },
     "input": {
-      "required": [
-        "projectId",
-        "workItemId",
-        "workRecordId"
-      ],
       "schema": {
         "type": "object",
         "properties": {
@@ -29714,7 +27047,9 @@ export const GENERATED_OPERATIONS = [
           "workRecordId"
         ],
         "additionalProperties": false
-      },
+      }
+    },
+    "wire": {
       "pathParams": [
         "projectId",
         "workItemId",
@@ -29724,20 +27059,7 @@ export const GENERATED_OPERATIONS = [
         "fields",
         "include",
         "revision"
-      ],
-      "hasBody": false
-    },
-    "wire": {
-      "pathParamMap": {
-        "projectId": "projectId",
-        "workItemId": "workItemId",
-        "workRecordId": "workRecordId"
-      },
-      "queryParamMap": {
-        "fields": "fields",
-        "include": "include",
-        "revision": "revision"
-      }
+      ]
     },
     "output": {
       "mode": "json",
@@ -29761,11 +27083,6 @@ export const GENERATED_OPERATIONS = [
       "openWorldHint": true
     },
     "input": {
-      "required": [
-        "projectId",
-        "workItemId",
-        "workRecordId"
-      ],
       "schema": {
         "type": "object",
         "properties": {
@@ -29788,22 +27105,15 @@ export const GENERATED_OPERATIONS = [
           "workRecordId"
         ],
         "additionalProperties": false
-      },
+      }
+    },
+    "wire": {
       "pathParams": [
         "projectId",
         "workItemId",
         "workRecordId"
       ],
-      "queryParams": [],
-      "hasBody": false
-    },
-    "wire": {
-      "pathParamMap": {
-        "projectId": "projectId",
-        "workItemId": "workItemId",
-        "workRecordId": "workRecordId"
-      },
-      "queryParamMap": {}
+      "queryParams": []
     },
     "output": {
       "mode": "no_content",
@@ -29827,10 +27137,6 @@ export const GENERATED_OPERATIONS = [
       "openWorldHint": true
     },
     "input": {
-      "required": [
-        "projectId",
-        "body"
-      ],
       "schema": {
         "type": "object",
         "properties": {
@@ -29849,18 +27155,13 @@ export const GENERATED_OPERATIONS = [
           "body"
         ],
         "additionalProperties": false
-      },
+      }
+    },
+    "wire": {
       "pathParams": [
         "projectId"
       ],
       "queryParams": [],
-      "hasBody": true
-    },
-    "wire": {
-      "pathParamMap": {
-        "projectId": "projectId"
-      },
-      "queryParamMap": {},
       "bodyContentType": "application/json"
     },
     "output": {
@@ -29885,10 +27186,6 @@ export const GENERATED_OPERATIONS = [
       "openWorldHint": true
     },
     "input": {
-      "required": [
-        "projectId",
-        "fieldId"
-      ],
       "schema": {
         "type": "object",
         "properties": {
@@ -29910,24 +27207,16 @@ export const GENERATED_OPERATIONS = [
           "fieldId"
         ],
         "additionalProperties": false
-      },
+      }
+    },
+    "wire": {
       "pathParams": [
         "projectId",
         "fieldId"
       ],
       "queryParams": [
         "type"
-      ],
-      "hasBody": false
-    },
-    "wire": {
-      "pathParamMap": {
-        "projectId": "projectId",
-        "fieldId": "fieldId"
-      },
-      "queryParamMap": {
-        "type": "type"
-      }
+      ]
     },
     "output": {
       "mode": "json",

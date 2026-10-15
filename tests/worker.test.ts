@@ -52,11 +52,10 @@ async function mcp(path: string, method: string, params: Record<string, unknown>
 }
 
 describe("worker HTTP", () => {
-  test("healthz and readyz return ok", async () => {
+  test("worker health paths are not served", async () => {
     for (const path of ["/healthz", "/readyz"]) {
       const response = await SELF.fetch(`https://example.com${path}`);
-      expect(response.status).toBe(200);
-      expect(await response.json()).toEqual({ ok: true });
+      expect(response.status).toBe(404);
     }
   });
 
