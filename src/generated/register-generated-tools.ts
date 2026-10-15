@@ -339,9 +339,9 @@ function buildQuery(
   operation: (typeof GENERATED_OPERATIONS)[number],
 ) {
   const query: Record<string, unknown> = {};
-  for (const [key, wireName] of Object.entries(operation.wire.queryParamMap)) {
-    const value = args[key];
-    if (typeof value !== "undefined") query[wireName] = value;
+  for (const name of operation.wire.queryParams) {
+    const value = args[name];
+    if (typeof value !== "undefined") query[name] = value;
   }
   return query;
 }
@@ -360,8 +360,8 @@ export async function executeGeneratedOperation(
 
   try {
     const pathParams = Object.fromEntries(
-      Object.entries(operation.wire.pathParamMap).map(([key, wireName]) => [wireName, args[key]]),
-    );
+      operation.wire.pathParams.map((name) => [name, args[name]]),
+    ) as Parameters<typeof interpolatePath>[1];
     const queryString = toQueryString(
       buildQuery(args, operation) as Parameters<typeof toQueryString>[0],
     );

@@ -15,9 +15,6 @@ const mcpHandler = createMcpHandler(
 export default {
   async fetch(request: Request): Promise<Response> {
     const url = new URL(request.url);
-    if (request.method === "GET" && (url.pathname === "/healthz" || url.pathname === "/readyz")) {
-      return Response.json({ ok: true });
-    }
     if (url.pathname !== "/mcp") return new Response("Not found", { status: 404 });
     if (request.method !== "POST") return new Response("Method not allowed", { status: 405 });
 

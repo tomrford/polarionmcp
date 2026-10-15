@@ -84,15 +84,11 @@ type GeneratedOperation = {
     openWorldHint: boolean;
   };
   input: {
-    required: string[];
     schema: Record<string, unknown>;
-    pathParams: string[];
-    queryParams: string[];
-    hasBody: boolean;
   };
   wire: {
-    pathParamMap: Record<string, string>;
-    queryParamMap: Record<string, string>;
+    pathParams: string[];
+    queryParams: string[];
     bodyContentType?: "application/json";
   };
   output: {
@@ -433,8 +429,6 @@ function buildGeneratedOperations(
     const required = new Set<string>();
     const pathParams: string[] = [];
     const queryParams: string[] = [];
-    const pathParamMap: Record<string, string> = {};
-    const queryParamMap: Record<string, string> = {};
     let autoPaginateCollection = false;
 
     for (const parameter of params) {
@@ -444,7 +438,6 @@ function buildGeneratedOperations(
       if (parameter.in === "path") {
         properties[parameter.name] = schema;
         pathParams.push(parameter.name);
-        pathParamMap[parameter.name] = parameter.name;
         if (parameter.required) required.add(parameter.name);
         continue;
       }
@@ -456,7 +449,6 @@ function buildGeneratedOperations(
 
       properties[parameter.name] = schema;
       queryParams.push(parameter.name);
-      queryParamMap[parameter.name] = parameter.name;
       if (parameter.required) required.add(parameter.name);
     }
 
@@ -489,15 +481,11 @@ function buildGeneratedOperations(
       resourceGroup: resourceGroupForPath(path),
       annotations: annotationsForMethod(methodUpper),
       input: {
-        required: requiredList,
         schema: inputSchema,
-        pathParams,
-        queryParams,
-        hasBody,
       },
       wire: {
-        pathParamMap,
-        queryParamMap,
+        pathParams,
+        queryParams,
         ...(bodySchema ? { bodyContentType: "application/json" as const } : {}),
       },
       output: {
