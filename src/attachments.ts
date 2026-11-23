@@ -25,12 +25,12 @@ const WEBP_TRANSCODE_MAX_PIXELS = 10_000_000;
 const WEBP_MAX_DIMENSION = 16_383;
 const SUPPORTED_TEXT_MIME_TYPES = new Set([
   "application/json",
-  "application/ld+json",
   "application/xml",
-  "application/xhtml+xml",
   "application/yaml",
   "application/x-yaml",
 ]);
+const TEXT_STRUCTURED_SUFFIX =
+  /^[a-z0-9][a-z0-9!#$&^_.-]*\/[a-z0-9][a-z0-9!#$&^_.+-]*\+(?:xml|json|yaml)$/;
 
 const ATTACHMENT_INPUT_SCHEMA = z.object({
   contentUrl: z.string().optional().describe("Attachment links.content URL from Polarion metadata"),
@@ -148,7 +148,12 @@ function sniffImageMime(bytes: Uint8Array) {
 }
 
 function isTextMime(mimeType: string | undefined) {
-  return !!mimeType && (mimeType.startsWith("text/") || SUPPORTED_TEXT_MIME_TYPES.has(mimeType));
+  return (
+    !!mimeType &&
+    (mimeType.startsWith("text/") ||
+      SUPPORTED_TEXT_MIME_TYPES.has(mimeType) ||
+      TEXT_STRUCTURED_SUFFIX.test(mimeType))
+  );
 }
 
 function decodeUtf8(bytes: Uint8Array) {
@@ -326,8 +331,9 @@ async function renderAttachmentResult(
   const sniffedImageMime = sniffImageMime(bytes);
   const headerImageMime =
     mimeType && SUPPORTED_IMAGE_MIME_TYPES.has(mimeType) ? mimeType : undefined;
+  const allowSniffedImage = !mimeType || mimeType === "application/octet-stream";
 
-  if (mode !== "text" && (headerImageMime || sniffedImageMime)) {
+  if (mode !== "text" && (headerImageMime || (allowSniffedImage && sniffedImageMime))) {
     if (headerImageMime && sniffedImageMime && headerImageMime !== sniffedImageMime) {
       return errorResult(
         makeError(
@@ -347,7 +353,7 @@ async function renderAttachmentResult(
     return oversizedImageResult(candidate, url, maxInlineResultBytes, byteLength);
   }
 
-  if (mimeType?.startsWith("image/")) {
+  if (mimeType?.startsWith("image/") && (mode === "image" || !isTextMime(mimeType))) {
     return errorResult(makeError(415, "Unsupported attachment image type", mimeType));
   }
 

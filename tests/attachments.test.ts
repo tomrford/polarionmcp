@@ -96,6 +96,113 @@ describe("attachment image selection", () => {
   });
 });
 
+describe("attachment text selection", () => {
+  afterEach(() => vi.restoreAllMocks());
+
+  function readWith(body: BodyInit, contentType: string, mode?: "auto" | "image" | "text") {
+    vi.spyOn(globalThis, "fetch").mockResolvedValue(
+      new Response(body, { headers: { "content-type": contentType } }),
+    );
+    return runWithPolarionAccessToken("attachment-test-token", () =>
+      readAttachment({
+        contentUrl: "/projects/PRJ/workitems/WI-1/attachments/A-1/content",
+        mode,
+      }),
+    );
+  }
+
+  test.each(["auto", "text"] as const)(
+    "reads image/svg+xml as UTF-8 text in %s mode",
+    async (mode) => {
+      const svg = '<svg xmlns="http://www.w3.org/2000/svg"><text>Hi</text></svg>';
+      const result = await readWith(svg, "image/svg+xml; charset=utf-8", mode);
+      expect("isError" in result && result.isError).toBeFalsy();
+      expect(result.content).toEqual([{ type: "text", text: svg }]);
+      expect("structuredContent" in result && result.structuredContent).toMatchObject({
+        kind: "attachment",
+        mimeType: "image/svg+xml",
+        byteLength: svg.length,
+      });
+    },
+  );
+
+  test("rejects image/svg+xml in image mode and unsupported binary image types", async () => {
+    const svgAsImage = await readWith("<svg/>", "image/svg+xml", "image");
+    expect("isError" in svgAsImage && svgAsImage.isError).toBe(true);
+    expect(JSON.parse(svgAsImage.content[0].text!)).toMatchObject({
+      status_code: 415,
+      message: "Unsupported attachment image type",
+      details: "image/svg+xml",
+    });
+
+    for (const mode of ["auto", "text"] as const) {
+      const tiff = await readWith(Uint8Array.from([0x49, 0x49, 0x2a, 0x00]), "image/tiff", mode);
+      expect("isError" in tiff && tiff.isError).toBe(true);
+      expect(JSON.parse(tiff.content[0].text!)).toMatchObject({
+        status_code: 415,
+        message: "Unsupported attachment image type",
+        details: "image/tiff",
+      });
+    }
+  });
+
+  test("reads structured +xml/+json/+yaml text types in auto mode and rejects non-UTF-8 bytes", async () => {
+    const xml = '<mxfile><diagram name="Arch"/></mxfile>';
+    const xmlResult = await readWith(xml, "application/vnd.jgraph.mxfile+xml");
+    expect("isError" in xmlResult && xmlResult.isError).toBeFalsy();
+    expect(xmlResult.content).toEqual([{ type: "text", text: xml }]);
+
+    const json = '{"title":"Problem"}';
+    const jsonResult = await readWith(json, "application/problem+json");
+    expect("isError" in jsonResult && jsonResult.isError).toBeFalsy();
+    expect(jsonResult.content).toEqual([{ type: "text", text: json }]);
+
+    const yaml = "openapi: 3.1.0\n";
+    const yamlResult = await readWith(yaml, "application/openapi+yaml");
+    expect("isError" in yamlResult && yamlResult.isError).toBeFalsy();
+    expect(yamlResult.content).toEqual([{ type: "text", text: yaml }]);
+
+    const svgz = Uint8Array.from([0x1f, 0x8b, 0x08, 0x00, 0xff, 0xfe]);
+    const invalidUtf8 = await readWith(svgz, "image/svg+xml");
+    expect("isError" in invalidUtf8 && invalidUtf8.isError).toBe(true);
+    expect(JSON.parse(invalidUtf8.content[0].text!)).toMatchObject({
+      status_code: 415,
+      message: "Unsupported attachment content",
+    });
+
+    const malformed = await readWith(
+      Uint8Array.from([0x49, 0x49, 0x2a, 0x00]),
+      "image/tiff,broken+xml",
+    );
+    expect("isError" in malformed && malformed.isError).toBe(true);
+    expect(JSON.parse(malformed.content[0].text!)).toMatchObject({
+      status_code: 415,
+      message: "Unsupported attachment image type",
+    });
+  });
+
+  test("declared text and SVG MIME types take precedence over magic-byte image sniffing", async () => {
+    const yaml = await readWith("GIF89a", "application/example+yaml", "auto");
+    expect("isError" in yaml && yaml.isError).toBeFalsy();
+    expect(yaml.content).toEqual([{ type: "text", text: "GIF89a" }]);
+
+    const svgAsImage = await readWith("GIF89a", "image/svg+xml", "image");
+    expect("isError" in svgAsImage && svgAsImage.isError).toBe(true);
+    expect(JSON.parse(svgAsImage.content[0].text!)).toMatchObject({
+      status_code: 415,
+      message: "Unsupported attachment image type",
+      details: "image/svg+xml",
+    });
+
+    const octetGif = await readWith("GIF89a", "application/octet-stream", "auto");
+    expect("isError" in octetGif && octetGif.isError).toBeFalsy();
+    expect(octetGif.content.find((part) => part.type === "image")).toMatchObject({
+      type: "image",
+      mimeType: "image/gif",
+    });
+  });
+});
+
 function withPngSize(png: Uint8Array, width: number, height: number) {
   const copy = png.slice();
   const view = new DataView(copy.buffer);
